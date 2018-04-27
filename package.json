@@ -13,7 +13,7 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
-  "author": "",
+  "author": "Digital Strategies",
   "license": "ISC",
   "browser": {
     "form-data": false,
