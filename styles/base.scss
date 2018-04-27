@@ -1,0 +1,291 @@
+html,
+body {
+  color: #ffffff;
+  line-height: 1.2;
+  font-family: $SourceSans;
+  font-size: 14px;
+  -webkit-font-smoothing: antialiased;
+  background: $background-color;
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  min-height: 100%;
+}
+
+html {
+  -ms-text-size-adjust: 100%;
+  -webkit-text-size-adjust: 100%;
+}
+
+input, textarea, select, button {
+  font-family: $SourceSans;
+}
+
+.main {
+  padding-top: $main-indent-top;
+}
+
+// font sizes
+@for $i from 1 through 40 {
+  .f-#{$i} {
+    font-size: 1rem * $i / 10;
+  }
+  .line-h-#{$i} {
+    line-height: 1rem * $i / 10;
+  }
+}
+
+.dropdown {
+  &-toggle:after {
+    vertical-align: middle;
+    margin-left: .5rem;
+    transition: transform .2s linear;
+
+    .show & {
+      transform: rotate(180deg);
+    }
+  }
+  &-item {
+    padding: 0.25rem .8rem;
+    font-size: 1.2rem;
+
+    a {
+      color: $black;
+      text-decoration: none;
+      display: block;
+    }
+  }
+}
+
+.bordered-bottom {
+  position: relative;
+  overflow: hidden;
+
+  &:after {
+    content: '';
+    position: absolute;
+    bottom: -5px;
+    left: 0;
+    right: 50%;
+    border-top: 1px solid;
+  }
+}
+
+.bg-white.bg-transparent {
+  position: relative;
+  margin-bottom: 30px;
+
+  &:before {
+    background: $black;
+    top: 0;
+    left: 15px;
+    right: 15px;
+    bottom: 0;
+    border: 4px solid $white;
+    position: absolute;
+    content: '';
+    border-radius: 27px;
+  }
+  h3, .block-content {
+    position: relative;
+    color: $white;
+    margin: 0;
+    padding: 15px 20px;
+  }
+  h3 {
+    padding-bottom: 5px;
+    font-size: 2.3rem;
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+    text-align: center;
+    color: $accent-color;
+    position: relative;
+
+    &:before {
+      content: '';
+      position: absolute;
+      top: 100%;
+      width: 10rem;
+      border-bottom: 3px solid $accent-color;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+    &:after {
+      width: 2rem;
+      top: calc(100% + 3px);
+      border-bottom-width: 3px;
+    }
+    + .block-content {
+      padding-top: 0;
+      padding-bottom: 20px;
+    }
+  }
+}
+
+form,
+.black-box {
+  max-width: 700px;
+  margin: 30px auto;
+  padding: 30px;
+  background-color: $black;
+  border: 4px solid $white;
+  border-radius: 30px;
+  .form-title {
+
+  }
+  .form-subtitle {
+    margin-bottom: 1rem;
+    font-size: -0.8rem;
+  }
+  label {
+    font-size: 16px;
+    font-weight: 700;
+  }
+  .form-control {
+    border-radius: 12px;
+    color: $accent-color;
+  }
+  .form-check {
+    margin: 0 4px;
+  }
+  .submit-button-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    .submit-button {
+      border-radius: 24px;
+      border-width: 4px;
+      padding-top: 8px;
+      padding-bottom: 8px;
+      padding-left: 32px;
+      padding-right: 32px;
+    }
+  }
+  .additional-button-container {
+    @extend .submit-button-container;
+  }
+}
+.custom-control-label:before,
+.custom-control-label:after {
+  top: .15rem;
+}
+.custom-radio .custom-control-input:checked ~ .custom-control-label:after {
+  background-size: 90% auto;
+  background-image: url("data:image/svg+xml;charset=utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='-4 -4 8 8'><circle r='3' fill='%23000000'/></svg>");
+}
+.custom-checkbox .custom-control-input:checked ~ .custom-control-label:after {
+  background-size: 80% auto;
+  background-image: url("data:image/svg+xml;charset=utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 8'><path fill='%23000000' d='M6.564.75l-3.59 3.612-1.538-1.55L0 4.26 2.974 7.25 8 2.193z'/></svg>");
+}
+
+
+// buttons
+.btn {
+  border-radius: 24px;
+  border-width: 4px;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 32px;
+  padding-right: 32px;
+
+  &.btn-secondary {
+    color: $white;
+    background: $green;
+  }
+  &.btn-primary {
+    background: $black;
+    color: $primary;
+  }
+  &.btn-link {
+    padding: 0;
+    border: 0;
+
+    .bg-white & {
+      color: $black;
+      text-decoration: underline;
+    }
+  }
+}
+
+// select custom
+.block {
+  .Select {
+    &-control {
+      background: transparent;
+      border: 2px solid $white;
+      border-radius: 12px;
+
+      &:hover {
+        box-shadow: none;
+      }
+    }
+    &.no-border {
+      .Select-control {
+        border-color: transparent;
+        border-radius: 4px;
+      }
+    }
+    &-input {
+      height: 32px;
+    }
+    &-placeholder,
+    &--single > .Select-control .Select-value {
+      line-height: 31px;
+    }
+    &-placeholder {
+      color: #777;
+    }
+
+    &.has-value.Select--single > .Select-control .Select-value .Select-value-label {
+      color: $white;
+    }
+    &.has-value.Select--single.is-open > .Select-control .Select-value .Select-value-label {
+      color: $black;
+    }
+    &-option.is-selected {
+      background-color: $black;
+      color: $accent-color;
+    }
+    &-option:not(.is-selected).is-focused {
+      background-color: lighten($black, 25%);
+    }
+    &.is-focused:not(.is-open) > .Select-control {
+      border-color: $primary;
+    }
+    &-arrow {
+      border-color: $white transparent transparent;
+    }
+    &.is-pseudo-focused > .Select-control .Select-arrow {
+      border-color: $black transparent transparent;
+    }
+    &.is-open > .Select-control .Select-arrow {
+      border-color: transparent transparent $black;
+    }
+  }
+}
+
+.is-invalid {
+  div.Select-control{
+    border-color: $danger;
+  }
+}
+
+.invalid-feedback {
+  //display: block;
+  padding: 0.675rem 0.75rem .6875rem 2.7rem;
+  border-radius: 12px;
+  font-size: 1rem;
+  color: #721c24;
+  border: 1px solid #f5c6cb;
+  background: #f8d7da url(../static/images/warning-svgrepo-com.svg) no-repeat 0.5rem 50%;
+  background-size: 1.8rem auto;
+}
+.invalid-form-feedback {
+  margin: .8rem 0;
+  padding: 0.675rem 0.75rem .6875rem 2.7rem;
+  border-radius: 12px;
+  font-size: 1rem;
+  color: $black;
+  background: lighten($black, 20%) url(../static/images/warning-svgrepo-com-black.svg) no-repeat 0.5rem 50%;
+  background-size: 1.8rem auto;
+}

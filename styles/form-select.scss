@@ -1,0 +1,93 @@
+.Select {
+
+  &.is-disabled > .Select-control {
+    background-color: #000000;
+    color: #ffffff;
+  }
+  &.is-open > .Select-control {
+    background: #000000;
+    color: #ffffff;
+  }
+  &.is-focused > .Select-control {
+    background: #000000;
+  }
+  &.is-focused:not(.is-open) > .Select-control {
+    border-color: #ffffff;
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 0 3px rgba(200, 200, 200, 200);
+    background: #000000;
+  }
+  &.has-value.Select--single > .Select-control .Select-value .Select-value-label,
+  &.has-value.is-pseudo-focused.Select--single > .Select-control .Select-value .Select-value-label {
+    color: #ffca4c;
+  }
+  &.has-value.Select--single > .Select-control .Select-value a.Select-value-label:hover,
+  &.has-value.is-pseudo-focused.Select--single > .Select-control .Select-value a.Select-value-label:hover,
+  &.has-value.Select--single > .Select-control .Select-value a.Select-value-label:focus,
+  &.has-value.is-pseudo-focused.Select--single > .Select-control .Select-value a.Select-value-label:focus {
+    color: #ffffff;
+  }
+  &.has-value.Select--single > .Select-control .Select-value a.Select-value-label:focus,
+  &.has-value.is-pseudo-focused.Select--single > .Select-control .Select-value a.Select-value-label:focus {
+    background: #000000;
+  }
+  &-control {
+    background-color: #000000;
+    border-radius: 10px;
+    border: 2px solid #fff;
+    color: #ffca4c;
+  }
+  &-control .Select-input:focus {
+    color: #ffffff;
+    background: #000000;
+  }
+  &-placeholder,
+  &--single > .Select-control .Select-value {
+    color: #999999;
+  }
+  &-input {
+    color: #ffffff;
+  }
+  &-menu-outer {
+    background-color: #007bff;
+    border-radius: 0;
+  }
+  &-option {
+    background-color: #000000;
+    color: #ffffff;
+  }
+  &-option:last-child {
+    border-bottom-right-radius: 0;
+    border-bottom-left-radius: 0;
+  }
+  &-option.is-selected {
+    background-color: $black;
+    color: $accent-color;
+  }
+  &-option.is-focused {
+    background-color: #007bff;
+    color: #fff;
+  }
+  &-option.is-disabled {
+    color: #ffffff;
+  }
+  &-option:not(.is-selected):hover{
+    background-color: lighten($black, 5%);
+  }
+  &-noresults {
+    background: #000;
+  }
+  &--multi.is-disabled .Select-value {
+    color: #ffffff;
+  }
+  &--multi.is-disabled .Select-value-icon:hover,
+  &--multi.is-disabled .Select-value-icon:focus,
+  &--multi.is-disabled .Select-value-icon:active {
+    background-color: #007bff;
+  }
+}
+.is-focused .Select-input > input {
+  color: #ffffff;
+}
+.has-value.is-pseudo-focused .Select-input {
+  color: #ffffff;
+}
