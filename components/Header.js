@@ -25,7 +25,7 @@ export default class Header extends Component {
     return (
       <Container>
         <header className="header">
-          <Menu body={<div>Version: {version || 'Loading'}</div>} />
+          <Menu body={<div>VideoRemix Go</div>} />
         </header>
       </Container>
     );
