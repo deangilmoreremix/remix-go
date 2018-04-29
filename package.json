@@ -63,6 +63,7 @@
     "socket.io-client": "^2.0.4",
     "sweetalert": "^2.1.0",
     "validator": "^9.4.1",
+    "webmaker-auth": "git://github.com/strategic-limited/webmaker-auth2#a883d60e3cb95124273eac716f217cf3e6c85022",
     "webpack": "^3.10.0"
   },
   "devDependencies": {
