@@ -24,6 +24,7 @@ app.prepare().then(() => {
       next();
     }
   });
+  server.use(express.csrf());
   require('./lib/express/webmaker-auth')(server);
 
   server.get('*', checkAccess, (req, res) => {

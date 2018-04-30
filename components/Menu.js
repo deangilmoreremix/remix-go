@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import Link from 'next/link';
+import Router from 'next/router';
 import {
   Collapse,
   Container,
@@ -34,36 +35,49 @@ export default class Menu extends React.Component {
       isOpen: false,
     };
   }
+
   toggle() {
     this.setState({
       isOpen: !this.state.isOpen,
     });
   }
+
+  onLogOut = () => {
+    fetch('/logout', {
+      method: 'POST',
+    })
+      .then(() => {
+        Router.push('/');
+      });
+  };
+
   render() {
+    const {store: {currentUser} } = this.props;
     return (
       <Container>
         <Navbar color="faded" light expand="md">
           <Link href="/" passHref>
-            <NavbarBrand>VideoRemix Go</NavbarBrand>
+            <NavbarBrand>
+            </NavbarBrand>
           </Link>
-          {this.props.body}
           <NavbarToggler onClick={this.toggle} />
           <Collapse isOpen={this.state.isOpen} navbar>
             <Nav className="ml-auto" navbar>
               <UncontrolledDropdown nav>
                 <DropdownToggle nav caret>
-                  Menu
+                  <img className="userpic" src={currentUser.avatar} />
+                  {currentUser.fullName}
                 </DropdownToggle>
                 <DropdownMenu >
                   <DropdownItem>
-                    <Link href="/login">
-                      <a>Login</a>
+                    <Link href="/account">
+                      <a>Settings</a>
                     </Link>
                   </DropdownItem>
                   <DropdownItem>
-                    <Link href="/users/profile">
-                      <a>Profile</a>
-                    </Link>
+                    <a onClick={this.onLogOut}>
+                      Log Out
+                    </a>
                   </DropdownItem>
                 </DropdownMenu>
               </UncontrolledDropdown>
