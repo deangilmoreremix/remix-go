@@ -43,7 +43,7 @@ export default class Menu extends React.Component {
   }
 
   render() {
-    const {store: {currentUser} } = this.props;
+    const {store: {currentUser = {}} } = this.props;
     return (
       <Container>
         <Navbar color="faded" light expand="md">
