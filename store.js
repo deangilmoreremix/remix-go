@@ -27,6 +27,9 @@ class Store {
   isLoading = false;
 
   @observable
+  csrf = null;
+  
+  @observable
   currentUser = null;
 
   constructor(isServer, source, req) {
@@ -37,6 +40,8 @@ class Store {
       global.fetch = require('isomorphic-fetch');
       global.btoa = string => Buffer.from(string).toString('base64');
       this.req = req;
+      this.csrf = req.csrfToken();
+      this.currentUser = req.session.user;
     }
     Object.assign(this, source);
     const { common } = this;
@@ -50,47 +55,6 @@ class Store {
     this.isLoading = true;
     try {
       return this.request('/health');
-    } finally {
-      this.isLoading = false;
-    }
-  }
-
-  @action
-  fetchUser(id) {
-    this.isLoading = true;
-    try {
-      return this.request(`/api/users/${id}`, {
-        method: 'GET',
-      });
-    } finally {
-      this.isLoading = false;
-    }
-  }
-
-  @action
-  async fetchCurrentUser() {
-    this.currentUser = await this.fetchUser('me');
-    return this.currentUser;
-  }
-
-  @action
-  async login(body) {
-    this.isLoading = true;
-    try {
-      const resp = await this.request('/oauth', {
-        method: 'POST',
-        body: { grant_type: 'password', ...body },
-        headers: {
-          Authorization: this.clientAuthHeader,
-        },
-      });
-      const {
-        access_token: accessToken,
-        refresh_token: refreshToken,
-        expires_in: expiresIn,
-      } = resp;
-      this.saveAuthData(accessToken, refreshToken, expiresIn);
-      this.setupNetworkServices(accessToken);
     } finally {
       this.isLoading = false;
     }

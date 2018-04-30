@@ -21,11 +21,10 @@ export default class Header extends Component {
   }
 
   render() {
-    const { state: { version } } = this;
     return (
       <Container>
         <header className="header">
-          <Menu body={<div>VideoRemix Go</div>} />
+          <Menu />
         </header>
       </Container>
     );
