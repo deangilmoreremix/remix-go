@@ -61,9 +61,9 @@ export default class Menu extends React.Component {
                 </DropdownToggle>
                 <DropdownMenu >
                   <DropdownItem>
-                    <Link href="/account">
-                      <a>Settings</a>
-                    </Link>
+                    <a onClick={() => Router.push('/account')}>
+                      Settings
+                    </a>
                   </DropdownItem>
                   <DropdownItem>
                     <Link href="/logout">
