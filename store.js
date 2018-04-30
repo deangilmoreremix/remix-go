@@ -25,9 +25,6 @@ class Store {
 
   @observable
   isLoading = false;
-
-  @observable
-  csrf = null;
   
   @observable
   currentUser = null;
@@ -40,7 +37,6 @@ class Store {
       global.fetch = require('isomorphic-fetch');
       global.btoa = string => Buffer.from(string).toString('base64');
       this.req = req;
-      this.csrf = req.csrfToken();
       this.currentUser = req.session.user;
     }
     Object.assign(this, source);
