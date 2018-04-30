@@ -37,7 +37,7 @@ class Store {
       global.fetch = require('isomorphic-fetch');
       global.btoa = string => Buffer.from(string).toString('base64');
       this.req = req;
-      this.currentUser = req.session.user;
+      this.currentUser = req.session && req.session.user;
     }
     Object.assign(this, source);
     const { common } = this;
