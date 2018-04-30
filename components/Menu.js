@@ -42,15 +42,6 @@ export default class Menu extends React.Component {
     });
   }
 
-  onLogOut = () => {
-    fetch('/logout', {
-      method: 'POST',
-    })
-      .then(() => {
-        Router.push('/');
-      });
-  };
-
   render() {
     const {store: {currentUser} } = this.props;
     return (
@@ -75,9 +66,9 @@ export default class Menu extends React.Component {
                     </Link>
                   </DropdownItem>
                   <DropdownItem>
-                    <a onClick={this.onLogOut}>
-                      Log Out
-                    </a>
+                    <Link href="/logout">
+                      <a>Log Out</a>
+                    </Link>
                   </DropdownItem>
                 </DropdownMenu>
               </UncontrolledDropdown>
