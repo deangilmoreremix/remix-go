@@ -1,2 +1,16 @@
 .footer {
+  @extend %full-width;
+  height: $footer-height;
+  background: $primary-color;
+  color: $white;
+  position: fixed;
+  z-index: 10;
+  bottom: 0;
+  text-align: center;
+  font-size: 1.2rem;
+  left: 0;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
