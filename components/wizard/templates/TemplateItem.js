@@ -3,13 +3,13 @@ import React from 'react';
 import PropTypes from '../../../lib/PropTypes';
 
 const TemplateItem = (props) => {
-  const { title, thumbnail, url } = props.template;
+  const { thumbnail } = props.template;
   return (
-    <div className="card" style={{backgroundImage: `url(${thumbnail})`}}>
+    <div className="card" style={{ backgroundImage: `url(${thumbnail})` }}>
       <div className="overlay">
         <div className="buttons-container">
-          <a className="button" onClick={() => { props.onPreview(props.template) }}>preview</a>
-          <a className="button button-primary" onClick={() => { props.onUse(props.template)}}>use</a>
+          <a className="button" onClick={() => { props.onPreview(props.template); }}>preview</a>
+          <a className="button button-primary" onClick={() => { props.onUse(props.template); }}>use</a>
         </div>
       </div>
     </div>

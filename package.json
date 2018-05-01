@@ -59,6 +59,7 @@
     "react-masonry-infinite": "^1.2.2",
     "react-no-ssr": "^1.1.0",
     "react-popper": "0.8.1",
+    "react-popupbox": "^2.0.3",
     "react-select": "^1.2.1",
     "reactstrap": "5.0.0-beta",
     "sass-loader": "^6.0.6",
