@@ -3,9 +3,8 @@ import { action, observable } from 'mobx';
 import Cookies from 'js-cookie';
 import Router from 'next/router';
 
-import requestCreator from './lib/requestCreator';
-import socketCreator from './lib/socketCreator';
-import { showError, showInfo } from './services/alertService';
+import requestCreator from '../lib/requestCreator';
+import { showError, showInfo } from '../services/alertService';
 
 let store = null;
 
@@ -46,16 +45,6 @@ class Store {
     this.setupNetworkServices(accessToken, isServer);
   }
 
-  @action
-  fetchHealth() {
-    this.isLoading = true;
-    try {
-      return this.request('/health');
-    } finally {
-      this.isLoading = false;
-    }
-  }
-
   saveAuthData(accessToken, refreshToken, expiresIn) {
     this.setCookies(
       AUTH_DATA_CONFIG.accessToken,
@@ -84,13 +73,6 @@ class Store {
     }
     this.request = requestCreator(
       common.backend, this.authorization, isServer, () => this.refreshToken());
-    if (!isServer) {
-      this.socket = socketCreator(`${common.socketProtocol}://${common.backend}`, {
-        extraHeaders: {
-          Authorization: this.authorization,
-        },
-      });
-    }
   }
 
   async refreshToken() {

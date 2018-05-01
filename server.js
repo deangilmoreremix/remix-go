@@ -26,6 +26,9 @@ app.prepare().then(() => {
   });
   require('./lib/express/webmaker-auth')(server);
 
+  server.get('/_next/*', (req, res) => {
+    handle(req, res);
+  });
   server.get('*', checkAccess, (req, res) => {
     handle(req, res);
   });
