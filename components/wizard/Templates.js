@@ -4,8 +4,8 @@ import {inject, observer} from 'mobx-react';
 import Masonry from 'react-masonry-infinite';
 import shortid from 'shortid';
 
+import TemplateGallery from '../common/InfiniteLoading';
 import TemplateItem from './templates/TemplateItem';
-import InfiniteLoading from '../common/InfiniteLoading';
 
 @inject('store')
 @observer
@@ -37,8 +37,8 @@ export default class Templates extends Component {
 
   render() {
     return <Fragment>
-      <Masonry
-        className="masonry"
+      <TemplateGallery
+        className="template-gallery"
         hasMore={this.state.hasMore}
         loader={<InfiniteLoading />}
         loadMore={this.loadMore}
@@ -48,7 +48,7 @@ export default class Templates extends Component {
             <TemplateItem key={key} className="card" color={color} height={height}/>
           ))
         }
-      </Masonry>
+      </TemplateGallery>
     </Fragment>;
   }
 }
