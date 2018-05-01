@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Provider } from 'mobx-react';
 import { Container } from 'reactstrap';
 
-import { initStoreAndPreload, initStore } from '../store';
+import { initStoreAndPreload, initStore } from '../globals/store';
 import Header from './Header';
 import Footer from './Footer';
 

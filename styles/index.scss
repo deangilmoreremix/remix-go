@@ -9,7 +9,9 @@
 @import "footer";
 @import "header";
 @import "loading";
-@import "home/index";
+
+@import "wizard/editor/index";
+@import "wizard/templates/index";
 
 @import "~react-select/scss/default";
 @import "form-select.scss";

@@ -3,7 +3,7 @@ import { inject, observer } from 'mobx-react';
 
 @inject('store')
 @observer
-export default class Editor extends Component {
+export default class Publisher extends Component {
   constructor(props) {
     super(props);
 
