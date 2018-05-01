@@ -1,4 +1,5 @@
 import React, { Component, Fragment } from 'react';
+import { observable } from 'mobx';
 import { observer, inject } from 'mobx-react';
 
 import TemplateGallery from 'react-masonry-infinite';
@@ -29,13 +30,14 @@ export default class Templates extends Component {
   };
 
   onPreview = (template) => {
+    this.currentPlayback = (<EmbeddedPlayback
+      url={template.url}
+      title={template.title}
+      width={840}
+      height={480}
+    />);
     PopupboxManager.open({
-      content: <EmbeddedPlayback
-        url={template.url}
-        title={template.title}
-        width={840}
-        height={480}
-      />,
+      content: this.currentPlayback,
       config: {
         titleBar: {
           enable: true,
@@ -46,6 +48,9 @@ export default class Templates extends Component {
       },
     });
   };
+
+  @observable
+  currentPlayback = null;
 
   loadMore = async () => {
     const { templateApi } = this.props;
@@ -60,7 +65,7 @@ export default class Templates extends Component {
   render() {
     return (
       <Fragment>
-        <PopupboxContainer />
+        <PopupboxContainer onClosed={() => { this.currentPlayback.props.url = null; }} />
         <TemplateGallery
           className="template-gallery"
           hasMore={this.state.hasMore}
