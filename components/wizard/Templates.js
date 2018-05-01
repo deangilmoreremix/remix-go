@@ -4,6 +4,8 @@ import {inject, observer} from 'mobx-react';
 import Masonry from 'react-masonry-infinite';
 import shortid from 'shortid';
 
+import TemplateItem from './templates/TemplateItem';
+import InfiniteLoading from '../common/InfiniteLoading';
 
 @inject('store')
 @observer
@@ -13,7 +15,7 @@ export default class Templates extends Component {
 
     this.state = {
       hasMore: true,
-      elements: this.generateElements(),
+      elements: [],
     };
   }
 
@@ -34,26 +36,19 @@ export default class Templates extends Component {
   })), 2500);
 
   render() {
-    return <Masonry
-      className="masonry"
-      hasMore={this.state.hasMore}
-      loader={
-        <div className="sk-folding-cube">
-          <div className="sk-cube1 sk-cube" />
-          <div className="sk-cube2 sk-cube" />
-          <div className="sk-cube4 sk-cube" />
-          <div className="sk-cube3 sk-cube" />
-        </div>
-      }
-      loadMore={this.loadMore}
-    >
-      {
-        this.state.elements.map(({ key, color, height }, i) => (
-          <div key={key} className="card" style={{ background: color, height }}>
-            <h2>{i}</h2>
-          </div>
-        ))
-      }
-    </Masonry>;
+    return <Fragment>
+      <Masonry
+        className="masonry"
+        hasMore={this.state.hasMore}
+        loader={<InfiniteLoading />}
+        loadMore={this.loadMore}
+      >
+        {
+          this.state.elements.map(({ key, color, height }, i) => (
+            <TemplateItem key={key} className="card" color={color} height={height}/>
+          ))
+        }
+      </Masonry>
+    </Fragment>;
   }
 }
