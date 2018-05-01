@@ -1,4 +1,5 @@
 import React, { Component, Fragment } from 'react';
+import Router from 'next/router';
 import { observable } from 'mobx';
 import { observer, inject } from 'mobx-react';
 
@@ -24,10 +25,7 @@ export default class Templates extends Component {
     };
   }
 
-  onUse = (template) => {
-    // TODO: implement transition to editor
-    console.log(`using ${template.title}`);
-  };
+  onUse = template => Router.push({ pathname: '/edit', query: { template: template._id } });
 
   onPreview = (template) => {
     this.currentPlayback = (<EmbeddedPlayback
