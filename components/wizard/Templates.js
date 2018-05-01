@@ -28,12 +28,22 @@ export default class Templates extends Component {
     });
   };
 
+  onUse = (template) => {
+    // TODO: implement transition to editor
+    console.log(`using ${template.title}`);
+  };
+
+  onPreview = (template) => {
+    // TODO: implement preview
+    console.log(`previewing ${template.title}`);
+  };
+
   render() {
     return <Fragment>
       <TemplateGallery
         className="template-gallery"
         hasMore={this.state.hasMore}
-        loader={<InfiniteLoading/>}
+        loader={<InfiniteLoading key="loader" />}
         loadMore={this.loadMore}
         sizes={[
           {columns: 1, gutter: 30},
@@ -44,8 +54,13 @@ export default class Templates extends Component {
         ]}
       >
         {
-          this.state.elements.map((item) => (
-            <TemplateItem key={item._id} template={item}/>
+          this.state.elements.map((item, idx) => (
+            <TemplateItem
+              key={idx}
+              template={item}
+              onPreview={this.onPreview}
+              onUse={this.onUse}
+            />
           ))
         }
       </TemplateGallery>

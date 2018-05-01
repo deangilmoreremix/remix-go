@@ -30,6 +30,28 @@
       opacity: 1;
       transition: opacity 0.3s;
     }
+
+    .buttons-container {
+      height: 30px;
+      display: block;
+      position: relative;
+      margin-top: 42.5%;
+
+      .button {
+        height: 25px;
+        display: inline-block;;
+        width: 70px;
+        padding: 3px 8px;
+        border: white solid 0.5px;
+        border-radius: 10px;
+        margin: 0 5px;
+      }
+
+      .button-primary {
+        background: $primary-color;
+        border-color: $primary-color;
+      }
+    }
   }
 }
 
