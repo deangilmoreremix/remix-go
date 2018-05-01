@@ -19,8 +19,8 @@ export default class Templates extends Component {
   }
 
   loadMore = async () => {
-    const { templateApi } = this.props;
-    const { elements } = this.state;
+    const {templateApi} = this.props;
+    const {elements} = this.state;
     const newElements = await templateApi.list(elements.length);
     this.setState({
       elements: elements.concat(newElements),
@@ -33,12 +33,19 @@ export default class Templates extends Component {
       <TemplateGallery
         className="template-gallery"
         hasMore={this.state.hasMore}
-        loader={<InfiniteLoading />}
+        loader={<InfiniteLoading/>}
         loadMore={this.loadMore}
+        sizes={[
+          {columns: 1, gutter: 20},
+          {mq: '512px', columns: 2, gutter: 20},
+          {mq: '768px', columns: 3, gutter: 20},
+          {mq: '1024px', columns: 4, gutter: 20},
+          {mq: '1536px', columns: 5, gutter: 20}
+        ]}
       >
         {
-          this.state.elements.map(({ _id, title }) => (
-            <TemplateItem key={_id} className="card" title={title} height={200}/>
+          this.state.elements.map((item) => (
+            <TemplateItem key={item._id} template={item}/>
           ))
         }
       </TemplateGallery>
