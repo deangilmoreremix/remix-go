@@ -1,2 +1,22 @@
+@import "_variables";
 @import "placeholders";
 @import "base";
+
+.editor-wrapper {
+  background: #dddddd;
+  bottom: $footer-height + $editor-wrapper-padding;
+  left: 0;
+  top: $header-height + $editor-wrapper-padding;
+  right: 0;
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+
+  .toolbar {
+    height: 4rem;
+  }
+
+  .canvas {
+    flex-grow: 2;
+  }
+}
