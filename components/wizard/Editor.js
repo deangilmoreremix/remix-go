@@ -8,14 +8,17 @@ export default class Editor extends Component {
   constructor(props) {
     super(props);
 
-    this.state = {};
+    this.state = {
+      toolbarEnabled: true,
+    };
   }
 
   render() {
+    const { toolbarEnabled } = this.state;
     return (
       <Fragment>
         <Container fluid className="editor-wrapper">
-          <Row className="toolbar" style={{background: '#00ff00'}}>
+          <Row className={`toolbar ${!toolbarEnabled && 'hidden'}`} style={{background: '#00ff00'}}>
             <Col style={{textAlign: 'middle'}}>.col</Col>
           </Row>
           <Row className="canvas" style={{background: '#0000ff'}}>
