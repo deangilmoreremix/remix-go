@@ -1,6 +1,8 @@
 import React, { Component, Fragment } from 'react';
 import { Container, Col, Row } from 'reactstrap';
 import { inject, observer } from 'mobx-react';
+import EditorStageChanger from "./editor/EditorStageChanger";
+import EditorStageManager from "../../lib/editor/editorStageManager";
 
 @inject('store')
 @observer
@@ -10,20 +12,29 @@ export default class Editor extends Component {
 
     this.state = {
       toolbarEnabled: true,
+      stageManager: new EditorStageManager(),
     };
   }
 
   render() {
-    const { toolbarEnabled } = this.state;
+    const { toolbarEnabled, stageManager } = this.state;
     return (
       <Fragment>
         <Container fluid className="editor-wrapper">
-          <Row className={`toolbar ${!toolbarEnabled && 'hidden'}`} style={{background: '#00ff00'}}>
-            <Col style={{textAlign: 'middle'}}>.col</Col>
+          <Row className={`toolbar ${!toolbarEnabled && 'hidden'}`}>
+            <Col>
+
+            </Col>
           </Row>
-          <Row className="canvas" style={{background: '#0000ff'}}>
-            <Col xs="2">.col</Col>
-            <Col style={{background: '#ff0000'}}>.col</Col>
+          <Row className="canvas">
+            <Col className="col-2 paddingless">
+              <EditorStageChanger
+                className="stage-wrapper"
+                stage={stageManager.stage}
+                onChange={(stage) => { stageManager.stage = stage; }}
+              />
+            </Col>
+            <Col style={{background: '#ffffff'}}>.col</Col>
             <Col xs="2">.col</Col>
           </Row>
         </Container>
