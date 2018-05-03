@@ -1,8 +1,10 @@
 import React, { Component, Fragment } from 'react';
 import { Container, Col, Row } from 'reactstrap';
 import { inject, observer } from 'mobx-react';
-import EditorStageChanger from "./editor/EditorStageChanger";
-import EditorStageManager from "../../lib/editor/editorStageManager";
+
+import WorkspaceContainer from './editor/WorkspaceContainer';
+import EditorStageChanger from './editor/EditorStageChanger';
+import EditorStateManager from '../../lib/editor/editorStateManager';
 
 @inject('store')
 @observer
@@ -12,30 +14,31 @@ export default class Editor extends Component {
 
     this.state = {
       toolbarEnabled: true,
-      stageManager: new EditorStageManager(),
+      stateManager: new EditorStateManager(),
     };
   }
 
   render() {
-    const { toolbarEnabled, stageManager } = this.state;
+    const { toolbarEnabled, stateManager } = this.state;
     return (
       <Fragment>
         <Container fluid className="editor-wrapper">
           <Row className={`toolbar ${!toolbarEnabled && 'hidden'}`}>
             <Col>
-
             </Col>
           </Row>
           <Row className="canvas">
-            <Col className="col-2 paddingless">
+            <Col className="col-2 paddingless editor-pane">
               <EditorStageChanger
                 className="stage-wrapper"
-                stage={stageManager.stage}
-                onChange={(stage) => { stageManager.stage = stage; }}
+                stage={stateManager.stage}
+                onChange={(stage) => { stateManager.stage = stage; }}
               />
             </Col>
-            <Col style={{background: '#ffffff'}}>.col</Col>
-            <Col xs="2">.col</Col>
+            <Col className="workspace scrollable">
+              <WorkspaceContainer stateManager={stateManager} />
+            </Col>
+            <Col className="col-2 paddingless editor-pane">.col</Col>
           </Row>
         </Container>
       </Fragment>);

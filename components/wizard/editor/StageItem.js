@@ -6,8 +6,11 @@ const StageItem = (props) => {
   const { className, image, title, onClick } = props;
   return (
     <div className={className} onClick={onClick}>
-      {image}
-      <div>{title}</div>
+      <div>
+        {image}
+        <br />
+        <span>{title}</span>
+      </div>
     </div>
   );
 };
@@ -15,7 +18,7 @@ const StageItem = (props) => {
 StageItem.propTypes = {
   className: PropTypes.string,
   title: PropTypes.string.isRequired,
-  image: PropTypes.node.isRequired,
+  image: PropTypes.element.isRequired,
   onClick: PropTypes.func.isRequired,
 };
 

@@ -3,7 +3,7 @@ import { Provider } from 'mobx-react';
 import { Container } from 'reactstrap';
 
 import { initStoreAndPreload, initStore } from '../globals/store';
-import { initApiAndPreload, initApi } from '../globals/templateApi';
+import { initApiAndPreload, initApi } from '../globals/api';
 
 import Header from './Header';
 import Footer from './Footer';
@@ -12,19 +12,19 @@ class Layout extends Component {
   static async getInitialProps({ query, req }, preloader) {
     const isServer = !!req;
     const store = await initStoreAndPreload(isServer, query, req, preloader);
-    const templateApi = await initApiAndPreload(isServer, query, req, preloader);
-    return { store, templateApi };
+    const api = await initApiAndPreload(isServer, query, req, preloader);
+    return { store, api };
   }
 
   constructor(props) {
     super(props);
     this.store = initStore(props.store);
-    this.templateApi = initApi(props.templateApi);
+    this.api = initApi(props.api);
   }
 
   render() {
     return (
-      <Provider store={this.store} templateApi={this.templateApi}>
+      <Provider store={this.store} api={this.api}>
         <div>
           <Header />
           <Container {...this.props} className="main">

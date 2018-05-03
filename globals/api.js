@@ -1,11 +1,10 @@
 import _ from 'lodash';
 import { action, observable } from 'mobx';
-import requestCreator from "../lib/requestCreator";
+import requestCreator from '../lib/requestCreator';
 
-let templateApi = null;
+let api = null;
 
-class TemplateApi {
-
+class Api {
   @observable
   isLoading = false;
 
@@ -28,7 +27,8 @@ class TemplateApi {
 
   setupNetworkServices(isServer) {
     const { common } = this;
-    this.request = requestCreator(common.backend, this.authorization, isServer, () => { });
+    this.request = requestCreator(common.backend, this.authorization, isServer, () => {
+    });
   }
 
   @action
@@ -37,11 +37,11 @@ class TemplateApi {
     try {
       return this.request(
         `/api/makes/templates?perPage=${this.perPage}&page=${page + 1}&q=${query}`, {
-        method: 'GET',
-        headers: {
-          'on-behalf': this.currentUser.id,
-        }
-      });
+          method: 'GET',
+          headers: {
+            'on-behalf': this.currentUser.id,
+          },
+        });
     } finally {
       this.isLoading = false;
     }
@@ -68,26 +68,26 @@ export async function initApiAndPreload(isServer, source, req, preloader) {
     };
   }
 
-  if (isServer || templateApi === null) {
-    templateApi = new TemplateApi(isServer, source, req);
+  if (isServer || api === null) {
+    api = new Api(isServer, source, req);
   }
 
   if (preloader) {
-    await preloader(templateApi);
+    await preloader(api);
   }
 
   if (isServer) {
-    return _.omit(templateApi, 'request', 'socket', 'req');
+    return _.omit(api, 'request', 'socket', 'req');
   } else {
-    return templateApi;
+    return api;
   }
 }
 
 export function initApi(source) {
-  if (templateApi === null) {
-    templateApi = new TemplateApi(false, source);
+  if (api === null) {
+    api = new Api(false, source);
   }
-  return templateApi;
+  return api;
 }
 
 export default { initApi, initApiAndPreload };

@@ -13,7 +13,7 @@ import InfiniteLoading from '../common/InfiniteLoading';
 import TemplateItem from './templates/TemplateItem';
 import EmbeddedPlayback from '../common/EmbeddedPlayback';
 
-@inject('templateApi')
+@inject('api')
 @observer
 export default class Templates extends Component {
   constructor(props) {
@@ -51,9 +51,9 @@ export default class Templates extends Component {
   currentPlayback = null;
 
   loadMore = async () => {
-    const { templateApi } = this.props;
+    const { api } = this.props;
     const { elements } = this.state;
-    const newElements = await templateApi.list(elements.length);
+    const newElements = await api.list(elements.length);
     this.setState({
       elements: elements.concat(newElements),
       hasMore: newElements.length > 0,

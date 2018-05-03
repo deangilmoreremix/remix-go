@@ -4,20 +4,20 @@ import { observer } from 'mobx-react';
 
 import StageItem from './StageItem';
 
-import StageManager from '../../../lib/editor/editorStageManager';
+import StateManager from '../../../lib/editor/editorStateManager';
 import PropTypes from '../../../lib/PropTypes';
 
 const EDITOR_STAGE_VIEWS = [{
-  stage: StageManager.STAGE_TYPES.VIDEO_CUSTOMISE,
-  image: <img src="../../../static/images/editor/video.png" alt="" />,
+  stage: StateManager.STAGE_TYPES.VIDEO_CUSTOMISE,
+  image: <img src="../../../static/images/editor/video.svg" alt="" />,
   title: 'Video',
 }, {
-  stage: StageManager.STAGE_TYPES.AUDIO_CUSTOMISE,
-  image: <img src="../../../static/images/editor/audio.png" alt="" />,
+  stage: StateManager.STAGE_TYPES.AUDIO_CUSTOMISE,
+  image: <img src="../../../static/images/editor/audio.svg" alt="" />,
   title: 'Audio',
 }, {
-  stage: StageManager.STAGE_TYPES.CAPTION_CUSTOMISE,
-  image: <img src="../../../static/images/editor/caption.png" alt="" />,
+  stage: StateManager.STAGE_TYPES.CAPTION_CUSTOMISE,
+  image: <img src="../../../static/images/editor/caption.svg" alt="" />,
   title: 'Captions',
 }];
 
