@@ -35,7 +35,7 @@ export default class Editor extends Component {
               />
             </Col>
             <Col className="workspace">
-              {/*<WorkspaceContainer stateManager={stateManager} className="full-height" />*/}
+              <WorkspaceContainer stateManager={stateManager} className="full-height" />
             </Col>
             <Col className="col-2 paddingless editor-pane">.col</Col>
           </Row>

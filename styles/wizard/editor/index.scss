@@ -9,6 +9,8 @@
   top: $header-height + $editor-wrapper-padding;
   right: 0;
   position: absolute;
+  display: flex;
+  flex-direction: column;
 
   .toolbar {
     height: 60px !important;
