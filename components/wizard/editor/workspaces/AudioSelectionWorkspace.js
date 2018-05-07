@@ -35,6 +35,7 @@ export default class AudioSelectionWorkspace extends Component {
     return (
       <Container className={className}>
         <AudioGallery
+          useWindow={false}
           className={`media-gallery ${className}`}
           hasMore={this.state.hasMore}
           loader={<InfiniteLoading key="loader" />}

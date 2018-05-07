@@ -30,10 +30,11 @@ export default class VideoSelectionWorkspace extends Component {
   };
 
   render() {
+    const { className } = this.props;
     return (
       <VideoGallery
-        pack
-        className="media-gallery"
+        useWindow={false}
+        className={`media-gallery ${className}`}
         hasMore={this.state.hasMore}
         loader={<InfiniteLoading key="loader" />}
         loadMore={this.loadMore}

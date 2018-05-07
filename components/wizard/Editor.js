@@ -13,7 +13,7 @@ export default class Editor extends Component {
     super(props);
 
     this.state = {
-      toolbarEnabled: false,
+      toolbarEnabled: true,
       stateManager: new EditorStateManager(),
     };
   }
