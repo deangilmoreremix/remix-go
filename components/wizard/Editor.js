@@ -13,7 +13,7 @@ export default class Editor extends Component {
     super(props);
 
     this.state = {
-      toolbarEnabled: true,
+      toolbarEnabled: false,
       stateManager: new EditorStateManager(),
     };
   }
@@ -22,24 +22,24 @@ export default class Editor extends Component {
     const { toolbarEnabled, stateManager } = this.state;
     return (
       <Fragment>
-        <div className="editor-wrapper">
-          <div className={`toolbar ${!toolbarEnabled && 'hidden'}`} />
-          <Container fluid className="canvas">
-            <Row className="full-height">
-              <Col className="col-2 paddingless editor-pane">
-                <EditorStageChanger
-                  className="stage-wrapper"
-                  stage={stateManager.stage}
-                  onChange={(stage) => { stateManager.stage = stage; }}
-                />
-              </Col>
-              <Col className="workspace">
-                <WorkspaceContainer stateManager={stateManager} className="full-height" />
-              </Col>
-              <Col className="col-2 paddingless editor-pane">.col</Col>
-            </Row>
-          </Container>
-        </div>
+        <Container fluid className="editor-wrapper">
+          <Row className={`toolbar ${!toolbarEnabled && 'hidden'}`}>
+            <Col />
+          </Row>
+          <Row className="canvas full-height">
+            <Col className="col-2 paddingless editor-pane">
+              <EditorStageChanger
+                className="stage-wrapper"
+                stage={stateManager.stage}
+                onChange={(stage) => { stateManager.stage = stage; }}
+              />
+            </Col>
+            <Col className="workspace">
+              {/*<WorkspaceContainer stateManager={stateManager} className="full-height" />*/}
+            </Col>
+            <Col className="col-2 paddingless editor-pane">.col</Col>
+          </Row>
+        </Container>
       </Fragment>
     );
   }
