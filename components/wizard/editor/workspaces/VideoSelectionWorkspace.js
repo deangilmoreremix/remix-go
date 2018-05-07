@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { Container } from 'reactstrap';
 import { inject, observer } from 'mobx-react';
 
 import VideoGallery from 'react-masonry-infinite';

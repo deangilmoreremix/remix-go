@@ -8,12 +8,11 @@
   left: 0;
   top: $header-height + $editor-wrapper-padding;
   right: 0;
+  overflow: hidden;
   position: absolute;
-  display: flex;
-  flex-direction: column;
 
   .toolbar {
-    height: 60px;
+    height: 60px !important;
   }
 
   .editor-pane {
@@ -21,11 +20,13 @@
   }
 
   .canvas {
-    flex-grow: 2;
+    height: 100%;
+    padding-bottom: $footer-height;
+    overflow: hidden;
 
     .workspace {
       background: $white;
-      padding: 30px 0;
+      padding: 0;
 
       .media-gallery {
         margin: 0 auto;
@@ -50,7 +51,7 @@
         align-items:center;
 
       &.active {
-          background: rgb(212 ,72 ,77);
+          background: rgb(212, 72, 77);
         }
 
         img {

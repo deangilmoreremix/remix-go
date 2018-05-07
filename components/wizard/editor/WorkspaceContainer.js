@@ -21,9 +21,17 @@ export default class EditorStageChanger extends Component {
         {(() => {
           switch (stage) {
             case EditorStateManager.STAGE_TYPES.VIDEO_CUSTOMISE:
-              return <VideoSelectionWorkspace />;
+              return (
+                <div className="scrollable full-height">
+                  <VideoSelectionWorkspace />
+                </div>
+              );
             case EditorStateManager.STAGE_TYPES.AUDIO_CUSTOMISE:
-              return <AudioSelectionWorkspace />;
+              return (
+                <div className="scrollable full-height">
+                  <AudioSelectionWorkspace />
+                </div>
+              );
             case EditorStateManager.STAGE_TYPES.CAPTION_CUSTOMISE:
               return <CaptionSelectionWorkspace />;
             default:

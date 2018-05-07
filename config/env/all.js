@@ -9,7 +9,7 @@ module.exports = {
   loginServer: {
     url: process.env.LOGIN_SERVER_URL || 'http://localhost:1340',
     authUrl: process.env.AUTH_SERVER_URL || 'http://localhost:8888',
-    urlWithAuth: process.env.LOGIN_SERVER_URL_WITH_AUTH || 'http://testuser:password@localhost:1340'
+    urlWithAuth: process.env.LOGIN_SERVER_URL_WITH_AUTH || 'http://testuser:password@localhost:1340',
   },
   secret: process.env.SECRET || 'dummy secret value',
   appHostname: process.env.APP_HOSTNAME || 'http://localhost:3000',
