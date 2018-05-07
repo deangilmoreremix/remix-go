@@ -36,6 +36,15 @@
         padding: 30px 0;
         text-align: center;
       }
+
+      .construction-workspace {
+        display: flex;
+        flex-direction: column;
+
+        .construction-thumbnails {
+          height: 30%;
+        }
+      }
     }
 
     .stage-wrapper {
