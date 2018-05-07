@@ -3,7 +3,7 @@ $white:                    #ffffff !default;
 $gray-200:                 #e9ecef !default;
 $gray-300:                 #dee2e6 !default;
 $green:                    #18a212 !default;
-$secondary-color:       #EF5054 !default;
+$secondary-color:          #EF5054 !default;
 $primary-color:            #343a40 !default;
 
 $accent-color:             $gray-200;
@@ -11,7 +11,7 @@ $background-color:         $accent-color;
 $header-bg:                $white;
 $header-height:            67px;
 $footer-height:            50px;
-$main-indent-top:          $header-height + 30px;
+$main-indent-top:          $header-height;
 
 $SourceSans:               'Source Sans Pro', Arial, Helvetica, "Nimbus Sans L", sans-serif;
 

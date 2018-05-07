@@ -289,3 +289,19 @@ form,
   background: lighten($black, 20%) url(../static/images/warning-svgrepo-com-black.svg) no-repeat 0.5rem 50%;
   background-size: 1.8rem auto;
 }
+
+.hidden {
+  display: none;
+}
+
+.paddingless {
+  padding: 0;
+}
+
+.full-width {
+  width: 100%;
+}
+
+.full-height {
+  height: 100%;
+}

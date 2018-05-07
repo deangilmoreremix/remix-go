@@ -1,2 +1,73 @@
+@import "_variables";
 @import "placeholders";
 @import "base";
+
+.editor-wrapper {
+  background: #dddddd;
+  bottom: $footer-height + $editor-wrapper-padding;
+  left: 0;
+  top: $header-height + $editor-wrapper-padding;
+  right: 0;
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+
+  .toolbar {
+    height: 60px !important;
+  }
+
+  .editor-pane {
+    min-width: 90px;
+  }
+
+  .canvas {
+    height: 100%;
+
+    .workspace {
+      background: $white;
+      padding: 0;
+
+      .scrollable {
+        padding: 30px 0;
+      }
+
+      .media-gallery {
+        margin: 0 auto;
+        padding: 30px 0;
+        text-align: center;
+      }
+    }
+
+    .stage-wrapper {
+      width: 100%;
+      height: 100%;
+      padding: 0;
+      background: $secondary-color;
+
+      .stage-item {
+        height: 20%;
+        min-height: 90px;
+        padding: 15px;
+        text-align: center;
+
+        display:flex;
+        justify-content:center;
+        align-items:center;
+
+      &.active {
+          background: rgb(212, 72, 77);
+        }
+
+        img {
+          width: 48px;
+          height: 48px;
+          margin-bottom: 5px;
+        }
+
+        span {
+          font-size: 1.2rem;
+        }
+      }
+    }
+  }
+}
