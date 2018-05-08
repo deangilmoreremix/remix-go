@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import { action, observable } from 'mobx';
+import {action, observable} from 'mobx';
 import requestCreator from '../lib/requestCreator';
 
 let api = null;
@@ -7,6 +7,11 @@ let api = null;
 class Api {
   @observable
   isLoading = false;
+
+  static ASSET_TYPE = {
+    VIDEOS: 'videos',
+    AUDIOS: 'audios',
+  };
 
   constructor(isServer, source, req) {
     if (isServer) {
@@ -19,16 +24,29 @@ class Api {
       this.currentUser = req.session && req.session.user;
     }
     Object.assign(this, source);
-    const { common } = this;
+    const {common} = this;
     this.perPage = common.templates.perPage;
     this.authorization = `Basic ${btoa(`${common.clientId}:${common.clientSecret}`)}`;
     this.setupNetworkServices(isServer);
   }
 
   setupNetworkServices(isServer) {
-    const { common } = this;
-    this.request = requestCreator(common.backend, this.authorization, isServer, () => {
-    });
+    const {common} = this;
+    this.request = requestCreator(common.backend, this.authorization, isServer, () => {});
+    this.assetsRequest = requestCreator(common.assetsPath, this.authorization, isServer, () => {});
+  }
+
+  @action
+  async assets(assetType, page = 0) {
+    this.isLoading = true;
+    try {
+      return this.assetsRequest(
+        `/${assetType}/index.json`, {
+          method: 'GET',
+        });
+    } finally {
+      this.isLoading = false;
+    }
   }
 
   @action
@@ -60,6 +78,7 @@ export async function initApiAndPreload(isServer, source, req, preloader) {
     source.common = {
       hostname: req.hostname,
       backend: config.backend,
+      assetsPath: config.assetsPath,
       clientId: config.client.id,
       clientSecret: config.client.secret,
       templates: {
@@ -90,4 +109,4 @@ export function initApi(source) {
   return api;
 }
 
-export default { initApi, initApiAndPreload };
+export default {initApi, initApiAndPreload};

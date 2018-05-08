@@ -3,12 +3,13 @@ import React from 'react';
 import PropTypes from '../../../../../lib/PropTypes';
 
 const AudioGridItem = (props) => {
-  const { thumbnail } = props.template;
+  const { onPreview, onUse, artwork, title, url } = props;
   return (
-    <div className="card" style={{ backgroundImage: `url(${thumbnail})` }}>
+    <div className="card" style={{ backgroundImage: `url(${artwork || '/static/images/editor/default-artwork.png'})` }}>
       <div className="overlay">
         <div className="buttons-container">
-          <a className="button button-primary" onClick={() => { props.onUse(props.template); }}>use</a>
+          <a className="button" onClick={() => onPreview(title, url)}>preview</a>
+          <a className="button button-primary" onClick={() => onUse(url)}>use</a>
         </div>
       </div>
     </div>
@@ -16,11 +17,10 @@ const AudioGridItem = (props) => {
 };
 
 AudioGridItem.propTypes = {
-  template: PropTypes.shape({
-    _id: PropTypes.string.isRequired,
-    title: PropTypes.string.isRequired,
-    thumbnail: PropTypes.string.isRequired,
-  }),
+  title: PropTypes.string.isRequired,
+  url: PropTypes.string.isRequired,
+  artwork: PropTypes.string,
+  onPreview: PropTypes.func.isRequired,
   onUse: PropTypes.func.isRequired,
 };
 
