@@ -1,6 +1,11 @@
-import React, { Component } from 'react';
-import { Container } from 'reactstrap';
+import React, { Component, Fragment } from 'react';
 import { inject, observer } from 'mobx-react';
+
+import {
+  PopupboxManager,
+  PopupboxContainer,
+} from 'react-popupbox';
+import Router from 'next/router';
 
 import AudioGallery from 'react-masonry-infinite';
 
@@ -20,20 +25,44 @@ export default class AudioSelectionWorkspace extends Component {
     elements: [],
   };
 
+  onUse = () => Router.push({ pathname: '/publish' });
+
+  onPreview = (title, url) => {
+    this.currentPlayback = (
+      <audio controls>
+        <source src={url} />
+      </audio>);
+    PopupboxManager.open({
+      content: this.currentPlayback,
+      config: {
+        titleBar: {
+          enable: true,
+          text: title,
+        },
+        fadeIn: true,
+        fadeInSpeed: 200,
+      },
+    });
+  };
+
   loadMore = async () => {
     const { api } = this.props;
     const { elements } = this.state;
-    const newElements = await api.list(elements.length);
+    const newElements = await api.assets(api.constructor.ASSET_TYPE.AUDIOS, elements.length);
     this.setState({
       elements: elements.concat(newElements),
-      hasMore: newElements.length > 0,
+      // for now we have no pagination for such resources
+      hasMore: false,
     });
   };
 
   render() {
     const { className } = this.props;
     return (
-      <Container className={className}>
+      <Fragment>
+        <PopupboxContainer onClosed={() => {
+          delete this.currentPlayback.props.children;
+        }} />
         <AudioGallery
           useWindow={false}
           className={`media-gallery ${className}`}
@@ -48,15 +77,18 @@ export default class AudioSelectionWorkspace extends Component {
           ]}
         >
           {
-            this.state.elements.map((item, idx) => (
+            this.state.elements.map(({ title, url, artwork }, idx) => (
               <AudioGridItem
                 key={idx}
-                template={item}
+                title={title}
+                url={url}
+                artwork={artwork}
+                onPreview={this.onPreview}
                 onUse={this.onUse}
               />
             ))
           }
         </AudioGallery>
-      </Container>);
+      </Fragment>);
   }
 }

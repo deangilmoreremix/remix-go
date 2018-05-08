@@ -1,6 +1,7 @@
 module.exports = {
   port: process.env.PORT || 3000,
   backend: process.env.BACKEND || 'dev-api.videoremix.io',
+  assetsPath: process.env.ASSETS_PATH || 'dev-cdn.videoremix.io/resources/go',
   socketProtocol: process.env.SOCKET_PROTOCOL || 'ws',
   client: {
     id: process.env.CLIENT_ID || 'service',
