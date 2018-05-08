@@ -4,8 +4,6 @@ import initPopcornJS from '../../../../../lib/PopcornProxy';
 
 import PropTypes from '../../../../../lib/PropTypes';
 
-const POPCORN_WRAPPER_ID = 'popcorn-scene-wrapper';
-
 const generatePopcornObject = (projectData) => {
   var popcornObject = {};
 
