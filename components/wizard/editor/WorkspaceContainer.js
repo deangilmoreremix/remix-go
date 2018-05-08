@@ -5,7 +5,7 @@ import PropTypes from '../../../lib/PropTypes';
 import EditorStateManager from '../../../lib/editor/editorStateManager';
 import VideoSelectionWorkspace from './workspaces/VideoSelectionWorkspace';
 import AudioSelectionWorkspace from './workspaces/AudioSelectionWorkspace';
-import CaptionSelectionWorkspace from './workspaces/CaptionSelectionWorkspace';
+import ConstructionWorkspace from './workspaces/ConstructionWorkspace';
 
 @observer
 export default class EditorStageChanger extends Component {
@@ -33,7 +33,7 @@ export default class EditorStageChanger extends Component {
                 </div>
               );
             case EditorStateManager.STAGE_TYPES.CAPTION_CUSTOMISE:
-              return <CaptionSelectionWorkspace />;
+              return <ConstructionWorkspace className="full-height full-width" />;
             default:
               return null;
           }
