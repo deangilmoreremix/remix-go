@@ -46,6 +46,8 @@ export default class ConstructionScene extends Component {
     className: PropTypes.string,
   };
 
+  popcorn = null;
+
   state = {
     popcornData: {}
   };
@@ -61,12 +63,12 @@ export default class ConstructionScene extends Component {
   componentDidMount() {
     const { popcornData } = this.state;
     if (process.browser) {
-      initPopcornJS(window, document);
-      const popcorn = window.Popcorn.smart(`#${popcornData.target}`,
+      initPopcornJS(window);
+      this.popcorn = window.Popcorn.smart(`#${popcornData.target}`,
         popcornData.mediaUrlsString, popcornData.mediaPopcornOptions);
-      popcorn.on('sequencesReady', function () {
+      this.popcorn.on('sequencesReady', function () {
         console.log('sequences ready');
-        popcorn.play();
+        this.popcorn.play();
       });
       const qs = {};
       const config = {
@@ -102,46 +104,47 @@ export default class ConstructionScene extends Component {
         var start = config.start,
           end = config.end;
 
-        popcorn.off("load", onLoad);
+        this.popcorn.off("load", onLoad);
 
         // update the currentTime to the embed options start value
         // this is needed for mobile devices as attempting to listen for `canplay` or similar events
         // that let us know it is safe to update the current time seem to be futile
         function timeupdate() {
-          popcorn.currentTime(start);
-          popcorn.off("timeupdate", timeupdate);
+          this.popcorn.currentTime(start);
+          this.popcorn.off("timeupdate", timeupdate);
         }
 
         // See if we should start playing at a time other than 0.
         // We combine this logic with autoplay, since you either
         // seek+play or play or neither.
-        if (start > 0 && start < popcorn.duration()) {
-          popcorn.on("seeked", function onSeeked() {
-            popcorn.off("seeked", onSeeked);
+        if (start > 0 && start < this.popcorn.duration()) {
+          this.popcorn.on("seeked", function onSeeked() {
+            this.popcorn.off("seeked", onSeeked);
             if (config.autoplay && isMobile()) {
-              popcorn.play();
+              this.popcorn.play();
             }
           });
-          popcorn.on("timeupdate", timeupdate);
+          this.popcorn.on("timeupdate", timeupdate);
         } else if (config.autoplay && !isMobile()) {
-          popcorn.play();
+          this.popcorn.play();
         }
 
         // See if we should pause at some time other than duration.
-        if (end > 0 && end > start && end <= popcorn.duration()) {
-          popcorn.cue(end, function () {
-            popcorn.pause();
-            popcorn.emit("ended");
+        if (end > 0 && end > start && end <= this.popcorn.duration()) {
+          this.popcorn.cue(end, function () {
+            this.popcorn.pause();
+            this.popcorn.emit("ended");
           });
         }
       }
-      if (popcorn.readyState() >= 1) {
+      if (this.popcorn.readyState() >= 1) {
         onLoad();
       } else {
-        popcorn.media.addEventListener("canplay", onLoad);
+        this.popcorn.media.addEventListener("canplay", onLoad);
       }
+      this.popcorn.controls(true);
       popcornData.elements.forEach((element) => {
-        popcorn[element.type](element.popcornOptions)
+        this.popcorn[element.type](element.popcornOptions);
       });
     }
   }
@@ -150,7 +153,11 @@ export default class ConstructionScene extends Component {
     const { className } = this.props;
     const { popcornData } = this.state;
     return (
-      <div id={popcornData.target} className={`full-height full-width ${className || ''}`} />
+      <div id="embed-wrapper" className={`wrapper cf faded embed full-height full-width ${className || ''}`}>
+        <div id="video-container" className="construction-container" data-butter="target">
+          <div id={popcornData.target} />
+        </div>
+      </div>
     );
   }
 }

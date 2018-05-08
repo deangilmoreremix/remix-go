@@ -1,0 +1,107 @@
+@mixin transition1($transition1) {
+  -webkit-transition: $transition1;
+  -moz-transition: $transition1;
+  -o-transition: $transition1;
+  -ms-transition: $transition1;
+  transition: $transition1;
+}
+
+@mixin transition2($transition1, $transition2) {
+  -webkit-transition: $transition1, $transition2;
+  -moz-transition: $transition1, $transition2;
+  -o-transition: $transition1, $transition2;
+  -ms-transition: $transition1, $transition2;
+  transition: $transition1, $transition2;
+}
+
+@mixin transition3($transition1, $transition2, $transition3) {
+  -webkit-transition: $transition1, $transition2, $transition3;
+  -moz-transition: $transition1, $transition2, $transition3;
+  -o-transition: $transition1, $transition2, $transition3;
+  -ms-transition: $transition1, $transition2, $transition3;
+  transition: $transition1, $transition2, $transition3;
+}
+
+@mixin animation( $animation ) {
+  -webkit-animation: $animation;
+  -moz-animation: $animation;
+  -o-animation: $animation;
+  -ms-animation: $animation;
+}
+
+@mixin transform( $transformation ) {
+  -webkit-transform: $transformation;
+  -moz-transform: $transformation;
+  -o-transform: $transformation;
+  -ms-transform: $transformation;
+  transform: $transformation;
+}
+
+@mixin transform-origin( $transformation ) {
+  -webkit-transform-origin: $transformation;
+  -moz-transform-origin: $transformation;
+  -o-transform-origin: $transformation;
+  -ms-transform-origin: $transformation;
+  transform-origin: $transformation;
+}
+
+@mixin transformAnimation($startProperty, $endProperty) {
+  -webkit-keyframes spin {
+    0% {
+      -webkit-transform: $startProperty;
+      transform: $startProperty;
+    }
+    100% {
+      -webkit-transform: $endProperty;
+      transform: $endProperty;
+    }
+  }
+  -moz-keyframes spin {
+    0% {
+      -moz-transform: $startProperty;
+      transform: $startProperty;
+    }
+    100% {
+      -moz-transform: $endProperty;
+      transform: $endProperty;
+    }
+  }
+}
+
+@mixin boxOrient($direction) {
+  -webkit-box-orient: $direction;
+  -moz-box-orient: $direction;
+  -ms-box-orient: $direction;
+  box-orient: $direction;
+}
+
+@mixin boxAlign($property) {
+  -webkit-box-align: $property;
+  -moz-box-align: $property;
+  -ms-box-align: $property;
+  box-align: $property;
+}
+
+@mixin box-sizing( $property ) {
+  // https://developer.mozilla.org/En/CSS/Box-sizing
+  -webkit-box-sizing: $property; // Chrome 10-
+  -moz-box-sizing: $property;
+  -ms-box-sizing: $property; // IE 8+
+  box-sizing: $property; // Opera, Safari 5.1+, Chrome 10+
+}
+
+// *********************************************************
+// POSITIONING
+//
+
+@mixin clearfix() {
+  *zoom: 1;
+  &:before,
+  &:after {
+    content: "";
+    display: table;
+  }
+  &:after {
+    clear: both;
+  }
+}

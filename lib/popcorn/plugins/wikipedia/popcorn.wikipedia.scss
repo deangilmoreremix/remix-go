@@ -1,6 +1,6 @@
+$titleheight: 2.2em;
 
 .wikipedia-outer-container {
-  @titleheight: 2.2em;
 
   position: absolute;
   background: #FFF;
@@ -14,9 +14,9 @@
     overflow: hidden;
   }
   .wikipedia-title {
-    height: @titleheight;
+    height: $titleheight;
     border-bottom: 2px solid #FFF;
-    line-height: @titleheight;
+    line-height: $titleheight;
     margin-bottom: 2px;
     box-shadow: 0 4px 10px -5px #EEE,
       inset 0 -1px #E6E6E6,
@@ -53,7 +53,7 @@
     bottom: 0.5em;
     border-bottom: 1px solid #E6E6E6;
     padding-left: 1.5em;
-    padding-top: @titleheight;
+    padding-top: $titleheight;
   }
   .wikipedia-content {
     padding-top: 1em;
