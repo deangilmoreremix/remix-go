@@ -1,24 +1,20 @@
 import React, { Component } from 'react';
-import { observer } from 'mobx-react';
-import initPopcornJS from '../../../../../lib/PopcornProxy';
+import { inject, observer } from 'mobx-react';
 
 import PropTypes from '../../../../../lib/PropTypes';
 
+@inject('store')
 @observer
 export default class ConstructionScene extends Component {
   static propTypes = {
     className: PropTypes.string,
-    popcornData: PropTypes.any,
   };
 
   componentDidMount() {
-    const { popcornData } = this.props;
+    const { store } = this.props;
+
     if (process.browser) {
-      const popcorn = window.Popcorn.smart(`#${popcornData.target}`,
-        popcornData.mediaUrlsString, popcornData.mediaPopcornOptions);
-      popcornData.elements.forEach((element) => {
-        popcorn[element.type](element.popcornOptions);
-      });
+      store.activeProject.attach(store.activeProject.popcornify());
     }
   }
 
