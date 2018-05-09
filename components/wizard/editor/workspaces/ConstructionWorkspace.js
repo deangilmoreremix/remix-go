@@ -21,7 +21,7 @@ export default class ConstructionWorkspace extends Component {
     return (
       <Container className={`construction-workspace ${className || ''}`}>
         <ConstructionScene />
-        {/*<CheckpointsList className="construction-thumbnails" />*/}
+        <CheckpointsList className="construction-thumbnails" />
       </Container>
     );
   }

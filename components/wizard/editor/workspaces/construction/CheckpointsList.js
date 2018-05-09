@@ -15,12 +15,21 @@ export default class CheckpointsList extends Component {
 
   render() {
     const { className, store: { activeProject } } = this.props;
+    const getCheckpoints = () => {
+      let result = [];
+      activeProject.elements.forEach(({ popcornOptions: { start } }) => {
+        if (result.indexOf(start) === -1) {
+          result.push(start);
+        }
+      });
+      return result.sort();
+    };
     return (
       <Container className={`full-height full-width ${className || ''}`} style={{ background: '#ffff00' }}>
         <ul>
-          {activeProject.elements.map((item, idx) => (
+          {getCheckpoints().map((item, idx) => (
             <li key={idx}>
-              <Checkpoint />
+              <Checkpoint at={item} />
             </li>
             ))}
         </ul>

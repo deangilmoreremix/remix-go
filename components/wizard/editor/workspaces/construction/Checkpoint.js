@@ -8,12 +8,13 @@ import PropTypes from '../../../../../lib/PropTypes';
 export default class CheckpointsList extends Component {
   static propTypes = {
     className: PropTypes.string,
+    at: PropTypes.number.isRequired,
   };
 
   render() {
-    const { className } = this.props;
+    const { className, at } = this.props;
     return (
-      <div className="card" />
+      <div>{at}</div>
     );
   }
 }
