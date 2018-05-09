@@ -54,7 +54,7 @@ class Api {
     this.isLoading = true;
     try {
       return this.request(
-        `/api/makes/templates?perPage=${this.perPage}&page=${page + 1}&q=${query}`, {
+        `/api/makes/go?perPage=${this.perPage}&page=${page + 1}&q=${query}`, {
           method: 'GET',
           headers: {
             'on-behalf': this.currentUser.id,
