@@ -4,7 +4,7 @@ import { observer } from 'mobx-react';
 
 import PropTypes from '../../../../lib/PropTypes';
 import ConstructionScene from './construction/ConstructionScene';
-import ThumbnailsList from './construction/ThumbnailsList';
+import CheckpointsList from './construction/CheckpointsList';
 
 @observer
 export default class ConstructionWorkspace extends Component {
@@ -12,12 +12,16 @@ export default class ConstructionWorkspace extends Component {
     className: PropTypes.string,
   };
 
+  state = {
+    popcornData: null,
+  };
+
   render() {
     const { className } = this.props;
     return (
       <Container className={`construction-workspace ${className || ''}`}>
         <ConstructionScene />
-        <ThumbnailsList className="construction-thumbnails" />
+        {/*<CheckpointsList className="construction-thumbnails" />*/}
       </Container>
     );
   }
