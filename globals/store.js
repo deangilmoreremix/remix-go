@@ -24,9 +24,12 @@ class Store {
 
   @observable
   isLoading = false;
-  
+
   @observable
   currentUser = null;
+
+  @observable
+  activeProject = null;
 
   constructor(isServer, source, req) {
     if (isServer) {

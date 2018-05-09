@@ -7,6 +7,7 @@ import { initApiAndPreload, initApi } from '../globals/api';
 
 import Header from './Header';
 import Footer from './Footer';
+import initPopcornJS from "../lib/PopcornProxy";
 
 class Layout extends Component {
   static async getInitialProps({ query, req }, preloader) {
@@ -23,6 +24,7 @@ class Layout extends Component {
   }
 
   render() {
+    initPopcornJS(window);
     return (
       <Provider store={this.store} api={this.api}>
         <div>
