@@ -3,6 +3,7 @@ import { Container } from 'reactstrap';
 import { inject, observer } from 'mobx-react';
 
 import PropTypes from '../../../../../lib/PropTypes';
+import Project from '../../../../../lib/editor/Project';
 import Checkpoint from './Checkpoint';
 
 @inject('store')
@@ -17,9 +18,9 @@ export default class CheckpointsList extends Component {
   render() {
     const { className, store: { activeProject }, onCheckpointSelect } = this.props;
     const getCheckpoints = () => {
-      let result = [];
-      activeProject.elements.forEach(({ popcornOptions: { start } }) => {
-        if (result.indexOf(start) === -1) {
+      const result = [];
+      activeProject.elements.forEach(({ type, popcornOptions: { start } }) => {
+        if (result.indexOf(start) === -1 && Project.EditableElementTypes.indexOf(type) !== -1) {
           result.push(start);
         }
       });
