@@ -10,18 +10,18 @@ import CheckpointsList from './construction/CheckpointsList';
 export default class ConstructionWorkspace extends Component {
   static propTypes = {
     className: PropTypes.string,
-  };
-
-  state = {
-    popcornData: null,
+    onProjectSeek: PropTypes.func.isRequired,
   };
 
   render() {
-    const { className } = this.props;
+    const { className, onProjectSeek } = this.props;
     return (
       <Container className={`construction-workspace ${className || ''}`}>
         <ConstructionScene />
-        <CheckpointsList className="construction-thumbnails" />
+        <CheckpointsList
+          className="construction-thumbnails"
+          onCheckpointSelect={at => onProjectSeek(at)}
+        />
       </Container>
     );
   }

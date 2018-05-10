@@ -10,11 +10,12 @@ import Checkpoint from './Checkpoint';
 export default class CheckpointsList extends Component {
   static propTypes = {
     className: PropTypes.string,
-    onCheckpointToggle: PropTypes.func.isRequired,
+    onCheckpointSelect: PropTypes.func.isRequired,
+    // onCheckpointToggle: PropTypes.func.isRequired,
   };
 
   render() {
-    const { className, store: { activeProject } } = this.props;
+    const { className, store: { activeProject }, onCheckpointSelect } = this.props;
     const getCheckpoints = () => {
       let result = [];
       activeProject.elements.forEach(({ popcornOptions: { start } }) => {
@@ -22,7 +23,7 @@ export default class CheckpointsList extends Component {
           result.push(start);
         }
       });
-      return result.sort();
+      return result.sort((a, b) => a - b);
     };
     return (
       <Container className={`full-height full-width ${className || ''}`}>
@@ -30,7 +31,7 @@ export default class CheckpointsList extends Component {
           <div className="thumbnail-canvas-scroll">
             {getCheckpoints().map((item, idx) => (
               <div key={idx} className="thumbnail-wrapper">
-                <Checkpoint at={item} />
+                <Checkpoint at={item} onClick={() => onCheckpointSelect(item)} />
               </div>
             ))}
           </div>

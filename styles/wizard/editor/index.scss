@@ -80,20 +80,21 @@
             right: 0;
             margin: 15px 0;
             display: flex;
-            flexWrap: nowrap;
+            flex-wrap: nowrap;
             overflow: auto;
             -webkit-overflow-scrolling: touch;
             -ms-overflow-style: -ms-autohiding-scrollbar;
 
             .thumbnail-canvas-scroll {
               display: flex;
-              flexWrap: nowrap;
+              flex-wrap: nowrap;
+              min-width: 100%;
 
               .thumbnail-wrapper {
                 flex: 0 0 auto;
                 float: left;
                 display: inline-block;
-                width: 24%;
+                width: 20%;
                 margin: 0 5px;
                 height: 100%;
               }
