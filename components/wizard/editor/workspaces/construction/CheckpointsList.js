@@ -25,14 +25,16 @@ export default class CheckpointsList extends Component {
       return result.sort();
     };
     return (
-      <Container className={`full-height full-width ${className || ''}`} style={{ background: '#ffff00' }}>
-        <ul>
-          {getCheckpoints().map((item, idx) => (
-            <li key={idx}>
-              <Checkpoint at={item} />
-            </li>
+      <Container className={`full-height full-width ${className || ''}`}>
+        <div className="thumbnail-canvas">
+          <div className="thumbnail-canvas-scroll">
+            {getCheckpoints().map((item, idx) => (
+              <div key={idx} className="thumbnail-wrapper">
+                <Checkpoint at={item} />
+              </div>
             ))}
-        </ul>
+          </div>
+        </div>
       </Container>
     );
   }

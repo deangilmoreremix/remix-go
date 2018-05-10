@@ -14,7 +14,7 @@ export default class CheckpointsList extends Component {
   render() {
     const { className, at } = this.props;
     return (
-      <div>{at}</div>
+      <div style={{width: '100%', height: '100%', background: '#ff0000', position: 'relative'}}>{at}</div>
     );
   }
 }
