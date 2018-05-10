@@ -20,6 +20,7 @@
 
   .editor-pane {
     min-width: 90px;
+    height: 100%;
   }
 
   .canvas {
@@ -27,6 +28,7 @@
 
     .workspace {
       background: $white;
+      display: block;
       padding: 0;
 
       .scrollable {
@@ -68,6 +70,36 @@
 
         .construction-thumbnails {
           height: 30%;
+          position: relative;
+
+          .thumbnail-canvas {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            margin: 15px 0;
+            display: flex;
+            flex-wrap: nowrap;
+            overflow: auto;
+            -webkit-overflow-scrolling: touch;
+            -ms-overflow-style: -ms-autohiding-scrollbar;
+
+            .thumbnail-canvas-scroll {
+              display: flex;
+              flex-wrap: nowrap;
+              min-width: 100%;
+
+              .thumbnail-wrapper {
+                flex: 0 0 auto;
+                float: left;
+                display: inline-block;
+                width: 20%;
+                margin: 0 5px;
+                height: 100%;
+              }
+            }
+          }
         }
       }
     }
