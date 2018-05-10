@@ -1,26 +1,42 @@
 import React, { Component } from 'react';
 import { Container } from 'reactstrap';
-import { observer } from 'mobx-react';
+import { inject, observer } from 'mobx-react';
 
 import PropTypes from '../../../../lib/PropTypes';
 import ConstructionScene from './construction/ConstructionScene';
 import CheckpointsList from './construction/CheckpointsList';
 
+@inject('store')
 @observer
 export default class ConstructionWorkspace extends Component {
   static propTypes = {
     className: PropTypes.string,
-    onProjectSeek: PropTypes.func.isRequired,
   };
 
+  state = {
+    popcorn: null,
+  };
+
+  onProjectSeek(at) {
+    const { popcorn } = this.state;
+    popcorn.currentTime(at);
+  }
+
   render() {
-    const { className, onProjectSeek } = this.props;
+    const { store, className } = this.props;
     return (
       <Container className={`construction-workspace ${className || ''}`}>
-        <ConstructionScene />
+        <ConstructionScene
+          onPopcornInitialize={(popcornWrapper) => {
+            this.setState({
+              popcorn: store.activeProject
+                .attach(store.activeProject.popcornify(popcornWrapper)),
+            });
+          }}
+        />
         <CheckpointsList
           className="construction-thumbnails"
-          onCheckpointSelect={at => onProjectSeek(at)}
+          onCheckpointSelect={at => this.onProjectSeek(at)}
         />
       </Container>
     );

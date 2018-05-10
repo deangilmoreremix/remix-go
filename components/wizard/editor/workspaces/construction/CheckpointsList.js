@@ -30,8 +30,8 @@ export default class CheckpointsList extends Component {
         <div className="thumbnail-canvas">
           <div className="thumbnail-canvas-scroll">
             {getCheckpoints().map((item, idx) => (
-              <div key={idx} className="thumbnail-wrapper">
-                <Checkpoint at={item} onClick={() => onCheckpointSelect(item)} />
+              <div key={idx} className="thumbnail-wrapper" onClick={() => onCheckpointSelect(item)}>
+                <Checkpoint at={item} />
               </div>
             ))}
           </div>
