@@ -5,6 +5,7 @@ import { inject, observer } from 'mobx-react';
 import WorkspaceContainer from './editor/WorkspaceContainer';
 import EditorStageChanger from './editor/EditorStageChanger';
 import EditorStateManager from '../../lib/editor/editorStateManager';
+import ActionsPane from "./editor/ActionsPane";
 
 @inject('store')
 @observer
@@ -37,7 +38,9 @@ export default class Editor extends Component {
             <Col className="workspace">
               <WorkspaceContainer stateManager={stateManager} className="full-height" />
             </Col>
-            <Col className="col-2 paddingless editor-pane">.col</Col>
+            <Col className="col-2 paddingless editor-pane">
+              <ActionsPane className="actions-pane" />
+            </Col>
           </Row>
         </Container>
       </Fragment>

@@ -135,5 +135,20 @@
         }
       }
     }
+
+    .actions-pane {
+      background: $white;
+      height: 100%;
+
+      .action-button {
+        font-size: 1.2rem;
+        width: 100%;
+        border: none;
+        margin-top: 10px;
+        height: 10%;
+        max-height: 45px;
+        text-transform: uppercase;
+      }
+    }
   }
 }
