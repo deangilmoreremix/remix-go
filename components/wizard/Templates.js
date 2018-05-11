@@ -13,6 +13,7 @@ import Project from '../../lib/editor/Project';
 import InfiniteLoading from '../common/InfiniteLoading';
 import TemplateItem from './templates/TemplateItem';
 import EmbeddedPlayback from '../common/EmbeddedPlayback';
+import TemplateSearch from './templates/TemplateSearch';
 
 @inject('api')
 @inject('store')
@@ -57,6 +58,9 @@ export default class Templates extends Component {
   @observable
   currentPlayback = null;
 
+  @observable
+  queryParams = '';
+
   loadMore = async () => {
     const { api } = this.props;
     const { elements } = this.state;
@@ -70,6 +74,8 @@ export default class Templates extends Component {
   render() {
     return (
       <Fragment>
+        <TemplateSearch query={this.queryParams} />
+
         <PopupboxContainer onClosed={() => { this.currentPlayback.props.url = null; }} />
         <TemplateGallery
           className="template-gallery"
@@ -84,6 +90,7 @@ export default class Templates extends Component {
             { mq: '1536px', columns: 5, gutter: 30 },
           ]}
         >
+
           {
             this.state.elements.map((item, idx) => (
               <TemplateItem
