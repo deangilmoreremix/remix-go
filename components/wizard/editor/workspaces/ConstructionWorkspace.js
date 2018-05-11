@@ -17,6 +17,15 @@ export default class ConstructionWorkspace extends Component {
     popcorn: null,
   };
 
+  onPopcornInitialize(wrapper) {
+    const { store } = this.props;
+    const popcorn = store.activeProject.attach(store.activeProject.popcornify(wrapper));
+    this.setState({ popcorn });
+    popcorn.on('elementSelected', (element) => {
+      console.log('element selected', element);
+    });
+  }
+
   onProjectSeek(at) {
     const { popcorn } = this.state;
     popcorn.currentTime(at);
@@ -27,12 +36,7 @@ export default class ConstructionWorkspace extends Component {
     return (
       <Container className={`construction-workspace ${className || ''}`}>
         <ConstructionScene
-          onPopcornInitialize={(popcornWrapper) => {
-            this.setState({
-              popcorn: store.activeProject
-                .attach(store.activeProject.popcornify(popcornWrapper)),
-            });
-          }}
+          onPopcornInitialize={popcornWrapper => this.onPopcornInitialize(popcornWrapper)}
         />
         <CheckpointsList
           className="construction-thumbnails"

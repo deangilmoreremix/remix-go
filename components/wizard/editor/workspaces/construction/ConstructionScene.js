@@ -10,6 +10,7 @@ export default class ConstructionScene extends Component {
   static propTypes = {
     className: PropTypes.string,
     onPopcornInitialize: PropTypes.func.isRequired,
+    onElementSelected: PropTypes.func.isRequired,
   };
 
   componentDidMount() {
