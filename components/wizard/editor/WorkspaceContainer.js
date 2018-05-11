@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { observer } from 'mobx-react';
+import { inject, observer } from 'mobx-react';
 
 import PropTypes from '../../../lib/PropTypes';
 import EditorStateManager from '../../../lib/editor/editorStateManager';
@@ -7,15 +7,15 @@ import VideoSelectionWorkspace from './workspaces/VideoSelectionWorkspace';
 import AudioSelectionWorkspace from './workspaces/AudioSelectionWorkspace';
 import ConstructionWorkspace from './workspaces/ConstructionWorkspace';
 
+@inject('store')
 @observer
 export default class EditorStageChanger extends Component {
   static propTypes = {
     className: PropTypes.string,
-    stateManager: PropTypes.instanceOf(EditorStateManager).isRequired,
   };
 
   render() {
-    const { className, stateManager: { stage } } = this.props;
+    const { className, store: { editorStateManager: { stage } } } = this.props;
     return (
       <div className={className}>
         {(() => {

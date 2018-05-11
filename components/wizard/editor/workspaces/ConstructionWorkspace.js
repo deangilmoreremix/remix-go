@@ -5,6 +5,7 @@ import { inject, observer } from 'mobx-react';
 import PropTypes from '../../../../lib/PropTypes';
 import ConstructionScene from './construction/ConstructionScene';
 import CheckpointsList from './construction/CheckpointsList';
+import PopcornEditor from '../../../../lib/popcorn/plugins/editor.popcorn';
 
 @inject('store')
 @observer
@@ -18,11 +19,14 @@ export default class ConstructionWorkspace extends Component {
   };
 
   onPopcornInitialize(wrapper) {
-    const { store } = this.props;
+    const { store, store: { editorStateManager } } = this.props;
     const popcorn = store.activeProject.attach(store.activeProject.popcornify(wrapper));
     this.setState({ popcorn });
-    popcorn.on('elementSelected', (element) => {
-      console.log('element selected', element);
+    popcorn.on('elementSelected', (event) => {
+      const { type, element } = event;
+      const Editor = PopcornEditor.editors[type];
+      console.log('element type is ', type);
+      editorStateManager.toolbar = <Editor element={element} />;
     });
   }
 
@@ -32,7 +36,7 @@ export default class ConstructionWorkspace extends Component {
   }
 
   render() {
-    const { store, className } = this.props;
+    const { className } = this.props;
     return (
       <Container className={`construction-workspace ${className || ''}`}>
         <ConstructionScene
