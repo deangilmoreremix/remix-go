@@ -19,7 +19,7 @@ export default class ConstructionWorkspace extends Component {
   };
 
   onPopcornInitialize(wrapper) {
-    const { store, store: { editorStateManager } } = this.props;
+    const { store, store: { activeProject, editorStateManager } } = this.props;
     const popcorn = store.activeProject.attach(store.activeProject.popcornify(wrapper));
     this.setState({ popcorn });
     popcorn.on('elementSelected', (event) => {
@@ -30,8 +30,14 @@ export default class ConstructionWorkspace extends Component {
         onElementUpdate={(updatedProps) => {
           /* eslint-disable no-underscore-dangle */
           element._natives._update.call(this, element, updatedProps);
+          activeProject.update(element, updatedProps);
         }}
       />);
+    });
+    popcorn.on('elementUpdated', (event) => {
+      const { element, options } = event;
+      element._natives._update.call(this, element, options);
+      activeProject.update(element, options);
     });
   }
 
