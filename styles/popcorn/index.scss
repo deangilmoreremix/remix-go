@@ -9,4 +9,9 @@
 @import "../../lib/popcorn/plugins/twitter/popcorn.twitter";
 @import "../../lib/popcorn/plugins/wikipedia/popcorn.wikipedia";
 
+@import "../../lib/popcorn/plugins/editor.popcorn";
+@import "../../lib/popcorn/plugins/text/editor.popcorn.text";
+@import "../../lib/popcorn/plugins/image/editor.popcorn.image";
+
+
 @import "transitions";

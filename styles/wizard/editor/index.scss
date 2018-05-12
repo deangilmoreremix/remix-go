@@ -16,6 +16,9 @@
 
   .toolbar {
     height: 60px !important;
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
 
   .editor-pane {

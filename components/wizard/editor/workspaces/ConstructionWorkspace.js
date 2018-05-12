@@ -25,8 +25,13 @@ export default class ConstructionWorkspace extends Component {
     popcorn.on('elementSelected', (event) => {
       const { type, element } = event;
       const Editor = PopcornEditor.editors[type];
-      console.log('element type is ', type);
-      editorStateManager.toolbar = <Editor element={element} />;
+      editorStateManager.toolbar = (<Editor
+        element={element}
+        onElementUpdate={(updatedProps) => {
+          /* eslint-disable no-underscore-dangle */
+          element._natives._update.call(this, element, updatedProps);
+        }}
+      />);
     });
   }
 
