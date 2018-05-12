@@ -13,7 +13,7 @@ import Project from '../../lib/editor/Project';
 import InfiniteLoading from '../common/InfiniteLoading';
 import TemplateItem from './templates/TemplateItem';
 import EmbeddedPlayback from '../common/EmbeddedPlayback';
-import TemplateSearch from './templates/TemplateSearch';
+import Search from './templates/Search';
 
 @inject('api')
 @inject('store')
@@ -55,6 +55,10 @@ export default class Templates extends Component {
     });
   };
 
+  onQueryParamsChange = (query) => {
+    console.log(`${this.queryParams = query}`);
+  };
+
   @observable
   currentPlayback = null;
 
@@ -74,7 +78,10 @@ export default class Templates extends Component {
   render() {
     return (
       <Fragment>
-        <TemplateSearch query={this.queryParams} />
+        <Search 
+          query={this.queryParams} 
+          onQueryParamsChange={this.onQueryParamsChange}
+        />
 
         <PopupboxContainer onClosed={() => { this.currentPlayback.props.url = null; }} />
         <TemplateGallery

@@ -1,11 +1,19 @@
 import React from 'react';
 
-const TemplateSearch = (props) => {
+const Search = (props) => {
 
-  const SearchInput = (query) => {
+  const queryChangeHandler = (event) => {
+    const qry = event.target.value;
+    props.onQueryParamsChange(qry);
+  };
+
+  const SearchInput = (data) => {
     return (
       <div className="search-input">
-        <input className="vr-dashed" type="text" placeholder="Search through your templates..." />
+        <input className="vr-dashed" 
+          type="text" name="query"
+          placeholder="Search through your templates..." 
+          value={data.query} onChange={queryChangeHandler} />
       </div>
     );
   };
@@ -34,4 +42,4 @@ const TemplateSearch = (props) => {
   );
 };
 
-export default TemplateSearch;
+export default Search;
