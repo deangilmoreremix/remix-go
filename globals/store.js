@@ -1,10 +1,9 @@
 import _ from 'lodash';
-import { action, observable } from 'mobx';
+import { observable } from 'mobx';
 import Cookies from 'js-cookie';
-import Router from 'next/router';
 
+import EditorStateManager from '../lib/editor/editorStateManager';
 import requestCreator from '../lib/requestCreator';
-import { showError, showInfo } from '../services/alertService';
 
 let store = null;
 
@@ -30,6 +29,9 @@ class Store {
 
   @observable
   activeProject = null;
+
+  @observable
+  editorStateManager = new EditorStateManager();
 
   constructor(isServer, source, req) {
     if (isServer) {

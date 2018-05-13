@@ -1,0 +1,17 @@
+.popcorn-editor {
+  height: 60%;
+  width: auto;
+  display: flex;
+  flex-direction: row;
+  align-content: center;
+  justify-content: center;
+
+  * {
+    margin: 0 2px;
+  }
+
+  .icon {
+    height: 100%;
+    width: auto;
+  }
+}
