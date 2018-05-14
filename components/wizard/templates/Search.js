@@ -4,26 +4,17 @@ const Search = (props) => {
   let queryString;
 
   const queryHandler = () => {
-    const data = this.queryInput.value;
+    const data = document.getElementById(`query`).value;
     props.onSearch(data);
   };
-
-  const handleKeyPress = (event) => {
-    if (event.key === 'Enter') {
-      queryHandler();
-    }
-  }
 
   const SearchInput = (data) => {
     return (
       <div className="search-input">
         <input className="vr-dashed" 
-          type="text" name="query"
+          type="text" name="query" id="query"
           placeholder="Search through your templates..."
-          ref={(q) => { this.queryInput = q; }}
-          value={queryString} 
-          onKeyPress={handleKeyPress}
-          /> 
+          value={queryString} onChange={queryHandler} /> 
       </div>
     );
   };
