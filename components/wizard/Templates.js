@@ -58,8 +58,9 @@ export default class Templates extends Component {
   onSearch = async (query) => {
     const { api } = this.props;
     const queryElements = await api.list(null, query);
+    console.log(queryElements);
     this.setState({
-      elements: elements.concat(queryElements),
+      elements: queryElements,
       hasMore: queryElements.length > 0,
     });
   };
