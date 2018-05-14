@@ -14,7 +14,7 @@ const Search = (props) => {
         <input className="vr-dashed" 
           type="text" name="query" id="query"
           placeholder="Search through your templates..."
-          value={queryString} onChange={(e) => {queryHandler}} /> 
+          value={queryString} onChange={queryHandler} /> 
       </div>
     );
   };
