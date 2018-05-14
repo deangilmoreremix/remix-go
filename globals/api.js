@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import {action, observable} from 'mobx';
+import { action, observable } from 'mobx';
 import requestCreator from '../lib/requestCreator';
 
 let api = null;
@@ -24,20 +24,21 @@ class Api {
       this.currentUser = req.session && req.session.user;
     }
     Object.assign(this, source);
-    const {common} = this;
+    const { common } = this;
     this.perPage = common.templates.perPage;
     this.authorization = `Basic ${btoa(`${common.clientId}:${common.clientSecret}`)}`;
     this.setupNetworkServices(isServer);
   }
 
   setupNetworkServices(isServer) {
-    const {common} = this;
+    const { common } = this;
     this.request = requestCreator(common.backend, this.authorization, isServer, () => {});
     this.assetsRequest = requestCreator(common.assetsPath, this.authorization, isServer, () => {});
+    this.selfRequest = requestCreator(common.self, null, isServer, () => {});
   }
 
   @action
-  async assets(assetType, page = 0) {
+  async assets(assetType) {
     this.isLoading = true;
     try {
       return this.assetsRequest(
@@ -66,8 +67,24 @@ class Api {
   }
 
   @action
-  async one(id) {
-
+  async uploadImage(data) {
+    this.isLoading = true;
+    try {
+      if (typeof data === 'string') {
+        data = { srcUrl: data };
+      } else {
+        const fd = new FormData();
+        fd.append('image', data);
+        data = fd;
+      }
+      return this.selfRequest(
+        '/api/image?original=true', {
+          method: 'PUT',
+          body: data,
+        });
+    } finally {
+      this.isLoading = false;
+    }
   }
 }
 
@@ -78,6 +95,8 @@ export async function initApiAndPreload(isServer, source, req, preloader) {
     source.common = {
       hostname: req.hostname,
       backend: config.backend,
+      editor: config.editor,
+      self: req.get('host'),
       assetsPath: config.assetsPath,
       clientId: config.client.id,
       clientSecret: config.client.secret,
@@ -109,4 +128,4 @@ export function initApi(source) {
   return api;
 }
 
-export default {initApi, initApiAndPreload};
+export default { initApi, initApiAndPreload };

@@ -1,0 +1,22 @@
+.image-upload {
+  color: $primary-color;
+  margin: 5px 0;
+  background: transparent;
+  padding: 0;
+
+  * {
+    margin: 10px 0;
+    display: block;
+  }
+
+  input[type=text] {
+    width: 100%;
+  }
+
+  .submit-button {
+    height: 30px;
+    width: 100px;
+    border: none;
+    text-transform: uppercase;
+  }
+}
