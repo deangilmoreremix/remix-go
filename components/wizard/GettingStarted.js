@@ -1,7 +1,13 @@
 import React, { Component, Fragment } from 'react';
 import Router from 'next/router';
 import { observer, inject } from 'mobx-react';
+import {
+  PopupboxManager,
+  PopupboxContainer,
+} from 'react-popupbox';
+
 import Templates from './templates/Templates';
+import VideoSelectionWorkspace from './editor/workspaces/VideoSelectionWorkspace';
 
 @inject('api')
 @inject('store')
@@ -28,7 +34,26 @@ export default class GettingStarted extends Component {
   getWizard(wizardType) {
     switch (wizardType) {
       case GettingStarted.WIZARD_TYPES.GENERATOR:
-        return 'Template generator is coming soon';
+        return (
+          <div className="scrollable full-height">
+            <PopupboxContainer />
+            <VideoSelectionWorkspace
+              className="wizard-gallery"
+              onVideoSelected={(video) => {
+                PopupboxManager.open({
+                  content: <h1>Please select niche script for {video}</h1>,
+                  config: {
+                    titleBar: {
+                      enable: true,
+                      text: 'Select a niche script',
+                    },
+                    fadeIn: true,
+                    fadeInSpeed: 200,
+                  },
+                });
+              }}
+            />
+          </div>);
       case GettingStarted.WIZARD_TYPES.VIDEO_UPLOAD:
         return 'Video upload is coming soon';
       default:

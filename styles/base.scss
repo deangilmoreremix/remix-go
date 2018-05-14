@@ -312,3 +312,25 @@ form,
   border-radius: 7px;
   background: $secondary-color;
 }
+
+.media-gallery {
+  margin: 0 auto;
+  padding: 30px 0;
+  text-align: center;
+
+  .video-item {
+    .video {
+      object-fit: cover;
+      position: relative;
+      width: 100%;
+      height: 100%;
+    }
+    .overlay {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      right: 0;
+    }
+  }
+}

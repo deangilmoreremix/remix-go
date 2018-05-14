@@ -78,7 +78,7 @@ export default class Templates extends Component {
       <Fragment>
         <PopupboxContainer onClosed={() => { this.currentPlayback.props.url = null; }} />
         <TemplateGallery
-          className="template-gallery"
+          className="wizard-gallery"
           hasMore={this.state.hasMore}
           loader={<InfiniteLoading key="loader" />}
           loadMore={this.loadMore}
