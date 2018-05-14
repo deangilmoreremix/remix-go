@@ -96,7 +96,7 @@ export async function initApiAndPreload(isServer, source, req, preloader) {
       hostname: req.hostname,
       backend: config.backend,
       editor: config.editor,
-      self: req.get('host'),
+      self: req.get && req.get('host'),
       assetsPath: config.assetsPath,
       clientId: config.client.id,
       clientSecret: config.client.secret,
