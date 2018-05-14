@@ -10,7 +10,7 @@ const app = next({ dev });
 const handle = app.getRequestHandler();
 
 const checkAccess = require('./lib/express/check-access');
-const { processForm, isImage, imageUpload } = require('./lib/editor/image-upload');
+const { processForm, isImage, imageUpload } = require('./lib/express/image-upload');
 
 mobxReact.useStaticRendering(true);
 
