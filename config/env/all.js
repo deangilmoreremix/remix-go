@@ -20,4 +20,13 @@ module.exports = {
   templates: {
     perPage: process.env.TEMPLATES_PER_PAGE || 25,
   },
+  s3: {
+    cdn: process.env.CDN_HOSTNAME || '',
+    key: process.env.S3_KEY || 'AKIAIAQ6WDZIWRHJTGVA',
+    bucket: process.env.S3_BUCKET || 'videoremix',
+    secret: process.env.S3_SECRET || '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',
+    domain: process.env.S3_DOMAIN || 'http://videoremix.s3-website-us-west-1.amazonaws.com',
+    emulation: process.env.S3_EMULATION || false,
+    publishLifetime: process.env.S3_PUBLISH_LIFETIME || 3600,
+  },
 };

@@ -34,7 +34,7 @@ class Api {
     const { common } = this;
     this.request = requestCreator(common.backend, this.authorization, isServer, () => {});
     this.assetsRequest = requestCreator(common.assetsPath, this.authorization, isServer, () => {});
-    this.editorRequest = requestCreator(common.editor, null, isServer, () => {});
+    this.selfRequest = requestCreator(common.self, null, isServer, () => {});
   }
 
   @action
@@ -70,10 +70,17 @@ class Api {
   async uploadImage(data) {
     this.isLoading = true;
     try {
-      return this.editorRequest(
-        '/api/image', {
+      if (data instanceof String) {
+        data = JSON.stringify({ srcUrl: data });
+      } else {
+        const fd = new FormData();
+        fd.append('image', data);
+        data = fd;
+      }
+      return this.selfRequest(
+        '/api/image?original=true', {
           method: 'PUT',
-          body: data instanceof String ? { srcUrl: data } : data,
+          body: data,
         });
     } finally {
       this.isLoading = false;
@@ -89,6 +96,7 @@ export async function initApiAndPreload(isServer, source, req, preloader) {
       hostname: req.hostname,
       backend: config.backend,
       editor: config.editor,
+      self: req.get('host'),
       assetsPath: config.assetsPath,
       clientId: config.client.id,
       clientSecret: config.client.secret,

@@ -5,8 +5,12 @@
   padding: 0;
 
   * {
-    margin: 5px 0;
+    margin: 10px 0;
     display: block;
+  }
+
+  input[type=text] {
+    width: 100%;
   }
 
   .submit-button {
