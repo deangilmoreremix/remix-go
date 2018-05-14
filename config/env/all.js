@@ -8,6 +8,10 @@ module.exports = {
     id: process.env.CLIENT_ID || 'service',
     secret: process.env.CLIENT_SECRET || 'q39Jy70X6ao9dTca',
   },
+  access: {
+    minAuthLevel: process.env.MIN_AUTH_LEVEL || 5,
+    featureName: process.env.GO_FEATURE_NAME || 'goEditor',
+  },
   loginServer: {
     url: process.env.LOGIN_SERVER_URL || 'http://localhost:1340',
     authUrl: process.env.AUTH_SERVER_URL || 'http://localhost:8888',
