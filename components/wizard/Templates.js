@@ -25,6 +25,7 @@ export default class Templates extends Component {
     this.state = {
       hasMore: true,
       elements: [],
+      query: '',
     };
   }
 
@@ -56,33 +57,35 @@ export default class Templates extends Component {
   };
 
   onSearch = async (query) => {
+    this.state.query = query;
     const { api } = this.props;
-    const queryElements = await api.list(null, query);
-    console.log(queryElements);
+    const { elements } = this.state;
+    const newElements = await api.list(elements.length, this.state.query);
     this.setState({
-      elements: queryElements,
-      hasMore: queryElements.length > 0,
+      elements: newElements,
+      hasMore: newElements.length > 0,
+      query,
     });
   };
 
   @observable
   currentPlayback = null;
 
-
   loadMore = async () => {
     const { api } = this.props;
     const { elements } = this.state;
-    const newElements = await api.list(elements.length);
+    const newElements = await api.list(elements.length, this.state.query);
     this.setState({
       elements: elements.concat(newElements),
       hasMore: newElements.length > 0,
+      query: this.state.query,
     });
   };
 
   render() {
     return (
       <Fragment>
-        <Search 
+        <Search
           onSearch={this.onSearch}
         />
 
