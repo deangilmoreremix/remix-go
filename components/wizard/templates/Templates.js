@@ -9,15 +9,20 @@ import {
   PopupboxContainer,
 } from 'react-popupbox';
 
-import Project from '../../lib/editor/Project';
-import InfiniteLoading from '../common/InfiniteLoading';
-import TemplateItem from './templates/TemplateItem';
-import EmbeddedPlayback from '../common/EmbeddedPlayback';
+import PropTypes from '../../../lib/PropTypes';
+import Project from '../../../lib/editor/Project';
+import InfiniteLoading from '../../common/InfiniteLoading';
+import TemplateItem from './TemplateItem';
+import EmbeddedPlayback from '../../common/EmbeddedPlayback';
 
 @inject('api')
 @inject('store')
 @observer
 export default class Templates extends Component {
+  static propTypes = {
+    onTemplateSelected: PropTypes.func.isRequired,
+  };
+
   constructor(props) {
     super(props);
 
@@ -28,7 +33,8 @@ export default class Templates extends Component {
   }
 
   onUse = (template) => {
-    const { store } = this.props;
+    const { store, onTemplateSelected } = this.props;
+    onTemplateSelected(new Project(JSON.parse(template.project.data)));
     store.activeProject = new Project(JSON.parse(template.project.data));
     return Router.push({ pathname: '/edit' });
   };
