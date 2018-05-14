@@ -1,31 +1,28 @@
 import React from 'react';
 
 const Search = (props) => {
+  let queryString;
 
-  const queryChangeHandler = (event) => {
-    const qry = event.target.value;
-    props.onQueryParamsChange(qry);
+  const queryHandler = () => {
+    const data = document.getElementById(`query`).value;
+    props.onSearch(data);
   };
 
   const SearchInput = (data) => {
     return (
       <div className="search-input">
         <input className="vr-dashed" 
-          type="text" name="query"
-          placeholder="Search through your templates..." 
-          value={data.query} onChange={queryChangeHandler} />
+          type="text" name="query" id="query"
+          placeholder="Search through your templates..."
+          value={queryString} onChange={(e) => {queryHandler}} /> 
       </div>
     );
-  };
-
-  const qrySearch = (query) => {
-    console.log(query);
   };
 
   const SearchButton = () => {
     return (
       <div className="search-button">
-        <a onClick={qrySearch}>
+        <a onClick={queryHandler}>
           <img className="search-icon" src="../../../static/images/magnifying-glass.svg" />
         </a>
       </div>
@@ -35,7 +32,7 @@ const Search = (props) => {
   return (
     <div className="search-template">
       <div className="search-field">
-        <SearchInput query={props.query} />
+        <SearchInput />
         <SearchButton />
       </div>
     </div>

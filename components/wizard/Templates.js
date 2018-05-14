@@ -55,15 +55,18 @@ export default class Templates extends Component {
     });
   };
 
-  onQueryParamsChange = (query) => {
-    console.log(`${this.queryParams = query}`);
+  onSearch = async (query) => {
+    const { api } = this.props;
+    const queryElements = await api.list(null, query);
+    this.setState({
+      elements: elements.concat(queryElements),
+      hasMore: queryElements.length > 0,
+    });
   };
 
   @observable
   currentPlayback = null;
 
-  @observable
-  queryParams = '';
 
   loadMore = async () => {
     const { api } = this.props;
@@ -79,8 +82,7 @@ export default class Templates extends Component {
     return (
       <Fragment>
         <Search 
-          query={this.queryParams} 
-          onQueryParamsChange={this.onQueryParamsChange}
+          onSearch={this.onSearch}
         />
 
         <PopupboxContainer onClosed={() => { this.currentPlayback.props.url = null; }} />
