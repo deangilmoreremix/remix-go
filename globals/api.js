@@ -70,8 +70,8 @@ class Api {
   async uploadImage(data) {
     this.isLoading = true;
     try {
-      if (data instanceof String) {
-        data = JSON.stringify({ srcUrl: data });
+      if (typeof data === 'string') {
+        data = { srcUrl: data };
       } else {
         const fd = new FormData();
         fd.append('image', data);
