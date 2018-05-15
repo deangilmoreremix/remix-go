@@ -19,7 +19,10 @@ export default class ActionsPane extends Component {
         <button className="go-button action-button">Preview</button>
         <button
           className="go-button action-button"
-          onClick={() => api.save(activeProject)}
+          onClick={async () => {
+            const result = await api.publish(await api.save(activeProject));
+            console.log(result.url);
+          }}
         >Publish & Share
         </button>
       </Container>
