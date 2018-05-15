@@ -34,6 +34,7 @@ class Api {
     const { common } = this;
     this.request = requestCreator(common.backend, this.authorization, isServer, () => {});
     this.assetsRequest = requestCreator(common.assetsPath, this.authorization, isServer, () => {});
+    this.editorRequest = requestCreator(common.editor, null, isServer, () => {});
     this.selfRequest = requestCreator(common.self, null, isServer, () => {});
   }
 
@@ -77,6 +78,34 @@ class Api {
         fd.append('image', data);
         data = fd;
       }
+      return this.selfRequest(
+        '/api/image?original=true', {
+          method: 'PUT',
+          body: data,
+        });
+    } finally {
+      this.isLoading = false;
+    }
+  }
+
+  @action
+  save(project) {
+    this.isLoading = true;
+    try {
+      return this.selfRequest(
+        '/api/project/', {
+          method: 'POST',
+          body: project.serialize(),
+        });
+    } finally {
+      this.isLoading = false;
+    }
+  }
+
+  @action
+  publish(project) {
+    this.isLoading = true;
+    try {
       return this.selfRequest(
         '/api/image?original=true', {
           method: 'PUT',

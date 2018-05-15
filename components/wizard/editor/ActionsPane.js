@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
 import { Container } from 'reactstrap';
-import { observer } from 'mobx-react';
+import { inject, observer } from 'mobx-react';
 
 import PropTypes from '../../../lib/PropTypes';
 
+@inject('api')
+@inject('store')
 @observer
 export default class ActionsPane extends Component {
   static propTypes = {
@@ -11,11 +13,15 @@ export default class ActionsPane extends Component {
   };
 
   render() {
-    const { className } = this.props;
+    const { className, api, store: { activeProject } } = this.props;
     return (
       <Container className={className}>
         <button className="go-button action-button">Preview</button>
-        <button className="go-button action-button">Publish & Share</button>
+        <button
+          className="go-button action-button"
+          onClick={() => api.save(activeProject)}
+        >Publish & Share
+        </button>
       </Container>
     );
   }
