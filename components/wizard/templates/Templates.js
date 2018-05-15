@@ -66,7 +66,7 @@ export default class Templates extends Component {
   loadMore = async () => {
     const { api } = this.props;
     const { elements } = this.state;
-    const newElements = await api.list(elements.length);
+    const newElements = await api.templates(elements.length);
     this.setState({
       elements: elements.concat(newElements),
       hasMore: newElements.length > 0,
