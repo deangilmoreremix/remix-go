@@ -89,27 +89,38 @@ class Api {
   }
 
   @action
-  save(project) {
+  async save(project) {
     this.isLoading = true;
     try {
-      return this.selfRequest(
-        '/api/project/', {
+      const response = await this.request(
+        '/api/users/me/makes', {
           method: 'POST',
-          body: project.serialize(),
+          headers: {
+            'on-behalf': this.currentUser.id,
+          },
+          body: {
+            title: project.serialize().name,
+            description: project.serialize().description,
+            project: project.serialize(),
+          },
         });
+      project.make = response._id;
+      return project;
     } finally {
       this.isLoading = false;
     }
   }
 
   @action
-  publish(project) {
+  async publish(project) {
     this.isLoading = true;
     try {
-      return this.selfRequest(
-        '/api/image?original=true', {
-          method: 'PUT',
-          body: data,
+      return this.request(
+        `/api/users/me/makes/${project.make}/publish`, {
+          method: 'POST',
+          headers: {
+            'on-behalf': this.currentUser.id,
+          },
         });
     } finally {
       this.isLoading = false;
