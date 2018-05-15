@@ -57,10 +57,9 @@ export default class Templates extends Component {
   };
 
   onSearch = async (query) => {
-    this.state.query = query;
     const { api } = this.props;
     const { elements } = this.state;
-    const newElements = await api.list(elements.length, this.state.query);
+    const newElements = await api.list(elements.length, query);
     this.setState({
       elements: newElements,
       hasMore: newElements.length > 0,
@@ -74,21 +73,19 @@ export default class Templates extends Component {
   loadMore = async () => {
     const { api } = this.props;
     const { elements } = this.state;
-    const newElements = await api.list(elements.length, this.state.query);
+    const { query } = this.state;
+    const newElements = await api.list(elements.length, query);
     this.setState({
       elements: elements.concat(newElements),
       hasMore: newElements.length > 0,
-      query: this.state.query,
+      query,
     });
   };
 
   render() {
     return (
       <Fragment>
-        <Search
-          onSearch={this.onSearch}
-        />
-
+        <Search onSearch={q => this.onSearch(q)} />
         <PopupboxContainer onClosed={() => { this.currentPlayback.props.url = null; }} />
         <TemplateGallery
           className="template-gallery"

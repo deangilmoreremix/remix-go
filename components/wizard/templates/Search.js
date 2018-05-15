@@ -2,28 +2,23 @@ import React from 'react';
 
 const Search = (props) => {
   let queryString;
+  let queryInput;
 
   const queryHandler = () => {
-    const data = this.queryInput.value;
-    props.onSearch(data);
+    const { value } = queryInput;
+    props.onSearch(value);
   };
 
-  const handleKeyPress = (event) => {
-    if (event.key === 'Enter') {
-      queryHandler();
-    }
-  }
-
-  const SearchInput = (data) => {
+  const SearchInput = () => {
     return (
       <div className="search-input">
         <input className="vr-dashed" 
           type="text" name="query"
           placeholder="Search through your templates..."
-          ref={(q) => { this.queryInput = q; }}
-          value={queryString} 
-          onKeyPress={handleKeyPress}
-          /> 
+          ref={(q) => { queryInput = q; }}
+          value={queryString}
+          onInput={queryHandler}
+        /> 
       </div>
     );
   };
