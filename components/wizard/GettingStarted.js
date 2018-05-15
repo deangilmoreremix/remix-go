@@ -8,6 +8,7 @@ import {
 
 import Templates from './templates/Templates';
 import VideoSelectionWorkspace from './editor/workspaces/VideoSelectionWorkspace';
+import NicheScriptsWorkspace from "./niche-scripts/NicheScriptsWorkspace";
 
 @inject('api')
 @inject('store')
@@ -40,8 +41,12 @@ export default class GettingStarted extends Component {
             <VideoSelectionWorkspace
               className="wizard-gallery"
               onVideoSelected={(video) => {
+                const nicheSelection = (<NicheScriptsWorkspace className="niche-scripts" onScriptSelected={(script) => {
+                  console.log(script);
+                }}
+                />);
                 PopupboxManager.open({
-                  content: <h1>Please select niche script for {video}</h1>,
+                  content: nicheSelection,
                   config: {
                     titleBar: {
                       enable: true,
