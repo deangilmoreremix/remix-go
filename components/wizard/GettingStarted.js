@@ -22,15 +22,17 @@ export default class GettingStarted extends Component {
   };
 
   state = {
-    wizardType: null,
+    wizardType: GettingStarted.WIZARD_TYPES.FROM_TEMPLATE,
   };
 
   componentDidMount() {
-    let wizardType = GettingStarted.WIZARD_TYPES.FROM_TEMPLATE;
+    let wizardType;
     if (process.browser) {
       wizardType = Router.query.wizard;
     }
-    this.setState({ wizardType });
+    if (wizardType) {
+      this.setState({ wizardType });
+    }
   }
 
   getWizard(wizardType) {
