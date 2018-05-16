@@ -34,6 +34,7 @@ class Api {
     const { common } = this;
     this.request = requestCreator(common.backend, this.authorization, isServer, () => {});
     this.assetsRequest = requestCreator(common.assetsPath, this.authorization, isServer, () => {});
+    this.editorRequest = requestCreator(common.editor, null, isServer, () => {});
     this.selfRequest = requestCreator(common.self, null, isServer, () => {});
   }
 
@@ -81,6 +82,45 @@ class Api {
         '/api/image?original=true', {
           method: 'PUT',
           body: data,
+        });
+    } finally {
+      this.isLoading = false;
+    }
+  }
+
+  @action
+  async save(project) {
+    this.isLoading = true;
+    try {
+      const response = await this.request(
+        '/api/users/me/makes', {
+          method: 'POST',
+          headers: {
+            'on-behalf': this.currentUser.id,
+          },
+          body: {
+            title: project.serialize().name,
+            description: project.serialize().description,
+            project: project.serialize(),
+          },
+        });
+      project.make = response._id;
+      return project;
+    } finally {
+      this.isLoading = false;
+    }
+  }
+
+  @action
+  async publish(project) {
+    this.isLoading = true;
+    try {
+      return this.request(
+        `/api/users/me/makes/${project.make}/publish`, {
+          method: 'POST',
+          headers: {
+            'on-behalf': this.currentUser.id,
+          },
         });
     } finally {
       this.isLoading = false;
