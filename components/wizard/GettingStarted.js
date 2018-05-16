@@ -8,7 +8,8 @@ import {
 
 import Templates from './templates/Templates';
 import VideoSelectionWorkspace from './editor/workspaces/VideoSelectionWorkspace';
-import NicheScriptsWorkspace from "./niche-scripts/NicheScriptsWorkspace";
+import NicheScriptsWorkspace from './niche-scripts/NicheScriptsWorkspace';
+import Project from '../../lib/editor/Project';
 
 @inject('api')
 @inject('store')
@@ -41,9 +42,11 @@ export default class GettingStarted extends Component {
             <VideoSelectionWorkspace
               className="wizard-gallery"
               onVideoSelected={(video) => {
-                const nicheSelection = (<NicheScriptsWorkspace className="niche-scripts" onScriptSelected={(script) => {
-                  console.log(script);
-                }}
+                const nicheSelection = (<NicheScriptsWorkspace
+                  className="niche-scripts"
+                  onScriptSelected={(script) => {
+                    this.handleWizardSelection({ script, video });
+                  }}
                 />);
                 PopupboxManager.open({
                   content: nicheSelection,
@@ -62,7 +65,7 @@ export default class GettingStarted extends Component {
       case GettingStarted.WIZARD_TYPES.VIDEO_UPLOAD:
         return 'Video upload is coming soon';
       default:
-        return <Templates onTemplateSelected={template => this.handleWizardSelection(template)} />;
+        return <Templates onTemplateSelected={data => this.handleWizardSelection(data)} />;
     }
   }
 
@@ -71,7 +74,12 @@ export default class GettingStarted extends Component {
     const { store } = this.props;
     switch (wizardType) {
       case GettingStarted.WIZARD_TYPES.FROM_TEMPLATE:
-        store.activeProject = data;
+        store.activeProject = new Project(JSON.parse(data.project.data));
+        Router.push({ pathname: '/edit' });
+        break;
+      case GettingStarted.WIZARD_TYPES.GENERATOR:
+        store.activeProject = new Project(JSON.parse(data.script.project.data));
+        store.activeProject.video = data.video;
         Router.push({ pathname: '/edit' });
         break;
       default:
