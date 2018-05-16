@@ -1,5 +1,4 @@
 import React, { Component, Fragment } from 'react';
-import Router from 'next/router';
 import { observable } from 'mobx';
 import { observer, inject } from 'mobx-react';
 
@@ -9,30 +8,28 @@ import {
   PopupboxContainer,
 } from 'react-popupbox';
 
-import Project from '../../lib/editor/Project';
-import InfiniteLoading from '../common/InfiniteLoading';
-import TemplateItem from './templates/TemplateItem';
-import EmbeddedPlayback from '../common/EmbeddedPlayback';
+import PropTypes from '../../../lib/PropTypes';
+import InfiniteLoading from '../../common/InfiniteLoading';
+import TemplateItem from './TemplateItem';
+import EmbeddedPlayback from '../../common/EmbeddedPlayback';
+import Search from './Search';
 
 @inject('api')
-@inject('store')
 @observer
 export default class Templates extends Component {
+  static propTypes = {
+    onTemplateSelected: PropTypes.func.isRequired,
+  };
+
   constructor(props) {
     super(props);
 
     this.state = {
       hasMore: true,
       elements: [],
+      query: '',
     };
   }
-
-  onUse = (template) => {
-    const { store } = this.props;
-    store.activeProject = new Project(JSON.parse(template.project.data));
-    return Router.push({ pathname: '/edit' });
-  };
-
 
   onPreview = (template) => {
     this.currentPlayback = (<EmbeddedPlayback
@@ -54,25 +51,39 @@ export default class Templates extends Component {
     });
   };
 
+  onSearch = async (query) => {
+    const { api } = this.props;
+    const { elements } = this.state;
+    const newElements = await api.list(elements.length, query);
+    this.setState({
+      elements: newElements,
+      hasMore: newElements.length > 0,
+      query,
+    });
+  };
+
   @observable
   currentPlayback = null;
 
   loadMore = async () => {
     const { api } = this.props;
     const { elements } = this.state;
-    const newElements = await api.list(elements.length);
+    const { query } = this.state;
+    const newElements = await api.templates(elements.length, query);
     this.setState({
       elements: elements.concat(newElements),
       hasMore: newElements.length > 0,
+      query,
     });
   };
 
   render() {
     return (
       <Fragment>
+        <Search onSearch={q => this.onSearch(q)} />
         <PopupboxContainer onClosed={() => { this.currentPlayback.props.url = null; }} />
         <TemplateGallery
-          className="template-gallery"
+          className="wizard-gallery"
           hasMore={this.state.hasMore}
           loader={<InfiniteLoading key="loader" />}
           loadMore={this.loadMore}
@@ -90,7 +101,10 @@ export default class Templates extends Component {
                 key={idx}
                 template={item}
                 onPreview={this.onPreview}
-                onUse={this.onUse}
+                onUse={(template) => {
+                  const { onTemplateSelected } = this.props;
+                  onTemplateSelected(template);
+                }}
               />
             ))
           }

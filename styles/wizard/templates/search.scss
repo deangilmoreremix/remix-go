@@ -1,0 +1,50 @@
+@import "../../_variables";
+@import "placeholders";
+
+.search-template {
+  color: $primary-color;
+  padding: 30px 20px 20px 20px;
+  display: flex;
+  justify-content: center; 
+
+  .search-field {
+    display: flex;
+    align-items: center;
+    width: 50%;
+
+    .search-input {
+      width: 70%;
+      input {
+        &.vr-dashed {
+          margin-left: 10px;
+          width: 100%;
+          font-size: 1em;
+          border: none;
+          background-color: transparent;
+          border-width: thin;
+          border-bottom-style: dashed;
+          padding: 10px;
+          &:active, &:focus {
+            outline: none;
+          }
+        }
+      } 
+    }
+
+    .search-button {
+      width: 10%;
+      text-align: center;
+      a {
+        cursor: pointer;
+        img {
+          &.search-icon {
+            width: 20px;
+            &:hover {
+              color: blue;
+            }
+          }
+        }
+      }
+    }
+  }
+}

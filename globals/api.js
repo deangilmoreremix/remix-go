@@ -34,6 +34,7 @@ class Api {
     const { common } = this;
     this.request = requestCreator(common.backend, this.authorization, isServer, () => {});
     this.assetsRequest = requestCreator(common.assetsPath, this.authorization, isServer, () => {});
+    this.editorRequest = requestCreator(common.editor, null, isServer, () => {});
     this.selfRequest = requestCreator(common.self, null, isServer, () => {});
   }
 
@@ -51,11 +52,43 @@ class Api {
   }
 
   @action
-  async list(page = 0, query = '') {
+  async templates(page = 0, query = '') {
     this.isLoading = true;
     try {
       return this.request(
-        `/api/makes/go?perPage=${this.perPage}&page=${page + 1}&q=${query}`, {
+        `/api/makes/go?segment=templates&perPage=${this.perPage}&page=${page + 1}&q=${query}`, {
+          method: 'GET',
+          headers: {
+            'on-behalf': this.currentUser.id,
+          },
+        });
+    } finally {
+      this.isLoading = false;
+    }
+  }
+
+  @action
+  async nicheScripts(page = 0, query = '') {
+    this.isLoading = true;
+    try {
+      return this.request(
+        `/api/makes/go?segment=nicheScripts&perPage=${this.perPage}&page=${page + 1}&q=${query}`, {
+          method: 'GET',
+          headers: {
+            'on-behalf': this.currentUser.id,
+          },
+        });
+    } finally {
+      this.isLoading = false;
+    }
+  }
+
+  @action
+  async cta(page = 0, query = '') {
+    this.isLoading = true;
+    try {
+      return this.request(
+        `/api/makes/go?segment=cta&perPage=${this.perPage}&page=${page + 1}&q=${query}`, {
           method: 'GET',
           headers: {
             'on-behalf': this.currentUser.id,
@@ -81,6 +114,45 @@ class Api {
         '/api/image?original=true', {
           method: 'PUT',
           body: data,
+        });
+    } finally {
+      this.isLoading = false;
+    }
+  }
+
+  @action
+  async save(project) {
+    this.isLoading = true;
+    try {
+      const response = await this.request(
+        '/api/users/me/makes', {
+          method: 'POST',
+          headers: {
+            'on-behalf': this.currentUser.id,
+          },
+          body: {
+            title: project.serialize().name,
+            description: project.serialize().description,
+            project: project.serialize(),
+          },
+        });
+      project.make = response._id;
+      return project;
+    } finally {
+      this.isLoading = false;
+    }
+  }
+
+  @action
+  async publish(project) {
+    this.isLoading = true;
+    try {
+      return this.request(
+        `/api/users/me/makes/${project.make}/publish`, {
+          method: 'POST',
+          headers: {
+            'on-behalf': this.currentUser.id,
+          },
         });
     } finally {
       this.isLoading = false;

@@ -15,7 +15,7 @@ export default class EditorStageChanger extends Component {
   };
 
   render() {
-    const { className, store: { editorStateManager: { stage } } } = this.props;
+    const { className, store: { activeProject, editorStateManager: { stage } } } = this.props;
     return (
       <div className={className}>
         {(() => {
@@ -23,7 +23,10 @@ export default class EditorStageChanger extends Component {
             case EditorStateManager.STAGE_TYPES.VIDEO_CUSTOMISE:
               return (
                 <div className="scrollable full-height">
-                  <VideoSelectionWorkspace />
+                  <VideoSelectionWorkspace onVideoSelected={(video) => {
+                    activeProject.video = video;
+                  }}
+                  />
                 </div>
               );
             case EditorStateManager.STAGE_TYPES.AUDIO_CUSTOMISE:

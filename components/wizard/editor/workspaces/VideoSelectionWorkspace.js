@@ -6,7 +6,6 @@ import {
   PopupboxManager,
   PopupboxContainer,
 } from 'react-popupbox';
-import Router from 'next/router';
 
 import VideoGallery from 'react-masonry-infinite';
 
@@ -19,21 +18,17 @@ import PropTypes from '../../../../lib/PropTypes';
 export default class VideoSelectionWorkspace extends Component {
   static propTypes = {
     className: PropTypes.string,
+    onVideoSelected: PropTypes.func.isRequired,
   };
-
-  @observable
-  currentPlayback = null;
 
   state = {
     hasMore: true,
     elements: [],
   };
 
-  onUse = () => Router.push({ pathname: '/publish' });
-
   onPreview = (title, url) => {
     this.currentPlayback = (
-      <video className="video" preload autoPlay controls style={{width: '100%', height: '100%'}}>
+      <video className="video" preload autoPlay controls style={{ width: '100%', height: '100%' }}>
         <source src={url} />
       </video>);
     PopupboxManager.open({
@@ -49,6 +44,9 @@ export default class VideoSelectionWorkspace extends Component {
     });
   };
 
+  @observable
+  currentPlayback = null;
+
   loadMore = async () => {
     const { api } = this.props;
     const { elements } = this.state;
@@ -61,12 +59,13 @@ export default class VideoSelectionWorkspace extends Component {
   };
 
   render() {
-    const { className } = this.props;
+    const { className, onVideoSelected } = this.props;
     return (
       <Fragment>
         <PopupboxContainer onClosed={() => {
           delete this.currentPlayback.props.children;
-        }} />
+        }}
+        />
         <VideoGallery
           useWindow={false}
           className={`media-gallery ${className}`}
@@ -88,7 +87,7 @@ export default class VideoSelectionWorkspace extends Component {
                 url={url}
                 preview={preview}
                 onPreview={this.onPreview}
-                onUse={this.onUse}
+                onUse={video => onVideoSelected(video)}
               />
             ))
           }

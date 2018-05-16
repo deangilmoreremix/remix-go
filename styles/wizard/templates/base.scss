@@ -1,3 +1,65 @@
 .templates {
   min-height: 600px;
 }
+
+.wizard-gallery {
+  margin: 30px auto;
+  text-align: center;
+}
+
+.card {
+  width: 200px;
+  overflow: hidden;
+  height: 200px;
+  box-shadow: rgba(0, 0, 0, 0.14902) 0 2px 4px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+  cursor: pointer;
+  border: none;
+
+  .overlay {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    background: rgba(0, 0, 0, 0.6);
+    opacity: 0;
+    transition: opacity 0.3s;
+
+    &:hover {
+      opacity: 1;
+      transition: opacity 0.3s;
+    }
+
+    .buttons-container {
+      height: 30px;
+      display: block;
+      position: relative;
+      margin-top: 42.5%;
+
+      .button {
+        height: 25px;
+        display: inline-block;;
+        width: 70px;
+        padding: 3px 8px;
+        border: white solid 0.5px;
+        border-radius: 10px;
+        margin: 0 5px;
+      }
+
+      .button-primary {
+        background: $secondary-color;
+        border-color: $secondary-color;
+      }
+    }
+  }
+}
+
+.card > h2 {
+  font-size: 6em;
+  color: #fff;
+  margin: 1.6em 0;
+}
