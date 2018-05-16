@@ -12,6 +12,7 @@ import PropTypes from '../../../lib/PropTypes';
 import InfiniteLoading from '../../common/InfiniteLoading';
 import TemplateItem from './TemplateItem';
 import EmbeddedPlayback from '../../common/EmbeddedPlayback';
+import Search from './templates/Search';
 
 @inject('api')
 @observer
@@ -26,6 +27,7 @@ export default class Templates extends Component {
     this.state = {
       hasMore: true,
       elements: [],
+      query: '',
     };
   }
 
@@ -49,22 +51,36 @@ export default class Templates extends Component {
     });
   };
 
+  onSearch = async (query) => {
+    const { api } = this.props;
+    const { elements } = this.state;
+    const newElements = await api.list(elements.length, query);
+    this.setState({
+      elements: newElements,
+      hasMore: newElements.length > 0,
+      query,
+    });
+  };
+
   @observable
   currentPlayback = null;
 
   loadMore = async () => {
     const { api } = this.props;
     const { elements } = this.state;
-    const newElements = await api.templates(elements.length);
+    const { query } = this.state;
+    const newElements = await api.templates(elements.length, query);
     this.setState({
       elements: elements.concat(newElements),
       hasMore: newElements.length > 0,
+      query,
     });
   };
 
   render() {
     return (
       <Fragment>
+        <Search onSearch={q => this.onSearch(q)} />
         <PopupboxContainer onClosed={() => { this.currentPlayback.props.url = null; }} />
         <TemplateGallery
           className="wizard-gallery"
