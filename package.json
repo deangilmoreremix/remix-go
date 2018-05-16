@@ -3,6 +3,10 @@
   "version": "1.0.0",
   "description": "VideoRemix Go: lite video editor",
   "main": "index.js",
+  "engines": {
+    "node": "8.9.1",
+    "npm": "5.5.1"
+  },
   "scripts": {
     "dev": "node server.js",
     "build": "next build && next export",
