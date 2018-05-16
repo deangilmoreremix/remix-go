@@ -71,7 +71,7 @@ export default class GettingStarted extends Component {
     }
   }
 
-  handleWizardSelection(data) {
+  async handleWizardSelection(data) {
     const { wizardType } = this.state;
     const { store } = this.props;
     switch (wizardType) {
@@ -81,7 +81,7 @@ export default class GettingStarted extends Component {
         break;
       case GettingStarted.WIZARD_TYPES.GENERATOR:
         store.activeProject = new Project(JSON.parse(data.script.project.data));
-        store.activeProject.video = data.video;
+        await store.activeProject.updateVideo(data.video);
         Router.push({ pathname: '/edit' });
         break;
       default:

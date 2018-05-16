@@ -11,6 +11,7 @@ const handle = app.getRequestHandler();
 
 const checkAccess = require('./lib/express/check-access');
 const { processForm, isImage, imageUpload } = require('./lib/express/image-upload');
+const getContentType = require('./lib/express/get-content-type');
 
 mobxReact.useStaticRendering(true);
 
@@ -29,6 +30,7 @@ app.prepare().then(() => {
   server.use(express.json());
   server.use(express.urlencoded());
   server.put('/api/image', processForm, isImage, imageUpload);
+  server.get('/api/get-content-type', getContentType);
 
   server.get('/_next/*', (req, res) => {
     handle(req, res);
