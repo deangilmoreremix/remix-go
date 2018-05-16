@@ -2,7 +2,7 @@
 @import "placeholders";
 
 .search-template {
-  color: $primary-color;
+  color: $default-gray;
   padding: 30px 20px 20px 20px;
   display: flex;
   justify-content: center; 
@@ -22,6 +22,7 @@
           border: none;
           background-color: transparent;
           border-width: thin;
+          border-bottom-color: $default-gray;
           border-bottom-style: dashed;
           padding: 0 0 5px;
           &:active, &:focus {
