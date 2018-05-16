@@ -52,11 +52,43 @@ class Api {
   }
 
   @action
-  async list(page = 0, query = '') {
+  async templates(page = 0, query = '') {
     this.isLoading = true;
     try {
       return this.request(
-        `/api/makes/go?perPage=${this.perPage}&page=${page + 1}&q=${query}`, {
+        `/api/makes/go?segment=templates&perPage=${this.perPage}&page=${page + 1}&q=${query}`, {
+          method: 'GET',
+          headers: {
+            'on-behalf': this.currentUser.id,
+          },
+        });
+    } finally {
+      this.isLoading = false;
+    }
+  }
+
+  @action
+  async nicheScripts(page = 0, query = '') {
+    this.isLoading = true;
+    try {
+      return this.request(
+        `/api/makes/go?segment=nicheScripts&perPage=${this.perPage}&page=${page + 1}&q=${query}`, {
+          method: 'GET',
+          headers: {
+            'on-behalf': this.currentUser.id,
+          },
+        });
+    } finally {
+      this.isLoading = false;
+    }
+  }
+
+  @action
+  async cta(page = 0, query = '') {
+    this.isLoading = true;
+    try {
+      return this.request(
+        `/api/makes/go?segment=cta&perPage=${this.perPage}&page=${page + 1}&q=${query}`, {
           method: 'GET',
           headers: {
             'on-behalf': this.currentUser.id,

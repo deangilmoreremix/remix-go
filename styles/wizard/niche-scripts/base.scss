@@ -1,0 +1,30 @@
+.niche-scripts {
+  width: 50vw;
+  height: 50vh;
+
+  .wizard-list {
+
+    .list-item {
+      width: 100%;
+      padding-bottom: 7px;
+      height: auto;
+      color: $primary-color;
+      font-size: 1.1rem;
+      border-bottom: solid 0.3px $primary-color;
+
+      .script-title {
+        display: inline-block;
+        padding-top: 3px;
+      }
+
+      .go-button {
+        color: $white;
+        cursor: pointer;
+        float: right;
+        height: 24px;
+        padding: 2px 0;
+        width: 50px;
+      }
+    }
+  }
+}

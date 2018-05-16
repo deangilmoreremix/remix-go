@@ -1,4 +1,4 @@
 import pageFactory from '../components/hoc/pageFactory';
-import Templates from '../components/wizard/Templates';
+import GettingStarted from '../components/wizard/GettingStarted';
 
-export default pageFactory(Templates, 'templates');
+export default pageFactory(GettingStarted, 'gettingStarted');

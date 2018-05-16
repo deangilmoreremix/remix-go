@@ -1,5 +1,4 @@
 import React, { Component, Fragment } from 'react';
-import Router from 'next/router';
 import { observable } from 'mobx';
 import { observer, inject } from 'mobx-react';
 
@@ -9,16 +8,19 @@ import {
   PopupboxContainer,
 } from 'react-popupbox';
 
-import Project from '../../lib/editor/Project';
-import InfiniteLoading from '../common/InfiniteLoading';
-import TemplateItem from './templates/TemplateItem';
-import EmbeddedPlayback from '../common/EmbeddedPlayback';
+import PropTypes from '../../../lib/PropTypes';
+import InfiniteLoading from '../../common/InfiniteLoading';
+import TemplateItem from './TemplateItem';
+import EmbeddedPlayback from '../../common/EmbeddedPlayback';
 import Search from './templates/Search';
 
 @inject('api')
-@inject('store')
 @observer
 export default class Templates extends Component {
+  static propTypes = {
+    onTemplateSelected: PropTypes.func.isRequired,
+  };
+
   constructor(props) {
     super(props);
 
@@ -28,13 +30,6 @@ export default class Templates extends Component {
       query: '',
     };
   }
-
-  onUse = (template) => {
-    const { store } = this.props;
-    store.activeProject = new Project(JSON.parse(template.project.data));
-    return Router.push({ pathname: '/edit' });
-  };
-
 
   onPreview = (template) => {
     this.currentPlayback = (<EmbeddedPlayback
@@ -74,7 +69,7 @@ export default class Templates extends Component {
     const { api } = this.props;
     const { elements } = this.state;
     const { query } = this.state;
-    const newElements = await api.list(elements.length, query);
+    const newElements = await api.templates(elements.length, query);
     this.setState({
       elements: elements.concat(newElements),
       hasMore: newElements.length > 0,
@@ -88,7 +83,7 @@ export default class Templates extends Component {
         <Search onSearch={q => this.onSearch(q)} />
         <PopupboxContainer onClosed={() => { this.currentPlayback.props.url = null; }} />
         <TemplateGallery
-          className="template-gallery"
+          className="wizard-gallery"
           hasMore={this.state.hasMore}
           loader={<InfiniteLoading key="loader" />}
           loadMore={this.loadMore}
@@ -100,14 +95,16 @@ export default class Templates extends Component {
             { mq: '1536px', columns: 5, gutter: 30 },
           ]}
         >
-
           {
             this.state.elements.map((item, idx) => (
               <TemplateItem
                 key={idx}
                 template={item}
                 onPreview={this.onPreview}
-                onUse={this.onUse}
+                onUse={(template) => {
+                  const { onTemplateSelected } = this.props;
+                  onTemplateSelected(template);
+                }}
               />
             ))
           }
