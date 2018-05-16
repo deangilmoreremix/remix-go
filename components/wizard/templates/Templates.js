@@ -12,7 +12,7 @@ import PropTypes from '../../../lib/PropTypes';
 import InfiniteLoading from '../../common/InfiniteLoading';
 import TemplateItem from './TemplateItem';
 import EmbeddedPlayback from '../../common/EmbeddedPlayback';
-import Search from './templates/Search';
+import Search from './Search';
 
 @inject('api')
 @observer
