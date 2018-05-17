@@ -76,11 +76,11 @@ export default class GettingStarted extends Component {
     const { store } = this.props;
     switch (wizardType) {
       case GettingStarted.WIZARD_TYPES.FROM_TEMPLATE:
-        store.activeProject = new Project(JSON.parse(data.project.data));
+        store.activeProject = new Project(data.project, true);
         Router.push({ pathname: '/edit' });
         break;
       case GettingStarted.WIZARD_TYPES.GENERATOR:
-        store.activeProject = new Project(JSON.parse(data.script.project.data));
+        store.activeProject = new Project(data.script, true);
         await store.activeProject.updateVideo(data.video);
         Router.push({ pathname: '/edit' });
         break;
