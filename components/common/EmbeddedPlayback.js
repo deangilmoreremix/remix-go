@@ -7,8 +7,8 @@ export default class EmbeddedPlayback extends Component {
   static propTypes = {
     url: PropTypes.string.isRequired,
     title: PropTypes.string.isRequired,
-    width: PropTypes.number.isRequired,
-    height: PropTypes.number.isRequired,
+    width: PropTypes.string.isRequired,
+    height: PropTypes.string.isRequired,
   };
 
   render() {

@@ -147,13 +147,16 @@ class Api {
   async publish(project) {
     this.isLoading = true;
     try {
-      return this.request(
+      const response = await this.request(
         `/api/users/me/makes/${project.make}/publish`, {
           method: 'POST',
           headers: {
             'on-behalf': this.currentUser.id,
           },
         });
+      project.url = response.url;
+      project.contentUrl = response.contenturl;
+      return project;
     } finally {
       this.isLoading = false;
     }
