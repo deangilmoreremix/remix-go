@@ -76,7 +76,7 @@ export default class GettingStarted extends Component {
     const { store } = this.props;
     switch (wizardType) {
       case GettingStarted.WIZARD_TYPES.FROM_TEMPLATE:
-        store.activeProject = new Project(data.project, true);
+        store.activeProject = new Project(data, true);
         Router.push({ pathname: '/edit' });
         break;
       case GettingStarted.WIZARD_TYPES.GENERATOR:

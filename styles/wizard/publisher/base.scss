@@ -15,6 +15,7 @@
   }
 
   .title-edit {
+    padding: 0 10px;
     height: 30px;
     display: flex;
     justify-content: center;
@@ -31,6 +32,7 @@
     }
 
     .button {
+      cursor: pointer;
       text-align: center;
       height: 25px;
       display: inline-block;;

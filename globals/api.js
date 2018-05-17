@@ -137,7 +137,8 @@ class Api {
             title: project.serialize().name,
             description: project.serialize().description,
             project: project.serialize(),
-            remixedFrom: project.serialize().remixedFrom,
+            thumbnail: project.serialize().thumbnail,
+            remixedFrom: project.serialize().source,
           },
         });
       project.make = response;

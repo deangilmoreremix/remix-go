@@ -13,7 +13,8 @@ import ProjectNameChanger from './publisher/ProjectNameChanger';
 export default class Publisher extends Component {
   onTitleUpdate = async (title) => {
     const { api, store: { activeProject } } = this.props;
-    await api.save(activeProject, { title });
+    activeProject.name = title;
+    await api.save(activeProject);
   };
 
   render() {
@@ -31,7 +32,7 @@ export default class Publisher extends Component {
                 <ProjectNameChanger
                   className="overview-item title-edit"
                   title={activeProject.make.title}
-                  onChange={(title) => this.onTitleUpdate(title)}
+                  onChange={title => this.onTitleUpdate(title)}
                 />
                 <EmbeddedPlayback
                   className="overview-item"
