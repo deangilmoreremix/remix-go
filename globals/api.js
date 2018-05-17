@@ -124,9 +124,12 @@ class Api {
   async save(project) {
     this.isLoading = true;
     try {
+      const path = project.make ?
+        `/api/users/me/makes/${project.make._id}` :
+        '/api/users/me/makes';
       const response = await this.request(
-        '/api/users/me/makes', {
-          method: 'POST',
+        path, {
+          method: project.make ? 'PATCH' : 'POST',
           headers: {
             'on-behalf': this.currentUser.id,
           },
@@ -134,9 +137,10 @@ class Api {
             title: project.serialize().name,
             description: project.serialize().description,
             project: project.serialize(),
+            remixedFrom: project.serialize().remixedFrom,
           },
         });
-      project.make = response._id;
+      project.make = response;
       return project;
     } finally {
       this.isLoading = false;
@@ -148,14 +152,14 @@ class Api {
     this.isLoading = true;
     try {
       const response = await this.request(
-        `/api/users/me/makes/${project.make}/publish`, {
+        `/api/users/me/makes/${project.make._id}/publish`, {
           method: 'POST',
           headers: {
             'on-behalf': this.currentUser.id,
           },
         });
-      project.url = response.url;
-      project.contentUrl = response.contenturl;
+      project.make.url = response.url;
+      project.make.contentUrl = response.contenturl;
       return project;
     } finally {
       this.isLoading = false;
