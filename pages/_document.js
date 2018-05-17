@@ -15,6 +15,9 @@ export default class MyDocument extends Document {
   render() {
     return (
       <html lang="en">
+        <head>
+          <title>VideoRemix GO</title>
+        </head>
         <body>
           {/* eslint-disable react/no-danger */}
           <style dangerouslySetInnerHTML={{ __html: stylesheet }} />
