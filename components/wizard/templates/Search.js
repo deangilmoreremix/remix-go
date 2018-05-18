@@ -5,7 +5,7 @@ import PropTypes from '../../../lib/PropTypes';
 export default class Search extends Component {
 
   static propTypes = {
-    queryString: PropTypes.string,
+    query: PropTypes.string,
   };
 
   constructor(props) {
@@ -13,9 +13,7 @@ export default class Search extends Component {
   }
 
   render() {
-
-    let queryString;
-
+    
     const queryHandler = () => {
       const { value } = this.queryInput;
       this.props.onSearch(value);
@@ -28,7 +26,6 @@ export default class Search extends Component {
             <input className="vr-dashed" 
               type="text" name="query"
               placeholder="Search through your templates..."
-              value={queryString}
               onChange={queryHandler}
               ref={(q) => { this.queryInput = q; }}
             /> 
