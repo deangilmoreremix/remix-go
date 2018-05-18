@@ -1,22 +1,19 @@
 import React, { Component } from 'react';
 
 export default class Search extends Component {
+
   constructor(props) {
     super(props);
   }
 
-  componentDidMount() {
-    this.queryInput.focus();
-  }
-
   render() {
-    const { state } = this.props;
-    const{ query } = state;
-    
+    let query;
+
     const queryHandler = () => {
       const { value } = this.queryInput;
       this.props.onSearch(value);
-    }  
+    };
+
     return (
       <div className="search-template">
         <div className="search-field">
