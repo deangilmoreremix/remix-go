@@ -12,8 +12,14 @@ export default class Search extends Component {
     super(props);
   }
 
+  state = {
+    value: '',
+  };
+
   render() {
-    
+
+    let { value } = this.state;
+
     const queryHandler = () => {
       const { value } = this.queryInput;
       this.props.onSearch(value);
@@ -26,7 +32,8 @@ export default class Search extends Component {
             <input className="vr-dashed" 
               type="text" name="query"
               placeholder="Search through your templates..."
-              onChange={queryHandler}
+              value={value}
+              onChange={(event) => { this.setState({ value: event.target.value }); queryHandler(); }}
               ref={(q) => { this.queryInput = q; }}
             /> 
           </div>
