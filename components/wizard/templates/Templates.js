@@ -35,8 +35,8 @@ export default class Templates extends Component {
     this.currentPlayback = (<EmbeddedPlayback
       url={template.url}
       title={template.title}
-      width={840}
-      height={480}
+      width="840"
+      height="480"
     />);
     PopupboxManager.open({
       content: this.currentPlayback,
@@ -54,7 +54,7 @@ export default class Templates extends Component {
   onSearch = async (query) => {
     const { api } = this.props;
     const { elements } = this.state;
-    const newElements = await api.list(elements.length, query);
+    const newElements = await api.templates(elements.length, query);
     this.setState({
       elements: newElements,
       hasMore: newElements.length > 0,
