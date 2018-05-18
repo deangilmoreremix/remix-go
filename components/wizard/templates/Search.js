@@ -8,10 +8,6 @@ export default class Search extends Component {
     query: PropTypes.string,
   };
 
-  constructor(props) {
-    super(props);
-  }
-
   state = {
     value: '',
   };
