@@ -1,0 +1,57 @@
+.publish-overview {
+  height: 100%;
+  width: 100%;
+  color: $primary-color;
+
+  .overview-item {
+    display: block;
+    width: 50%;
+    margin: 10px 20px;
+  }
+
+  .embed-item {
+    min-height: 20%;
+    resize: none;
+  }
+
+  .title-edit {
+    padding: 0 10px;
+    height: 30px;
+    display: flex;
+    justify-content: center;
+    vertical-align: middle;
+
+    .title-field {
+      flex-grow: 2;
+    }
+
+    .icon {
+      height: 80%;
+      float: right;
+      margin: -2px 0 0 8px;
+    }
+
+    .button {
+      cursor: pointer;
+      text-align: center;
+      height: 25px;
+      display: inline-block;;
+      width: 70px;
+      padding: 3px 8px;
+      border: $primary-color solid 0.5px;
+      border-radius: 10px;
+      margin: 3px 5px 0 5px;
+    }
+
+    .button-primary {
+      color: $white;
+      background: $secondary-color;
+      border-color: $secondary-color;
+    }
+  }
+
+  label {
+    font-weight: 300;
+    font-size: 1.2rem;
+  }
+}

@@ -35,8 +35,8 @@ export default class Templates extends Component {
     this.currentPlayback = (<EmbeddedPlayback
       url={template.url}
       title={template.title}
-      width={840}
-      height={480}
+      width="840"
+      height="480"
     />);
     PopupboxManager.open({
       content: this.currentPlayback,
