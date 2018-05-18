@@ -1,46 +1,41 @@
-import React from 'react';
+import React, { Component } from 'react';
 
-const Search = (props) => {
-  let queryString;
-  let queryInput;
+export default class Search extends Component {
+  constructor(props) {
+    super(props);
+  }
 
-  const queryHandler = () => {
-    const { value } = queryInput;
-    props.onSearch(value);
-  };
+  componentDidMount() {
+    this.queryInput.focus();
+  }
 
-  const SearchInput = () => {
+  render() {
+    const { state } = this.props;
+    const{ query } = state;
+    
+    const queryHandler = () => {
+      const { value } = this.queryInput;
+      this.props.onSearch(value);
+    }  
     return (
-      <div className="search-input">
-        <input className="vr-dashed" 
-          type="text" name="query"
-          placeholder="Search through your templates..."
-          ref={(q) => { queryInput = q; }}
-          value={queryString}
-          onInput={queryHandler}
-        /> 
+      <div className="search-template">
+        <div className="search-field">
+          <div className="search-input">
+            <input className="vr-dashed" 
+              type="text" name="query"
+              placeholder="Search through your templates..."
+              value={query}
+              onChange={queryHandler}
+              ref={(q) => { this.queryInput = q; }}
+            /> 
+          </div>
+          <div className="search-button">
+            <a onClick={queryHandler}>
+              <img className="search-icon" src="../../../static/images/magnifying-glass.svg" />
+            </a>
+          </div>
+        </div>
       </div>
     );
-  };
-
-  const SearchButton = () => {
-    return (
-      <div className="search-button">
-        <a onClick={queryHandler}>
-          <img className="search-icon" src="../../../static/images/magnifying-glass.svg" />
-        </a>
-      </div>
-    );
-  };
-
-  return (
-    <div className="search-template">
-      <div className="search-field">
-        <SearchInput />
-        <SearchButton />
-      </div>
-    </div>
-  );
-};
-
-export default Search;
+  }
+}

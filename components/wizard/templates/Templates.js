@@ -80,7 +80,7 @@ export default class Templates extends Component {
   render() {
     return (
       <Fragment>
-        <Search onSearch={q => this.onSearch(q)} />
+        <Search onSearch={q => this.onSearch(q)} state={this.state} />
         <PopupboxContainer onClosed={() => { this.currentPlayback.props.url = null; }} />
         <TemplateGallery
           className="wizard-gallery"
