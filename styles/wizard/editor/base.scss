@@ -127,16 +127,35 @@
 
     .actions-pane {
       background: $white;
+      text-align: center;
       height: 100%;
 
       .action-button {
         font-size: 1.2rem;
         width: 100%;
         border: none;
-        margin-top: 10px;
+        margin-top: 7%;
         height: 10%;
-        max-height: 45px;
+        min-height: 45px;
         text-transform: uppercase;
+      }
+
+      .addon-button {
+        width: auto;
+        font-size: 1.1rem;
+        border: none;
+        background: transparent;
+        margin-top: 7%;
+        cursor: pointer;
+
+        &.inactive {
+          opacity: 0.5;
+          pointer-events: none;
+        }
+
+        .icon {
+          margin-bottom: 3px;
+        }
       }
     }
   }

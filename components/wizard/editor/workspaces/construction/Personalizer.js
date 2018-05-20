@@ -4,7 +4,6 @@ import PropTypes from '../../../../../lib/PropTypes';
 export default class Personalizer extends Component {
   static propTypes = {
     className: PropTypes.string,
-    token: PropTypes.string.isRequired,
     onTokenChosen: PropTypes.func.isRequired,
   };
 
@@ -28,9 +27,8 @@ export default class Personalizer extends Component {
 
   constructor(props) {
     super(props);
-    const { token } = props;
     this.state = {
-      currentToken: token || Personalizer.TOKENS[0],
+      currentToken: Personalizer.TOKENS[0],
       tokenMode: Personalizer.TOKEN_MODE.PLAIN,
       fallbackValue: '',
       customTokenValue: 'CUSTOM',
@@ -80,12 +78,12 @@ export default class Personalizer extends Component {
         <div className="setup-area">
           <span>{'{{'}{
             currentToken !== 'CUSTOM' ?
-                <span>{currentToken}</span> :
-                <input
-                  type="text"
-                  value={customTokenValue}
-                  onChange={event => this.setState({ customTokenValue: event.target.value })}
-                />
+              <span>{currentToken}</span> :
+              <input
+                type="text"
+                value={customTokenValue}
+                onChange={event => this.setState({ customTokenValue: event.target.value })}
+              />
           }{'}}'}
           </span>
           <div className="separator horizontal" />
