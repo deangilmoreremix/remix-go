@@ -16,16 +16,24 @@ export default class EditorStageChanger extends Component {
 
   state = {
     modified: false,
+    prompt: 'Leave with unsaved change?',
   };
 
-  componentWillUnmount() {
-    const { modified } = this.state;
-    if (modified) {
-      const response = confirm(`You have unsaved changes. Do you want to continue?`);
-      return response;
-    }
+  componentDidUpdate() {
+    this.promptUnsavedChange(this.state);
   }
 
+  componentWillUnmount() {
+    window.onbeforeunload = null;
+  }
+
+  promptUnsavedChange(state) {
+    const { modified, prompt } = state;
+    if (modified) {
+      window.onbeforeunload = (() => confirm(prompt));
+    }
+  }
+  
   onComponentChanged() {
     this.setState({ modified: true });
   }
