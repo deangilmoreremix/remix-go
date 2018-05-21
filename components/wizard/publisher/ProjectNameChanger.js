@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from '../../../lib/PropTypes';
 
-export default class Publisher extends Component {
+export default class ProjectNameChanger extends Component {
   static propTypes = {
     className: PropTypes.string,
     title: PropTypes.string.isRequired,
