@@ -14,6 +14,22 @@ export default class EditorStageChanger extends Component {
     className: PropTypes.string,
   };
 
+  state = {
+    modified: false,
+  };
+
+  componentWillUnmount() {
+    const { modified } = this.state;
+    if (modified) {
+      const response = confirm(`You have unsaved changes. Do you want to continue?`);
+      return response;
+    }
+  }
+
+  onComponentChanged() {
+    this.setState({ modified: true });
+  }
+
   render() {
     const { className, store: { activeProject, editorStateManager: { stage } } } = this.props;
     return (
@@ -36,7 +52,7 @@ export default class EditorStageChanger extends Component {
                 </div>
               );
             case EditorStateManager.STAGE_TYPES.CAPTION_CUSTOMISE:
-              return <ConstructionWorkspace className="full-height full-width" />;
+              return <ConstructionWorkspace className="full-height full-width" onComponentChanged={() => { this.onComponentChanged(); }} />;
             default:
               return null;
           }
