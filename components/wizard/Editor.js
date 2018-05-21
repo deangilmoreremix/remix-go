@@ -13,6 +13,12 @@ import ActionsPane from './editor/ActionsPane';
 import Personalizer from './editor/workspaces/construction/Personalizer';
 import PopcornEditor from '../../lib/popcorn/plugins/editor.popcorn';
 
+const insertAtCaret = (element, offset, text) => {
+  const front = (element.innerText).substring(0, offset);
+  const back = (element.innerText).substring(offset, element.innerText.length);
+  element.innerText = front + text + back;
+};
+
 @inject('api')
 @inject('store')
 @observer
@@ -73,12 +79,26 @@ export default class Editor extends Component {
                   className={`addon-button ${!activeElement && 'inactive'}`}
                   onClick={() => {
                     PopupboxManager.open({
-                      content: <Personalizer className="personalizer" onTokenChosen={(token) => {
-                        console.log('token chosen', token)
-                      }}/>,
+                      content: <Personalizer
+                        className="personalizer"
+                        onTokenChosen={(token) => {
+                          PopupboxManager.close();
+                          const { _contentContainer: target, caretOffset: offset } = activeElement;
+                          insertAtCaret(target, offset, token);
+
+                          const event = new Event('input');
+                          target.dispatchEvent(event);
+
+                          const updatedProps = {};
+                          updatedProps.text = target.innerText;
+                          activeElement._natives._update.call(this, activeElement, updatedProps);
+                          activeProject.update(activeElement, updatedProps);
+                      }}
+                      />,
                       config: {
                         titleBar: {
                           enable: true,
+                          text: 'Personalizer',
                         },
                         fadeIn: true,
                         fadeInSpeed: 200,
