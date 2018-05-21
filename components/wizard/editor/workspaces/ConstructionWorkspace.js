@@ -19,23 +19,16 @@ export default class ConstructionWorkspace extends Component {
   };
 
   onPopcornInitialize(wrapper) {
-    const { store, store: { activeProject, editorStateManager } } = this.props;
+    const { store, store: { activeProject } } = this.props;
     const popcorn = store.activeProject.attach(store.activeProject.popcornify(wrapper));
     this.setState({ popcorn });
     popcorn.on('elementSelected', (event) => {
-      const { type, element } = event;
-      const Editor = PopcornEditor.editors[type];
-      editorStateManager.toolbar = (<Editor
-        element={element}
-        onElementUpdate={(updatedProps) => {
-          /* eslint-disable no-underscore-dangle */
-          element._natives._update.call(this, element, updatedProps);
-          activeProject.update(element, updatedProps);
-        }}
-      />);
+      const { element } = event;
+      activeProject.activeElement = element;
     });
     popcorn.on('elementUpdated', (event) => {
       const { element, options } = event;
+      /* eslint-disable no-underscore-dangle */
       element._natives._update.call(this, element, options);
       activeProject.update(element, options);
     });
