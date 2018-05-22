@@ -42,8 +42,12 @@ export default class Editor extends Component {
     /* eslint-disable no-underscore-dangle */
     const ToolbarEditor = activeElement && PopcornEditor.editors[activeElement._natives.type];
 
+    const promptUnsavedChanges = () => {
+      return () => confirm('Leave with unsaved change?');
+    };
+
     const onProjectUpdated = () => {
-      const { modified, promptUnsavedChanges } = activeProject;
+      const { modified,  } = activeProject;
       if (modified) {
         window.onbeforeunload = promptUnsavedChanges();
       }
