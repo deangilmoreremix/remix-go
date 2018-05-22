@@ -24,14 +24,6 @@ const insertAtCaret = (element, offset, text) => {
 @observer
 export default class Editor extends Component {
   
-  resetAlert() {
-    window.onbeforeunload = null;
-  }
-
-  componentWillUnmount() {
-    this.resetAlert();
-  }
-
   render() {
     const {
       api,
@@ -45,15 +37,13 @@ export default class Editor extends Component {
     } = this.props;
     /* eslint-disable no-underscore-dangle */
     const ToolbarEditor = activeElement && PopcornEditor.editors[activeElement._natives.type];
-
-    const promptUnsavedChanges = () => {
-      return () => confirm('Leave with unsaved change?');
-    };
-
-    const onProjectUpdated = () => {
-      const { modified } = activeProject;
+    
+    window.onbeforeunload = () => {
+      const {modified} = activeProject;
       if (modified) {
-        window.onbeforeunload = promptUnsavedChanges();
+        return confirm('There are unsaved changes, do you want to continue?');
+      } else {
+        return null;
       }
     };
 
@@ -83,7 +73,7 @@ export default class Editor extends Component {
               />
             </Col>
             <Col className="workspace">
-              <WorkspaceContainer stateManager={editorStateManager} className="full-height" onProjectUpdated={() => onProjectUpdated()} />
+              <WorkspaceContainer stateManager={editorStateManager} className="full-height" />
             </Col>
             <Col className="col-2 paddingless editor-pane">
               <ActionsPane className="actions-pane">
@@ -91,8 +81,7 @@ export default class Editor extends Component {
                 <button
                   className="go-button action-button"
                   onClick={async () => {
-                    activeProject.resetStatus();
-                    this.resetAlert();
+                    activeProject.modified = false;
                     await api.publish(await api.save(activeProject));
                     Router.push('/publish');
                   }}
