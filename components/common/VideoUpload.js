@@ -24,6 +24,7 @@ export default class VideoUpload extends Component {
       <div className="video-upload-box">
         <DropZone
           className="upload-dropzone"
+          activeClassName="upload-dropzone hot"
           onDrop={file => console.log(`file dropped ${file}`)}
           accept="image/png"
         >
