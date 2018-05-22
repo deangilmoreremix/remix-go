@@ -24,8 +24,12 @@ const insertAtCaret = (element, offset, text) => {
 @observer
 export default class Editor extends Component {
   
-  componentWillUnmount() {
+  resetAlert() {
     window.onbeforeunload = null;
+  }
+
+  componentWillUnmount() {
+    this.resetAlert();
   }
 
   render() {
@@ -47,7 +51,7 @@ export default class Editor extends Component {
     };
 
     const onProjectUpdated = () => {
-      const { modified,  } = activeProject;
+      const { modified } = activeProject;
       if (modified) {
         window.onbeforeunload = promptUnsavedChanges();
       }
@@ -87,6 +91,8 @@ export default class Editor extends Component {
                 <button
                   className="go-button action-button"
                   onClick={async () => {
+                    activeProject.resetStatus();
+                    this.resetAlert();
                     await api.publish(await api.save(activeProject));
                     Router.push('/publish');
                   }}
