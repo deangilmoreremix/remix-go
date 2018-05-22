@@ -81,7 +81,6 @@ export default class Editor extends Component {
                 <button
                   className="go-button action-button"
                   onClick={async () => {
-                    activeProject.modified = false;
                     await api.publish(await api.save(activeProject));
                     Router.push('/publish');
                   }}
