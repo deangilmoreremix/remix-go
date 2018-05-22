@@ -61,7 +61,8 @@ export default class Publisher extends Component {
                     PopupboxManager.open({
                       content: <EmailCampaign
                         className="campaign"
-                        project={activeProject.make.url}
+                        project={activeProject}
+                        onCampaignFinished={() => PopupboxManager.close()}
                       />,
                       config: {
                         titleBar: {

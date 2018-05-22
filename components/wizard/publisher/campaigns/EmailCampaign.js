@@ -5,6 +5,12 @@ import Project from '../../../../lib/editor/Project';
 import PropTypes from '../../../../lib/PropTypes';
 import EmbedDataContainer from '../EmbedDataContainer';
 
+const SKIP_VARS = [
+  'GEOCOUNTRY',
+  'GEOCITY',
+  'GEOSTATE',
+];
+
 const STAGES = [
   { key: 'embed-engine' },
   { key: 'embed-location' },
@@ -42,61 +48,214 @@ const EMBED_LOCATIONS = [
   },
 ];
 
+const duplicateCustomVars = (string, variable) => {
+  string = string.replace('?', '').replace('&', '');
+  return string.search(variable) === -1;
+};
+
 const EMAIL_PROVIDERS = [
   {
     key: 'aweber',
     label: 'AWeber',
     image: '../../../../static/images/publisher/email-campaign/aweber_hover.png',
-    paramsBuilder: () => {},
+    paramsBuilder: (personalizations) => {
+      let result = '';
+      const lookup = {
+        GEOCOUNTRY: 'geog_country',
+        IMAGE: 'custom image',
+      };
+      personalizations.forEach((personalization) => {
+        const tempvar = lookup[personalization] || personalization.toLowerCase();
+        if (duplicateCustomVars(result, personalization)) {
+          result = `${result + personalization}={!${tempvar}}&`;
+        }
+      });
+      return result.slice(0, -1);
+    },
   },
   {
     key: 'mailchimp',
     label: 'MailChimp',
     image: '../../../../static/images/publisher/email-campaign/mailchimp_hover.png',
-    paramsBuilder: () => {},
+    paramsBuilder: (personalizations) => {
+      let result = '';
+      const lookup = {
+        LASTNAME: 'LNAME',
+        FIRSTNAME: 'FNAME',
+        GEOCOUNTRY: 'Everywhere',
+        IMAGE: 'IMAGE',
+      };
+      personalizations.forEach((personalization) => {
+        const tempVar = lookup[personalization] || personalization;
+        if (duplicateCustomVars(result, personalization)) {
+          result = result + personalization + (result !== 'Everywhere' ? `=*|${tempVar}|*&` : `=${tempVar}&`);
+        }
+      });
+      return result.slice(0, -1);
+    },
   },
   {
     key: 'interspire',
     label: 'Interspire',
     image: '../../../../static/images/publisher/email-campaign/interspire_hover.png',
-    paramsBuilder: () => {},
+    paramsBuilder: (personalizations) => {
+      let result = '';
+      const lookup = {
+        LASTNAME: 'Last Name',
+        FIRSTNAME: 'First Name',
+        EMAIL: 'emailaddress',
+        GEOCOUNTRY: 'Everywhere',
+        IMAGE: 'image',
+      };
+      personalizations.forEach((personalization) => {
+        const tempvar = lookup[personalization] ||
+          personalization.charAt(0).toUpperCase() + personalization.slice(1).toLowerCase();
+        if (duplicateCustomVars(result, personalization)) {
+          result = result + personalization + (tempvar !== 'Everywhere' ? `=%%${tempvar}%%&` : '=Everywhere&');
+        }
+      });
+      return result.slice(0, -1);
+    },
   },
   {
     key: 'getresponse',
     label: 'GetResponse',
     image: '../../../../static/images/publisher/email-campaign/gr_hover.png',
-    paramsBuilder: () => {},
+    paramsBuilder: (personalizations) => {
+      let result = '';
+      const lookup = {
+        GEOCOUNTRY: 'geo country',
+      };
+      personalizations.forEach((personalization) => {
+        const tempvar = lookup[personalization] || personalization.toLowerCase();
+        if (duplicateCustomVars(result, personalization)) {
+          result = `${result + personalization}=[[${tempvar}]]&`;
+        }
+      });
+      return result.slice(0, -1);
+    },
   },
   {
     key: 'infusionsoft',
     label: 'InfusionSoft',
     image: '../../../../static/images/publisher/email-campaign/infusionsoft_hover.png',
-    paramsBuilder: () => {},
+    paramsBuilder: (personalizations) => {
+      let result = '';
+      const lookup = {
+        LASTNAME: 'Contact.LastName',
+        FIRSTNAME: 'Contact.FirstName',
+        EMAIL: 'Contact.Email',
+        GEOCOUNTRY: 'Contact.Country',
+        IMAGE: 'Contact.Image',
+      };
+      personalizations.forEach((personalization) => {
+        const tempvar = lookup[personalization] ||
+          personalization.charAt(0).toUpperCase() + personalization.slice(1).toLowerCase();
+        if (duplicateCustomVars(result, personalization)) {
+          result = `${result + personalization}=~${tempvar}~&`;
+        }
+      });
+      return result.slice(0, -1);
+    },
   },
   {
     key: 'sendlane',
     label: 'Sendlane',
     image: '../../../../static/images/publisher/email-campaign/sendlane_hover.png',
-    paramsBuilder: () => {},
+    paramsBuilder: (personalizations) => {
+      let result = '';
+      const lookup = {
+        LASTNAME: 'VAR_LAST_NAME',
+        FIRSTNAME: 'VAR_FIRST_NAME',
+        EMAIL: 'VAR_EMAIL',
+        GEOCOUNTRY: 'VAR_COUNTRY',
+        IMAGE: 'VAR_IMAGE',
+      };
+      personalizations.forEach((personalization) => {
+        const tempvar = lookup[personalization] || personalization.toUpperCase();
+        if (duplicateCustomVars(result, personalization)) {
+          result = `${result + personalization}=${tempvar}&`;
+        }
+      });
+      return result.slice(0, -1);
+    },
   },
   {
     key: 'constantcontact',
     label: 'Constant Contact',
     image: '../../../../static/images/publisher/email-campaign/constantcontact_hover.png',
-    paramsBuilder: () => {},
+    paramsBuilder: (personalizations) => {
+      let result = '';
+      const lookup = {
+        LASTNAME: '$Subscriber.Lastname',
+        FIRSTNAME: '$Subscriber.Firstname',
+        EMAIL: '$Subscriber.Email',
+        GEOCOUNTRY: '$Subscriber.Country',
+        IMAGE: '$Subscriber.Image',
+      };
+      personalizations.forEach((personalization) => {
+        const tempvar = lookup[personalization] || `$Subscriber.${personalization.charAt(0).toUpperCase()}${personalization.toLowerCase().slice(1)}`;
+        if (duplicateCustomVars(result, personalization)) {
+          result = `${result + personalization}={!${tempvar}}&`;
+        }
+      });
+      return result.slice(0, -1);
+    },
   },
   {
     key: 'sendreach',
     label: 'SendReach',
     image: '../../../../static/images/publisher/email-campaign/sendreach_hover.png',
-    paramsBuilder: () => {},
+    paramsBuilder: (personalizations) => {
+      const lookup = {
+        LASTNAME: 'LNAME',
+        FIRSTNAME: 'FNAME',
+        EMAIL: 'EMAIL',
+        GEOCITY: 'CITY',
+        GEOCOUNTRY: 'COUNTRY',
+        GEOSTATE: 'STATE',
+        GENDER: 'GENDER',
+      };
+
+      let result = '';
+
+      personalizations.forEach((personalization) => {
+        const tempvar = lookup[personalization] || personalization;
+        if (duplicateCustomVars(result, personalization)) {
+          result = `${result + personalization}=[${tempvar}]&`;
+        }
+      });
+      return result.slice(0, -1);
+    },
+  },
+  {
+    key: 'custom',
+    label: 'Custom',
+    image: '../../../../static/images/publisher/email-campaign/custom_hover.png',
+    paramsBuilder: (personalizations) => {
+      let result = '';
+      const lookup = {
+        LASTNAME: 'lastname_token',
+        FIRSTNAME: 'firstname_token',
+        EMAIL: 'email_token',
+        GEOCOUNTRY: 'country_token',
+        IMAGE: 'image_token',
+      };
+      personalizations.forEach((personalization) => {
+        const tempvar = lookup[personalization] || `${personalization.toLowerCase()}_token`;
+        if (duplicateCustomVars(result, personalization)) {
+          result = `${result + personalization}=${tempvar}&`;
+        }
+      });
+      return result.slice(0, -1);
+    },
   },
 ];
 
 export default class EmailCampaign extends Component {
   static propTypes = {
     className: PropTypes.string,
-    project: PropTypes.string.isRequired,
+    project: PropTypes.instanceOf(Project).isRequired,
     onCampaignFinished: PropTypes.func,
   };
 
@@ -107,7 +266,6 @@ export default class EmailCampaign extends Component {
     autoplay: false,
     embedPage: '',
     emailProvider: null,
-    personalizedLink: '',
   };
 
   nextStage() {
@@ -134,6 +292,26 @@ export default class EmailCampaign extends Component {
     this.setState({ currentStage: STAGES[prevStageIdx] });
   }
 
+  generatePersonalizedLink() {
+    const { project } = this.props;
+    let { project: { personalizations } } = this.props;
+    const { autoplay, preload, embedLocation, emailProvider, embedPage } = this.state;
+    const basicPath = embedLocation.key === 'default' ? project.make.url : embedPage;
+    personalizations = personalizations.filter(item => SKIP_VARS.indexOf(item) === -1);
+    const providerParams = (emailProvider && emailProvider.paramsBuilder) ?
+      emailProvider.paramsBuilder(personalizations) :
+      '';
+    const autoplayParams = autoplay ? 'autoplay=true' : null;
+    const preloadParams = preload ? 'preload=true' : null;
+    return [
+      basicPath, [
+        autoplayParams,
+        preloadParams,
+        providerParams,
+      ].filter(item => !!item).join('&'),
+    ].join('?');
+  }
+
   render() {
     const { className, project, onCampaignFinished } = this.props;
     const {
@@ -143,7 +321,6 @@ export default class EmailCampaign extends Component {
       autoplay,
       embedPage,
       emailProvider,
-      personalizedLink,
     } = this.state;
 
     return (
@@ -211,7 +388,7 @@ export default class EmailCampaign extends Component {
                 <span className="embed-line">{embedLocation.prompt}</span>
                 <EmbedDataContainer
                   className="embed-item"
-                  url={project}
+                  url={project.make.url}
                   stringGenerator={embedLocation.embedGenerator}
                   resizable
                 />
@@ -244,7 +421,13 @@ export default class EmailCampaign extends Component {
                 </li>
                 <li className={`service-provider-step ${!emailProvider ? 'hidden' : ''}`}>
                   <span>Copy & Paste this PersonalizedLink™ into your email campaign</span>
-                  <input className="personalized-link" type="text" value={personalizedLink} readOnly />
+                  <input
+                    className="personalized-link"
+                    type="text"
+                    value={this.generatePersonalizedLink()}
+                    readOnly
+                    onClick={({ target }) => { target.select(); }}
+                  />
                 </li>
                 <li className={`service-provider-step ${!emailProvider ? 'hidden' : ''}`}>
                   <span>Send your Personalized email campaign</span>
