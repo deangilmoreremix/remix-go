@@ -7,7 +7,7 @@ import PropTypes from '../../lib/PropTypes';
 
 @inject('api')
 @observer
-export default class PopcornEditor extends Component {
+export default class ImageUpload extends Component {
   static propTypes = {
     onFileUploaded: PropTypes.func.isRequired,
   };

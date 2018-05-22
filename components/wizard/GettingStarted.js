@@ -10,6 +10,7 @@ import Templates from './templates/Templates';
 import VideoSelectionWorkspace from './editor/workspaces/VideoSelectionWorkspace';
 import NicheScriptsWorkspace from './niche-scripts/NicheScriptsWorkspace';
 import Project from '../../lib/editor/Project';
+import VideoUpload from '../common/VideoUpload';
 
 @inject('api')
 @inject('store')
@@ -65,7 +66,10 @@ export default class GettingStarted extends Component {
             />
           </div>);
       case GettingStarted.WIZARD_TYPES.VIDEO_UPLOAD:
-        return 'Video upload is coming soon';
+        return (
+          <div className="scrollable full-height video-upload">
+            <VideoUpload />
+          </div>);
       default:
         return <Templates onTemplateSelected={data => this.handleWizardSelection(data)} />;
     }

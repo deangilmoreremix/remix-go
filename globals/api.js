@@ -166,6 +166,21 @@ class Api {
       this.isLoading = false;
     }
   }
+
+  @action
+  uploadVideo(data, onProgress) {
+    const xhr = new XMLHttpRequest();
+    xhr.open('PUT', '/api/video', true);
+    xhr.onprogress = ({ loaded, total }) => {
+      onProgress(false, loaded / total);
+    };
+    xhr.onload = () => {
+      onProgress(true, 1.0);
+    };
+    const fd = new FormData();
+    fd.append('video', data);
+    xhr.send(fd);
+  }
 }
 
 export async function initApiAndPreload(isServer, source, req, preloader) {
