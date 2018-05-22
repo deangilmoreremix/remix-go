@@ -15,7 +15,7 @@ export default class EditorStageChanger extends Component {
   };
 
   render() {
-    const { className, store: { activeProject, editorStateManager: { stage } }, onProjectUpdated } = this.props;
+    const { className, store: { activeProject, editorStateManager: { stage } } } = this.props;
     return (
       <div className={className}>
         {(() => {
@@ -36,7 +36,7 @@ export default class EditorStageChanger extends Component {
                 </div>
               );
             case EditorStateManager.STAGE_TYPES.CAPTION_CUSTOMISE:
-              return <ConstructionWorkspace className="full-height full-width" onProjectUpdated={() => onProjectUpdated()} />;
+              return <ConstructionWorkspace className="full-height full-width" />;
             default:
               return null;
           }
