@@ -12,6 +12,7 @@ import PropTypes from '../../../lib/PropTypes';
 import InfiniteLoading from '../../common/InfiniteLoading';
 import TemplateItem from './TemplateItem';
 import EmbeddedPlayback from '../../common/EmbeddedPlayback';
+import Phase from './Phase';
 import Search from './Search';
 
 @inject('api')
@@ -80,6 +81,7 @@ export default class Templates extends Component {
   render() {
     return (
       <Fragment>
+         <Phase />
         <Search onSearch={q => this.onSearch(q)} />
         <PopupboxContainer onClosed={() => { this.currentPlayback.props.url = null; }} />
         <TemplateGallery

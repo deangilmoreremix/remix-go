@@ -1,0 +1,69 @@
+@import "../../_variables";
+
+.phase-component {
+  color: $primary-color;
+  padding: 30px 20px 0;
+  
+  .phase-state {
+    &-title {
+      text-align: center;
+      font-size: 26px;
+      font-weight: 700;
+    }
+    &-tabs, &-container {
+      display: flex;
+      justify-content: center;
+      
+      .stepper {
+        margin: 20px 0;
+        display: flex;
+        justify-content: space-evenly;
+        width: 100%;
+        position: relative;
+        align-items: center;
+        cursor: pointer;
+        
+        .line {
+          position: absolute;
+          border: 1px solid #eb5053;
+          width: 50%;
+          display: flex;
+          align-items: center;
+        }
+        .phase {
+          z-index: 10;
+          width: 40px;
+          height: 40px;
+          text-align: center;
+          border-radius: 50%;
+          border: 1px solid #eb5053;
+          background-color: #ffffff;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          &-label {
+            display: flex;
+            color: #eb5053;
+            border: 1px solid #eb5053;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            justify-content: center;
+            align-items: center;
+            font-size: 16px;
+            &.active {
+              color: #ffffff;
+              background: #e78c8d;
+              border: 1px solid #e78c8d;
+            }
+          }
+        }
+        .gapped {
+          z-index: 10;
+          background: #e9ecef;
+          padding: 5px;
+        }
+      }
+    }
+  }
+}
