@@ -39,7 +39,7 @@ export default class Editor extends Component {
     const ToolbarEditor = activeElement && PopcornEditor.editors[activeElement._natives.type];
     
     window.onbeforeunload = () => {
-      const {modified} = activeProject;
+      const { modified } = activeProject;
       if (modified) {
         return confirm('There are unsaved changes, do you want to continue?');
       } else {
