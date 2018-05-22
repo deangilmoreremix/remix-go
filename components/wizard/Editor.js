@@ -23,6 +23,11 @@ const insertAtCaret = (element, offset, text) => {
 @inject('store')
 @observer
 export default class Editor extends Component {
+  
+  componentWillUnmount() {
+    window.onbeforeunload = null;
+  }
+
   render() {
     const {
       api,
@@ -36,6 +41,14 @@ export default class Editor extends Component {
     } = this.props;
     /* eslint-disable no-underscore-dangle */
     const ToolbarEditor = activeElement && PopcornEditor.editors[activeElement._natives.type];
+
+    const onProjectUpdated = () => {
+      const { modified, promptUnsavedChanges } = activeProject;
+      if (modified) {
+        window.onbeforeunload = promptUnsavedChanges();
+      }
+    };
+
     return (
       <Fragment>
         <PopupboxContainer />
@@ -62,7 +75,7 @@ export default class Editor extends Component {
               />
             </Col>
             <Col className="workspace">
-              <WorkspaceContainer stateManager={editorStateManager} className="full-height" />
+              <WorkspaceContainer stateManager={editorStateManager} className="full-height" onProjectUpdated={() => onProjectUpdated()} />
             </Col>
             <Col className="col-2 paddingless editor-pane">
               <ActionsPane className="actions-pane">
