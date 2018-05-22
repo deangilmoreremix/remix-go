@@ -72,11 +72,47 @@
     }
 
     .embed-location {
-
+      .embed-page-input {
+        width: 80%;
+        margin: 0 10%;
+      }
     }
 
     .service-provider {
+      .service-provider-inner {
+        list-style-type: decimal;
 
+        .service-provider-step {
+        }
+
+        .providers-list {
+          list-style-type: none;
+          padding: 0;
+          margin: 10px 0;
+          width: 90%;
+
+          .provider-item {
+            filter: brightness(1.8) grayscale(1) opacity(0.7);
+            display: inline;
+            margin-right: 8px;
+
+            &.selected {
+              filter: none;
+            }
+
+            img {
+              margin: 3px 0;
+              max-width: 50px;
+              max-height: 50px;
+            }
+          }
+        }
+
+        .personalized-link {
+          width: 90%;
+          margin: 8px 0;
+        }
+      }
     }
   }
 
