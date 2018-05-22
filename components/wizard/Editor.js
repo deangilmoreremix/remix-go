@@ -109,7 +109,7 @@ export default class Editor extends Component {
                   <img className="icon" src="../../static/images/editor/personalizer.svg" alt="" />
                   <span>Personalizer</span>
                 </button>
-                <button className="addon-button">
+                <button className="addon-button hidden">
                   <img className="icon" src="../../static/images/editor/cta.svg" alt="" />
                   <span>Call to Action</span>
                 </button>

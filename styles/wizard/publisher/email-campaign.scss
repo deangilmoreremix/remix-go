@@ -49,24 +49,40 @@
     .embed-engine {
       height: 24rem;
 
+      #autoplay-check, #preload-check {
+        background: transparent;
+        color: $primary-color;
+      }
+
       .embed-details {
         height: 9rem;
       }
 
       .embed-item {
         .resizer {
+          height: 28px;
           margin-bottom: 10px;
+          display: inline-flex;
+          align-items: center;
+          float: right;
         }
 
         .dimension-input {
-          width: 40px;
+          width: 50px;
+          margin: 0 5px;
+          display: inline;
+          height: 100%;
           text-align: center;
+          background: transparent;
+          color: $primary-color;
         }
 
-        textarea {
+        textarea[type="textarea"] {
           width: 100%;
           height: 100%;
           resize: none;
+          background: transparent;
+          color: $primary-color;
         }
       }
     }
@@ -75,6 +91,8 @@
       .embed-page-input {
         width: 80%;
         margin: 0 10%;
+        background: transparent;
+        color: $primary-color;
       }
     }
 
@@ -110,6 +128,8 @@
 
         .personalized-link {
           width: 90%;
+          background: transparent;
+          color: $primary-color;
           padding: 5px;
           margin: 8px 0;
         }
