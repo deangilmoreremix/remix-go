@@ -142,6 +142,7 @@ class Api {
           },
         });
       project.make = response;
+      project.modified = false;
       return project;
     } finally {
       this.isLoading = false;

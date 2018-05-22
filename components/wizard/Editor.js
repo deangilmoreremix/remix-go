@@ -23,6 +23,7 @@ const insertAtCaret = (element, offset, text) => {
 @inject('store')
 @observer
 export default class Editor extends Component {
+  
   render() {
     const {
       api,
@@ -36,6 +37,16 @@ export default class Editor extends Component {
     } = this.props;
     /* eslint-disable no-underscore-dangle */
     const ToolbarEditor = activeElement && PopcornEditor.editors[activeElement._natives.type];
+    
+    window.onbeforeunload = () => {
+      const { modified } = activeProject;
+      if (modified) {
+        return confirm('There are unsaved changes, do you want to continue?');
+      } else {
+        return null;
+      }
+    };
+
     return (
       <Fragment>
         <PopupboxContainer />
