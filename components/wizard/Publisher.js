@@ -1,11 +1,16 @@
 import React, { Component, Fragment } from 'react';
 import { Container, Col, Row } from 'reactstrap';
 import { inject, observer } from 'mobx-react';
+import {
+  PopupboxManager,
+  PopupboxContainer,
+} from 'react-popupbox';
 
 import ActionsPane from './editor/ActionsPane';
 import EmbeddedPlayback from '../common/EmbeddedPlayback';
 import EmbedDataContainer from './publisher/EmbedDataContainer';
 import ProjectNameChanger from './publisher/ProjectNameChanger';
+import EmailCampaign from './publisher/campaigns/EmailCampaign';
 
 @inject('api')
 @inject('store')
@@ -25,6 +30,7 @@ export default class Publisher extends Component {
     } = this.props;
     return (
       <Fragment>
+        <PopupboxContainer />
         <Container fluid className="editor-wrapper">
           <Row className="canvas full-height">
             <Col className="workspace">
@@ -49,7 +55,27 @@ export default class Publisher extends Component {
             </Col>
             <Col className="col-2 paddingless editor-pane">
               <ActionsPane className="actions-pane">
-                <button className="go-button action-button">Email Campaign</button>
+                <button
+                  className="go-button action-button"
+                  onClick={() => {
+                    PopupboxManager.open({
+                      content: <EmailCampaign
+                        className="campaign"
+                        project={activeProject}
+                        onCampaignFinished={() => PopupboxManager.close()}
+                      />,
+                      config: {
+                        titleBar: {
+                          enable: true,
+                          text: 'Email Campaign',
+                        },
+                        fadeIn: true,
+                        fadeInSpeed: 200,
+                      },
+                    });
+                  }}
+                >Email Campaign
+                </button>
                 <button className="go-button action-button">Facebook</button>
               </ActionsPane>
             </Col>

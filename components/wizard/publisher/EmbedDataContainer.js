@@ -1,19 +1,55 @@
-import React from 'react';
+import React, { Component, Fragment } from 'react';
 
 import PropTypes from '../../../lib/PropTypes';
 
-const EmbedDataContainer = (props) => {
-  const { url, className } = props;
-  return (
-    <textarea className={className} readOnly rows={4}>
-      {`<script>var vars={};var tempstring='';var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(m,key,value){if(value){tempstring+=key+'='+value+'&';}});if (tempstring) {document.addEventListener('DOMContentLoaded',function() {document.getElementById('vr').src='${url}?'+tempstring.slice(0, -1);});}</script>\r<iframe id='vr' src='${url}' width='${560}' height='${358}' frameborder='0' mozallowfullscreen webkitallowfullscreen allowfullscreen></iframe>`}
-    </textarea>
-  );
-};
+const defaultStringGenerator = (url, width, height) => (`<script>var vars={};var tempstring='';var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(m,key,value){if(value){tempstring+=key+'='+value+'&';}});if (tempstring) {document.addEventListener('DOMContentLoaded',function() {document.getElementById('vr').src='${url}?'+tempstring.slice(0, -1);});}</script>\r<iframe id='vr' src='${url}' width='${width}' height='${height}' frameborder='0' mozallowfullscreen webkitallowfullscreen allowfullscreen></iframe>`);
 
-EmbedDataContainer.propTypes = {
-  className: PropTypes.string,
-  url: PropTypes.string.isRequired,
-};
+export default class EmbedDataContainer extends Component {
+  static propTypes = {
+    className: PropTypes.string,
+    url: PropTypes.string.isRequired,
+    resizable: PropTypes.bool,
+    stringGenerator: PropTypes.func,
+  };
 
-export default EmbedDataContainer;
+  state = {
+    width: 560,
+    height: 358,
+  };
+
+  render() {
+    const {
+      url,
+      className,
+      resizable = false,
+      stringGenerator = defaultStringGenerator,
+    } = this.props;
+    const { height, width } = this.state;
+
+    return (
+      <Fragment>
+        <div className={className}>
+          <div className={resizable ? 'resizer' : 'hidden'}>
+            <span>Size</span>
+            <span style={{ float: 'right' }}>
+            <input
+              className="dimension-input"
+              type="text"
+              value={height}
+              onChange={({ target: { value } }) => this.setState({ height: value })}
+            />
+            <span> X </span>
+            <input
+              className="dimension-input"
+              type="text"
+              value={width}
+              onChange={({ target: { value } }) => this.setState({ width: value })}
+            />
+          </span>
+          </div>
+          <textarea readOnly value={stringGenerator(url, width, height)} />
+        </div>
+      </Fragment>
+    );
+  }
+}
