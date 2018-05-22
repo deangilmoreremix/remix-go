@@ -9,6 +9,11 @@
     margin: 10px 20px;
   }
 
+  .embed-url {
+    background: transparent;
+    color: $primary-color;
+  }
+
   .embed-item {
     min-height: 20%;
 
@@ -16,9 +21,11 @@
       margin-bottom: 10px;
     }
 
-    textarea {
+    textarea[type="textarea"] {
       width: 100%;
       resize: none;
+      background: transparent;
+      color: $primary-color;
     }
   }
 

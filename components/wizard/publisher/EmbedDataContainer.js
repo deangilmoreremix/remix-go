@@ -1,4 +1,5 @@
 import React, { Component, Fragment } from 'react';
+import { Input } from 'reactstrap';
 
 import PropTypes from '../../../lib/PropTypes';
 
@@ -32,14 +33,14 @@ export default class EmbedDataContainer extends Component {
           <div className={resizable ? 'resizer' : 'hidden'}>
             <span>Size</span>
             <span style={{ float: 'right' }}>
-            <input
+            <Input
               className="dimension-input"
               type="text"
               value={height}
               onChange={({ target: { value } }) => this.setState({ height: value })}
             />
-            <span> X </span>
-            <input
+            <span>X</span>
+            <Input
               className="dimension-input"
               type="text"
               value={width}
@@ -47,7 +48,13 @@ export default class EmbedDataContainer extends Component {
             />
           </span>
           </div>
-          <textarea readOnly value={stringGenerator(url, width, height)} />
+          <Input
+            type="textarea"
+            readOnly
+            rows={4}
+            value={stringGenerator(url, width, height)}
+            onClick={({ target }) => { target.select(); }}
+          />
         </div>
       </Fragment>
     );

@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from 'react';
-import { Progress } from 'reactstrap';
+import { Progress, Input } from 'reactstrap';
 
 import Project from '../../../../lib/editor/Project';
 import PropTypes from '../../../../lib/PropTypes';
@@ -356,7 +356,7 @@ export default class EmailCampaign extends Component {
                   <label className="cell" htmlFor="preload-check">
                     Preload
                   </label>
-                  <input
+                  <Input
                     className="cell"
                     type="checkbox"
                     id="preload-check"
@@ -368,7 +368,7 @@ export default class EmailCampaign extends Component {
                   <label className="cell" htmlFor="autoplay-check">
                     Autoplay
                   </label>
-                  <input
+                  <Input
                     className="cell"
                     type="checkbox"
                     id="autoplay-check"
@@ -396,7 +396,7 @@ export default class EmailCampaign extends Component {
             </div>
             <div className={`embed-location ${currentStage.key !== 'embed-location' && 'hidden'}`}>
               <h5 className="embed-title">URL Link to your page with your embedded video</h5>
-              <input
+              <Input
                 type="text"
                 className="embed-page-input"
                 value={embedPage}
@@ -421,7 +421,7 @@ export default class EmailCampaign extends Component {
                 </li>
                 <li className={`service-provider-step ${!emailProvider ? 'hidden' : ''}`}>
                   <span>Copy & Paste this PersonalizedLink™ into your email campaign</span>
-                  <input
+                  <Input
                     className="personalized-link"
                     type="text"
                     value={this.generatePersonalizedLink()}

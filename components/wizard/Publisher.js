@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from 'react';
-import { Container, Col, Row } from 'reactstrap';
+import { Container, Col, Row, Input } from 'reactstrap';
 import { inject, observer } from 'mobx-react';
 import {
   PopupboxManager,
@@ -48,7 +48,7 @@ export default class Publisher extends Component {
                   height="50%"
                 />
                 <label className="overview-item">URL</label>
-                <input className="overview-item" type="text" value={activeProject.make.url} readOnly />
+                <Input className="overview-item embed-url" type="text" value={activeProject.make.url} readOnly />
                 <label className="overview-item">Embed</label>
                 <EmbedDataContainer className="overview-item embed-item" url={activeProject.make.url} />
               </div>
