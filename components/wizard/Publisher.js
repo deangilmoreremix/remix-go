@@ -10,7 +10,7 @@ import ActionsPane from './editor/ActionsPane';
 import EmbeddedPlayback from '../common/EmbeddedPlayback';
 import EmbedDataContainer from './publisher/EmbedDataContainer';
 import ProjectNameChanger from './publisher/ProjectNameChanger';
-import EmailCampaign from "./publisher/campaigns/EmailCampaign";
+import EmailCampaign from './publisher/campaigns/EmailCampaign';
 
 @inject('api')
 @inject('store')
@@ -60,7 +60,7 @@ export default class Publisher extends Component {
                   onClick={() => {
                     PopupboxManager.open({
                       content: <EmailCampaign
-                        className="campaign email-campaign"
+                        className="campaign"
                         project={activeProject.make.url}
                       />,
                       config: {

@@ -11,7 +11,15 @@
 
   .embed-item {
     min-height: 20%;
-    resize: none;
+
+    .resizer {
+      margin-bottom: 10px;
+    }
+
+    textarea {
+      width: 100%;
+      resize: none;
+    }
   }
 
   .title-edit {
@@ -35,7 +43,7 @@
       cursor: pointer;
       text-align: center;
       height: 25px;
-      display: inline-block;;
+      display: inline-block;
       width: 70px;
       padding: 3px 8px;
       border: $primary-color solid 0.5px;
@@ -57,6 +65,6 @@
 }
 
 .campaign {
-  width: 70vw;
-  height: 70vh;
+  width: 40vw;
+  height: 60vh;
 }
