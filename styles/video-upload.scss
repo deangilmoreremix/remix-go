@@ -77,11 +77,24 @@
       margin: 10px 0;
     }
 
-    .external-video-submit {
-      float: right;
+    .external-video-submit-container {
       height: 15%;
-      width: 15%;
+      width: 100%;
+      display: block;
       margin: 10px 0;
+
+      .external-video-submit {
+        float: right;
+        height: 100%;
+        width: 15%;
+      }
+    }
+  }
+  .alert-error {
+    text-align: left;
+
+    .close {
+      padding: 0.6rem 1.25rem;
     }
   }
 }
