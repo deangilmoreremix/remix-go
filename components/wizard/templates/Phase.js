@@ -47,7 +47,7 @@ export default class Phase extends Component {
         <div className={`stepper-tab-group ${(selected?'active':'')}`} >
           <div className="gapped">
             <div className="phase">
-              <div className="phase-label" onClick={() => onSelectPhase(phaseTabName)}>{phaseTabValue}</div>
+              <div className="phase-label" onClick={() => handleClick(phaseTabName)}>{phaseTabValue}</div>
             </div>
           </div>
           <div className="stepper-tab-label">{phaseTitle}</div>
