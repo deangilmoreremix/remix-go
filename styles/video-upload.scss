@@ -10,7 +10,6 @@
   color: $primary-color;
 
   * {
-    margin: 10px 0;
     text-align: center;
   }
 
@@ -23,7 +22,8 @@
     .upload-dropzone {
       color: $primary-color;
       width: 80%;
-      margin: 0 10%;
+      display: flex;
+      margin: 10px 10%;
       height: 45%;
       border-width: 2px;
       border-color: $primary-color;
@@ -61,15 +61,27 @@
       }
     }
 
+    .upload-progress {
+      .upload-progress-bar {
+        background: $white;
+        margin: 0;
+        .progress-bar {
+          background-color: $secondary-color;
+        }
+      }
+    }
+
     .external-video-link {
       background: transparent;
       color: $primary-color;
+      margin: 10px 0;
     }
 
     .external-video-submit {
       float: right;
       height: 15%;
       width: 15%;
+      margin: 10px 0;
     }
   }
 }

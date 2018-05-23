@@ -37,7 +37,7 @@ export default class ImageUpload extends Component {
             className="go-button submit-button"
             onClick={async () => {
               this.setState({ isUploading: true });
-              const response = await api.uploadImage(file || url);
+              const response = await api.uploadMedia(file || url);
               onFileUploaded(response.url);
               this.setState({
                 isUploading: false,

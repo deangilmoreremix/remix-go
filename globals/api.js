@@ -100,27 +100,6 @@ class Api {
   }
 
   @action
-  async uploadImage(data) {
-    this.isLoading = true;
-    try {
-      if (typeof data === 'string') {
-        data = { srcUrl: data };
-      } else {
-        const fd = new FormData();
-        fd.append('image', data);
-        data = fd;
-      }
-      return this.selfRequest(
-        '/api/image?original=true', {
-          method: 'PUT',
-          body: data,
-        });
-    } finally {
-      this.isLoading = false;
-    }
-  }
-
-  @action
   async save(project) {
     this.isLoading = true;
     try {
@@ -168,18 +147,38 @@ class Api {
   }
 
   @action
-  uploadVideo(data, onProgress) {
-    const xhr = new XMLHttpRequest();
-    xhr.open('PUT', '/api/video', true);
-    xhr.onprogress = ({ loaded, total }) => {
-      onProgress(false, loaded / total);
-    };
-    xhr.onload = () => {
-      onProgress(true, 1.0);
-    };
-    const fd = new FormData();
-    fd.append('video', data);
-    xhr.send(fd);
+  uploadMedia(data, onProgress) {
+    this.isLoading = true;
+    return new Promise((resolve, reject) => {
+      if (typeof data === 'string') {
+        data = JSON.stringify({ srcUrl: data });
+      } else {
+        const fd = new FormData();
+        fd.append('media', data);
+        data = fd;
+      }
+
+      const xhr = new XMLHttpRequest();
+      if (onProgress) {
+        xhr.upload.onprogress = ({ loaded, total }) => {
+          onProgress(loaded / total);
+        };
+      }
+      xhr.open('PUT', '/api/media', true);
+      xhr.onload = () => {
+        onProgress(1.0);
+        this.isLoading = false;
+        if (xhr.status !== 200) {
+          return reject(new Error(`HTTP error ${xhr.status}.`));
+        }
+        try {
+          return resolve(JSON.parse(xhr.responseText));
+        } catch (err) {
+          return reject(err);
+        }
+      };
+      xhr.send(data);
+    });
   }
 }
 

@@ -68,7 +68,7 @@ export default class GettingStarted extends Component {
       case GettingStarted.WIZARD_TYPES.VIDEO_UPLOAD:
         return (
           <div className="scrollable full-height video-upload">
-            <VideoUpload />
+            <VideoUpload onVideoUploaded={videoUrl => alert(videoUrl)} />
           </div>);
       default:
         return <Templates onTemplateSelected={data => this.handleWizardSelection(data)} />;
