@@ -94,7 +94,6 @@ export default class Editor extends Component {
                       content: <Personalizer
                         className="personalizer"
                         onTokenChosen={(token) => {
-                          PopupboxManager.close();
                           const { _contentContainer: target, caretOffset: offset } = activeElement;
                           insertAtCaret(target, offset, token);
 
@@ -105,6 +104,7 @@ export default class Editor extends Component {
                           updatedProps.text = target.innerText;
                           activeElement._natives._update.call(this, activeElement, updatedProps);
                           activeProject.update(activeElement, updatedProps);
+                          PopupboxManager.close();
                       }}
                       />,
                       config: {
@@ -127,7 +127,12 @@ export default class Editor extends Component {
                     PopupboxManager.open({
                       content: <CallToActions
                         className="cta-library"
-                        onCtaSelected={(cta) => { activeProject.cta = new Project(cta); }}
+                        onCtaSelected={(cta) => {
+                          activeProject.cta = new Project(cta);
+                          // update popcorn displaying
+
+                          PopupboxManager.close();
+                        }}
                       />,
                       config: {
                         titleBar: {
