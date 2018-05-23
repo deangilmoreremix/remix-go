@@ -1,6 +1,6 @@
-import React, { Component, Fragment } from 'react';
+import React, {Component, Fragment} from 'react';
 import Router from 'next/router';
-import { observer, inject } from 'mobx-react';
+import {observer, inject} from 'mobx-react';
 import {
   PopupboxManager,
   PopupboxContainer,
@@ -10,6 +10,7 @@ import Templates from './templates/Templates';
 import VideoSelectionWorkspace from './editor/workspaces/VideoSelectionWorkspace';
 import NicheScriptsWorkspace from './niche-scripts/NicheScriptsWorkspace';
 import Project from '../../lib/editor/Project';
+import VideoUpload from '../common/VideoUpload';
 
 @inject('api')
 @inject('store')
@@ -65,7 +66,30 @@ export default class GettingStarted extends Component {
             />
           </div>);
       case GettingStarted.WIZARD_TYPES.VIDEO_UPLOAD:
-        return 'Video upload is coming soon';
+        return (
+          <div className="scrollable full-height video-upload">
+            <PopupboxContainer />
+            <VideoUpload onVideoUploaded={(videoUrl) => {
+              const nicheSelection = (<NicheScriptsWorkspace
+                className="niche-scripts"
+                onScriptSelected={(script) => {
+                  this.handleWizardSelection({ script, video: videoUrl });
+                }}
+              />);
+              PopupboxManager.open({
+                content: nicheSelection,
+                config: {
+                  titleBar: {
+                    enable: true,
+                    text: 'Select a niche script',
+                  },
+                  fadeIn: true,
+                  fadeInSpeed: 200,
+                },
+              });
+            }}
+            />
+          </div>);
       default:
         return <Templates onTemplateSelected={data => this.handleWizardSelection(data)} />;
     }
@@ -80,6 +104,7 @@ export default class GettingStarted extends Component {
         Router.push({ pathname: '/edit' });
         break;
       case GettingStarted.WIZARD_TYPES.GENERATOR:
+      case GettingStarted.WIZARD_TYPES.VIDEO_UPLOAD:
         store.activeProject = new Project(data.script, true);
         await store.activeProject.updateVideo(data.video);
         Router.push({ pathname: '/edit' });

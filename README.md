@@ -41,7 +41,6 @@ COOKIE_DOMAIN|Cookie domain used for session|undefined
 FORCE_SSL|Determines if we're using HTTPS|false
 MAKE_ENDPOINT|Path to backend service|'https://api.vidcloud.io'
 JWPLAYER_KEY|JWPlayer API Key|undefined
-FULLSTORY_KEY|Fullstory.com API Key|undefined
 LOGIN_SERVER_URL|Legacy Login: Hostname for backend service|'http://localhost:3000'
 LOGIN_SERVER_URL_WITH_AUTH|Legacy Login: Hostname for local service with credentials|'http://testuser:password@localhost:3000'
 AUDIENCE|URL of projects module|'https://projects.vidcloud.io'

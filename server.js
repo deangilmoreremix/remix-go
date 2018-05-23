@@ -10,7 +10,7 @@ const app = next({ dev });
 const handle = app.getRequestHandler();
 
 const checkAccess = require('./lib/express/check-access');
-const { processForm, isImage, imageUpload } = require('./lib/express/image-upload');
+const { processForm, isValidMedia, mediaUpload } = require('./lib/express/media-upload');
 const getContentType = require('./lib/express/get-content-type');
 
 mobxReact.useStaticRendering(true);
@@ -29,7 +29,7 @@ app.prepare().then(() => {
   require('./lib/express/webmaker-auth')(server);
   server.use(express.json());
   server.use(express.urlencoded());
-  server.put('/api/image', processForm, isImage, imageUpload);
+  server.put('/api/media', processForm, isValidMedia, mediaUpload);
   server.get('/api/get-content-type', getContentType);
 
   server.get('/_next/*', (req, res) => {
