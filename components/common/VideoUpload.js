@@ -4,6 +4,7 @@ import { Input, Progress } from 'reactstrap';
 import DropZone from 'react-dropzone';
 
 import PropTypes from '../../lib/PropTypes';
+import MediaTypeDetector from '../../lib/popcorn/util/mediaTypeDetector';
 
 @inject('api')
 @observer
@@ -29,9 +30,18 @@ export default class VideoUpload extends Component {
     onVideoUploaded(response.url);
   };
 
-  retrieveVideoFromUrl = () => {
+  retrieveVideoFromUrl = async () => {
+    const { onVideoUploaded } = this.props;
     const { url } = this.state;
-    console.log(url);
+    const videoTypeDetector = new MediaTypeDetector();
+    this.setState({ uploadPercentage: 1, isUploading: true });
+    try {
+      onVideoUploaded((await videoTypeDetector.getMetadata(url)).source);
+      this.setState({ uploadPercentage: 0, isUploading: false });
+    } catch (err) {
+      this.setState({ uploadPercentage: 0, isUploading: false });
+      alert(err.message);
+    }
   };
 
   render() {
