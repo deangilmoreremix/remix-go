@@ -37,7 +37,6 @@ export default class VideoUpload extends Component {
     this.setState({ uploadPercentage: 1, isUploading: true });
     try {
       onVideoUploaded((await videoTypeDetector.getMetadata(url)).source);
-      this.setState({ uploadPercentage: 0, isUploading: false });
     } catch (err) {
       this.setState({ uploadPercentage: 0, isUploading: false });
       alert(err.message);

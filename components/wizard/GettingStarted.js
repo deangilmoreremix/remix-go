@@ -68,11 +68,12 @@ export default class GettingStarted extends Component {
       case GettingStarted.WIZARD_TYPES.VIDEO_UPLOAD:
         return (
           <div className="scrollable full-height video-upload">
+            <PopupboxContainer />
             <VideoUpload onVideoUploaded={(videoUrl) => {
               const nicheSelection = (<NicheScriptsWorkspace
                 className="niche-scripts"
                 onScriptSelected={(script) => {
-                  this.handleWizardSelection({ script, videoUrl });
+                  this.handleWizardSelection({ script, video: videoUrl });
                 }}
               />);
               PopupboxManager.open({
@@ -103,6 +104,7 @@ export default class GettingStarted extends Component {
         Router.push({ pathname: '/edit' });
         break;
       case GettingStarted.WIZARD_TYPES.GENERATOR:
+      case GettingStarted.WIZARD_TYPES.VIDEO_UPLOAD:
         store.activeProject = new Project(data.script, true);
         await store.activeProject.updateVideo(data.video);
         Router.push({ pathname: '/edit' });
