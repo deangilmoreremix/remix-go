@@ -7,11 +7,13 @@ import {
   PopupboxContainer,
 } from 'react-popupbox';
 
+import Project from '../../lib/editor/Project';
 import WorkspaceContainer from './editor/WorkspaceContainer';
 import EditorStageChanger from './editor/EditorStageChanger';
 import ActionsPane from './editor/ActionsPane';
 import Personalizer from './editor/workspaces/construction/Personalizer';
 import PopcornEditor from '../../lib/popcorn/plugins/editor.popcorn';
+import CallToActions from './editor/call-to-actions/CallToActions';
 
 const insertAtCaret = (element, offset, text) => {
   const front = (element.innerText).substring(0, offset);
@@ -23,7 +25,6 @@ const insertAtCaret = (element, offset, text) => {
 @inject('store')
 @observer
 export default class Editor extends Component {
-  
   render() {
     const {
       api,
@@ -37,7 +38,7 @@ export default class Editor extends Component {
     } = this.props;
     /* eslint-disable no-underscore-dangle */
     const ToolbarEditor = activeElement && PopcornEditor.editors[activeElement._natives.type];
-    
+
     window.onbeforeunload = () => {
       const { modified } = activeProject;
       if (modified) {
@@ -120,7 +121,25 @@ export default class Editor extends Component {
                   <img className="icon" src="../../static/images/editor/personalizer.svg" alt="" />
                   <span>Personalizer</span>
                 </button>
-                <button className="addon-button hidden">
+                <button
+                  className="addon-button"
+                  onClick={() => {
+                    PopupboxManager.open({
+                      content: <CallToActions
+                        className="cta-library"
+                        onCtaSelected={(cta) => { activeProject.cta = new Project(cta); }}
+                      />,
+                      config: {
+                        titleBar: {
+                          enable: true,
+                          text: 'CTA Library',
+                        },
+                        fadeIn: true,
+                        fadeInSpeed: 200,
+                      },
+                    });
+                  }}
+                >
                   <img className="icon" src="../../static/images/editor/cta.svg" alt="" />
                   <span>Call to Action</span>
                 </button>
