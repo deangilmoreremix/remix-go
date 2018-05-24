@@ -57,6 +57,7 @@ export default class SocialCampaign extends Component {
     embedLocation: EMBED_LOCATIONS[0],
     preload: true,
     autoplay: false,
+    embedPage: '',
   };
 
   nextStage() {
@@ -90,6 +91,7 @@ export default class SocialCampaign extends Component {
       embedLocation,
       preload,
       autoplay,
+      embedPage,
     } = this.state;
 
     return (
@@ -98,9 +100,7 @@ export default class SocialCampaign extends Component {
           <div className="workspace">
             <Progress
               className="embed-progress"
-              value={((STAGES.findIndex(
-                  item => currentStage.key === item.key) + 1
-              ) / STAGES.length) * 100}
+              value={currentStage.completionPercentage}
             />
             <div className={`embed-engine ${currentStage.key !== 'embed-engine' && 'hidden'}`}>
               <h5 className="embed-title">Where do you want to embed your video?</h5>
