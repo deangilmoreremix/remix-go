@@ -11,6 +11,7 @@ import EmbeddedPlayback from '../common/EmbeddedPlayback';
 import EmbedDataContainer from './publisher/EmbedDataContainer';
 import ProjectNameChanger from './publisher/ProjectNameChanger';
 import EmailCampaign from './publisher/campaigns/EmailCampaign';
+import SocialCampaign from './publisher/campaigns/SocialCampaign';
 
 @inject('api')
 @inject('store')
@@ -74,9 +75,31 @@ export default class Publisher extends Component {
                       },
                     });
                   }}
-                >Email Campaign
+                >
+                  Email Campaign
                 </button>
-                <button className="go-button action-button">Facebook</button>
+                <button
+                  className="go-button action-button"
+                  onClick={() => {
+                    PopupboxManager.open({
+                      content: <SocialCampaign
+                        className="campaign"
+                        project={activeProject}
+                        onCampaignFinished={() => PopupboxManager.close()}
+                      />,
+                      config: {
+                        titleBar: {
+                          enable: true,
+                          text: 'Facebook',
+                        },
+                        fadeIn: true,
+                        fadeInSpeed: 200,
+                      },
+                    });
+                  }}
+                >
+                  Facebook
+                </button>
               </ActionsPane>
             </Col>
           </Row>
