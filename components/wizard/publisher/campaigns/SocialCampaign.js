@@ -270,7 +270,7 @@ export default class SocialCampaign extends Component {
                   You must login to Facebook and authorize our app to post Videos into Facebook Pages
                 </label>
               </div>
-              <a
+              <button
                 className="go-button fb-login"
                 onClick={() => {
                   this.postFacebookMessage({
@@ -281,7 +281,7 @@ export default class SocialCampaign extends Component {
               >
                 <i className="fa fa-facebook-official" />
                 Log in
-              </a>
+              </button>
               <div className="cleared" />
             </div>
           </div>

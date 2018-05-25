@@ -6,6 +6,14 @@
   }
 
   .fb-login {
+    width: 120px;
+    height: 40px;
+    font-size: 1.1rem;
+    color: white;
+    background: #3b5998;
 
+    .fa-facebook-official {
+      margin-right: 5px;
+    }
   }
 }
