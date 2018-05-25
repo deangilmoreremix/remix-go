@@ -14,7 +14,6 @@ import Search from '../../common/Search';
 import TemplateItem from './TemplateItem';
 import EmbeddedPlayback from '../../common/EmbeddedPlayback';
 import PhaseView from './PhaseView';
-import Search from './Search';
 
 @inject('api')
 @observer
@@ -79,10 +78,28 @@ export default class Templates extends Component {
     });
   };
 
+  phaserElements = [
+    {
+      phaseTitle: 'Choose Template',
+      phaseTabValue: 1,
+      selected: true,
+    },
+    {
+      phaseTitle: 'Customize Video',
+      phaseTabValue: 2,
+      selected: false,
+    },
+    {
+      phaseTitle: 'Publish & Video',
+      phaseTabValue: 3,
+      selected: false,
+    },
+  ];
+
   render() {
     return (
       <Fragment>
-         <PhaseView />
+        <PhaseView phaserElements={this.phaserElements} />
         <Search
           onSearch={q => this.onSearch(q)}
           placeholder="Search through your templates..."
