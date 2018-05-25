@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import index from 'react-masonry-infinite/lib';
 
 export default class PhaseView extends Component {
   constructor() {
@@ -10,15 +11,17 @@ export default class PhaseView extends Component {
 
   render() {
     let { phaserElements } = this.props;
-    let { phaseTitle } = this.state;
+    let currentTitle = this.state.phaseTitle;
 
 
     const phaseHasChanged = (selectedTab) => {
       let title;
+      let indexKey = 0;
       const updated = phaserElements.map((element) => {
-        const { selected, phaseTabValue } = element;
-        if (selected && phaseTabValue !== selectedTab) element.selected = false;
-        if (phaseTabValue === selectedTab) {
+        indexKey += 1;
+        const { selected, phaseTitle } = element;
+        if (selected && phaseTitle !== selectedTab.phaseTitle) element.selected = false;
+        if (phaseTitle === selectedTab.phaseTitle) {
           element.selected = true;
           title = element.phaseTitle;
         }
@@ -30,13 +33,15 @@ export default class PhaseView extends Component {
 
     const Phases = (props) => {
       const { onPhaseChanged, phases } = props;
+      let indexKey = 0;
       const phaseTabs = phases.map((element) => {
         const { phaseTitle, phaseTabValue, selected } = element;
+        indexKey += 1;
         return (
-          <div className={`stepper-tab-group ${(selected?'active':'')}`} key={phaseTabValue} id={`phase${phaseTabValue}`} >
+          <div className={`stepper-tab-group ${(selected?'active':'')}`} key={indexKey} >
             <div className="gapped">
               <div className="phase">
-                <div className="phase-label" onClick={() => onPhaseChanged(phaseTabValue)}>{phaseTabValue}</div>
+                <div className="phase-label" onClick={() => onPhaseChanged(element)}>{indexKey}</div>
               </div>
             </div>
             <div className="stepper-tab-label">{phaseTitle}</div>
@@ -49,7 +54,7 @@ export default class PhaseView extends Component {
     return (
       <div className="phase-component">
         <div className="phase-state-title">
-          <div>{phaseTitle}</div>
+          <div>{currentTitle}</div>
         </div>
         <div className="phase-state-tabs">
           <div className="stepper">
