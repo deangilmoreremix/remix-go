@@ -5,9 +5,32 @@ import Project from '../../../../lib/editor/Project';
 import PropTypes from '../../../../lib/PropTypes';
 import EmbedDataContainer from '../EmbedDataContainer';
 
+const FB_APP_ID = '1728968890675795';
+const FACEBOOK_PERMISSIONS = 'manage_pages,pages_show_list';
+
+const FACEBOOK_MESSAGE_TOPICS = {
+  logIn: 'LOG_IN',
+  settleAuth: 'SETTLE_AUTH',
+  init: 'INIT',
+  fetchUserData: 'FETCH_USER_DATA',
+  fetchPagesData: 'FETCH_PAGE_DATA',
+  getPageTabs: 'GET_PAGE_TABS',
+  createTab: 'CREATE_TAB',
+  share: 'SHARE',
+};
+
 const STAGES = [
   { key: 'embed-engine', completionPercentage: 25 },
   { key: 'embed-location', completionPercentage: 25 },
+  {
+    key: 'facebook-login',
+    completionPercentage: 50,
+    bootstrap: (instance) => {
+      instance.postFacebookMessage({ topic: FACEBOOK_MESSAGE_TOPICS.init, arguments: FB_APP_ID });
+    },
+  },
+  { key: 'facebook-page', completionPercentage: 50 },
+  { key: 'facebook-post', completionPercentage: 75 },
 ];
 
 const EMBED_LOCATIONS = [
@@ -60,20 +83,72 @@ export default class SocialCampaign extends Component {
     embedPage: '',
   };
 
+  componentDidMount() {
+    window.addEventListener('message', e => this.receiveFacebookMessage(e));
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('message', e => this.receiveFacebookMessage(e));
+  }
+
+  setStage(stageName) {
+    const currentStage = STAGES.find(item => item.key === stageName);
+    this.setState({ currentStage });
+    currentStage.bootstrap(this);
+    if (currentStage.bootstrap) {
+      currentStage.bootstrap(this);
+    }
+  }
+
+  facebookMessageHandlers = {
+    [`${FACEBOOK_MESSAGE_TOPICS.settleAuth}`]: (data) => {
+      const err = data.error;
+      // hideLoading();
+      if (err) {
+        return this.setStage('facebook-login');
+      }
+      if (data.loggedIn) {
+        return this.nextStage();
+      }
+      return this.setStage('facebook-login');
+    },
+    [`${FACEBOOK_MESSAGE_TOPICS.init}`]: () => {
+      this.postFacebookMessage({
+        topic: FACEBOOK_MESSAGE_TOPICS.settleAuth,
+        arguments: FACEBOOK_PERMISSIONS,
+      });
+    },
+  };
+
   nextStage() {
-    const { currentStage, embedLocation } = this.state;
+    const { embedLocation } = this.state;
+    let { currentStage } = this.state;
     let nextStageIdx = Math.min(
       STAGES.findIndex(item => currentStage.key === item.key) + 1,
       STAGES.length - 1,
     );
-    if (STAGES[nextStageIdx].key === 'embed-location' && embedLocation.key === 'default') {
+    if (STAGES[nextStageIdx].key === 'embed-location' &&
+      embedLocation.key === 'default') {
       nextStageIdx += 1;
     }
-    this.setState({ currentStage: STAGES[nextStageIdx] });
+    currentStage = STAGES[nextStageIdx];
+    this.setState({ currentStage });
+    if (currentStage.bootstrap) {
+      currentStage.bootstrap(this);
+    }
+  }
+
+  postFacebookMessage(data) {
+    const { facebookConductor } = this;
+    facebookConductor.contentWindow.postMessage({
+      topic: data.topic,
+      arguments: data.arguments,
+    }, facebookConductor.src);
   }
 
   prevStage() {
-    const { currentStage, embedLocation } = this.state;
+    const { embedLocation } = this.state;
+    let { currentStage } = this.state;
     let prevStageIdx = Math.min(
       STAGES.findIndex(item => currentStage.key === item.key) - 1,
       0,
@@ -81,7 +156,16 @@ export default class SocialCampaign extends Component {
     if (STAGES[prevStageIdx].key === 'embed-location' && embedLocation.key === 'default') {
       prevStageIdx -= 1;
     }
-    this.setState({ currentStage: STAGES[prevStageIdx] });
+    currentStage = STAGES[prevStageIdx];
+    this.setState({ currentStage });
+  }
+
+  receiveFacebookMessage(e) {
+    const { topic } = e.data;
+
+    if (this.facebookMessageHandlers[topic]) {
+      this.facebookMessageHandlers[topic](e.data);
+    }
   }
 
   render() {
@@ -97,6 +181,14 @@ export default class SocialCampaign extends Component {
     return (
       <Fragment>
         <div className={`social-campaign ${className}`}>
+          <iframe
+            title="Facebook conductor"
+            src="https://dev-cdn.vidcloud.io/social-campaign/social-campaign.html"
+            frameBorder="0"
+            className="conductor-iframe"
+            id="conductor-iframe"
+            ref={(c) => { this.facebookConductor = c; }}
+          />
           <div className="workspace">
             <Progress
               className="embed-progress"
@@ -171,6 +263,26 @@ export default class SocialCampaign extends Component {
                 value={embedPage}
                 onChange={({ target: { value } }) => this.setState({ embedPage: value })}
               />
+            </div>
+            <div className={`facebook-login ${currentStage.key !== 'facebook-login' && 'hidden'}`}>
+              <div className="login-note">
+                <label>
+                  You must login to Facebook and authorize our app to post Videos into Facebook Pages
+                </label>
+              </div>
+              <a
+                className="go-button fb-login"
+                onClick={() => {
+                  this.postFacebookMessage({
+                    topic: FACEBOOK_MESSAGE_TOPICS.logIn,
+                    arguments: FACEBOOK_PERMISSIONS,
+                  });
+                }}
+              >
+                <i className="fa fa-facebook-official" />
+                Log in
+              </a>
+              <div className="cleared" />
             </div>
           </div>
           <div className="controls">
