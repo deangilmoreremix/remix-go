@@ -29,7 +29,13 @@ const STAGES = [
       instance.postFacebookMessage({ topic: FACEBOOK_MESSAGE_TOPICS.init, arguments: FB_APP_ID });
     },
   },
-  { key: 'facebook-page', completionPercentage: 50 },
+  {
+    key: 'facebook-page',
+    completionPercentage: 50,
+    bootstrap: (instance) => {
+      instance.postFacebookMessage({ topic: FACEBOOK_MESSAGE_TOPICS.fetchPagesData });
+    },
+  },
   { key: 'facebook-post', completionPercentage: 75 },
 ];
 
@@ -57,7 +63,7 @@ const EMBED_LOCATIONS = [
     embedGenerator: (url, width, height) => `<script>var vars={};var tempstring='';var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(m,key,value){if(value){tempstring+=key+'='+value+'&';}});if (tempstring) {document.addEventListener('DOMContentLoaded',function() {document.getElementById('vr').src='${url}?'+tempstring.slice(0, -1);});}</script>\n\n<iframe id='vr' src='${url}' width='${width}' height='${height}' frameborder='0' mozallowfullscreen webkitallowfullscreen allowfullscreen></iframe>`,
   },
   {
-    key: 'fb-page',
+    key: 'facebook-page',
     label: 'Facebook Page',
   },
   {
@@ -81,6 +87,8 @@ export default class SocialCampaign extends Component {
     preload: true,
     autoplay: false,
     embedPage: '',
+    facebookPages: [],
+    selectedFbPage: '',
   };
 
   componentDidMount() {
@@ -101,7 +109,7 @@ export default class SocialCampaign extends Component {
   }
 
   facebookMessageHandlers = {
-    [`${FACEBOOK_MESSAGE_TOPICS.settleAuth}`]: (data) => {
+    [FACEBOOK_MESSAGE_TOPICS.settleAuth]: (data) => {
       const err = data.error;
       // hideLoading();
       if (err) {
@@ -112,11 +120,29 @@ export default class SocialCampaign extends Component {
       }
       return this.setStage('facebook-login');
     },
-    [`${FACEBOOK_MESSAGE_TOPICS.init}`]: () => {
+    [FACEBOOK_MESSAGE_TOPICS.init]: () => {
       this.postFacebookMessage({
         topic: FACEBOOK_MESSAGE_TOPICS.settleAuth,
         arguments: FACEBOOK_PERMISSIONS,
       });
+    },
+    [FACEBOOK_MESSAGE_TOPICS.fetchPagesData]: (data) => {
+      const { error, result } = data;
+      const facebookPages = [];
+      if (error) {
+        // return showError(err.message);
+      }
+      if (result.length) {
+        result.forEach((page) => {
+          facebookPages.push({
+            id: page.id,
+            name: page.name,
+            token: page.access_token,
+            fanCount: page.fan_count,
+          });
+        });
+        this.setState({ facebookPages });
+      }
     },
   };
 
@@ -128,7 +154,10 @@ export default class SocialCampaign extends Component {
       STAGES.length - 1,
     );
     if (STAGES[nextStageIdx].key === 'embed-location' &&
-      embedLocation.key === 'default') {
+      ['default', 'facebook-page'].indexOf(embedLocation.key) !== -1) {
+      nextStageIdx += 1;
+    }
+    if (STAGES[nextStageIdx].key === 'facebook-page' && embedLocation.key !== 'facebook-page') {
       nextStageIdx += 1;
     }
     currentStage = STAGES[nextStageIdx];
@@ -176,6 +205,8 @@ export default class SocialCampaign extends Component {
       preload,
       autoplay,
       embedPage,
+      facebookPages,
+      selectedFbPage,
     } = this.state;
 
     return (
@@ -183,11 +214,19 @@ export default class SocialCampaign extends Component {
         <div className={`social-campaign ${className}`}>
           <iframe
             title="Facebook conductor"
-            src="https://dev-cdn.vidcloud.io/social-campaign/social-campaign.html"
+            src="https://cdn.vidcloud.io/social-campaign/social-campaign.html"
             frameBorder="0"
             className="conductor-iframe"
             id="conductor-iframe"
             ref={(c) => { this.facebookConductor = c; }}
+            onLoad={() => {
+              this.facebookConductor.contentWindow.postMessage({
+                topic: 'Initial load',
+                config: {},
+                topics: FACEBOOK_MESSAGE_TOPICS,
+                parentWindowUrl: window.location.origin + window.location.pathname,
+              }, this.facebookConductor.src);
+            }}
           />
           <div className="workspace">
             <Progress
@@ -282,7 +321,32 @@ export default class SocialCampaign extends Component {
                 <i className="fa fa-facebook-official" />
                 Log in
               </button>
-              <div className="cleared" />
+            </div>
+            <div className={`facebook-page ${currentStage.key !== 'facebook-page' && 'hidden'}`}>
+              <h5 className="embed-title">
+                Which one of your Facebook Pages do you want to embed your Video into?
+              </h5>
+              <div className="embed-grid">
+                <div className="row embed-group">
+                  <label className="cell" htmlFor="embed-location-select">
+                    Facebook pages
+                  </label>
+                  <select
+                    className="cell"
+                    name="select"
+                    value={selectedFbPage}
+                    onChange={({ target: { value } }) => this.setState({
+                      selectedFbPage: value,
+                    })}
+                  >
+                    {facebookPages.map(
+                      ({ id, name }, idx) => <option key={idx} value={id}>{name}</option>,
+                    )}
+                  </select>
+                </div>
+              </div>
+            </div>
+            <div className={`facebook-post ${currentStage.key !== 'facebook-post' && 'hidden'}`}>
             </div>
           </div>
           <div className="controls">
@@ -302,7 +366,7 @@ export default class SocialCampaign extends Component {
                 }
               }}
             >
-              {currentStage.key === STAGES[STAGES.length - 1].key ? 'Done' : 'Next'}
+              {currentStage.key === STAGES[STAGES.length - 1].key ? 'Share' : 'Next'}
             </button>
           </div>
         </div>
