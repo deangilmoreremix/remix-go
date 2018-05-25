@@ -40,7 +40,7 @@ export default class ConstructionWorkspace extends Component {
   }
 
   render() {
-    const { className } = this.props;
+    const { className, store: { activeProject } } = this.props;
     return (
       <Container className={`construction-workspace ${className || ''}`}>
         <ConstructionScene
@@ -48,6 +48,7 @@ export default class ConstructionWorkspace extends Component {
         />
         <CheckpointsList
           className="construction-thumbnails"
+          checkpoints={activeProject.checkpoints}
           onCheckpointSelect={at => this.onProjectSeek(at)}
         />
       </Container>

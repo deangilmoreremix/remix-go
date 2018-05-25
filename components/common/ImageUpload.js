@@ -7,7 +7,7 @@ import PropTypes from '../../lib/PropTypes';
 
 @inject('api')
 @observer
-export default class PopcornEditor extends Component {
+export default class ImageUpload extends Component {
   static propTypes = {
     onFileUploaded: PropTypes.func.isRequired,
   };
@@ -37,7 +37,7 @@ export default class PopcornEditor extends Component {
             className="go-button submit-button"
             onClick={async () => {
               this.setState({ isUploading: true });
-              const response = await api.uploadImage(file || url);
+              const response = await api.uploadMedia(file || url);
               onFileUploaded(response.url);
               this.setState({
                 isUploading: false,

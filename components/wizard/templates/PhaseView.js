@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-export default class Phase extends Component {
+export default class PhaseView extends Component {
   constructor() {
     super();
 

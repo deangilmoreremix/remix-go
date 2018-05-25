@@ -10,9 +10,10 @@ import {
 
 import PropTypes from '../../../lib/PropTypes';
 import InfiniteLoading from '../../common/InfiniteLoading';
+import Search from '../../common/Search';
 import TemplateItem from './TemplateItem';
 import EmbeddedPlayback from '../../common/EmbeddedPlayback';
-import Phase from './Phase';
+import PhaseView from './PhaseView';
 import Search from './Search';
 
 @inject('api')
@@ -81,8 +82,11 @@ export default class Templates extends Component {
   render() {
     return (
       <Fragment>
-         <Phase />
-        <Search onSearch={q => this.onSearch(q)} />
+         <PhaseView />
+        <Search
+          onSearch={q => this.onSearch(q)}
+          placeholder="Search through your templates..."
+        />
         <PopupboxContainer onClosed={() => { this.currentPlayback.props.url = null; }} />
         <TemplateGallery
           className="wizard-gallery"
