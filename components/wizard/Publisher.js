@@ -31,6 +31,22 @@ export default class Publisher extends Component {
     } = this.props;
     return (
       <Fragment>
+        <iframe
+          title="Facebook conductor"
+          src="http://dev-cdn.vidcloud.io/social-campaign/social-campaign.html"
+          frameBorder="0"
+          className="conductor-iframe"
+          id="conductor-iframe"
+          ref={(c) => { this.facebookConductor = c; }}
+          onLoad={() => {
+            this.facebookConductor.contentWindow.postMessage({
+              topic: 'Initial load',
+              config: {},
+              topics: SocialCampaign.FACEBOOK_MESSAGE_TOPICS,
+              parentWindowUrl: window.location.origin + window.location.pathname,
+            }, this.facebookConductor.src);
+          }}
+        />
         <PopupboxContainer />
         <Container fluid className="editor-wrapper">
           <Row className="canvas full-height">
@@ -85,6 +101,7 @@ export default class Publisher extends Component {
                       content: <SocialCampaign
                         className="campaign"
                         project={activeProject}
+                        facebookConductor={this.facebookConductor}
                         onCampaignFinished={() => PopupboxManager.close()}
                       />,
                       config: {
