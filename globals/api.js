@@ -167,7 +167,9 @@ class Api {
       }
       xhr.open('PUT', '/api/media', true);
       xhr.onload = () => {
-        onProgress(1.0);
+        if (onProgress) {
+          onProgress(1.0);
+        }
         this.isLoading = false;
         if (xhr.status !== 200) {
           return reject(new Error(`HTTP error ${xhr.status}.`));

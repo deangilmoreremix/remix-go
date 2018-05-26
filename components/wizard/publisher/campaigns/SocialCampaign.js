@@ -1,5 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import { Progress, Input } from 'reactstrap';
+import { inject, observer } from 'mobx-react';
 
 import Project from '../../../../lib/editor/Project';
 import PropTypes from '../../../../lib/PropTypes';
@@ -91,6 +92,8 @@ const EMBED_LOCATIONS = [
   },
 ];
 
+@inject('api')
+@observer
 export default class SocialCampaign extends Component {
   static propTypes = {
     className: PropTypes.string,
@@ -250,7 +253,7 @@ export default class SocialCampaign extends Component {
   }
 
   render() {
-    const { className, project, onCampaignFinished } = this.props;
+    const { api, className, project, onCampaignFinished } = this.props;
     const {
       currentStage,
       embedLocation,
@@ -475,6 +478,22 @@ export default class SocialCampaign extends Component {
                         onChange={({ target: { value } }) => {
                           const { facebookPostData } = this.state;
                           facebookPostData.description = value;
+                          this.setState({ facebookPostData });
+                        }}
+                      />
+                    </div>
+                    <div className="row embed-group">
+                      <label className="cell" htmlFor="facebook-post-image-input">
+                        Post Image
+                      </label>
+                      <Input
+                        id="facebook-post-image-input"
+                        className="cell facebook-post-input"
+                        type="file"
+                        onChange={async ({ target: { files: [file] } }) => {
+                          const response = await api.uploadMedia(file);
+                          const { facebookPostData } = this.state;
+                          facebookPostData.thumbnail = response.url;
                           this.setState({ facebookPostData });
                         }}
                       />

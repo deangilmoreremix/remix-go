@@ -149,11 +149,15 @@
     .facebook-post-details {
       text-align: left;
 
+      .row {
+        margin-bottom: 3%;
+      }
+
       .facebook-post-input {
         width: 100%;
         background: transparent;
         color: $primary-color;
-        margin-left: 1%;
+        margin-left: 4%;
       }
     }
   }
