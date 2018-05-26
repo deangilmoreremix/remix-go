@@ -89,6 +89,7 @@ export default class SocialCampaign extends Component {
     embedPage: '',
     facebookPages: [],
     selectedFbPage: '',
+    facebookPageTab: '',
   };
 
   componentDidMount() {
@@ -143,6 +144,22 @@ export default class SocialCampaign extends Component {
         });
         this.setState({ facebookPages });
       }
+    },
+    [FACEBOOK_MESSAGE_TOPICS.getPageTabs]: (data) => {
+      const { error, result } = data;
+      if (error) {
+        // showError(err.message);
+        return;
+      }
+
+      result.data.forEach((tab) => {
+        const tabAppId = tab.application && tab.application.id;
+        if (tabAppId === FB_APP_ID) {
+          this.setState({
+            facebookPageTab: tab.name,
+          });
+        }
+      });
     },
   };
 
@@ -207,6 +224,7 @@ export default class SocialCampaign extends Component {
       embedPage,
       facebookPages,
       selectedFbPage,
+      facebookPageTab,
     } = this.state;
 
     return (
@@ -328,21 +346,44 @@ export default class SocialCampaign extends Component {
               </h5>
               <div className="embed-grid">
                 <div className="row embed-group">
-                  <label className="cell" htmlFor="embed-location-select">
+                  <label className="cell" htmlFor="facebook-page-select">
                     Facebook pages
                   </label>
                   <select
+                    id="facebook-page-select"
                     className="cell"
                     name="select"
                     value={selectedFbPage}
-                    onChange={({ target: { value } }) => this.setState({
-                      selectedFbPage: value,
-                    })}
+                    onChange={({ target: { value } }) => {
+                      const fbPage = facebookPages.find(page => page.id === value);
+                      this.setState({
+                        selectedFbPage: value,
+                      });
+                      this.postFacebookMessage({
+                        topic: FACEBOOK_MESSAGE_TOPICS.getPageTabs,
+                        arguments: {
+                          pageId: fbPage.id,
+                          pageAccessToken: fbPage.token,
+                        },
+                      });
+                    }}
                   >
                     {facebookPages.map(
                       ({ id, name }, idx) => <option key={idx} value={id}>{name}</option>,
                     )}
                   </select>
+                </div>
+                <div className="row embed-group">
+                  <label className="cell" htmlFor="facebook-page-tab-input">
+                    Facebook Page tab name
+                  </label>
+                  <Input
+                    id="facebook-page-tab-input"
+                    className="facebook-page-tab"
+                    type="text"
+                    value={facebookPageTab}
+                    onChange={({ target: { value } }) => this.setState({ facebookPageTab: value })}
+                  />
                 </div>
               </div>
             </div>
@@ -357,7 +398,11 @@ export default class SocialCampaign extends Component {
               Back
             </button>
             <button
-              className="go-button next"
+              className={
+                `go-button ${currentStage.key === STAGES[STAGES.length - 1].key ?
+                  'next fb-login' :
+                  'next'}`
+              }
               onClick={() => {
                 if (currentStage.key === STAGES[STAGES.length - 1].key) {
                   onCampaignFinished();
@@ -366,6 +411,11 @@ export default class SocialCampaign extends Component {
                 }
               }}
             >
+              <i
+                className={`${currentStage.key === STAGES[STAGES.length - 1].key ?
+                  'fa fa-facebook-official' :
+                  'hidden'}`}
+              />
               {currentStage.key === STAGES[STAGES.length - 1].key ? 'Share' : 'Next'}
             </button>
           </div>
