@@ -4,9 +4,11 @@ import { Progress, Input } from 'reactstrap';
 import Project from '../../../../lib/editor/Project';
 import PropTypes from '../../../../lib/PropTypes';
 import EmbedDataContainer from '../EmbedDataContainer';
+import FacebookPostPreview from './FacebookPostPreview';
 
 const FB_APP_ID = '1728968890675795';
 const FACEBOOK_PERMISSIONS = 'manage_pages,pages_show_list';
+const FB_DEFAULT_USERPIC = 'http://emblemsbf.com/img/11864.jpg';
 
 const FACEBOOK_MESSAGE_TOPICS = {
   logIn: 'LOG_IN',
@@ -36,7 +38,22 @@ const STAGES = [
       instance.postFacebookMessage({ topic: FACEBOOK_MESSAGE_TOPICS.fetchPagesData });
     },
   },
-  { key: 'facebook-post', completionPercentage: 75 },
+  {
+    key: 'facebook-post',
+    completionPercentage: 75,
+    bootstrap: (instance) => {
+      const { project } = instance.props;
+      instance.setState({
+        facebookPostData: {
+          title: project.name,
+          thumbnail: project.thumbnail,
+          description: project.description,
+          link: project.make.url,
+        },
+      });
+      instance.postFacebookMessage({ topic: FACEBOOK_MESSAGE_TOPICS.fetchUserData });
+    },
+  },
 ];
 
 const EMBED_LOCATIONS = [
@@ -90,6 +107,8 @@ export default class SocialCampaign extends Component {
     facebookPages: [],
     selectedFbPage: '',
     facebookPageTab: '',
+    facebookUserData: {},
+    facebookPostData: {},
   };
 
   componentDidMount() {
@@ -161,6 +180,18 @@ export default class SocialCampaign extends Component {
         }
       });
     },
+    [FACEBOOK_MESSAGE_TOPICS.fetchUserData]: (data) => {
+      const { error, result } = data;
+      const facebookUserData = error ? {
+        name: 'You',
+        userpic: FB_DEFAULT_USERPIC,
+      } : {
+        name: result.NAME,
+        userpic: result.IMAGE || FB_DEFAULT_USERPIC,
+      };
+
+      this.setState({ facebookUserData });
+    },
   };
 
   nextStage() {
@@ -214,6 +245,10 @@ export default class SocialCampaign extends Component {
     }
   }
 
+  sharePost() {
+    this.postFacebookMessage({ topic: FACEBOOK_MESSAGE_TOPICS.share, arguments: {} });
+  }
+
   render() {
     const { className, project, onCampaignFinished } = this.props;
     const {
@@ -225,6 +260,8 @@ export default class SocialCampaign extends Component {
       facebookPages,
       selectedFbPage,
       facebookPageTab,
+      facebookUserData,
+      facebookPostData,
     } = this.state;
 
     return (
@@ -379,7 +416,7 @@ export default class SocialCampaign extends Component {
                   </label>
                   <Input
                     id="facebook-page-tab-input"
-                    className="facebook-page-tab"
+                    className="cell facebook-page-tab"
                     type="text"
                     value={facebookPageTab}
                     onChange={({ target: { value } }) => this.setState({ facebookPageTab: value })}
@@ -388,6 +425,68 @@ export default class SocialCampaign extends Component {
               </div>
             </div>
             <div className={`facebook-post ${currentStage.key !== 'facebook-post' && 'hidden'}`}>
+              <h5 className="embed-title">
+                What do you want the Facebook Share to look like?
+              </h5>
+              <div className="embed-grid">
+                <div className="row embed-group">
+                  <div className="embed-grid cell facebook-post-details">
+                    <div className="row embed-group">
+                      <label className="cell" htmlFor="facebook-post-url-input">
+                        Shared Url
+                      </label>
+                      <Input
+                        id="facebook-post-url-input"
+                        className="cell facebook-post-input"
+                        type="text"
+                        value={facebookPostData.link}
+                        onChange={({ target: { value } }) => {
+                          const { facebookPostData } = this.state;
+                          facebookPostData.link = value;
+                          this.setState({ facebookPostData });
+                        }}
+                      />
+                    </div>
+                    <div className="row embed-group">
+                      <label className="cell" htmlFor="facebook-post-title-input">
+                        Post Title
+                      </label>
+                      <Input
+                        id="facebook-post-title-input"
+                        className="cell facebook-post-input"
+                        type="text"
+                        value={facebookPostData.title}
+                        onChange={({ target: { value } }) => {
+                          const { facebookPostData } = this.state;
+                          facebookPostData.title = value;
+                          this.setState({ facebookPostData });
+                        }}
+                      />
+                    </div>
+                    <div className="row embed-group">
+                      <label className="cell" htmlFor="facebook-post-description-input">
+                        Post Description
+                      </label>
+                      <Input
+                        id="facebook-post-description-input"
+                        className="cell facebook-post-input"
+                        type="text"
+                        value={facebookPostData.description}
+                        onChange={({ target: { value } }) => {
+                          const { facebookPostData } = this.state;
+                          facebookPostData.description = value;
+                          this.setState({ facebookPostData });
+                        }}
+                      />
+                    </div>
+                  </div>
+                  <FacebookPostPreview
+                    className="cell"
+                    user={facebookUserData}
+                    post={facebookPostData}
+                  />
+                </div>
+              </div>
             </div>
           </div>
           <div className="controls">
