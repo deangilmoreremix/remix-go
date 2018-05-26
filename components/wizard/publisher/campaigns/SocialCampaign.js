@@ -44,6 +44,20 @@ const STAGES = [
     completionPercentage: 75,
     bootstrap: (instance) => {
       const { project } = instance.props;
+      const { facebookPages, facebookPageTab, selectedFbPage } = instance.state;
+      if (selectedFbPage.length > 0 && !facebookPageTab.id) {
+        const fbPage = facebookPages.find(page => page.id === selectedFbPage);
+        instance.postFacebookMessage({
+          topic: FACEBOOK_MESSAGE_TOPICS.createTab,
+          arguments: {
+            pageId: fbPage.id,
+            pageAccessToken: fbPage.token,
+            tabName: facebookPageTab.name,
+          },
+        });
+      } else {
+        instance.postFacebookMessage({ topic: FACEBOOK_MESSAGE_TOPICS.fetchUserData });
+      }
       instance.setState({
         facebookPostData: {
           title: project.name,
@@ -52,7 +66,6 @@ const STAGES = [
           link: project.make.url,
         },
       });
-      instance.postFacebookMessage({ topic: FACEBOOK_MESSAGE_TOPICS.fetchUserData });
     },
   },
 ];
@@ -109,7 +122,10 @@ export default class SocialCampaign extends Component {
     embedPage: '',
     facebookPages: [],
     selectedFbPage: '',
-    facebookPageTab: '',
+    facebookPageTab: {
+      id: null,
+      name: '',
+    },
     facebookUserData: {},
     facebookPostData: {},
   };
@@ -178,7 +194,10 @@ export default class SocialCampaign extends Component {
         const tabAppId = tab.application && tab.application.id;
         if (tabAppId === FB_APP_ID) {
           this.setState({
-            facebookPageTab: tab.name,
+            facebookPageTab: {
+              name: tab.name,
+              id: tab.id,
+            },
           });
         }
       });
@@ -194,6 +213,41 @@ export default class SocialCampaign extends Component {
       };
 
       this.setState({ facebookUserData });
+    },
+    [FACEBOOK_MESSAGE_TOPICS.share]: async (data) => {
+      const { error } = data;
+      const { api, project, onCampaignFinished } = this.props;
+      let queryString;
+      let splitProjectUrl;
+      if (error) {
+        return alert(error.message || 'Unable to post');
+      }
+
+      if (_embed1.options[_embed1.selectedIndex].value === 'fb-page') {
+        if (projectUrl.indexOf('?') > 0) {
+          splitProjectUrl = projectUrl.split('?');
+          queryString = splitProjectUrl[splitProjectUrl.length - 1];
+        }
+
+        await api.linkToFbPage(project, pageId, queryString);
+        onCampaignFinished();
+      }
+    },
+    [FACEBOOK_MESSAGE_TOPICS.createTab]: (data) => {
+      const { error, result } = data;
+      const { facebookPageTab } = this.state;
+
+      if (error) {
+        // showError(error.message);
+        return;
+      }
+      const parsedTabUrl = result.url.split('/');
+      facebookPageTab.id = parsedTabUrl[parsedTabUrl.length - 1];
+      if (!facebookPageTab.id) {
+        facebookPageTab.id = parsedTabUrl[parsedTabUrl.length - 2];
+      }
+      this.setState({ facebookPageTab });
+      this.postFacebookMessage({ topic: FACEBOOK_MESSAGE_TOPICS.fetchUserData });
     },
   };
 
@@ -249,11 +303,18 @@ export default class SocialCampaign extends Component {
   }
 
   sharePost() {
-    this.postFacebookMessage({ topic: FACEBOOK_MESSAGE_TOPICS.share, arguments: {} });
+    const { selectedFbPage } = this.state;
+
+    this.postFacebookMessage({
+      topic: FACEBOOK_MESSAGE_TOPICS.share,
+      arguments: {
+        pageId: selectedFbPage,
+      },
+    });
   }
 
   render() {
-    const { api, className, project, onCampaignFinished } = this.props;
+    const { api, className, project } = this.props;
     const {
       currentStage,
       embedLocation,
@@ -422,7 +483,7 @@ export default class SocialCampaign extends Component {
                     className="cell facebook-page-tab"
                     type="text"
                     value={facebookPageTab}
-                    onChange={({ target: { value } }) => this.setState({ facebookPageTab: value })}
+                    onChange={({ target: { value } }) => this.setState({ facebookPageTab: { name: value } })}
                   />
                 </div>
               </div>
@@ -523,7 +584,7 @@ export default class SocialCampaign extends Component {
               }
               onClick={() => {
                 if (currentStage.key === STAGES[STAGES.length - 1].key) {
-                  onCampaignFinished();
+                  this.sharePost();
                 } else {
                   this.nextStage();
                 }

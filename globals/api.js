@@ -183,6 +183,23 @@ class Api {
       xhr.send(data);
     });
   }
+
+  @action
+  async linkToFbPage(project, pageId, queryString) {
+    this.isLoading = true;
+    try {
+      return this.request(
+        `/api/makes/${project.make._id}/link-to-fb-page/${pageId}`, {
+          method: 'POST',
+          headers: {
+            'on-behalf': this.currentUser.id,
+          },
+          body: { queryString },
+        });
+    } finally {
+      this.isLoading = false;
+    }
+  }
 }
 
 export async function initApiAndPreload(isServer, source, req, preloader) {
