@@ -13,13 +13,6 @@ import InfiniteLoading from '../../common/InfiniteLoading';
 import Search from '../../common/Search';
 import TemplateItem from './TemplateItem';
 import EmbeddedPlayback from '../../common/EmbeddedPlayback';
-import PhaseView from './PhaseView';
-
-const phaserElements = [
-  { phaseTitle: 'Choose Template', selected: true },
-  { phaseTitle: 'Customize Video', selected: false },
-  { phaseTitle: 'Publish & Share', selected: false },
-];
 
 @inject('api')
 @observer
@@ -87,7 +80,6 @@ export default class Templates extends Component {
   render() {
     return (
       <Fragment>
-        <PhaseView phaserElements={phaserElements} />
         <Search
           onSearch={q => this.onSearch(q)}
           placeholder="Search through your templates..."
