@@ -3,7 +3,7 @@ import { observer } from 'mobx-react';
 import PropTypes from '../../lib/PropTypes';
 import Project from '../../lib/editor/Project';
 
-const POSTMESSAGE_URL = 'https://cdn.vidcloud.io/v/preview_play';
+const POSTMESSAGE_URL = 'https://dev-cdn.videoremix.io/v/playback_preview';
 
 @observer
 export default class EmbeddedPlayback extends Component {
@@ -32,24 +32,26 @@ export default class EmbeddedPlayback extends Component {
       allowFullScreen
       ref={(c) => { this.frameConductor = c; }}
       onLoad={() => {
-        const { project } = this.props;
         if (source instanceof Project) {
-          this.frameConductor.contentWindow.postMessage({
-            topic: 'preplay',
-            config: {
-              domain: 'videoremix.io',
-              serviceName: 'VideoRemix',
-              salesPage: '',
-              privacyPolicyLink: '',
-              hideSalesPage: true,
-              hidePlaybackLogo: true,
-              hideCopyButton: true,
-              showExtendedEndroll: false,
-              showShare: false,
-              allowFacebook: false,
-              data: project.projectData,
-            },
-          });
+          setTimeout(() => {
+            console.log('sending frame');
+            this.frameConductor.contentWindow.postMessage({
+              topic: 'preplay',
+              config: {
+                domain: 'vidcloud.io',
+                serviceName: 'VidCloud',
+                salesPage: '',
+                privacyPolicyLink: '',
+                hideSalesPage: true,
+                hidePlaybackLogo: true,
+                hideCopyButton: true,
+                showExtendedEndroll: false,
+                showShare: false,
+                allowFacebook: false,
+                data: source.popcornObject,
+              },
+            }, this.frameConductor.src);
+          }, 1000);
         }
       }}
     />);
