@@ -21,7 +21,7 @@ const EMBED_LOCATIONS = [
     key: 'leadpages',
     label: 'LeadPages',
     prompt: 'Copy and paste this embed code into your LeadPage',
-    embedGenerator: (url, width, height) => `<script>var vars={};var tempstring='';var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(m,key,value){if(value){tempstring+=key+'='+value+'&';}});if (tempstring) {document.addEventListener('DOMContentLoaded',function() {document.getElementById('vr').src='${url}?'+tempstring.slice(0, -1);});}</script>\n\n<iframe id='vr' src='${url}' width='${width}' height='${height}' frameborder='0' mozallowfullscreen webkitallowfullscreen allowfullscreen></iframe>`,
+    embedGenerator: (url, width, height) => `<iframe id='vr' src='${url}' width='${width}' height='${height}' frameborder='0' mozallowfullscreen webkitallowfullscreen allowfullscreen></iframe>`,
   },
   {
     key: 'wordpress',
@@ -33,7 +33,7 @@ const EMBED_LOCATIONS = [
     key: 'optimizepress',
     label: 'OptimizePress 2.0',
     prompt: 'Copy and paste this embed code into your Video Player OP 2.0 element',
-    embedGenerator: (url, width, height) => `<script>var vars={};var tempstring='';var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(m,key,value){if(value){tempstring+=key+'='+value+'&';}});if (tempstring) {document.addEventListener('DOMContentLoaded',function() {document.getElementById('vr').src='${url}?'+tempstring.slice(0, -1);});}</script>\n\n<iframe id='vr' src='${url}' width='${width}' height='${height}' frameborder='0' mozallowfullscreen webkitallowfullscreen allowfullscreen></iframe>`,
+    embedGenerator: (url, width, height) => `<iframe id='vr' src='${url}' width='${width}' height='${height}' frameborder='0' mozallowfullscreen webkitallowfullscreen allowfullscreen></iframe>`,
   },
   {
     key: 'facebook-page',
@@ -43,7 +43,7 @@ const EMBED_LOCATIONS = [
     key: 'other',
     label: 'Other',
     prompt: 'Copy & Paste this embed code inside the custom HTML element',
-    embedGenerator: (url, width, height) => `<script>var vars={};var tempstring='';var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(m,key,value){if(value){tempstring+=key+'='+value+'&';}});if (tempstring) {document.addEventListener('DOMContentLoaded',function() {document.getElementById('vr').src='${url}?'+tempstring.slice(0, -1);});}</script>\n\n<iframe id='vr' src='${url}' width='${width}' height='${height}' frameborder='0' mozallowfullscreen webkitallowfullscreen allowfullscreen></iframe>`,
+    embedGenerator: (url, width, height) => `<iframe id='vr' src='${url}' width='${width}' height='${height}' frameborder='0' mozallowfullscreen webkitallowfullscreen allowfullscreen></iframe>`,
   },
 ];
 
@@ -236,7 +236,7 @@ export default class SocialCampaign extends Component {
       if (embedLocation.key === 'facebook-page') {
         const queryString = [
           autoplay ? 'autoplay=true' : null,
-          preload ? 'preload=true' : null,
+          !preload ? 'preload=none' : null,
         ].filter(item => !!item).join('&');
 
         await api.linkToFbPage(project, selectedFbPage, queryString);
@@ -299,6 +299,9 @@ export default class SocialCampaign extends Component {
     if (SocialCampaign.STAGES[prevStageIdx].key === 'embed-location' && embedLocation.key === 'default') {
       prevStageIdx -= 1;
     }
+    if (SocialCampaign.STAGES[prevStageIdx].key === 'facebook-page' && embedLocation.key !== 'facebook-page') {
+      prevStageIdx -= 1;
+    }
     currentStage = SocialCampaign.STAGES[prevStageIdx];
     this.setState({ currentStage });
   }
@@ -337,7 +340,7 @@ export default class SocialCampaign extends Component {
     shareOptions.projectUrl = [
       project.make.url, [
         autoplay ? 'autoplay=true' : null,
-        preload ? 'preload=true' : null,
+        !preload ? 'preload=none' : null,
       ].filter(item => !!item).join('&'),
     ].join('?');
     shareOptions.backendUrl = BACKEND_URL;
@@ -453,7 +456,12 @@ export default class SocialCampaign extends Component {
                 <span className="embed-line">{embedLocation.prompt}</span>
                 <EmbedDataContainer
                   className="embed-item"
-                  url={project.make.url}
+                  url={[
+                    project.make.url, [
+                      autoplay ? 'autoplay=true' : null,
+                      !preload ? 'preload=none' : null,
+                    ].filter(item => !!item).join('&')]
+                    .join('?')}
                   stringGenerator={embedLocation.embedGenerator}
                   resizable
                 />

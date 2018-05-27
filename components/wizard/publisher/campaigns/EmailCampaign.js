@@ -301,12 +301,10 @@ export default class EmailCampaign extends Component {
     const providerParams = (emailProvider && emailProvider.paramsBuilder) ?
       emailProvider.paramsBuilder(personalizations) :
       '';
-    const autoplayParams = autoplay ? 'autoplay=true' : null;
-    const preloadParams = preload ? 'preload=true' : null;
     return [
       basicPath, [
-        autoplayParams,
-        preloadParams,
+        autoplay ? 'autoplay=true' : null,
+        !preload ? 'preload=none' : null,
         providerParams,
       ].filter(item => !!item).join('&'),
     ].join('?');
