@@ -33,6 +33,10 @@ export default class Editor extends Component {
         activeProject: {
           activeElement,
         },
+        common: {
+          features,
+        },
+        currentUser,
         editorStateManager,
       },
     } = this.props;
@@ -122,7 +126,7 @@ export default class Editor extends Component {
                   <span>Personalizer</span>
                 </button>
                 <button
-                  className="addon-button"
+                  className={`addon-button ${currentUser.features[features.cta].state === 'enabled' ? '' : 'hidden'}`}
                   onClick={() => {
                     PopupboxManager.open({
                       content: <CallToActions

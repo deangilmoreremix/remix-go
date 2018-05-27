@@ -123,6 +123,7 @@ export async function initStoreAndPreload(isServer, source, req, preloader) {
       socketProtocol: config.socketProtocol,
       clientId: config.client.id,
       clientSecret: config.client.secret,
+      features: config.access.features,
     };
   }
 
