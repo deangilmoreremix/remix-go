@@ -12,9 +12,9 @@ import PhaseView from './common/Phaser/PhaseView';
 
 
 const phaserElements = [
-  { title: 'Choose Template', selected: true },
-  { title: 'Customize Video', selected: false },
-  { title: 'Publish & Share', selected: false },
+  { title: 'Choose Template', path: '/', selected: true },
+  { title: 'Customize Video', path: '/edit', selected: false },
+  { title: 'Publish & Share', path: '/publish', selected: false },
 ];
 
 class Layout extends Component {
@@ -40,7 +40,7 @@ class Layout extends Component {
         <div>
           <Header />
           <Container {...this.props} className="main">
-            <PhaseView phaserElements={phaserElements} />
+            <PhaseView phaserElements={phaserElements} {...this.props} />
             {this.props.children}
           </Container>
           <Footer />

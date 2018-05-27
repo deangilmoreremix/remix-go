@@ -6,14 +6,13 @@ export default class PhaseView extends Component {
   state = {
     title: 'Choose Template',
   };
-
   render() {
+    const { url } = this.props;
     let { phaserElements } = this.props;
-    const currentTitle = this.state.title;
+    phaserElements.currentTitle = this.state.title;
 
     const phaseHasChanged = (selectedTab) => {
       let tempTitle;
-
       const updateElements = phaserElements.map((element) => {
         const { selected, title } = element;
         if (selected && title !== selectedTab.title) element.selected = false;
@@ -30,12 +29,16 @@ export default class PhaseView extends Component {
     return (
       <div className="phase-component">
         <div className="phase-state-title">
-          <div>{currentTitle}</div>
+          <div>{phaserElements.currentTitle }</div>
         </div>
         <div className="phase-state-tabs">
           <div className="stepper">
             <div className="line"></div>
-            <Phases phases={phaserElements} onPhaseChanged={event => phaseHasChanged(event)} />
+            <Phases
+              phases={phaserElements}
+              onPhaseChanged={event => phaseHasChanged(event)} 
+              currentPath={url.pathname}
+            />
           </div>
         </div>
       </div>
