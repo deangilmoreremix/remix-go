@@ -33,7 +33,7 @@ export default class EmbeddedPlayback extends Component {
       ref={(c) => { this.frameConductor = c; }}
       onLoad={() => {
         if (source instanceof Project) {
-          setTimeout(() => {
+          setInterval(() => {
             console.log('sending frame');
             this.frameConductor.contentWindow.postMessage({
               topic: 'preplay',
