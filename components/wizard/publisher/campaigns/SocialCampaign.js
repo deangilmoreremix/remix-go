@@ -178,6 +178,7 @@ export default class SocialCampaign extends Component {
     [this.constructor.FACEBOOK_MESSAGE_TOPICS.settleAuth]: (data) => {
       const err = data.error;
       // hideLoading();
+      console.log('data' + data);
       if (err) {
         return this.setStage('facebook-login');
       }
@@ -185,6 +186,15 @@ export default class SocialCampaign extends Component {
         return this.nextStage();
       }
       return this.setStage('facebook-login');
+    },
+    [this.constructor.FACEBOOK_MESSAGE_TOPICS.logIn]: (data) => {
+      const err = data.error;
+      // hideLoading();
+      console.log('data' + data);
+      if (err) {
+        return this.setStage('facebook-login');
+      }
+      return this.nextStage();
     },
     [this.constructor.FACEBOOK_MESSAGE_TOPICS.init]: () => {
       this.postFacebookMessage({
