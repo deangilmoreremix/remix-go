@@ -126,7 +126,7 @@ export default class Editor extends Component {
                   <span>Personalizer</span>
                 </button>
                 <button
-                  className={`addon-button ${currentUser.features[features.cta].state === 'enabled' ? '' : 'hidden'}`}
+                  className={`addon-button ${(currentUser.features[features.cta] && currentUser.features[features.cta].state === 'enabled') ? '' : 'hidden'}`}
                   onClick={() => {
                     PopupboxManager.open({
                       content: <CallToActions
