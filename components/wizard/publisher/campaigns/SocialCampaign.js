@@ -176,10 +176,9 @@ export default class SocialCampaign extends Component {
 
   facebookMessageHandlers = {
     [this.constructor.FACEBOOK_MESSAGE_TOPICS.settleAuth]: (data) => {
-      const err = data.error;
-      // hideLoading();
-      console.log('data' + data);
-      if (err) {
+      const { error } = data;
+      if (error) {
+        alert(error.message);
         return this.setStage('facebook-login');
       }
       if (data.loggedIn) {
@@ -189,8 +188,6 @@ export default class SocialCampaign extends Component {
     },
     [this.constructor.FACEBOOK_MESSAGE_TOPICS.logIn]: (data) => {
       const err = data.error;
-      // hideLoading();
-      console.log('data' + data);
       if (err) {
         return this.setStage('facebook-login');
       }
@@ -206,7 +203,7 @@ export default class SocialCampaign extends Component {
       const { error, result } = data;
       const facebookPages = [];
       if (error) {
-        // return showError(err.message);
+        return alert(error.message);
       }
       if (result.length) {
         result.forEach((page) => {
@@ -223,8 +220,7 @@ export default class SocialCampaign extends Component {
     [this.constructor.FACEBOOK_MESSAGE_TOPICS.getPageTabs]: (data) => {
       const { error, result } = data;
       if (error) {
-        // showError(err.message);
-        return;
+        return alert(error.message);
       }
 
       result.data.forEach((tab) => {
@@ -275,8 +271,7 @@ export default class SocialCampaign extends Component {
       const { facebookPageTab } = this.state;
 
       if (error) {
-        // showError(error.message);
-        return;
+        return alert(error.message);
       }
       const parsedTabUrl = result.url.split('/');
       facebookPageTab.id = parsedTabUrl[parsedTabUrl.length - 1];
