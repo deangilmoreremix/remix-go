@@ -6,6 +6,7 @@ import Project from '../../../../lib/editor/Project';
 import PropTypes from '../../../../lib/PropTypes';
 import EmbedDataContainer from '../EmbedDataContainer';
 import FacebookPostPreview from './FacebookPostPreview';
+import InfiniteLoading from '../../../common/InfiniteLoading';
 
 const FB_APP_ID = '1728968890675795';
 const FACEBOOK_PERMISSIONS = 'manage_pages,pages_show_list';
@@ -68,6 +69,17 @@ export default class SocialCampaign extends Component {
     share: 'SHARE',
   };
 
+  static TOPIC_LOADING_MESSAGES = {
+    logIn: 'Logging in...',
+    settleAuth: 'Checking current authorization...',
+    init: '',
+    fetchUserData: 'Retrieving your profile data...',
+    fetchPagesData: 'Retrieving your pages list...',
+    getPageTabs: 'Retrieving page tabs list...',
+    createTab: 'Creating page tab...',
+    share: 'Sharing your post...',
+  };
+
   static STAGES = [
     { key: 'embed-engine', completionPercentage: 25 },
     { key: 'embed-location', completionPercentage: 25 },
@@ -76,7 +88,7 @@ export default class SocialCampaign extends Component {
       completionPercentage: 50,
       bootstrap: (instance) => {
         instance.postFacebookMessage({
-          topic: SocialCampaign.FACEBOOK_MESSAGE_TOPICS.init,
+          topic: instance.constructor.FACEBOOK_MESSAGE_TOPICS.init,
           arguments: FB_APP_ID,
         });
       },
@@ -86,7 +98,7 @@ export default class SocialCampaign extends Component {
       completionPercentage: 50,
       bootstrap: (instance) => {
         instance.postFacebookMessage({
-          topic: SocialCampaign.FACEBOOK_MESSAGE_TOPICS.fetchPagesData,
+          topic: instance.constructor.FACEBOOK_MESSAGE_TOPICS.fetchPagesData,
         });
       },
     },
@@ -99,7 +111,7 @@ export default class SocialCampaign extends Component {
         if (selectedFbPage.length > 0 && !facebookPageTab.id) {
           const fbPage = facebookPages.find(page => page.id === selectedFbPage);
           instance.postFacebookMessage({
-            topic: SocialCampaign.FACEBOOK_MESSAGE_TOPICS.createTab,
+            topic: instance.constructor.FACEBOOK_MESSAGE_TOPICS.createTab,
             arguments: {
               pageId: fbPage.id,
               pageAccessToken: fbPage.token,
@@ -108,7 +120,7 @@ export default class SocialCampaign extends Component {
           });
         } else {
           instance.postFacebookMessage({
-            topic: SocialCampaign.FACEBOOK_MESSAGE_TOPICS.fetchUserData,
+            topic: instance.constructor.FACEBOOK_MESSAGE_TOPICS.fetchUserData,
           });
         }
         instance.setState({
@@ -124,7 +136,9 @@ export default class SocialCampaign extends Component {
   ];
 
   state = {
-    currentStage: SocialCampaign.STAGES[0],
+    isLoading: false,
+    loadingMessage: '',
+    currentStage: this.constructor.STAGES[0],
     embedLocation: EMBED_LOCATIONS[0],
     preload: true,
     autoplay: false,
@@ -148,7 +162,11 @@ export default class SocialCampaign extends Component {
   }
 
   setStage(stageName) {
-    const currentStage = SocialCampaign.STAGES.find(item => item.key === stageName);
+    let { currentStage } = this.state;
+    if (currentStage.key === stageName) {
+      return;
+    }
+    currentStage = this.constructor.STAGES.find(item => item.key === stageName);
     this.setState({ currentStage });
     currentStage.bootstrap(this);
     if (currentStage.bootstrap) {
@@ -157,7 +175,7 @@ export default class SocialCampaign extends Component {
   }
 
   facebookMessageHandlers = {
-    [SocialCampaign.FACEBOOK_MESSAGE_TOPICS.settleAuth]: (data) => {
+    [this.constructor.FACEBOOK_MESSAGE_TOPICS.settleAuth]: (data) => {
       const err = data.error;
       // hideLoading();
       if (err) {
@@ -168,13 +186,13 @@ export default class SocialCampaign extends Component {
       }
       return this.setStage('facebook-login');
     },
-    [SocialCampaign.FACEBOOK_MESSAGE_TOPICS.init]: () => {
+    [this.constructor.FACEBOOK_MESSAGE_TOPICS.init]: () => {
       this.postFacebookMessage({
-        topic: SocialCampaign.FACEBOOK_MESSAGE_TOPICS.settleAuth,
+        topic: this.constructor.FACEBOOK_MESSAGE_TOPICS.settleAuth,
         arguments: FACEBOOK_PERMISSIONS,
       });
     },
-    [SocialCampaign.FACEBOOK_MESSAGE_TOPICS.fetchPagesData]: (data) => {
+    [this.constructor.FACEBOOK_MESSAGE_TOPICS.fetchPagesData]: (data) => {
       const { error, result } = data;
       const facebookPages = [];
       if (error) {
@@ -192,7 +210,7 @@ export default class SocialCampaign extends Component {
         this.setState({ facebookPages });
       }
     },
-    [SocialCampaign.FACEBOOK_MESSAGE_TOPICS.getPageTabs]: (data) => {
+    [this.constructor.FACEBOOK_MESSAGE_TOPICS.getPageTabs]: (data) => {
       const { error, result } = data;
       if (error) {
         // showError(err.message);
@@ -211,7 +229,7 @@ export default class SocialCampaign extends Component {
         }
       });
     },
-    [SocialCampaign.FACEBOOK_MESSAGE_TOPICS.fetchUserData]: (data) => {
+    [this.constructor.FACEBOOK_MESSAGE_TOPICS.fetchUserData]: (data) => {
       const { error, result } = data;
       const facebookUserData = error ? {
         name: 'You',
@@ -223,7 +241,7 @@ export default class SocialCampaign extends Component {
 
       this.setState({ facebookUserData });
     },
-    [SocialCampaign.FACEBOOK_MESSAGE_TOPICS.share]: async (data) => {
+    [this.constructor.FACEBOOK_MESSAGE_TOPICS.share]: async (data) => {
       const { error } = data;
       const { api, project } = this.props;
       const { preload, autoplay, embedLocation, selectedFbPage } = this.state;
@@ -242,7 +260,7 @@ export default class SocialCampaign extends Component {
         await api.linkToFbPage(project, selectedFbPage, queryString);
       }
     },
-    [SocialCampaign.FACEBOOK_MESSAGE_TOPICS.createTab]: (data) => {
+    [this.constructor.FACEBOOK_MESSAGE_TOPICS.createTab]: (data) => {
       const { error, result } = data;
       const { facebookPageTab } = this.state;
 
@@ -255,8 +273,7 @@ export default class SocialCampaign extends Component {
       if (!facebookPageTab.id) {
         facebookPageTab.id = parsedTabUrl[parsedTabUrl.length - 2];
       }
-      this.setState({ facebookPageTab });
-      this.postFacebookMessage({ topic: SocialCampaign.FACEBOOK_MESSAGE_TOPICS.fetchUserData });
+      this.postFacebookMessage({ topic: this.constructor.FACEBOOK_MESSAGE_TOPICS.fetchUserData });
     },
   };
 
@@ -264,17 +281,17 @@ export default class SocialCampaign extends Component {
     const { embedLocation } = this.state;
     let { currentStage } = this.state;
     let nextStageIdx = Math.min(
-      SocialCampaign.STAGES.findIndex(item => currentStage.key === item.key) + 1,
-      SocialCampaign.STAGES.length - 1,
+      this.constructor.STAGES.findIndex(item => currentStage.key === item.key) + 1,
+      this.constructor.STAGES.length - 1,
     );
-    if (SocialCampaign.STAGES[nextStageIdx].key === 'embed-location' &&
+    if (this.constructor.STAGES[nextStageIdx].key === 'embed-location' &&
       ['default', 'facebook-page'].indexOf(embedLocation.key) !== -1) {
       nextStageIdx += 1;
     }
-    if (SocialCampaign.STAGES[nextStageIdx].key === 'facebook-page' && embedLocation.key !== 'facebook-page') {
+    if (this.constructor.STAGES[nextStageIdx].key === 'facebook-page' && embedLocation.key !== 'facebook-page') {
       nextStageIdx += 1;
     }
-    currentStage = SocialCampaign.STAGES[nextStageIdx];
+    currentStage = this.constructor.STAGES[nextStageIdx];
     this.setState({ currentStage });
     if (currentStage.bootstrap) {
       currentStage.bootstrap(this);
@@ -283,6 +300,10 @@ export default class SocialCampaign extends Component {
 
   postFacebookMessage(data) {
     const { facebookConductor } = this.props;
+    this.setState({
+      isLoading: true,
+      loadingMessage: this.constructor.TOPIC_LOADING_MESSAGES[data.topic],
+    });
     facebookConductor.contentWindow.postMessage({
       topic: data.topic,
       arguments: data.arguments,
@@ -293,22 +314,23 @@ export default class SocialCampaign extends Component {
     const { embedLocation } = this.state;
     let { currentStage } = this.state;
     let prevStageIdx = Math.min(
-      SocialCampaign.STAGES.findIndex(item => currentStage.key === item.key) - 1,
+      this.constructor.STAGES.findIndex(item => currentStage.key === item.key) - 1,
       0,
     );
-    if (SocialCampaign.STAGES[prevStageIdx].key === 'embed-location' && embedLocation.key === 'default') {
+    if (this.constructor.STAGES[prevStageIdx].key === 'embed-location' && embedLocation.key === 'default') {
       prevStageIdx -= 1;
     }
-    if (SocialCampaign.STAGES[prevStageIdx].key === 'facebook-page' && embedLocation.key !== 'facebook-page') {
+    if (this.constructor.STAGES[prevStageIdx].key === 'facebook-page' && embedLocation.key !== 'facebook-page') {
       prevStageIdx -= 1;
     }
-    currentStage = SocialCampaign.STAGES[prevStageIdx];
+    currentStage = this.constructor.STAGES[prevStageIdx];
     this.setState({ currentStage });
   }
 
   receiveFacebookMessage(e) {
     const { topic } = e.data;
 
+    this.setState({ isLoading: false });
     if (this.facebookMessageHandlers[topic]) {
       this.facebookMessageHandlers[topic](e.data);
     }
@@ -357,7 +379,7 @@ export default class SocialCampaign extends Component {
     onCampaignFinished();
     this.expandConductor();
     this.postFacebookMessage({
-      topic: SocialCampaign.FACEBOOK_MESSAGE_TOPICS.share,
+      topic: this.constructor.FACEBOOK_MESSAGE_TOPICS.share,
       arguments: shareOptions,
     });
   }
@@ -381,6 +403,8 @@ export default class SocialCampaign extends Component {
   render() {
     const { api, className, project } = this.props;
     const {
+      isLoading,
+      loadingMessage,
       currentStage,
       embedLocation,
       preload,
@@ -396,7 +420,11 @@ export default class SocialCampaign extends Component {
     return (
       <Fragment>
         <div className={`social-campaign ${className}`}>
-          <div className="workspace">
+          <div className={`loading-screen workspace ${!isLoading ? 'hidden' : ''}`}>
+            <InfiniteLoading />
+            <span>{loadingMessage}</span>
+          </div>
+          <div className={`workspace ${isLoading ? 'hidden' : ''}`}>
             <Progress
               className="embed-progress"
               value={currentStage.completionPercentage}
@@ -446,13 +474,6 @@ export default class SocialCampaign extends Component {
                 </div>
               </div>
               <div className={embedLocation.embedGenerator ? 'embed-details' : 'hidden'}>
-                {
-                  embedLocation.key === 'wordpress' ?
-                    <span className="embed-line">
-                      Click here to install the <a href="https://cdn.vidcloud.io/wp/vr.zip">wp</a> plugin.
-                    </span> :
-                    null
-                }
                 <span className="embed-line">{embedLocation.prompt}</span>
                 <EmbedDataContainer
                   className="embed-item"
@@ -486,7 +507,7 @@ export default class SocialCampaign extends Component {
                 className="go-button fb-login"
                 onClick={() => {
                   this.postFacebookMessage({
-                    topic: SocialCampaign.FACEBOOK_MESSAGE_TOPICS.logIn,
+                    topic: this.constructor.FACEBOOK_MESSAGE_TOPICS.logIn,
                     arguments: FACEBOOK_PERMISSIONS,
                   });
                 }}
@@ -515,7 +536,7 @@ export default class SocialCampaign extends Component {
                         selectedFbPage: value,
                       });
                       this.postFacebookMessage({
-                        topic: SocialCampaign.FACEBOOK_MESSAGE_TOPICS.getPageTabs,
+                        topic: this.constructor.FACEBOOK_MESSAGE_TOPICS.getPageTabs,
                         arguments: {
                           pageId: fbPage.id,
                           pageAccessToken: fbPage.token,
@@ -626,20 +647,28 @@ export default class SocialCampaign extends Component {
           </div>
           <div className="controls">
             <button
-              className={`go-button back ${currentStage.key === SocialCampaign.STAGES[0].key ? 'hidden' : ''}`}
-              onClick={() => this.prevStage()}
+              className={`go-button back ${currentStage.key === this.constructor.STAGES[0].key ? 'hidden' : ''}`}
+              onClick={() => {
+                if (isLoading) {
+                  return;
+                }
+                this.prevStage();
+              }}
             >
               Back
             </button>
             <button
               className={
-                `go-button ${currentStage.key === SocialCampaign.STAGES[SocialCampaign.STAGES.length - 1].key ?
+                `go-button ${currentStage.key === this.constructor.STAGES[this.constructor.STAGES.length - 1].key ?
                   'next fb-login' :
                   'next'}`
               }
               onClick={() => {
+                if (isLoading) {
+                  return;
+                }
                 if (currentStage.key ===
-                  SocialCampaign.STAGES[SocialCampaign.STAGES.length - 1].key) {
+                  this.constructor.STAGES[this.constructor.STAGES.length - 1].key) {
                   this.sharePost();
                 } else {
                   this.nextStage();
@@ -647,11 +676,11 @@ export default class SocialCampaign extends Component {
               }}
             >
               <i
-                className={`${currentStage.key === SocialCampaign.STAGES[SocialCampaign.STAGES.length - 1].key ?
+                className={`${currentStage.key === this.constructor.STAGES[this.constructor.STAGES.length - 1].key ?
                   'fa fa-facebook-official' :
                   'hidden'}`}
               />
-              {currentStage.key === SocialCampaign.STAGES[SocialCampaign.STAGES.length - 1].key ? 'Share' : 'Next'}
+              {currentStage.key === this.constructor.STAGES[this.constructor.STAGES.length - 1].key ? 'Share' : 'Next'}
             </button>
           </div>
         </div>

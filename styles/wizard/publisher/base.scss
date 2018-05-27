@@ -77,6 +77,22 @@
   display: flex;
   flex-direction: column;
 
+  .loading-screen {
+    height: 100%;
+    font-size: 1.5rem;
+    color: $primary-color;
+    text-align: center;
+
+    div {
+      margin-left: unset;
+    }
+
+    span {
+      display: block;
+      width: 100%;
+    }
+  }
+
   .workspace {
     flex-grow: 2;
     color: $primary-color;
