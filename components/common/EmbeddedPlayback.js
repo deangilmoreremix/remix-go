@@ -18,8 +18,38 @@ export default class EmbeddedPlayback extends Component {
     height: PropTypes.string.isRequired,
   };
 
+  preplayHandler(event) {
+    const { source } = this.props;
+    const { topic } = event.data;
+    if (topic !== 'preplay') {
+      return;
+    }
+
+    this.frameConductor.contentWindow.postMessage({
+      topic: 'preplay',
+      config: {
+        domain: 'vidcloud.io',
+        serviceName: 'VidCloud',
+        salesPage: '',
+        privacyPolicyLink: '',
+        hideSalesPage: true,
+        hidePlaybackLogo: true,
+        hideCopyButton: true,
+        showExtendedEndroll: false,
+        showShare: false,
+        allowFacebook: false,
+        data: source.popcornObject,
+      },
+    }, this.frameConductor.src);
+  }
+
   render() {
     const { title, source, width, height, className } = this.props;
+    if (source instanceof Project) {
+      if (process.browser) {
+        window.addEventListener('message', event => this.preplayHandler(event));
+      }
+    }
     return (<iframe
       className={className}
       title={title}
@@ -31,29 +61,6 @@ export default class EmbeddedPlayback extends Component {
       webkitallowfullscreen="true"
       allowFullScreen
       ref={(c) => { this.frameConductor = c; }}
-      onLoad={() => {
-        if (source instanceof Project) {
-          setInterval(() => {
-            console.log('sending frame');
-            this.frameConductor.contentWindow.postMessage({
-              topic: 'preplay',
-              config: {
-                domain: 'vidcloud.io',
-                serviceName: 'VidCloud',
-                salesPage: '',
-                privacyPolicyLink: '',
-                hideSalesPage: true,
-                hidePlaybackLogo: true,
-                hideCopyButton: true,
-                showExtendedEndroll: false,
-                showShare: false,
-                allowFacebook: false,
-                data: source.popcornObject,
-              },
-            }, this.frameConductor.src);
-          }, 1000);
-        }
-      }}
     />);
   }
 }
