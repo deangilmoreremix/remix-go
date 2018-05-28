@@ -12,9 +12,9 @@ const SKIP_VARS = [
 ];
 
 const STAGES = [
-  { key: 'embed-engine' },
-  { key: 'embed-location' },
-  { key: 'service-provider' },
+  { key: 'embed-engine', completionPercentage: (1 / 3.0) * 100 },
+  { key: 'embed-location', completionPercentage: (2 / 3.0) * 100 },
+  { key: 'service-provider', completionPercentage: 100 },
 ];
 
 const EMBED_LOCATIONS = [
@@ -301,12 +301,10 @@ export default class EmailCampaign extends Component {
     const providerParams = (emailProvider && emailProvider.paramsBuilder) ?
       emailProvider.paramsBuilder(personalizations) :
       '';
-    const autoplayParams = autoplay ? 'autoplay=true' : null;
-    const preloadParams = preload ? 'preload=true' : null;
     return [
       basicPath, [
-        autoplayParams,
-        preloadParams,
+        autoplay ? 'autoplay=true' : null,
+        !preload ? 'preload=none' : null,
         providerParams,
       ].filter(item => !!item).join('&'),
     ].join('?');
@@ -329,9 +327,7 @@ export default class EmailCampaign extends Component {
           <div className="workspace">
             <Progress
               className="embed-progress"
-              value={((STAGES.findIndex(
-                item => currentStage.key === item.key) + 1
-              ) / STAGES.length) * 100}
+              value={currentStage.completionPercentage}
             />
             <div className={`embed-engine ${currentStage.key !== 'embed-engine' && 'hidden'}`}>
               <h5 className="embed-title">Where do you want to embed your video?</h5>

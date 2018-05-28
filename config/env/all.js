@@ -10,7 +10,11 @@ module.exports = {
   },
   access: {
     minAuthLevel: process.env.MIN_AUTH_LEVEL || 5,
-    featureName: process.env.GO_FEATURE_NAME || 'goEditor',
+    features: {
+      main: process.env.GO_FEATURE_NAME || 'go:editor',
+      generator: process.env.GO_TEMPLATE_GENERATOR || 'go:generator',
+      cta: process.env.GO_CTA_LIBRARY || 'go:cta',
+    },
   },
   loginServer: {
     url: process.env.LOGIN_SERVER_URL || 'http://localhost:1340',

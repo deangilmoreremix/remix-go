@@ -167,7 +167,9 @@ class Api {
       }
       xhr.open('PUT', '/api/media', true);
       xhr.onload = () => {
-        onProgress(1.0);
+        if (onProgress) {
+          onProgress(1.0);
+        }
         this.isLoading = false;
         if (xhr.status !== 200) {
           return reject(new Error(`HTTP error ${xhr.status}.`));
@@ -180,6 +182,23 @@ class Api {
       };
       xhr.send(data);
     });
+  }
+
+  @action
+  async linkToFbPage(project, pageId, queryString) {
+    this.isLoading = true;
+    try {
+      return this.request(
+        `/api/makes/${project.make._id}/link-to-fb-page/${pageId}`, {
+          method: 'POST',
+          headers: {
+            'on-behalf': this.currentUser.id,
+          },
+          body: { queryString },
+        });
+    } finally {
+      this.isLoading = false;
+    }
   }
 }
 

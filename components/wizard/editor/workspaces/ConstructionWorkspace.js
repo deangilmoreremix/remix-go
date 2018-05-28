@@ -20,7 +20,7 @@ export default class ConstructionWorkspace extends Component {
 
   onPopcornInitialize(wrapper) {
     const { store, store: { activeProject } } = this.props;
-    const popcorn = store.activeProject.attach(store.activeProject.popcornify(wrapper));
+    const popcorn = store.activeProject.attach(store.activeProject.popcornify(wrapper), wrapper.id);
     this.setState({ popcorn });
     popcorn.on('elementSelected', (event) => {
       const { element } = event;

@@ -47,10 +47,10 @@ export default class Menu extends React.Component {
     return (
       <Container>
         <Navbar color="faded" light expand="md">
-          <Link href="/" passHref>
+          <a href="/">
             <NavbarBrand>
             </NavbarBrand>
-          </Link>
+          </a>
           <NavbarToggler onClick={this.toggle} />
           <Collapse isOpen={this.state.isOpen} navbar>
             <Nav className="ml-auto" navbar>
