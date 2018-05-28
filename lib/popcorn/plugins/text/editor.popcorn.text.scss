@@ -24,6 +24,7 @@
     vertical-align: middle;
     display: flex;
     align-items: center;
+    filter: grayscale(1);
   }
 
   .bold {
@@ -37,5 +38,6 @@
   .alignment-icon {
     height: 60%;
     margin: auto 5px;
+    filter: grayscale(1);
   }
 }
