@@ -47,7 +47,12 @@ export default class Publisher extends Component {
             }, this.facebookConductor.src);
           }}
         />
-        <PopupboxContainer />
+        <PopupboxContainer
+          ref={(c) => { this.popupboxContainer = c; }}
+          onClosed={() => {
+            this.popupboxContainer.state.children = null;
+          }}
+        />
         <Container fluid className="editor-wrapper">
           <Row className="canvas full-height">
             <Col className="workspace">

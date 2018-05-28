@@ -62,9 +62,11 @@ export default class VideoSelectionWorkspace extends Component {
     const { className, onVideoSelected } = this.props;
     return (
       <Fragment>
-        <PopupboxContainer onClosed={() => {
-          delete this.currentPlayback.props.children;
-        }}
+        <PopupboxContainer
+          ref={(c) => { this.popupboxContainer = c; }}
+          onClosed={() => {
+            this.popupboxContainer.state.children = null;
+          }}
         />
         <VideoGallery
           useWindow={false}
