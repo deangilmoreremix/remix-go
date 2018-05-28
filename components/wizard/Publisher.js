@@ -6,7 +6,9 @@ import {
   PopupboxContainer,
 } from 'react-popupbox';
 
+import Project from '../../lib/editor/Project';
 import ActionsPane from './editor/ActionsPane';
+import InfiniteLoading from '../common/InfiniteLoading';
 import EmbeddedPlayback from '../common/EmbeddedPlayback';
 import EmbedDataContainer from './publisher/EmbedDataContainer';
 import ProjectNameChanger from './publisher/ProjectNameChanger';
@@ -17,16 +19,31 @@ import SocialCampaign from './publisher/campaigns/SocialCampaign';
 @inject('store')
 @observer
 export default class Publisher extends Component {
+  constructor(props) {
+    super(props);
+
+    const { store: { activeProject, project } } = this.props;
+    if (!activeProject && project) {
+      this.retrieveProject(project);
+    }
+  }
+
   onTitleUpdate = async (title) => {
     const { api, store: { activeProject } } = this.props;
     activeProject.name = title;
     await api.save(activeProject);
   };
 
+  retrieveProject = async (projectId) => {
+    const { api, store } = this.props;
+    store.activeProject = new Project(await api.get(projectId));
+  };
+
   render() {
     const {
       store: {
         activeProject,
+        project,
       },
     } = this.props;
     return (
@@ -53,26 +70,29 @@ export default class Publisher extends Component {
             this.popupboxContainer.state.children = null;
           }}
         />
-        <Container fluid className="editor-wrapper">
+        <Container fluid className={`editor-wrapper project-expector ${activeProject && 'hidden'}`}>
+          {project ? <InfiniteLoading /> : <div>There is no active project.</div>}
+        </Container>
+        <Container fluid className={`editor-wrapper ${!activeProject && 'hidden'}`}>
           <Row className="canvas full-height">
             <Col className="workspace">
               <div className="publish-overview">
                 <ProjectNameChanger
                   className="overview-item title-edit"
-                  title={activeProject.make.title}
+                  title={activeProject && activeProject.make.title}
                   onChange={title => this.onTitleUpdate(title)}
                 />
                 <EmbeddedPlayback
                   className="overview-item"
-                  source={activeProject.make.url}
-                  title={activeProject.make.title}
+                  source={activeProject && activeProject.make.url}
+                  title={activeProject && activeProject.make.title}
                   width="50%"
                   height="50%"
                 />
                 <label className="overview-item">URL</label>
-                <Input className="overview-item embed-url" type="text" value={activeProject.make.url} readOnly />
+                <Input className="overview-item embed-url" type="text" value={activeProject && activeProject.make.url} readOnly />
                 <label className="overview-item">Embed</label>
-                <EmbedDataContainer className="overview-item embed-item" url={activeProject.make.url} />
+                <EmbedDataContainer className="overview-item embed-item" url={activeProject && activeProject.make.url} />
               </div>
             </Col>
             <Col className="col-2 paddingless editor-pane">

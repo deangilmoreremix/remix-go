@@ -11,6 +11,7 @@ import Project from '../../lib/editor/Project';
 import WorkspaceContainer from './editor/WorkspaceContainer';
 import EditorStageChanger from './editor/EditorStageChanger';
 import ActionsPane from './editor/ActionsPane';
+import InfiniteLoading from '../common/InfiniteLoading';
 import Personalizer from './editor/workspaces/construction/Personalizer';
 import PopcornEditor from '../../lib/popcorn/plugins/editor.popcorn';
 import CallToActions from './editor/call-to-actions/CallToActions';
@@ -26,14 +27,26 @@ const insertAtCaret = (element, offset, text) => {
 @inject('store')
 @observer
 export default class Editor extends Component {
+  constructor(props) {
+    super(props);
+
+    const { store: { activeProject, project } } = this.props;
+    if (!activeProject && project) {
+      this.retrieveProject(project);
+    }
+  }
+
+  retrieveProject = async (projectId) => {
+    const { api, store } = this.props;
+    store.activeProject = new Project(await api.get(projectId));
+  };
+
   render() {
     const {
       api,
       store: {
         activeProject,
-        activeProject: {
-          activeElement,
-        },
+        project,
         common: {
           features,
         },
@@ -42,16 +55,19 @@ export default class Editor extends Component {
       },
     } = this.props;
     /* eslint-disable no-underscore-dangle */
-    const ToolbarEditor = activeElement && PopcornEditor.editors[activeElement._natives.type];
+    const ToolbarEditor = activeProject && activeProject.activeElement &&
+      PopcornEditor.editors[activeProject.activeElement._natives.type];
 
-    window.onbeforeunload = () => {
-      const { modified } = activeProject;
-      if (modified) {
-        return confirm('There are unsaved changes, do you want to continue?');
-      } else {
-        return null;
-      }
-    };
+    if (process.browser) {
+      window.onbeforeunload = () => {
+        const { modified } = activeProject;
+        if (modified) {
+          return confirm('There are unsaved changes, do you want to continue?');
+        } else {
+          return null;
+        }
+      };
+    }
 
     return (
       <Fragment>
@@ -59,16 +75,20 @@ export default class Editor extends Component {
           ref={(c) => { this.popupboxContainer = c; }}
           onClosed={() => {
             this.popupboxContainer.state.children = null;
-          }}
+            }}
         />
-        <Container fluid className="editor-wrapper">
-          <Row className={`toolbar ${!activeElement && 'hidden'}`}>
-            {activeElement ? <ToolbarEditor
-              element={activeElement}
+        <Container fluid className={`editor-wrapper project-expector ${activeProject && 'hidden'}`}>
+          {project ? <InfiniteLoading /> : <div>There is no active project.</div>}
+        </Container>
+        <Container fluid className={`editor-wrapper ${!activeProject && 'hidden'}`}>
+          <Row className={`toolbar ${(!activeProject || !activeProject.activeElement) && 'hidden'}`}>
+            {activeProject && activeProject.activeElement ? <ToolbarEditor
+              element={activeProject && activeProject.activeElement}
               onElementUpdate={(updatedProps) => {
                 /* eslint-disable no-underscore-dangle */
-                activeElement._natives._update.call(this, activeElement, updatedProps);
-                activeProject.update(activeElement, updatedProps);
+                activeProject.activeElement._natives._update
+                  .call(this, activeProject.activeElement, updatedProps);
+                activeProject.update(activeProject.activeElement, updatedProps);
               }}
             /> : null}
           </Row>
@@ -114,19 +134,25 @@ export default class Editor extends Component {
                 <button
                   className="go-button action-button"
                   onClick={async () => {
-                    await api.publish(await api.save(activeProject));
-                    Router.push('/publish');
+                    const savedProject = await api.publish(await api.save(activeProject));
+                    Router.push({
+                      pathname: '/publish',
+                      query: { project: savedProject.make._id },
+                    });
                   }}
                 >Publish & Share
                 </button>
                 <button
-                  className={`addon-button ${!activeElement && 'inactive'}`}
+                  className={`addon-button ${(!activeProject || !activeProject.activeElement) && 'inactive'}`}
                   onClick={() => {
                     PopupboxManager.open({
                       content: <Personalizer
                         className="personalizer"
                         onTokenChosen={(token) => {
-                          const { _contentContainer: target, caretOffset: offset } = activeElement;
+                          const {
+                            _contentContainer: target,
+                            caretOffset: offset,
+                          } = activeProject.activeElement;
                           insertAtCaret(target, offset, token);
 
                           const event = new Event('input');
@@ -134,8 +160,9 @@ export default class Editor extends Component {
 
                           const updatedProps = {};
                           updatedProps.text = target.innerText;
-                          activeElement._natives._update.call(this, activeElement, updatedProps);
-                          activeProject.update(activeElement, updatedProps);
+                          activeProject.activeElement._natives._update
+                            .call(this, activeProject.activeElement, updatedProps);
+                          activeProject.update(activeProject.activeElement, updatedProps);
                           PopupboxManager.close();
                       }}
                       />,

@@ -100,6 +100,22 @@ class Api {
   }
 
   @action
+  async get(projectId) {
+    this.isLoading = true;
+    try {
+      return this.request(
+        `/api/users/me/makes/${projectId}`, {
+          method: 'GET',
+          headers: {
+            'on-behalf': this.currentUser.id,
+          },
+        });
+    } finally {
+      this.isLoading = false;
+    }
+  }
+
+  @action
   async save(project) {
     this.isLoading = true;
     try {
