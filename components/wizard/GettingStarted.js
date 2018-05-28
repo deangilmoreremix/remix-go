@@ -1,6 +1,7 @@
-import React, {Component, Fragment} from 'react';
+import React, { Component, Fragment } from 'react';
+import Link from 'next/link';
 import Router from 'next/router';
-import {observer, inject} from 'mobx-react';
+import { observer, inject } from 'mobx-react';
 import {
   PopupboxManager,
   PopupboxContainer,
@@ -22,19 +23,15 @@ export default class GettingStarted extends Component {
     VIDEO_UPLOAD: 'upload',
   };
 
-  state = {
-    wizardType: GettingStarted.WIZARD_TYPES.FROM_TEMPLATE,
-  };
-
-  componentDidMount() {
-    let wizardType;
-    if (process.browser) {
-      wizardType = Router.query.wizard;
-    }
-    if (wizardType) {
-      this.setState({ wizardType });
-    }
+  constructor(props) {
+    super(props);
+    const { store: { wizard: wizardType } } = this.props;
+    this.state = { wizardType };
   }
+
+  state = {
+    wizardType: null,
+  };
 
   getWizard(wizardType) {
     switch (wizardType) {
@@ -90,8 +87,59 @@ export default class GettingStarted extends Component {
             }}
             />
           </div>);
-      default:
+      case GettingStarted.WIZARD_TYPES.FROM_TEMPLATE:
         return <Templates onTemplateSelected={data => this.handleWizardSelection(data)} />;
+      default:
+        return (
+          <div className="scrollable full-height getting-started">
+            <div className="getting-started-list">
+              <div className="getting-started-item">
+                <div
+                  className="getting-started-item-inner"
+                  onClick={() => {
+                    Router.push({ pathname: '/', query: { wizard: this.constructor.WIZARD_TYPES.FROM_TEMPLATE } });
+                    this.setState({ wizardType: this.constructor.WIZARD_TYPES.FROM_TEMPLATE });
+                  }}
+                >
+                  <img
+                    src="../../static/images/getting-started/template.svg"
+                    alt="From Template"
+                  />
+                  <span>From Template</span>
+                </div>
+              </div>
+              <div className="getting-started-item">
+                <div
+                  className="getting-started-item-inner"
+                  onClick={() => {
+                    Router.push({ pathname: '/', query: { wizard: this.constructor.WIZARD_TYPES.GENERATOR } });
+                    this.setState({ wizardType: this.constructor.WIZARD_TYPES.GENERATOR });
+                  }}
+                >
+                  <img
+                    src="../../static/images/getting-started/generator.svg"
+                    alt="Template Generator"
+                  />
+                  <span>Template Generator</span>
+                </div>
+              </div>
+              <div className="getting-started-item">
+                <div
+                  className="getting-started-item-inner"
+                  onClick={() => {
+                    Router.push({ pathname: '/', query: { wizard: 'upload' } });
+                    this.setState({ wizardType: this.constructor.WIZARD_TYPES.VIDEO_UPLOAD });
+                  }}
+                >
+                  <img
+                    src="../../static/images/getting-started/upload.svg"
+                    alt="Import Your Own Video"
+                  />
+                  <span>Import Your Own Video</span>
+                </div>
+              </div>
+            </div>
+          </div>);
     }
   }
 

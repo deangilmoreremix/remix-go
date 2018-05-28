@@ -335,3 +335,52 @@ form,
     }
   }
 }
+
+.getting-started {
+  padding-bottom: $footer-height;
+  bottom: 0;
+  left: 0;
+  padding-top: $header-height;
+  top: 0;
+  right: 0;
+  position: absolute;
+  display: flex;
+  color: $primary-color;
+
+  .getting-started-list {
+    width: 60%;
+    height: 50%;
+    margin: auto;
+    display: flex;
+    flex-direction: row;
+    align-content: center;
+    justify-content: center;
+    text-align: center;
+
+    .getting-started-item {
+      width: 33%;
+      height: 100%;
+      margin: 0 1%;
+      background: $white;
+      border: 1px solid $gray-300;
+      border-radius: 10px;
+      cursor: pointer;
+
+      .getting-started-item-inner {
+        display: flex;
+        justify-content: center;
+        height: 100%;
+        flex-direction: column;
+      }
+
+      img {
+        height: 50%;
+        margin-bottom: 15%;
+      }
+
+      span {
+        font-size: 1.3rem;
+      }
+    }
+  }
+}
