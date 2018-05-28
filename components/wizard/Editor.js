@@ -55,7 +55,12 @@ export default class Editor extends Component {
 
     return (
       <Fragment>
-        <PopupboxContainer />
+        <PopupboxContainer
+          ref={(c) => { this.popupboxContainer = c; }}
+          onClosed={() => {
+            this.popupboxContainer.state.children = null;
+          }}
+        />
         <Container fluid className="editor-wrapper">
           <Row className={`toolbar ${!activeElement && 'hidden'}`}>
             {activeElement ? <ToolbarEditor

@@ -60,9 +60,12 @@ export default class AudioSelectionWorkspace extends Component {
     const { className } = this.props;
     return (
       <Fragment>
-        <PopupboxContainer onClosed={() => {
-          delete this.currentPlayback.props.children;
-        }} />
+        <PopupboxContainer
+          ref={(c) => { this.popupboxContainer = c; }}
+          onClosed={() => {
+            this.popupboxContainer.state.children = null;
+          }}
+        />
         <AudioGallery
           useWindow={false}
           className={`media-gallery ${className}`}

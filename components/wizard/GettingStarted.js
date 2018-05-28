@@ -38,7 +38,12 @@ export default class GettingStarted extends Component {
       case GettingStarted.WIZARD_TYPES.GENERATOR:
         return (
           <div className="scrollable full-height">
-            <PopupboxContainer />
+            <PopupboxContainer
+              ref={(c) => { this.popupboxContainer = c; }}
+              onClosed={() => {
+                this.popupboxContainer.state.children = null;
+              }}
+            />
             <VideoSelectionWorkspace
               className="wizard-gallery"
               onVideoSelected={(video) => {
@@ -65,7 +70,12 @@ export default class GettingStarted extends Component {
       case GettingStarted.WIZARD_TYPES.VIDEO_UPLOAD:
         return (
           <div className="scrollable full-height video-upload">
-            <PopupboxContainer />
+            <PopupboxContainer
+              ref={(c) => { this.popupboxContainer = c; }}
+              onClosed={() => {
+                this.popupboxContainer.state.children = null;
+              }}
+            />
             <VideoUpload onVideoUploaded={(videoUrl) => {
               const nicheSelection = (<NicheScriptsWorkspace
                 className="niche-scripts"
