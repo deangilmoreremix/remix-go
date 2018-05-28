@@ -31,7 +31,7 @@ const PositionSelector = (props) => {
 PositionSelector.propTypes = {
   className: PropTypes.string,
   position: PropTypes.shape({
-    vertical: PropTypes.oneOf(VERTICALS).isRequired,
+    vertical: PropTypes.oneOf(VERTICALS.concat(['custom'])).isRequired,
     horizontal: PropTypes.oneOf(HORIZONTALS).isRequired,
   }).isRequired,
   onPositionChanged: PropTypes.func.isRequired,
