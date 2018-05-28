@@ -33,7 +33,7 @@ export default class Templates extends Component {
 
   onPreview = (template) => {
     this.currentPlayback = (<EmbeddedPlayback
-      url={template.url}
+      source={template.url}
       title={template.title}
       width="840"
       height="480"

@@ -14,6 +14,7 @@ import ActionsPane from './editor/ActionsPane';
 import Personalizer from './editor/workspaces/construction/Personalizer';
 import PopcornEditor from '../../lib/popcorn/plugins/editor.popcorn';
 import CallToActions from './editor/call-to-actions/CallToActions';
+import EmbeddedPlayback from '../common/EmbeddedPlayback';
 
 const insertAtCaret = (element, offset, text) => {
   const front = (element.innerText).substring(0, offset);
@@ -82,7 +83,29 @@ export default class Editor extends Component {
             </Col>
             <Col className="col-2 paddingless editor-pane">
               <ActionsPane className="actions-pane">
-                <button className="go-button action-button">Preview</button>
+                <button
+                  className="go-button action-button"
+                  onClick={() => {
+                    PopupboxManager.open({
+                      content: <EmbeddedPlayback
+                        source={activeProject}
+                        title="Preview"
+                        width="840"
+                        height="480"
+                      />,
+                      config: {
+                        titleBar: {
+                          enable: true,
+                          text: 'Preview',
+                        },
+                        fadeIn: true,
+                        fadeInSpeed: 200,
+                      },
+                    });
+                  }}
+                >
+                  Preview
+                </button>
                 <button
                   className="go-button action-button"
                   onClick={async () => {

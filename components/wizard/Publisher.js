@@ -59,7 +59,7 @@ export default class Publisher extends Component {
                 />
                 <EmbeddedPlayback
                   className="overview-item"
-                  url={activeProject.make.url}
+                  source={activeProject.make.url}
                   title={activeProject.make.title}
                   width="50%"
                   height="50%"
