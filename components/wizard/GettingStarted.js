@@ -163,7 +163,7 @@ export default class GettingStarted extends Component {
         break;
       case GettingStarted.WIZARD_TYPES.GENERATOR:
       case GettingStarted.WIZARD_TYPES.VIDEO_UPLOAD:
-        store.activeProject = Project.fromTemplatet(data.script, true);
+        store.activeProject = Project.fromTemplate(data.script, true);
         await store.activeProject.updateVideo(data.video);
         Router.push({ pathname: '/edit' });
         break;
