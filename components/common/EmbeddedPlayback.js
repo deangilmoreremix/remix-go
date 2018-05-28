@@ -1,29 +1,66 @@
 import React, { Component } from 'react';
 import { observer } from 'mobx-react';
 import PropTypes from '../../lib/PropTypes';
+import Project from '../../lib/editor/Project';
+
+const POSTMESSAGE_URL = 'https://cdn.vidcloud.io/v/playback_preview';
 
 @observer
 export default class EmbeddedPlayback extends Component {
   static propTypes = {
     className: PropTypes.string,
-    url: PropTypes.string.isRequired,
+    source: PropTypes.oneOfType([
+      PropTypes.string,
+      PropTypes.instanceOf(Project),
+    ]).isRequired,
     title: PropTypes.string.isRequired,
     width: PropTypes.string.isRequired,
     height: PropTypes.string.isRequired,
   };
 
+  preplayHandler(event) {
+    const { source } = this.props;
+    const { topic } = event.data;
+    if (topic !== 'preplay') {
+      return;
+    }
+
+    this.frameConductor.contentWindow.postMessage({
+      topic: 'preplay',
+      config: {
+        domain: 'vidcloud.io',
+        serviceName: 'VidCloud',
+        salesPage: '',
+        privacyPolicyLink: '',
+        hideSalesPage: true,
+        hidePlaybackLogo: true,
+        hideCopyButton: true,
+        showExtendedEndroll: false,
+        showShare: false,
+        allowFacebook: false,
+        data: JSON.stringify(source.popcornObject),
+      },
+    }, this.frameConductor.src);
+  }
+
   render() {
-    const { title, url, width, height, className } = this.props;
+    const { title, source, width, height, className } = this.props;
+    if (source instanceof Project) {
+      if (process.browser) {
+        window.addEventListener('message', event => this.preplayHandler(event));
+      }
+    }
     return (<iframe
       className={className}
       title={title}
-      src={url}
+      src={source instanceof Project ? POSTMESSAGE_URL : source}
       width={width}
       height={height}
       frameBorder="0"
       mozallowfullscreen="true"
       webkitallowfullscreen="true"
       allowFullScreen
+      ref={(c) => { this.frameConductor = c; }}
     />);
   }
 }

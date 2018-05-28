@@ -35,7 +35,7 @@ export default class ConstructionScene extends Component {
           className="wrapper cf faded embed full-height full-width"
           ref={(c) => { this.embedWrapper = c; }}
         >
-          <div id="video-container" className="construction-container" data-butter="target">
+          <div id="video-container-scene" className="construction-container" data-butter="target">
             <div ref={(c) => { this.popcornWrapper = c; }} />
           </div>
         </div>
