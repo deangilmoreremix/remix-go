@@ -4,12 +4,29 @@ import Phases from './Phases';
 
 export default class PhaseView extends Component {
   state = {
-    title: 'Choose Template',
+    title: '',
   };
+
+  componentDidMount() {
+    this.updateTitle();
+  }
+
+  updateTitle() {
+    let tempTitle;
+    const { url } = this.props;
+    const { phaserElements } = this.props;
+    phaserElements.forEach((element) => {
+      if (element.path === url.pathname) {
+        tempTitle = element.title;
+      }
+    });
+    this.setState({ title: tempTitle });
+  }
+
   render() {
     const { url } = this.props;
     let { phaserElements } = this.props;
-    phaserElements.currentTitle = this.state.title;
+    let currentTitle = this.state.title;
 
     const phaseHasChanged = (selectedTab) => {
       let tempTitle;
@@ -22,14 +39,25 @@ export default class PhaseView extends Component {
         }
         return element;
       });
-      this.setState({ title: tempTitle });
+      this.setState({
+        title: tempTitle,
+      });
       phaserElements = [...updateElements];
+    };
+
+    const checkStatus = (element) => {
+      if (element.path === url.pathname) {
+        return true;
+      } else {
+        element.selected = false;
+      }
+      return false;
     };
 
     return (
       <div className="phase-component">
         <div className="phase-state-title">
-          <div>{phaserElements.currentTitle }</div>
+          <div>{currentTitle}</div>
         </div>
         <div className="phase-state-tabs">
           <div className="stepper">
@@ -37,7 +65,7 @@ export default class PhaseView extends Component {
             <Phases
               phases={phaserElements}
               onPhaseChanged={event => phaseHasChanged(event)} 
-              currentPath={url.pathname}
+              statusCheck={checkStatus}
             />
           </div>
         </div>
