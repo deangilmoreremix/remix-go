@@ -84,7 +84,12 @@ export default class Templates extends Component {
           onSearch={q => this.onSearch(q)}
           placeholder="Search through your templates..."
         />
-        <PopupboxContainer onClosed={() => { this.currentPlayback.props.url = null; }} />
+        <PopupboxContainer
+          ref={(c) => { this.popupboxContainer = c; }}
+          onClosed={() => {
+            this.popupboxContainer.state.children = null;
+          }}
+        />
         <TemplateGallery
           className="wizard-gallery"
           hasMore={this.state.hasMore}
