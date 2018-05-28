@@ -5,7 +5,6 @@ import { inject, observer } from 'mobx-react';
 import PropTypes from '../../../../lib/PropTypes';
 import ConstructionScene from './construction/ConstructionScene';
 import CheckpointsList from './construction/CheckpointsList';
-import PopcornEditor from '../../../../lib/popcorn/plugins/editor.popcorn';
 
 @inject('store')
 @observer
@@ -41,6 +40,9 @@ export default class ConstructionWorkspace extends Component {
 
   render() {
     const { className, store: { activeProject } } = this.props;
+    if (!activeProject) {
+      return null;
+    }
     return (
       <Container className={`construction-workspace ${className || ''}`}>
         <ConstructionScene
