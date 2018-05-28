@@ -3,7 +3,7 @@ import { observer } from 'mobx-react';
 import PropTypes from '../../lib/PropTypes';
 import Project from '../../lib/editor/Project';
 
-const POSTMESSAGE_URL = 'https://dev-cdn.videoremix.io/v/playback_preview';
+const POSTMESSAGE_URL = 'https://dev-cdn.vidcloud.io/v/playback_preview';
 
 @observer
 export default class EmbeddedPlayback extends Component {
@@ -38,7 +38,7 @@ export default class EmbeddedPlayback extends Component {
         showExtendedEndroll: false,
         showShare: false,
         allowFacebook: false,
-        data: source.popcornObject,
+        data: JSON.stringify(source.popcornObject),
       },
     }, this.frameConductor.src);
   }
