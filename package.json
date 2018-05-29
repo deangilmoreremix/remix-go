@@ -66,6 +66,7 @@
     "raw-loader": "^0.5.1",
     "react": "^16.2.0",
     "react-bootstrap-typeahead": "^3.0.0-alpha.2",
+    "react-color": "^2.14.1",
     "react-copy-to-clipboard": "^5.0.1",
     "react-custom-select": "0.0.3",
     "react-dom": "^16.2.0",

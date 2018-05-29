@@ -18,6 +18,7 @@ export default class CheckpointsList extends Component {
       .attach(store.activeProject.popcornify(this.popcornWrapper), `video-container-${at}`);
     this.updateSceneSize = videoResizer(this.embedWrapper, 2);
     window.addEventListener('resize', this.updateSceneSize.bind(this));
+    window.addEventListener('layoutUpdated', this.updateSceneSize.bind(this));
     this.updateSceneSize();
     popcorn.currentTime(at);
   }
