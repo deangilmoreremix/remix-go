@@ -1,11 +1,14 @@
 import React, { Component, Fragment } from 'react';
 import { Container, Col, Row, Input } from 'reactstrap';
 import { inject, observer } from 'mobx-react';
+import Router from 'next/router';
 import {
   PopupboxManager,
   PopupboxContainer,
 } from 'react-popupbox';
 
+import GettingStarted from './GettingStarted';
+import PhaseView from '../common/Phaser/PhaseView';
 import Project from '../../lib/editor/Project';
 import ActionsPane from './editor/ActionsPane';
 import InfiniteLoading from '../common/InfiniteLoading';
@@ -48,6 +51,52 @@ export default class Publisher extends Component {
     } = this.props;
     return (
       <Fragment>
+        <PhaseView
+          elements={[
+            {
+              key: 'getting-started',
+              title: ((project && project.usedWizard) ||
+                GettingStarted.WIZARD_TYPES.FROM_TEMPLATE).label,
+              active: false,
+              available: true,
+            },
+            {
+              key: 'edit',
+              title: 'Customize Video',
+              active: false,
+              available: true,
+            },
+            {
+              key: 'publish',
+              title: 'Publish & Share',
+              active: true,
+              available: true,
+            },
+          ]}
+          onPhaseChanged={(element) => {
+            switch (element.key) {
+              case 'getting-started':
+                Router.push({
+                  pathname: '/',
+                  query: {
+                    wizard: ((activeProject && activeProject.usedWizard) ||
+                      GettingStarted.WIZARD_TYPES.FROM_TEMPLATE).key,
+                  },
+                });
+                break;
+              case 'edit':
+                Router.push({
+                  pathname: '/edit',
+                  query: {
+                    project: activeProject.make._id,
+                  },
+                });
+                break;
+              default:
+                break;
+            }
+          }}
+        />
         <iframe
           title="Facebook conductor"
           src="http://dev-cdn.vidcloud.io/social-campaign/social-campaign.html"
