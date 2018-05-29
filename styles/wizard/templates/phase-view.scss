@@ -31,7 +31,6 @@
         width: 70%;
         position: relative;
         align-items: center;
-        cursor: pointer;
         
         .line {
           position: absolute;
@@ -45,6 +44,12 @@
           z-index: 10;
           display: flex;
           flex-flow: column;
+          cursor: pointer;
+
+          &.inactive {
+            filter: grayscale(1);
+            pointer-events: none;
+          }
 
           &.active {
             font-weight: 700;

@@ -6,6 +6,7 @@ import PropTypes from '../../../lib/PropTypes';
 export default class PhaseView extends Component {
   static propTypes = {
     elements: PropTypes.arrayOrObservableArrayOf(PropTypes.shape({
+      key: PropTypes.string.isRequired,
       title: PropTypes.string.isRequired,
       available: PropTypes.bool.isRequired,
       active: PropTypes.bool.isRequired,
@@ -26,14 +27,18 @@ export default class PhaseView extends Component {
             <div className="line" />
             {
               elements.map((element, idx) => {
-                idx += 1;
                 const { title: tabTitle } = element;
 
                 return (
-                  <div className={`stepper-tab-group ${(element.active ? 'active' : '')}`} key={idx} >
+                  <div className={`stepper-tab-group ${(element.active ? 'active' : '')}${element.available ? '' : 'inactive'}`} key={idx} >
                     <div className="gapped">
                       <div className="phase">
-                        <div className="phase-label" onClick={() => onPhaseChanged(element, idx)}>{idx}</div>
+                        <div
+                          className="phase-label"
+                          onClick={() => onPhaseChanged(element)}
+                        >
+                          {idx + 1}
+                        </div>
                       </div>
                     </div>
                     <div className="stepper-tab-label">{tabTitle}</div>

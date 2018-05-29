@@ -1,5 +1,4 @@
 import React, { Component, Fragment } from 'react';
-import Link from 'next/link';
 import Router from 'next/router';
 import { observer, inject } from 'mobx-react';
 import {
@@ -7,6 +6,7 @@ import {
   PopupboxContainer,
 } from 'react-popupbox';
 
+import PhaseView from '../common/Phaser/PhaseView';
 import Templates from './templates/Templates';
 import VideoSelectionWorkspace from './editor/workspaces/VideoSelectionWorkspace';
 import NicheScriptsWorkspace from './niche-scripts/NicheScriptsWorkspace';
@@ -18,15 +18,20 @@ import VideoUpload from '../common/VideoUpload';
 @observer
 export default class GettingStarted extends Component {
   static WIZARD_TYPES = {
-    FROM_TEMPLATE: 'template',
-    GENERATOR: 'generator',
-    VIDEO_UPLOAD: 'upload',
+    FROM_TEMPLATE: { key: 'template', label: 'Choose Template' },
+    GENERATOR: { key: 'generator', label: 'Choose a Video' },
+    VIDEO_UPLOAD: { key: 'upload', label: 'Upload Your Video' },
   };
 
   constructor(props) {
     super(props);
-    const { store: { wizard: wizardType } } = this.props;
-    this.state = { wizardType };
+    const { store: { wizard } } = this.props;
+    const foundWizardType = Object
+      .entries(this.constructor.WIZARD_TYPES)
+      .find(([key, item]) => item.key === wizard);
+    this.state = {
+      wizardType: foundWizardType && foundWizardType[1],
+    };
   }
 
   state = {
@@ -107,7 +112,7 @@ export default class GettingStarted extends Component {
                 <div
                   className="getting-started-item-inner"
                   onClick={() => {
-                    Router.push({ pathname: '/', query: { wizard: this.constructor.WIZARD_TYPES.FROM_TEMPLATE } });
+                    Router.push({ pathname: '/', query: { wizard: this.constructor.WIZARD_TYPES.FROM_TEMPLATE.key } });
                     this.setState({ wizardType: this.constructor.WIZARD_TYPES.FROM_TEMPLATE });
                   }}
                 >
@@ -122,7 +127,7 @@ export default class GettingStarted extends Component {
                 <div
                   className="getting-started-item-inner"
                   onClick={() => {
-                    Router.push({ pathname: '/', query: { wizard: this.constructor.WIZARD_TYPES.GENERATOR } });
+                    Router.push({ pathname: '/', query: { wizard: this.constructor.WIZARD_TYPES.GENERATOR.key } });
                     this.setState({ wizardType: this.constructor.WIZARD_TYPES.GENERATOR });
                   }}
                 >
@@ -137,7 +142,7 @@ export default class GettingStarted extends Component {
                 <div
                   className="getting-started-item-inner"
                   onClick={() => {
-                    Router.push({ pathname: '/', query: { wizard: 'upload' } });
+                    Router.push({ pathname: '/', query: { wizard: this.constructor.WIZARD_TYPES.VIDEO_UPLOAD.key } });
                     this.setState({ wizardType: this.constructor.WIZARD_TYPES.VIDEO_UPLOAD });
                   }}
                 >
@@ -159,12 +164,14 @@ export default class GettingStarted extends Component {
     switch (wizardType) {
       case GettingStarted.WIZARD_TYPES.FROM_TEMPLATE:
         store.activeProject = Project.fromTemplate(data, true);
+        store.activeProject.usedWizard = wizardType;
         Router.push({ pathname: '/edit' });
         break;
       case GettingStarted.WIZARD_TYPES.GENERATOR:
       case GettingStarted.WIZARD_TYPES.VIDEO_UPLOAD:
         store.activeProject = Project.fromTemplate(data.script, true);
         await store.activeProject.updateVideo(data.video);
+        store.activeProject.usedWizard = wizardType;
         Router.push({ pathname: '/edit' });
         break;
       default:
@@ -176,6 +183,29 @@ export default class GettingStarted extends Component {
     const { wizardType } = this.state;
     return (
       <Fragment>
+        {wizardType ? <PhaseView
+          elements={[
+            {
+              key: 'getting-started',
+              title: wizardType.label,
+              active: true,
+              available: true,
+            },
+            {
+              key: 'edit',
+              title: 'Customize Video',
+              active: false,
+              available: false,
+            },
+            {
+              key: 'publish',
+              title: 'Publish & Share',
+              active: false,
+              available: false,
+            },
+          ]}
+          onPhaseChanged={() => {}}
+        /> : null }
         {this.getWizard(wizardType)}
       </Fragment>
     );
