@@ -19,7 +19,7 @@ const PositionSelector = (props) => {
               key={hidx}
               className={`position-selector-cell ${
                 (vrt === position.vertical && hrz === position.horizontal) ? 'active' : ''
-              }`}
+                }`}
               onClick={() => onPositionChanged({ vertical: vrt, horizontal: hrz })}
             />
           ))}
