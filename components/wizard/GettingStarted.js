@@ -37,7 +37,7 @@ export default class GettingStarted extends Component {
     switch (wizardType) {
       case GettingStarted.WIZARD_TYPES.GENERATOR:
         return (
-          <div className="scrollable full-height">
+          <div className="full-height">
             <PopupboxContainer
               ref={(c) => { this.popupboxContainer = c; }}
               onClosed={() => {
