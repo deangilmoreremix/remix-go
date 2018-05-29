@@ -7,6 +7,7 @@ import {
   PopupboxContainer,
 } from 'react-popupbox';
 
+import Waiter from '../common/Waiter';
 import GettingStarted from './GettingStarted';
 import Project from '../../lib/editor/Project';
 import PhaseView from '../common/Phaser/PhaseView';
@@ -38,6 +39,10 @@ export default class Editor extends Component {
     }
   }
 
+  state = {
+    waiter: null,
+  };
+
   retrieveProject = async (projectId) => {
     const { api, store } = this.props;
     store.activeProject = new Project(await api.get(projectId));
@@ -56,6 +61,7 @@ export default class Editor extends Component {
         editorStateManager,
       },
     } = this.props;
+    const { waiter } = this.state;
     /* eslint-disable no-underscore-dangle */
     const ToolbarEditor = activeProject && activeProject.activeElement &&
       PopcornEditor.editors[activeProject.activeElement._natives.type];
@@ -79,7 +85,7 @@ export default class Editor extends Component {
             this.popupboxContainer.state.children = null;
             }}
         />
-        <PhaseView
+        { activeProject ? <PhaseView
           elements={[
             {
               key: 'getting-started',
@@ -124,7 +130,8 @@ export default class Editor extends Component {
                 break;
             }
           }}
-        />
+        /> : null }
+        { waiter ? <Waiter message={waiter.message} /> : null }
         <Container fluid className={`editor-wrapper project-expector ${activeProject && 'hidden'}`}>
           {project ? <InfiniteLoading /> : <div>There is no active project.</div>}
         </Container>
@@ -182,11 +189,13 @@ export default class Editor extends Component {
                 <button
                   className="go-button action-button"
                   onClick={async () => {
+                    this.setState({ waiter: { message: 'Saving your project...' } });
                     const savedProject = await api.publish(await api.save(activeProject));
                     Router.push({
                       pathname: '/publish',
                       query: { project: savedProject.make._id },
                     });
+                    this.setState({ waiter: null });
                   }}
                 >Publish & Share
                 </button>
