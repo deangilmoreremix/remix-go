@@ -9,14 +9,6 @@ import { initApiAndPreload, initApi } from '../globals/api';
 import Header from './Header';
 import Footer from './Footer';
 import PopcornProxy from '../lib/PopcornProxy';
-import PhaseView from './common/Phaser/PhaseView';
-
-
-const phaserElements = [
-  { title: 'Choose Template', path: '/', selected: true },
-  { title: 'Customize Video', path: '/edit', selected: false },
-  { title: 'Publish & Share', path: '/publish', selected: false },
-];
 
 class Layout extends Component {
   static async getInitialProps({ query, req }, preloader) {
@@ -41,7 +33,6 @@ class Layout extends Component {
         <div>
           <Header />
           <Container {...this.props} className="main">
-            <PhaseView phaserElements={phaserElements} {...this.props} />
             {this.props.children}
           </Container>
           <Footer />

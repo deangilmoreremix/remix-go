@@ -1,72 +1,46 @@
 import React, { Component } from 'react';
+import { observer } from 'mobx-react';
+import PropTypes from '../../../lib/PropTypes';
 
-import Phases from './Phases';
-
+@observer
 export default class PhaseView extends Component {
-  state = {
-    title: '',
+  static propTypes = {
+    elements: PropTypes.arrayOrObservableArrayOf(PropTypes.shape({
+      title: PropTypes.string.isRequired,
+      available: PropTypes.bool.isRequired,
+      active: PropTypes.bool.isRequired,
+    })).isRequired,
+    onPhaseChanged: PropTypes.func.isRequired,
   };
 
-  componentDidMount() {
-    this.updateTitle();
-  }
-
-  updateTitle() {
-    let tempTitle;
-    const { url } = this.props;
-    const { phaserElements } = this.props;
-    phaserElements.forEach((element) => {
-      if (element.path === url.pathname) {
-        tempTitle = element.title;
-      }
-    });
-    this.setState({ title: tempTitle });
-  }
-
   render() {
-    const { url } = this.props;
-    let { phaserElements } = this.props;
-    let currentTitle = this.state.title;
-
-    const phaseHasChanged = (selectedTab) => {
-      let tempTitle;
-      const updateElements = phaserElements.map((element) => {
-        const { selected, title } = element;
-        if (selected && title !== selectedTab.title) element.selected = false;
-        if (title === selectedTab.title) {
-          element.selected = true;
-          tempTitle = element.title;
-        }
-        return element;
-      });
-      this.setState({
-        title: tempTitle,
-      });
-      phaserElements = [...updateElements];
-    };
-
-    const checkStatus = (element) => {
-      if (element.path === url.pathname) {
-        return true;
-      } else {
-        element.selected = false;
-      }
-      return false;
-    };
+    const { elements, onPhaseChanged } = this.props;
 
     return (
       <div className="phase-component">
         <div className="phase-state-title">
-          <div>{currentTitle}</div>
+          <div>{elements.find(item => item.active).title}</div>
         </div>
         <div className="phase-state-tabs">
           <div className="stepper">
-            <div className="line"></div>
-            <Phases
-              phases={phaserElements}
-              onPhaseChanged={event => phaseHasChanged(event)} 
-              statusCheck={checkStatus}
-            />
+            <div className="line" />
+            {
+              elements.map((element, idx) => {
+                idx += 1;
+                const { title: tabTitle } = element;
+
+                return (
+                  <div className={`stepper-tab-group ${(element.active ? 'active' : '')}`} key={idx} >
+                    <div className="gapped">
+                      <div className="phase">
+                        <div className="phase-label" onClick={() => onPhaseChanged(element, idx)}>{idx}</div>
+                      </div>
+                    </div>
+                    <div className="stepper-tab-label">{tabTitle}</div>
+                  </div>
+                );
+              })
+            }
           </div>
         </div>
       </div>

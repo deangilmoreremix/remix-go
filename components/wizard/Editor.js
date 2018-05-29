@@ -8,6 +8,7 @@ import {
 } from 'react-popupbox';
 
 import Project from '../../lib/editor/Project';
+import PhaseView from '../common/Phaser/PhaseView';
 import WorkspaceContainer from './editor/WorkspaceContainer';
 import EditorStageChanger from './editor/EditorStageChanger';
 import ActionsPane from './editor/ActionsPane';
@@ -76,6 +77,14 @@ export default class Editor extends Component {
           onClosed={() => {
             this.popupboxContainer.state.children = null;
             }}
+        />
+        <PhaseView
+          elements={[
+            { title: 'Choose Template', active: false, available: true },
+            { title: 'Customize Video', active: true, available: true },
+            { title: 'Publish & Share', active: false, available: true },
+          ]}
+          onPhaseChanged={(element, index) => {}}
         />
         <Container fluid className={`editor-wrapper project-expector ${activeProject && 'hidden'}`}>
           {project ? <InfiniteLoading /> : <div>There is no active project.</div>}

@@ -6,6 +6,7 @@ import {
   PopupboxContainer,
 } from 'react-popupbox';
 
+import PhaseView from '../common/Phaser/PhaseView';
 import Project from '../../lib/editor/Project';
 import ActionsPane from './editor/ActionsPane';
 import InfiniteLoading from '../common/InfiniteLoading';
@@ -48,6 +49,14 @@ export default class Publisher extends Component {
     } = this.props;
     return (
       <Fragment>
+        <PhaseView
+          elements={[
+            { title: 'Choose Template', active: false, available: true },
+            { title: 'Customize Video', active: false, available: true },
+            { title: 'Publish & Share', active: true, available: true },
+          ]}
+          onPhaseChanged={(element, index) => {}}
+        />
         <iframe
           title="Facebook conductor"
           src="http://dev-cdn.vidcloud.io/social-campaign/social-campaign.html"
