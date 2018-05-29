@@ -7,7 +7,9 @@ import {
   PopupboxContainer,
 } from 'react-popupbox';
 
+import GettingStarted from './GettingStarted';
 import Project from '../../lib/editor/Project';
+import PhaseView from '../common/Phaser/PhaseView';
 import WorkspaceContainer from './editor/WorkspaceContainer';
 import EditorStageChanger from './editor/EditorStageChanger';
 import ActionsPane from './editor/ActionsPane';
@@ -76,6 +78,52 @@ export default class Editor extends Component {
           onClosed={() => {
             this.popupboxContainer.state.children = null;
             }}
+        />
+        <PhaseView
+          elements={[
+            {
+              key: 'getting-started',
+              title: ((project && project.usedWizard) ||
+                GettingStarted.WIZARD_TYPES.FROM_TEMPLATE).label,
+              active: false,
+              available: true,
+            },
+            {
+              key: 'edit',
+              title: 'Customize Video',
+              active: true,
+              available: true,
+            },
+            {
+              key: 'publish',
+              title: 'Publish & Share',
+              active: false,
+              available: activeProject && activeProject.make && activeProject.make._id,
+            },
+          ]}
+          onPhaseChanged={(element) => {
+            switch (element.key) {
+              case 'getting-started':
+                Router.push({
+                  pathname: '/',
+                  query: {
+                  wizard: ((activeProject && activeProject.usedWizard) ||
+                    GettingStarted.WIZARD_TYPES.FROM_TEMPLATE).key,
+                  },
+                });
+                break;
+              case 'publish':
+                Router.push({
+                  pathname: '/publish',
+                  query: {
+                    project: activeProject.make._id,
+                  },
+                });
+                break;
+              default:
+                break;
+            }
+          }}
         />
         <Container fluid className={`editor-wrapper project-expector ${activeProject && 'hidden'}`}>
           {project ? <InfiniteLoading /> : <div>There is no active project.</div>}
@@ -189,7 +237,6 @@ export default class Editor extends Component {
                         onCtaSelected={(cta) => {
                           activeProject.cta = new Project(cta);
                           // update popcorn displaying
-
                           PopupboxManager.close();
                         }}
                       />,

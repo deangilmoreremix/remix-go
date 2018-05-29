@@ -1,0 +1,111 @@
+@import "../../_variables";
+@import url('https://fonts.googleapis.com/css?family=Muli:300');
+@font-face {
+  font-family: 'Muli', sans-serif;
+  font-weight: 300;
+  font-style: normal;
+}
+
+.phase-component {
+  color: $primary-color;
+  padding: 0 20px;
+  margin: 10px 0;
+  display: flex;
+  flex-direction: column;
+  font-family: 'Muli', sans-serif;
+  
+  .phase-state {
+    &-title {
+      text-align: center;
+      font-size: 1.5rem;
+      font-weight: 700;
+    }
+    &-tabs, &-container {
+      display: flex;
+      width: 100%;
+      justify-content: center;
+      
+      .stepper {
+        display: flex;
+        justify-content: space-between;
+        width: 70%;
+        position: relative;
+        align-items: center;
+        
+        .line {
+          position: absolute;
+          border: 1px solid #eb5053;
+          top: 25px;
+          left: 45px;
+          right: 45px;
+        }
+
+        .stepper-tab-group {
+          z-index: 10;
+          display: flex;
+          flex-flow: column;
+          cursor: pointer;
+
+          &.inactive {
+            filter: grayscale(1);
+            pointer-events: none;
+          }
+
+          &.active {
+            font-weight: 700;
+
+            .phase {
+              &-label {
+                color: #ffffff;
+                background: #e78c8d;
+                border: 1px solid #e78c8d;
+                &:hover {
+                  background: #eb5053;
+                }
+              }
+            }
+          }
+            
+          .gapped {
+            background: #e9ecef;
+            padding: 5px;
+            width: 50px;
+            align-self: center;
+          }
+
+          .phase {
+            z-index: 10;
+            width: 40px;
+            height: 40px;
+            text-align: center;
+            border-radius: 50%;
+            border: 1px solid #eb5053;
+            background: #ffffff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            &-label {
+              display: flex;
+              color: #eb5053;
+              border: 1px solid #eb5053;
+              border-radius: 50%;
+              width: 30px;
+              height: 30px;
+              justify-content: center;
+              align-items: center;
+              font-size: 20px;
+              phase-label: .4s background ease-out;
+              &:hover {
+                background: #e78c8d;
+                color: #ffffff;
+              }
+            }
+          }
+          .stepper-tab-label {
+            text-align: center;
+          }
+        }
+      }
+    }
+  }
+}
