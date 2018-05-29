@@ -73,56 +73,56 @@ export default class Publisher extends Component {
             this.popupboxContainer.state.children = null;
           }}
         />
+        { activeProject ? <PhaseView
+          elements={[
+            {
+              key: 'getting-started',
+              title: ((project && project.usedWizard) ||
+                GettingStarted.WIZARD_TYPES.FROM_TEMPLATE).label,
+              active: false,
+              available: true,
+            },
+            {
+              key: 'edit',
+              title: 'Customize Video',
+              active: false,
+              available: true,
+            },
+            {
+              key: 'publish',
+              title: 'Publish & Share',
+              active: true,
+              available: true,
+            },
+          ]}
+          onPhaseChanged={(element) => {
+            switch (element.key) {
+              case 'getting-started':
+                Router.push({
+                  pathname: '/',
+                  query: {
+                    wizard: ((activeProject && activeProject.usedWizard) ||
+                      GettingStarted.WIZARD_TYPES.FROM_TEMPLATE).key,
+                  },
+                });
+                break;
+              case 'edit':
+                Router.push({
+                  pathname: '/edit',
+                  query: {
+                    project: activeProject.make._id,
+                  },
+                });
+                break;
+              default:
+                break;
+            }
+          }}
+        /> : null }
         <Container fluid className={`editor-wrapper project-expector ${activeProject && 'hidden'}`}>
           {project ? <InfiniteLoading /> : <div>There is no active project.</div>}
         </Container>
         <Container fluid className={`editor-wrapper ${!activeProject && 'hidden'}`}>
-          <PhaseView
-            elements={[
-              {
-                key: 'getting-started',
-                title: ((project && project.usedWizard) ||
-                  GettingStarted.WIZARD_TYPES.FROM_TEMPLATE).label,
-                active: false,
-                available: true,
-              },
-              {
-                key: 'edit',
-                title: 'Customize Video',
-                active: false,
-                available: true,
-              },
-              {
-                key: 'publish',
-                title: 'Publish & Share',
-                active: true,
-                available: true,
-              },
-            ]}
-            onPhaseChanged={(element) => {
-              switch (element.key) {
-                case 'getting-started':
-                  Router.push({
-                    pathname: '/',
-                    query: {
-                      wizard: ((activeProject && activeProject.usedWizard) ||
-                        GettingStarted.WIZARD_TYPES.FROM_TEMPLATE).key,
-                    },
-                  });
-                  break;
-                case 'edit':
-                  Router.push({
-                    pathname: '/edit',
-                    query: {
-                      project: activeProject.make._id,
-                    },
-                  });
-                  break;
-                default:
-                  break;
-              }
-            }}
-          />
           <Row className="canvas full-height">
             <Col className="workspace">
               <div className="publish-overview">
