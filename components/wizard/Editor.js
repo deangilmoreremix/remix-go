@@ -207,16 +207,16 @@ export default class Editor extends Component {
                         className="personalizer"
                         onTokenChosen={(token) => {
                           const {
-                            _contentContainer: target,
-                            caretOffset: offset,
+                            _activeHandle: { type, target },
+                            caretOffsets: offset,
                           } = activeProject.activeElement;
-                          insertAtCaret(target, offset, token);
+                          insertAtCaret(target, offset[type], token);
 
                           const event = new Event('input');
                           target.dispatchEvent(event);
 
                           const updatedProps = {};
-                          updatedProps.text = target.innerText;
+                          updatedProps[type] = target.innerText;
                           activeProject.activeElement._natives._update
                             .call(this, activeProject.activeElement, updatedProps);
                           activeProject.update(activeProject.activeElement, updatedProps);
@@ -238,14 +238,13 @@ export default class Editor extends Component {
                   <span>Personalizer</span>
                 </button>
                 <button
-                  className={`addon-button ${(currentUser.features[features.cta] && currentUser.features[features.cta].state === 'enabled') ? '' : 'hidden'}`}
+                  className={`addon-button ${(currentUser.features[features.cta] && currentUser.features[features.cta].state === 'enabled') ? '' : ''}`}
                   onClick={() => {
                     PopupboxManager.open({
                       content: <CallToActions
                         className="cta-library"
                         onCtaSelected={(cta) => {
                           activeProject.cta = new Project(cta);
-                          // update popcorn displaying
                           PopupboxManager.close();
                         }}
                       />,
