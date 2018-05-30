@@ -366,6 +366,11 @@ form,
       border-radius: 10px;
       cursor: pointer;
 
+      &.inactive {
+        opacity: 0.5;
+        cursor: default;
+      }
+
       .getting-started-item-inner {
         display: flex;
         justify-content: center;

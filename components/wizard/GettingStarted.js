@@ -131,12 +131,19 @@ export default class GettingStarted extends Component {
                   <span>From Template</span>
                 </div>
               </div>
-              <div className={`getting-started-item ${(currentUser.features[features.generator] && currentUser.features[features.generator].state === 'enabled') ? '' : 'hidden'}`}>
+              <div
+                title={(currentUser.features[features.generator] && currentUser.features[features.generator].state === 'enabled') ? '' : 'This feature is not available on your type of subscription. Click here to details.'}
+                className={`getting-started-item ${(currentUser.features[features.generator] && currentUser.features[features.generator].state === 'enabled') ? '' : 'inactive'}`}
+              >
                 <div
                   className="getting-started-item-inner"
                   onClick={() => {
-                    Router.push({ pathname: '/', query: { wizard: this.constructor.WIZARD_TYPES.GENERATOR.key } });
-                    this.setState({ wizardType: this.constructor.WIZARD_TYPES.GENERATOR });
+                    if (currentUser.features[features.generator] && currentUser.features[features.generator].state === 'enabled') {
+                      Router.push({ pathname: '/', query: { wizard: this.constructor.WIZARD_TYPES.GENERATOR.key } });
+                      this.setState({ wizardType: this.constructor.WIZARD_TYPES.GENERATOR });
+                    } else {
+                      // TODO: implement transition to upgrade
+                    }
                   }}
                 >
                   <img
