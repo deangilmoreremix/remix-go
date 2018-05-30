@@ -60,3 +60,23 @@
   min-height: 1em;
 }
 
+.span-container {
+  display: block;
+
+  .text-container {
+    display: block;
+  }
+
+  .url-container {
+    display: block;
+    font-size: 0.8rem;
+    padding: 3%;
+    border: 0.5px dashed;
+  }
+
+  &.active {
+    .url-container {
+      display: block;
+    }
+  }
+}
