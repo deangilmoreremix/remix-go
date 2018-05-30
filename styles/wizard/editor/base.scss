@@ -145,20 +145,20 @@
       }
 
       .addon-button {
-        width: auto;
         font-size: 1.1rem;
         border: none;
         background: transparent;
         margin-top: 7%;
         cursor: pointer;
+        width: 100%;
 
         &.inactive {
           opacity: 0.5;
-          pointer-events: none;
+          cursor: default;
         }
 
         .icon {
-          margin-bottom: 3px;
+          margin: 0 20%;
         }
       }
     }

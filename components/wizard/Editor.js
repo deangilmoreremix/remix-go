@@ -162,7 +162,7 @@ export default class Editor extends Component {
               <WorkspaceContainer stateManager={editorStateManager} className="full-height" />
             </Col>
             <Col className="col-2 paddingless editor-pane">
-              <ActionsPane className="actions-pane">
+              <ActionsPane className="actions-pane scrollable">
                 <button
                   className="go-button action-button"
                   onClick={() => {
@@ -200,67 +200,105 @@ export default class Editor extends Component {
                 >Publish & Share
                 </button>
                 <button
+                  title={(!activeProject || !activeProject.activeElement) ? 'To use personalizer, please select any video element first.' : ''}
                   className={`addon-button ${(!activeProject || !activeProject.activeElement) && 'inactive'}`}
                   onClick={() => {
-                    PopupboxManager.open({
-                      content: <Personalizer
-                        className="personalizer"
-                        onTokenChosen={(token) => {
-                          const {
-                            _activeHandle: { type, target },
-                            caretOffsets: offset,
-                          } = activeProject.activeElement;
-                          insertAtCaret(target, offset[type], token);
+                    if (activeProject && activeProject.activeElement) {
+                      PopupboxManager.open({
+                        content: <Personalizer
+                          className="personalizer"
+                          onTokenChosen={(token) => {
+                            const {
+                              _activeHandle: { type, target },
+                              caretOffsets: offset,
+                            } = activeProject.activeElement;
+                            insertAtCaret(target, offset[type], token);
 
-                          const event = new Event('input');
-                          target.dispatchEvent(event);
+                            const event = new Event('input');
+                            target.dispatchEvent(event);
 
-                          const updatedProps = {};
-                          updatedProps[type] = target.innerText;
-                          activeProject.activeElement._natives._update
-                            .call(this, activeProject.activeElement, updatedProps);
-                          activeProject.update(activeProject.activeElement, updatedProps);
-                          PopupboxManager.close();
-                      }}
-                      />,
-                      config: {
-                        titleBar: {
-                          enable: true,
-                          text: 'Personalizer',
+                            const updatedProps = {};
+                            updatedProps[type] = target.innerText;
+                            activeProject.activeElement._natives._update
+                              .call(this, activeProject.activeElement, updatedProps);
+                            activeProject.update(activeProject.activeElement, updatedProps);
+                            PopupboxManager.close();
+                          }}
+                        />,
+                        config: {
+                          titleBar: {
+                            enable: true,
+                            text: 'Personalizer',
+                          },
+                          fadeIn: true,
+                          fadeInSpeed: 200,
                         },
-                        fadeIn: true,
-                        fadeInSpeed: 200,
-                      },
-                    });
+                      });
+                    }
                   }}
                 >
                   <img className="icon" src="../../static/images/editor/personalizer.svg" alt="" />
                   <span>Personalizer</span>
                 </button>
                 <button
-                  className={`addon-button ${(currentUser.features[features.cta] && currentUser.features[features.cta].state === 'enabled') ? '' : ''}`}
+                  className={`addon-button ${(currentUser.features[features.cta] && currentUser.features[features.cta].state === 'enabled') ? '' : 'inactive'}`}
+                  title={(currentUser.features[features.cta] && currentUser.features[features.cta].state === 'enabled') ? '' : 'This feature is not available on your type of subscription. Click here to details.'}
                   onClick={() => {
-                    PopupboxManager.open({
-                      content: <CallToActions
-                        className="cta-library"
-                        onCtaSelected={(cta) => {
-                          activeProject.cta = new Project(cta);
-                          PopupboxManager.close();
-                        }}
-                      />,
-                      config: {
-                        titleBar: {
-                          enable: true,
-                          text: 'CTA Library',
+                    if (currentUser.features[features.cta] && currentUser.features[features.cta].state === 'enabled') {
+                      PopupboxManager.open({
+                        content: <CallToActions
+                          className="cta-library"
+                          onCtaSelected={(cta) => {
+                            activeProject.cta = new Project(cta);
+                            PopupboxManager.close();
+                          }}
+                        />,
+                        config: {
+                          titleBar: {
+                            enable: true,
+                            text: 'CTA Library',
+                          },
+                          fadeIn: true,
+                          fadeInSpeed: 200,
                         },
-                        fadeIn: true,
-                        fadeInSpeed: 200,
-                      },
-                    });
+                      });
+                    } else {
+                      // TODO: forward to upgrade link
+                    }
                   }}
                 >
                   <img className="icon" src="../../static/images/editor/cta.svg" alt="" />
                   <span>Call to Action</span>
+                </button>
+                <button
+                  className={`addon-button ${(currentUser.features[features.generator] && currentUser.features[features.generator].state === 'enabled') ? '' : 'inactive'}`}
+                  title={(currentUser.features[features.generator] && currentUser.features[features.generator].state === 'enabled') ? '' : 'This feature is not available on your type of subscription. Click here to details.'}
+                  onClick={() => {
+                    if (currentUser.features[features.generator] && currentUser.features[features.generator].state === 'enabled') {
+                      PopupboxManager.open({
+                        content: <CallToActions
+                          className="cta-library"
+                          onCtaSelected={(cta) => {
+                            activeProject.cta = new Project(cta);
+                            PopupboxManager.close();
+                          }}
+                        />,
+                        config: {
+                          titleBar: {
+                            enable: true,
+                            text: 'CTA Library',
+                          },
+                          fadeIn: true,
+                          fadeInSpeed: 200,
+                        },
+                      });
+                    } else {
+                      // TODO: forward to upgrade link
+                    }
+                  }}
+                >
+                  <img className="icon" src="../../static/images/editor/niche_scripts.svg" alt="" />
+                  <span>Niche Scripts</span>
                 </button>
               </ActionsPane>
             </Col>

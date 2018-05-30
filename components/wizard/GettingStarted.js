@@ -39,6 +39,14 @@ export default class GettingStarted extends Component {
   };
 
   getWizard(wizardType) {
+    const {
+      store: {
+        common: {
+          features,
+        },
+        currentUser,
+      },
+    } = this.props;
     switch (wizardType) {
       case GettingStarted.WIZARD_TYPES.GENERATOR:
         return (
@@ -123,7 +131,7 @@ export default class GettingStarted extends Component {
                   <span>From Template</span>
                 </div>
               </div>
-              <div className="getting-started-item">
+              <div className={`getting-started-item ${(currentUser.features[features.generator] && currentUser.features[features.generator].state === 'enabled') ? '' : 'hidden'}`}>
                 <div
                   className="getting-started-item-inner"
                   onClick={() => {
