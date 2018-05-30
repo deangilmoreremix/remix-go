@@ -18,6 +18,7 @@ import InfiniteLoading from '../common/InfiniteLoading';
 import Personalizer from './editor/workspaces/construction/Personalizer';
 import PopcornEditor from '../../lib/popcorn/plugins/editor.popcorn';
 import CallToActions from './editor/call-to-actions/CallToActions';
+import NicheScriptsWorkspace from './niche-scripts/NicheScriptsWorkspace';
 import EmbeddedPlayback from '../common/EmbeddedPlayback';
 
 const insertAtCaret = (element, offset, text) => {
@@ -51,6 +52,7 @@ export default class Editor extends Component {
   render() {
     const {
       api,
+      store,
       store: {
         activeProject,
         project,
@@ -276,17 +278,20 @@ export default class Editor extends Component {
                   onClick={() => {
                     if (currentUser.features[features.generator] && currentUser.features[features.generator].state === 'enabled') {
                       PopupboxManager.open({
-                        content: <CallToActions
-                          className="cta-library"
-                          onCtaSelected={(cta) => {
-                            activeProject.cta = new Project(cta);
+                        content: <NicheScriptsWorkspace
+                          className="niche-scripts"
+                          onScriptSelected={async (script) => {
+                            const regeneratedProject = Project.fromTemplate(script, true);
+                            await regeneratedProject.updateVideo(activeProject.video);
+                            regeneratedProject.usedWizard = activeProject.wizardType;
+                            store.activeProject = regeneratedProject;
                             PopupboxManager.close();
                           }}
                         />,
                         config: {
                           titleBar: {
                             enable: true,
-                            text: 'CTA Library',
+                            text: 'Select a niche script',
                           },
                           fadeIn: true,
                           fadeInSpeed: 200,

@@ -89,24 +89,8 @@ export default class GettingStarted extends Component {
                 this.popupboxContainer.state.children = null;
               }}
             />
-            <VideoUpload onVideoUploaded={(videoUrl) => {
-              const nicheSelection = (<NicheScriptsWorkspace
-                className="niche-scripts"
-                onScriptSelected={(script) => {
-                  this.handleWizardSelection({ script, video: videoUrl });
-                }}
-              />);
-              PopupboxManager.open({
-                content: nicheSelection,
-                config: {
-                  titleBar: {
-                    enable: true,
-                    text: 'Select a niche script',
-                  },
-                  fadeIn: true,
-                  fadeInSpeed: 200,
-                },
-              });
+            <VideoUpload onVideoUploaded={(video) => {
+              this.handleWizardSelection({ video });
             }}
             />
           </div>);
@@ -175,7 +159,7 @@ export default class GettingStarted extends Component {
 
   async handleWizardSelection(data) {
     const { wizardType } = this.state;
-    const { store } = this.props;
+    const { api, store } = this.props;
     switch (wizardType) {
       case GettingStarted.WIZARD_TYPES.FROM_TEMPLATE:
         store.activeProject = Project.fromTemplate(data, true);
@@ -183,8 +167,13 @@ export default class GettingStarted extends Component {
         Router.push({ pathname: '/edit' });
         break;
       case GettingStarted.WIZARD_TYPES.GENERATOR:
-      case GettingStarted.WIZARD_TYPES.VIDEO_UPLOAD:
         store.activeProject = Project.fromTemplate(data.script, true);
+        await store.activeProject.updateVideo(data.video);
+        store.activeProject.usedWizard = wizardType;
+        Router.push({ pathname: '/edit' });
+        break;
+      case GettingStarted.WIZARD_TYPES.VIDEO_UPLOAD:
+        store.activeProject = Project.fromTemplate((await api.defaults())[0], true);
         await store.activeProject.updateVideo(data.video);
         store.activeProject.usedWizard = wizardType;
         Router.push({ pathname: '/edit' });
