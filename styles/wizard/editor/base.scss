@@ -85,6 +85,10 @@
                 width: 20%;
                 margin: 0 5px;
                 height: 100%;
+
+                .thumbnail-container {
+                  pointer-events: none;
+                }
               }
             }
           }
