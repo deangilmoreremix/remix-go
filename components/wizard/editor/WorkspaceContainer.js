@@ -42,7 +42,11 @@ export default class EditorStageChanger extends Component {
             case EditorStateManager.STAGE_TYPES.AUDIO_CUSTOMISE:
               return (
                 <div className="scrollable full-height">
-                  <AudioSelectionWorkspace />
+                  <AudioSelectionWorkspace onAudioSelected={async (audio) => {
+                    await activeProject.updateAudio(audio);
+                    editorStateManager.stage = EditorStateManager.STAGE_TYPES.CAPTION_CUSTOMISE;
+                  }}
+                  />
                 </div>
               );
             case EditorStateManager.STAGE_TYPES.CAPTION_CUSTOMISE:
