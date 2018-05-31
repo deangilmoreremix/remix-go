@@ -8,7 +8,7 @@ export default class PhaseView extends Component {
     elements: PropTypes.arrayOrObservableArrayOf(PropTypes.shape({
       key: PropTypes.string.isRequired,
       title: PropTypes.string.isRequired,
-      available: PropTypes.bool.isRequired,
+      available: PropTypes.bool,
       active: PropTypes.bool.isRequired,
     })).isRequired,
     onPhaseChanged: PropTypes.func.isRequired,

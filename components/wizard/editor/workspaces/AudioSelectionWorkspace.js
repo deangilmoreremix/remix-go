@@ -18,14 +18,13 @@ import PropTypes from '../../../../lib/PropTypes';
 export default class AudioSelectionWorkspace extends Component {
   static propTypes = {
     className: PropTypes.string,
+    onAudioSelected: PropTypes.func.isRequired,
   };
 
   state = {
     hasMore: true,
     elements: [],
   };
-
-  onUse = () => Router.push({ pathname: '/publish' });
 
   onPreview = (title, url) => {
     this.currentPlayback = (
@@ -57,7 +56,7 @@ export default class AudioSelectionWorkspace extends Component {
   };
 
   render() {
-    const { className } = this.props;
+    const { className, onAudioSelected } = this.props;
     return (
       <Fragment>
         <PopupboxContainer
@@ -87,7 +86,7 @@ export default class AudioSelectionWorkspace extends Component {
                 url={url}
                 artwork={artwork}
                 onPreview={this.onPreview}
-                onUse={this.onUse}
+                onUse={audio => onAudioSelected(audio)}
               />
             ))
           }
