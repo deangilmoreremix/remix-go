@@ -3,9 +3,7 @@ import { inject, observer } from 'mobx-react';
 
 import {
   PopupboxManager,
-  PopupboxContainer,
 } from 'react-popupbox';
-import Router from 'next/router';
 
 import AudioGallery from 'react-masonry-infinite';
 
@@ -59,12 +57,6 @@ export default class AudioSelectionWorkspace extends Component {
     const { className, onAudioSelected } = this.props;
     return (
       <Fragment>
-        <PopupboxContainer
-          ref={(c) => { this.popupboxContainer = c; }}
-          onClosed={() => {
-            this.popupboxContainer.state.children = null;
-          }}
-        />
         <AudioGallery
           useWindow={false}
           className={`media-gallery ${className}`}

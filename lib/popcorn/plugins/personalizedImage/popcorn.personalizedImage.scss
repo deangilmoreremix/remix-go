@@ -1,8 +1,7 @@
 .personalized-image {
-  .image-plugin-container {
-    position: absolute;
-  }
-  .image-plugin-container.track-event-editing .clone-container {
+  position: absolute;
+
+  & .track-event-editing .clone-container {
     display: inline-block;
   }
 
@@ -14,7 +13,7 @@
     text-decoration: none;
     width: 100%;
     height: 100%;
-    overflow: hidden;
+    overflow: visible;
   }
 
   .image-plugin-img {
@@ -27,6 +26,14 @@
     left: 0;
     height: 100%;
     width: 100%;
+  }
+
+  .url-container {
+    display: none;
+    font-size: 0.8rem;
+    padding: 3%;
+    border: 0.5px dashed;
+    text-align: center;
   }
 
   .image-plugin-hidden {
@@ -46,5 +53,11 @@
     position: relative;
     width: 100%;
     height: 100%;
+  }
+
+  &.active {
+    .url-container {
+      display: block;
+    }
   }
 }
