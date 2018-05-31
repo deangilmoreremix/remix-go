@@ -37,4 +37,7 @@ module.exports = {
     emulation: process.env.S3_EMULATION || false,
     publishLifetime: process.env.S3_PUBLISH_LIFETIME || 3600,
   },
+  video: {
+    maxThreads: process.env.MAX_VIDEO_THREADS || 2,
+  },
 };
