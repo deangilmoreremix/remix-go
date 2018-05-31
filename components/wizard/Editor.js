@@ -42,6 +42,7 @@ export default class Editor extends Component {
 
   state = {
     waiter: null,
+    key: Math.random(),
   };
 
   retrieveProject = async (projectId) => {
@@ -63,7 +64,7 @@ export default class Editor extends Component {
         editorStateManager,
       },
     } = this.props;
-    const { waiter } = this.state;
+    const { waiter, key } = this.state;
     /* eslint-disable no-underscore-dangle */
     const ToolbarEditor = activeProject && activeProject.activeElement &&
       PopcornEditor.editors[activeProject.activeElement._natives.type];
@@ -160,7 +161,7 @@ export default class Editor extends Component {
                 }}
               />
             </Col>
-            <Col className="workspace">
+            <Col className="workspace" key={key}>
               <WorkspaceContainer stateManager={editorStateManager} className="full-height" />
             </Col>
             <Col className="col-2 paddingless editor-pane">
@@ -285,6 +286,9 @@ export default class Editor extends Component {
                             await regeneratedProject.updateVideo(activeProject.video);
                             regeneratedProject.usedWizard = activeProject.wizardType;
                             store.activeProject = regeneratedProject;
+                            // this is to force re-render workspace
+                            // and show popcorn updates immediately
+                            this.setState({ key: Math.random() });
                             PopupboxManager.close();
                           }}
                         />,
