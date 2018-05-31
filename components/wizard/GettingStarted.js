@@ -39,8 +39,7 @@ export default class GettingStarted extends Component {
   };
 
   getWizard(wizardType) {
-    const { store: { common = {}, currentUser } } = this.props;
-    const { features = {} } = common;
+    const { store: { common: { features }, currentUser } } = this.props;
     switch (wizardType) {
       case GettingStarted.WIZARD_TYPES.GENERATOR:
         return (
@@ -110,13 +109,13 @@ export default class GettingStarted extends Component {
                 </div>
               </div>
               <div
-                title={(currentUser.features[features.generator] && currentUser.features[features.generator].state === 'enabled') ? '' : 'This feature is not available on your type of subscription. Click here to details.'}
-                className={`getting-started-item ${(currentUser.features[features.generator] && currentUser.features[features.generator].state === 'enabled') ? '' : 'inactive'}`}
+                title={(currentUser && currentUser.features[features.generator] && currentUser.features[features.generator].state === 'enabled') ? '' : 'This feature is not available on your type of subscription. Click here to details.'}
+                className={`getting-started-item ${(currentUser && currentUser.features[features.generator] && currentUser.features[features.generator].state === 'enabled') ? '' : 'inactive'}`}
               >
                 <div
                   className="getting-started-item-inner"
                   onClick={() => {
-                    if (currentUser.features[features.generator] && currentUser.features[features.generator].state === 'enabled') {
+                    if (currentUser && currentUser.features[features.generator] && currentUser.features[features.generator].state === 'enabled') {
                       Router.push({ pathname: '/', query: { wizard: this.constructor.WIZARD_TYPES.GENERATOR.key } });
                       this.setState({ wizardType: this.constructor.WIZARD_TYPES.GENERATOR });
                     } else {
