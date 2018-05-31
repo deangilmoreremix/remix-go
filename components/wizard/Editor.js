@@ -265,8 +265,8 @@ export default class Editor extends Component {
                           fadeInSpeed: 200,
                         },
                       });
-                    } else {
-                      // TODO: forward to upgrade link
+                    } else if (currentUser.features[features.cta].link) {
+                      window.open(currentUser.features[features.cta].link, '_blank');
                     }
                   }}
                 >
@@ -301,8 +301,8 @@ export default class Editor extends Component {
                           fadeInSpeed: 200,
                         },
                       });
-                    } else {
-                      // TODO: forward to upgrade link
+                    } else if (currentUser.features[features.generator].link) {
+                      window.open(currentUser.features[features.generator].link, '_blank');
                     }
                   }}
                 >

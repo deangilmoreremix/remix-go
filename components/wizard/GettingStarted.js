@@ -118,8 +118,8 @@ export default class GettingStarted extends Component {
                     if (currentUser && currentUser.features[features.generator] && currentUser.features[features.generator].state === 'enabled') {
                       Router.push({ pathname: '/', query: { wizard: this.constructor.WIZARD_TYPES.GENERATOR.key } });
                       this.setState({ wizardType: this.constructor.WIZARD_TYPES.GENERATOR });
-                    } else {
-                      // TODO: implement transition to upgrade
+                    } else if (currentUser.features[features.generator].link) {
+                      window.open(currentUser.features[features.generator].link, '_blank');
                     }
                   }}
                 >
