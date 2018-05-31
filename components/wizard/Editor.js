@@ -191,6 +191,16 @@ export default class Editor extends Component {
                 <button
                   className="go-button action-button"
                   onClick={async () => {
+                    // no need to have it working now, but who knows for future...
+                    // if (activeProject.audio) {
+                    //   this.setState({ waiter: { message: 'Making your media mobile-friendly...' } });
+                    //   const { url } = await api.mergeMedia(
+                    //     activeProject.video,
+                    //     activeProject.audio,
+                    //   );
+                    //   await activeProject.updateAudio(null);
+                    //   await activeProject.updateVideo(url);
+                    // }
                     this.setState({ waiter: { message: 'Saving your project...' } });
                     const savedProject = await api.publish(await api.save(activeProject));
                     Router.push({
