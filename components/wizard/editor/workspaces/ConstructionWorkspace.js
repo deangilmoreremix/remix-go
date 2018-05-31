@@ -30,8 +30,6 @@ export default class ConstructionWorkspace extends Component {
     });
     popcorn.on('elementUpdated', (event) => {
       const { element, options } = event;
-      /* eslint-disable no-underscore-dangle */
-      // element._natives._update.call(this, element, options);
       activeProject.update(element, options);
     });
   }

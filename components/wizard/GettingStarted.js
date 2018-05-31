@@ -39,6 +39,7 @@ export default class GettingStarted extends Component {
   };
 
   getWizard(wizardType) {
+    const { store: { common: { features }, currentUser } } = this.props;
     switch (wizardType) {
       case GettingStarted.WIZARD_TYPES.GENERATOR:
         return (
@@ -81,24 +82,8 @@ export default class GettingStarted extends Component {
                 this.popupboxContainer.state.children = null;
               }}
             />
-            <VideoUpload onVideoUploaded={(videoUrl) => {
-              const nicheSelection = (<NicheScriptsWorkspace
-                className="niche-scripts"
-                onScriptSelected={(script) => {
-                  this.handleWizardSelection({ script, video: videoUrl });
-                }}
-              />);
-              PopupboxManager.open({
-                content: nicheSelection,
-                config: {
-                  titleBar: {
-                    enable: true,
-                    text: 'Select a niche script',
-                  },
-                  fadeIn: true,
-                  fadeInSpeed: 200,
-                },
-              });
+            <VideoUpload onVideoUploaded={(video) => {
+              this.handleWizardSelection({ video });
             }}
             />
           </div>);
@@ -123,12 +108,19 @@ export default class GettingStarted extends Component {
                   <span>From Template</span>
                 </div>
               </div>
-              <div className="getting-started-item">
+              <div
+                title={(currentUser && currentUser.features[features.generator] && currentUser.features[features.generator].state === 'enabled') ? '' : 'This feature is not available on your type of subscription. Click here to details.'}
+                className={`getting-started-item ${(currentUser && currentUser.features[features.generator] && currentUser.features[features.generator].state === 'enabled') ? '' : 'inactive'}`}
+              >
                 <div
                   className="getting-started-item-inner"
                   onClick={() => {
-                    Router.push({ pathname: '/', query: { wizard: this.constructor.WIZARD_TYPES.GENERATOR.key } });
-                    this.setState({ wizardType: this.constructor.WIZARD_TYPES.GENERATOR });
+                    if (currentUser && currentUser.features[features.generator] && currentUser.features[features.generator].state === 'enabled') {
+                      Router.push({ pathname: '/', query: { wizard: this.constructor.WIZARD_TYPES.GENERATOR.key } });
+                      this.setState({ wizardType: this.constructor.WIZARD_TYPES.GENERATOR });
+                    } else {
+                      // TODO: implement transition to upgrade
+                    }
                   }}
                 >
                   <img
@@ -160,7 +152,7 @@ export default class GettingStarted extends Component {
 
   async handleWizardSelection(data) {
     const { wizardType } = this.state;
-    const { store } = this.props;
+    const { api, store } = this.props;
     switch (wizardType) {
       case GettingStarted.WIZARD_TYPES.FROM_TEMPLATE:
         store.activeProject = Project.fromTemplate(data, true);
@@ -168,8 +160,13 @@ export default class GettingStarted extends Component {
         Router.push({ pathname: '/edit' });
         break;
       case GettingStarted.WIZARD_TYPES.GENERATOR:
-      case GettingStarted.WIZARD_TYPES.VIDEO_UPLOAD:
         store.activeProject = Project.fromTemplate(data.script, true);
+        await store.activeProject.updateVideo(data.video);
+        store.activeProject.usedWizard = wizardType;
+        Router.push({ pathname: '/edit' });
+        break;
+      case GettingStarted.WIZARD_TYPES.VIDEO_UPLOAD:
+        store.activeProject = Project.fromTemplate((await api.defaults())[0], true);
         await store.activeProject.updateVideo(data.video);
         store.activeProject.usedWizard = wizardType;
         Router.push({ pathname: '/edit' });
