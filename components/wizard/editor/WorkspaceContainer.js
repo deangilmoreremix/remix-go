@@ -34,6 +34,7 @@ export default class EditorStageChanger extends Component {
                 <div className="scrollable full-height">
                   <VideoSelectionWorkspace onVideoSelected={async (video) => {
                     await activeProject.updateVideo(video);
+                    activeProject.version = Math.random();
                     editorStateManager.stage = EditorStateManager.STAGE_TYPES.CAPTION_CUSTOMISE;
                   }}
                   />
@@ -44,6 +45,7 @@ export default class EditorStageChanger extends Component {
                 <div className="scrollable full-height">
                   <AudioSelectionWorkspace onAudioSelected={async (audio) => {
                     await activeProject.updateAudio(audio);
+                    activeProject.version = Math.random();
                     editorStateManager.stage = EditorStateManager.STAGE_TYPES.CAPTION_CUSTOMISE;
                   }}
                   />
