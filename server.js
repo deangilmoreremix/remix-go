@@ -11,6 +11,7 @@ const handle = app.getRequestHandler();
 
 const checkAccess = require('./lib/express/check-access');
 const { processForm, isValidMedia, mediaUpload } = require('./lib/express/media-upload');
+const { join } = require('./lib/express/video-processing');
 const getContentType = require('./lib/express/get-content-type');
 
 mobxReact.useStaticRendering(true);
@@ -29,6 +30,7 @@ app.prepare().then(() => {
   require('./lib/express/webmaker-auth')(server);
   server.use(express.json());
   server.use(express.urlencoded());
+  server.post('/api/media/join', join);
   server.put('/api/media', processForm, isValidMedia, mediaUpload);
   server.get('/api/get-content-type', getContentType);
 

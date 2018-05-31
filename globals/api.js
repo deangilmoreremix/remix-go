@@ -161,6 +161,20 @@ class Api {
   }
 
   @action
+  async mergeMedia(videoSrc, audioSrc) {
+    this.isLoading = true;
+    try {
+      return this.selfRequest(
+        '/api/media/join', {
+          method: 'POST',
+          body: { videoSrc, audioSrc },
+        });
+    } finally {
+      this.isLoading = false;
+    }
+  }
+
+  @action
   async publish(project) {
     this.isLoading = true;
     try {
