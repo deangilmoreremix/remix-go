@@ -4,7 +4,6 @@ import { inject, observer } from 'mobx-react';
 
 import {
   PopupboxManager,
-  PopupboxContainer,
 } from 'react-popupbox';
 
 import VideoGallery from 'react-masonry-infinite';
@@ -62,12 +61,6 @@ export default class VideoSelectionWorkspace extends Component {
     const { className, onVideoSelected } = this.props;
     return (
       <Fragment>
-        <PopupboxContainer
-          ref={(c) => { this.popupboxContainer = c; }}
-          onClosed={() => {
-            this.popupboxContainer.state.children = null;
-          }}
-        />
         <VideoGallery
           useWindow={false}
           className={`media-gallery ${className}`}
