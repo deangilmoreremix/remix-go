@@ -39,14 +39,8 @@ export default class GettingStarted extends Component {
   };
 
   getWizard(wizardType) {
-    const {
-      store: {
-        common: {
-          features,
-        },
-        currentUser,
-      },
-    } = this.props;
+    const { store: { common = {}, currentUser } } = this.props;
+    const { features = {} } = common;
     switch (wizardType) {
       case GettingStarted.WIZARD_TYPES.GENERATOR:
         return (
