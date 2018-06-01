@@ -2,6 +2,7 @@ import React, { Component, Fragment } from 'react';
 import { inject, observer } from 'mobx-react';
 import { Input, Progress, Alert } from 'reactstrap';
 import DropZone from 'react-dropzone';
+import DurationRange from 'react-input-range';
 
 import Waiter from './Waiter';
 import PropTypes from '../../lib/PropTypes';
@@ -21,6 +22,11 @@ export default class VideoUpload extends Component {
     uploadPercentage: 0,
     error: null,
     waiter: null,
+    trim: {
+      min: 0,
+      max: 12,
+    },
+    videoMeta: null,
   };
 
   handleFileDrop = async (file) => {
@@ -115,6 +121,26 @@ export default class VideoUpload extends Component {
             value={url}
             onChange={({ target: { value } }) => this.setState({ url: value })}
           />
+          <div className="video-duration-range">
+            <DurationRange
+              classNames={{
+                activeTrack: 'input-range__track input-range__track--active video-range-track',
+                disabledInputRange: 'input-range--disabled',
+                inputRange: 'input-range',
+                labelContainer: 'input-range__label-container',
+                slider: 'input-range__slider video-range-slider',
+                sliderContainer: 'input-range__slider-container',
+                track: 'input-range__track input-range__track--background',
+                valueLabel: 'input-range__label input-range__label--value',
+                maxLabel: 'hidden',
+                minLabel: 'hidden',
+              }}
+              minValue={0}
+              maxValue={60}
+              value={this.state.trim}
+              onChange={value => this.setState({ trim: value })}
+            />
+          </div>
           <div className="external-video-submit-container">
             <button
               className={`go-button external-video-submit${isUploading ? ' hidden' : ''}`}
