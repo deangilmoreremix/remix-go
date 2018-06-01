@@ -42,5 +42,7 @@ module.exports = {
   },
   video: {
     maxThreads: process.env.MAX_VIDEO_THREADS || 2,
+    maxDuration: process.env.MAX_VIDEO_DURATION || 60, // in seconds
+    maxSize: process.env.MAX_VIDEO_SIZE || 100 * 1024 * 1024, // in bytes
   },
 };
