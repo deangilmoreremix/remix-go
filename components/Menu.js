@@ -43,7 +43,7 @@ export default class Menu extends React.Component {
   }
 
   render() {
-    const { store: { prefixes, currentUser = { } } } = this.props;
+    const { store: { common: { prefixes }, currentUser = { } } } = this.props;
     return (
       <Container>
         <Navbar color="faded" light expand="md">
