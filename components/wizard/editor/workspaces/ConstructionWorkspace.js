@@ -32,6 +32,7 @@ export default class ConstructionWorkspace extends Component {
       const { element, options } = event;
       activeProject.update(element, options);
     });
+    popcorn.currentTime(activeProject.checkpoints[0]);
   }
 
   onProjectSeek(at) {
