@@ -3,9 +3,17 @@ import React from 'react';
 import PropTypes from '../../../lib/PropTypes';
 
 const StageItem = (props) => {
-  const { className, image, title, onClick } = props;
+  const { className, image, title, onClick, validationMessage } = props;
   return (
-    <div className={className} onClick={onClick}>
+    <div
+      title={validationMessage || ''}
+      className={`${className} ${validationMessage ? 'inactive' : ''}`}
+      onClick={() => {
+        if (!validationMessage) {
+          onClick();
+        }
+      }}
+    >
       <div>
         {image}
         <br />
@@ -19,6 +27,7 @@ StageItem.propTypes = {
   className: PropTypes.string,
   title: PropTypes.string.isRequired,
   image: PropTypes.element.isRequired,
+  validationMessage: PropTypes.string,
   onClick: PropTypes.func.isRequired,
 };
 
