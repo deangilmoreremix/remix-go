@@ -5,6 +5,7 @@ import { observer, inject } from 'mobx-react';
 import TemplateGallery from 'react-masonry-infinite';
 import {
   PopupboxManager,
+  PopupboxContainer,
 } from 'react-popupbox';
 
 import PropTypes from '../../../lib/PropTypes';
@@ -79,10 +80,17 @@ export default class Templates extends Component {
   render() {
     return (
       <Fragment>
+        <PopupboxContainer
+          ref={(c) => { this.popupboxContainer = c; }}
+          onClosed={() => {
+            this.popupboxContainer.state.children = null;
+          }}
+        />
         <Search
           onSearch={q => this.onSearch(q)}
           placeholder="Search through your templates..."
         />
+
         <TemplateGallery
           className="wizard-gallery"
           hasMore={this.state.hasMore}
