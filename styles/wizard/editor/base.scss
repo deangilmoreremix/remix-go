@@ -117,6 +117,10 @@
           background: rgb(212, 72, 77);
         }
 
+        &.inactive {
+          opacity: 0.4;
+        }
+
         img {
           width: 48px;
           height: 48px;

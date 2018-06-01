@@ -28,6 +28,9 @@ module.exports = {
   templates: {
     perPage: process.env.TEMPLATES_PER_PAGE || 25,
   },
+  prefixes: {
+    projects: process.env.PROJECTS_PREFIX || 'projects',
+  },
   s3: {
     cdn: process.env.CDN_HOSTNAME || '',
     key: process.env.S3_KEY || 'AKIAIAQ6WDZIWRHJTGVA',
@@ -39,5 +42,7 @@ module.exports = {
   },
   video: {
     maxThreads: process.env.MAX_VIDEO_THREADS || 2,
+    maxDuration: process.env.MAX_VIDEO_DURATION || 60, // in seconds
+    maxSize: process.env.MAX_VIDEO_SIZE || 100 * 1024 * 1024, // in bytes
   },
 };
