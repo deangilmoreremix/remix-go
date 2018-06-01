@@ -34,9 +34,10 @@ export default class Editor extends Component {
   constructor(props) {
     super(props);
 
-    const { store: { activeProject, project } } = this.props;
-    if (!activeProject && project) {
-      this.retrieveProject(project);
+    const { store: { activeProject, project, remix } } = this.props;
+
+    if (!activeProject && (project || remix)) {
+      this.retrieveProject(project || remix, !!remix);
     }
   }
 
@@ -44,9 +45,10 @@ export default class Editor extends Component {
     waiter: null,
   };
 
-  retrieveProject = async (projectId) => {
+  retrieveProject = async (projectId, isRemix) => {
     const { api, store } = this.props;
-    store.activeProject = new Project(await api.get(projectId));
+    const source = await api.get(projectId);
+    store.activeProject = isRemix ? Project.fromTemplate(source) : new Project(source);
   };
 
   render() {
@@ -56,6 +58,7 @@ export default class Editor extends Component {
       store: {
         activeProject,
         project,
+        remix,
         common: {
           features,
         },
@@ -91,7 +94,7 @@ export default class Editor extends Component {
           elements={[
             {
               key: 'getting-started',
-              title: ((project && project.usedWizard) ||
+              title: ((activeProject && activeProject.usedWizard) ||
                 GettingStarted.WIZARD_TYPES.FROM_TEMPLATE).label,
               active: false,
               available: true,
@@ -135,7 +138,7 @@ export default class Editor extends Component {
         /> : null }
         { waiter ? <Waiter message={waiter.message} /> : null }
         <Container fluid className={`editor-wrapper project-expector ${activeProject && 'hidden'}`}>
-          {project ? <InfiniteLoading /> : <div>There is no active project.</div>}
+          {(project || remix) ? <InfiniteLoading /> : <div>There is no active project.</div>}
         </Container>
         <Container fluid className={`editor-wrapper ${!activeProject && 'hidden'}`}>
           <Row className={`toolbar ${(!activeProject || !activeProject.activeElement) && 'hidden'}`}>
