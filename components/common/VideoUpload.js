@@ -3,10 +3,12 @@ import { inject, observer } from 'mobx-react';
 import { Input, Progress, Alert } from 'reactstrap';
 import DropZone from 'react-dropzone';
 
+import Waiter from './Waiter';
 import PropTypes from '../../lib/PropTypes';
 import MediaTypeDetector from '../../lib/popcorn/util/mediaTypeDetector';
 
 @inject('api')
+@inject('store')
 @observer
 export default class VideoUpload extends Component {
   static propTypes = {
@@ -18,9 +20,18 @@ export default class VideoUpload extends Component {
     isUploading: false,
     uploadPercentage: 0,
     error: null,
+    waiter: null,
   };
 
   handleFileDrop = async (file) => {
+    const { store: { common: { video: videoConfig } } } = this.props;
+    if (videoConfig.maxSize < file.size) {
+      return this.setState({ error: 'We\'re sorry, upload video size can\'t be more than 100MB.' });
+    }
+    const videoMeta = await new MediaTypeDetector().getMetadata(file.preview, 'video/*');
+    if (videoMeta.duration > videoConfig.maxDuration) {
+      return this.setState({ error: 'We\'re sorry, upload video can\'t be longer than 60 seconds.' });
+    }
     const { onVideoUploaded, api } = this.props;
     this.setState({ isUploading: true });
     try {
@@ -45,16 +56,24 @@ export default class VideoUpload extends Component {
 
   retrieveVideoFromUrl = async () => {
     this.setState({ uploadPercentage: 1, isUploading: true });
-    const { onVideoUploaded } = this.props;
+    const { store: { common: { video: videoConfig } }, onVideoUploaded } = this.props;
     const { url } = this.state;
-    const videoTypeDetector = new MediaTypeDetector();
     try {
       this.setState({
         uploadPercentage: 0,
         isUploading: false,
         error: null,
       });
-      onVideoUploaded((await videoTypeDetector.getMetadata(url)).source);
+      this.setState({ waiter: { message: 'Retrieving video metadata...' } });
+      const videoMeta = await new MediaTypeDetector().getMetadata(url);
+      if (videoMeta.duration > videoConfig.maxDuration) {
+        return this.setState({
+          waiter: null,
+          error: 'We\'re sorry, upload video can\'t be longer than 60 seconds.',
+        });
+      }
+      onVideoUploaded(videoMeta.source);
+      this.setState({ waiter: null });
     } catch (err) {
       this.setState({
         uploadPercentage: 0,
@@ -65,9 +84,10 @@ export default class VideoUpload extends Component {
   };
 
   render() {
-    const { url, isUploading, error, uploadPercentage } = this.state;
+    const { url, isUploading, error, uploadPercentage, waiter } = this.state;
     return (
       <Fragment>
+        { waiter ? <Waiter message={waiter.message} /> : null }
         <div className="video-upload-box">
           <DropZone
             className={`upload-dropzone${isUploading ? ' hidden' : ''}`}

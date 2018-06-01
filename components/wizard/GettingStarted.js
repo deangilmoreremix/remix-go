@@ -6,6 +6,7 @@ import {
   PopupboxContainer,
 } from 'react-popupbox';
 
+import Waiter from '../common/Waiter';
 import PhaseView from '../common/Phaser/PhaseView';
 import Templates from './templates/Templates';
 import VideoSelectionWorkspace from './editor/workspaces/VideoSelectionWorkspace';
@@ -36,6 +37,7 @@ export default class GettingStarted extends Component {
 
   state = {
     wizardType: null,
+    waiter: null,
   };
 
   getWizard(wizardType) {
@@ -153,6 +155,7 @@ export default class GettingStarted extends Component {
   async handleWizardSelection(data) {
     const { wizardType } = this.state;
     const { api, store } = this.props;
+    this.setState({ waiter: { message: 'Preparing your project...' } });
     switch (wizardType) {
       case GettingStarted.WIZARD_TYPES.FROM_TEMPLATE:
         store.activeProject = Project.fromTemplate(data, true);
@@ -174,12 +177,14 @@ export default class GettingStarted extends Component {
       default:
         break;
     }
+    this.setState({ waiter: null });
   }
 
   render() {
-    const { wizardType } = this.state;
+    const { wizardType, waiter } = this.state;
     return (
       <Fragment>
+        { waiter ? <Waiter message={waiter.message} /> : null }
         {wizardType ? <PhaseView
           elements={[
             {
