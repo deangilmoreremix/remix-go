@@ -138,21 +138,21 @@ class Api {
       const path = project.make ?
         `/api/users/me/makes/${project.make._id}` :
         '/api/users/me/makes';
-      const response = await this.request(
+      const serializedProject = project.serialize();
+      project.make = await this.request(
         path, {
           method: project.make ? 'PATCH' : 'POST',
           headers: {
             'on-behalf': this.currentUser.id,
           },
           body: {
-            title: project.serialize().name,
-            description: project.serialize().description,
-            project: project.serialize(),
-            thumbnail: project.serialize().thumbnail,
-            remixedFrom: project.serialize().source,
+            title: serializedProject.name,
+            description: serializedProject.description,
+            project: serializedProject,
+            thumbnail: serializedProject.thumbnail,
+            remixedFrom: serializedProject.source,
           },
         });
-      project.make = response;
       project.modified = false;
       return project;
     } finally {
