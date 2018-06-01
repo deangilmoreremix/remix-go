@@ -28,6 +28,9 @@ module.exports = {
   templates: {
     perPage: process.env.TEMPLATES_PER_PAGE || 25,
   },
+  prefixes: {
+    projects: process.env.PROJECTS_PREFIX || 'projects',
+  },
   s3: {
     cdn: process.env.CDN_HOSTNAME || '',
     key: process.env.S3_KEY || 'AKIAIAQ6WDZIWRHJTGVA',

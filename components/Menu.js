@@ -43,7 +43,7 @@ export default class Menu extends React.Component {
   }
 
   render() {
-    const {store: {currentUser = {}} } = this.props;
+    const { store: { common: { prefixes }, currentUser = { } } } = this.props;
     return (
       <Container>
         <Navbar color="faded" light expand="md">
@@ -60,6 +60,11 @@ export default class Menu extends React.Component {
                   {currentUser.fullName}
                 </DropdownToggle>
                 <DropdownMenu >
+                  <DropdownItem>
+                    <a target="_blank" href={`//${prefixes.projects}.videoremix.io/me`}>
+                      Projects and Courses
+                    </a>
+                  </DropdownItem>
                   <DropdownItem>
                     <a onClick={() => Router.push('/account')}>
                       Settings
