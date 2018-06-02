@@ -58,7 +58,7 @@ export default class CallToActions extends Component {
     return (
       <Fragment>
         <div className={className}>
-          <Search onSearch={q => this.onSearch(q)} />
+          {/*<Search onSearch={q => this.onSearch(q)} />*/}
           <CTAGallery
             className="cta-library-inner"
             useWindow={false}
