@@ -54,7 +54,7 @@ class Api {
   @action
   async templates(count = 0, query = '') {
     this.isLoading = true;
-    const page = count / this.perPage;
+    const page = Math.ceil(count / this.perPage);
     try {
       return this.request(
         `/api/makes/go?segment=templates&perPage=${this.perPage}&page=${page + 1}&q=${query}`, {
@@ -71,7 +71,7 @@ class Api {
   @action
   async nicheScripts(count = 0, query = '') {
     this.isLoading = true;
-    const page = count / this.perPage;
+    const page = Math.ceil(count / this.perPage);
     try {
       return this.request(
         `/api/makes/go?segment=nicheScripts&perPage=${this.perPage}&page=${page + 1}&q=${query}`, {
@@ -88,7 +88,7 @@ class Api {
   @action
   async cta(count = 0, query = '') {
     this.isLoading = true;
-    const page = count / this.perPage;
+    const page = Math.ceil(count / this.perPage);
     try {
       return this.request(
         `/api/makes/go?segment=cta&perPage=${this.perPage}&page=${page + 1}&q=${query}`, {
@@ -103,8 +103,9 @@ class Api {
   }
 
   @action
-  async defaults(page = 0, query = '') {
+  async defaults(count = 0, query = '') {
     this.isLoading = true;
+    const page = Math.ceil(count / this.perPage);
     try {
       return this.request(
         `/api/makes/go?segment=defaults&perPage=${this.perPage}&page=${page + 1}&q=${query}`, {
