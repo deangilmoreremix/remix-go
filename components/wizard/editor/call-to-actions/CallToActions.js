@@ -61,6 +61,7 @@ export default class CallToActions extends Component {
           <Search onSearch={q => this.onSearch(q)} />
           <CTAGallery
             className="cta-library-inner"
+            useWindow={false}
             hasMore={this.state.hasMore}
             loader={<InfiniteLoading key="loader" />}
             loadMore={this.loadMore}
