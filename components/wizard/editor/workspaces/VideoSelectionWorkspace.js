@@ -27,7 +27,7 @@ export default class VideoSelectionWorkspace extends Component {
 
   onPreview = (title, url) => {
     this.currentPlayback = (
-      <video className="video" preload autoPlay controls style={{ width: '100%', height: '100%' }}>
+      <video className="video-popup" preload autoPlay controls>
         <source src={url} />
       </video>);
     PopupboxManager.open({

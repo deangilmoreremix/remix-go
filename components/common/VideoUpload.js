@@ -141,7 +141,13 @@ export default class VideoUpload extends Component {
               <DropZone
                 className={`upload-dropzone${isUploading ? ' hidden' : ''}`}
                 activeClassName="upload-dropzone hot"
-                onDrop={([file]) => this.handleFileDrop(file)}
+                onDrop={([file], [noFile]) => {
+                  if (file) {
+                    return this.handleFileDrop(file);
+                  } else if (noFile) {
+                    return this.setState({ error: 'This media format is not supported. Please try to upload MP4 video file.' });
+                  }
+                }}
                 accept="video/*"
               >
                 <div className="dropzone-inner">
