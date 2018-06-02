@@ -24,7 +24,7 @@ export default class VideoUpload extends Component {
     waiter: null,
     trim: {
       min: 0,
-      max: 12,
+      max: 0,
     },
     videoMeta: null,
   };
@@ -35,22 +35,24 @@ export default class VideoUpload extends Component {
       return this.setState({ error: 'We\'re sorry, upload video size can\'t be more than 100MB.' });
     }
     const videoMeta = await new MediaTypeDetector().getMetadata(file.preview, 'video/*');
-    if (videoMeta.duration > videoConfig.maxDuration) {
-      return this.setState({ error: 'We\'re sorry, upload video can\'t be longer than 60 seconds.' });
-    }
-    const { onVideoUploaded, api } = this.props;
+    const { api } = this.props;
     this.setState({ isUploading: true });
     try {
       const response = await api.uploadMedia(
         file,
         progress => this.setState({ uploadPercentage: progress }),
       );
+      videoMeta.source = response.url;
       this.setState({
         uploadPercentage: 0,
         isUploading: false,
         error: null,
+        videoMeta,
+        trim: {
+          min: 0,
+          max: Math.min(videoMeta.duration, videoConfig.maxDuration),
+        },
       });
-      onVideoUploaded(response.url);
     } catch (err) {
       this.setState({
         uploadPercentage: 0,
@@ -60,9 +62,15 @@ export default class VideoUpload extends Component {
     }
   };
 
+  submitVideo = async () => {
+    const { onVideoUploaded } = this.props;
+    const { videoMeta, trim } = this.state;
+    onVideoUploaded(videoMeta.source, trim);
+  };
+
   retrieveVideoFromUrl = async () => {
     this.setState({ uploadPercentage: 1, isUploading: true });
-    const { store: { common: { video: videoConfig } }, onVideoUploaded } = this.props;
+    const { store: { common: { video: videoConfig } } } = this.props;
     const { url } = this.state;
     try {
       this.setState({
@@ -70,16 +78,16 @@ export default class VideoUpload extends Component {
         isUploading: false,
         error: null,
       });
-      this.setState({ waiter: { message: 'Retrieving video metadata...' } });
+      this.setState({ waiter: { message: '' } });
       const videoMeta = await new MediaTypeDetector().getMetadata(url);
-      if (videoMeta.duration > videoConfig.maxDuration) {
-        return this.setState({
-          waiter: null,
-          error: 'We\'re sorry, upload video can\'t be longer than 60 seconds.',
-        });
-      }
-      onVideoUploaded(videoMeta.source);
-      this.setState({ waiter: null });
+      this.setState({
+        waiter: null,
+        videoMeta,
+        trim: {
+          min: 0,
+          max: Math.min(videoMeta.duration, videoConfig.maxDuration),
+        },
+      });
     } catch (err) {
       this.setState({
         uploadPercentage: 0,
@@ -90,67 +98,89 @@ export default class VideoUpload extends Component {
   };
 
   render() {
-    const { url, isUploading, error, uploadPercentage, waiter } = this.state;
+    const { store: { common: { video: videoConfig } } } = this.props;
+    const { url, isUploading, error, uploadPercentage, videoMeta, waiter } = this.state;
+
     return (
       <Fragment>
-        { waiter ? <Waiter message={waiter.message} /> : null }
-        <div className="video-upload-box">
-          <DropZone
-            className={`upload-dropzone${isUploading ? ' hidden' : ''}`}
-            activeClassName="upload-dropzone hot"
-            onDrop={([file]) => this.handleFileDrop(file)}
-            accept="video/*"
-          >
-            <div className="dropzone-inner">
-              <img className="icon" src="../../static/images/upload.png" alt="Video upload" />
-              <h5 className="label">Click or drag your file here to start uploading it</h5>
-            </div>
-          </DropZone>
-          <div className={`upload-progress${!isUploading ? ' hidden' : ''}`}>
-            <h5 className="label">{uploadPercentage < 1 ? `${(uploadPercentage * 100).toFixed(0)}%` : 'Processing your media...'}</h5>
-            <Progress
-              animated
-              className="upload-progress-bar"
-              value={uploadPercentage * 100}
-            />
-          </div>
-          <h5 className={isUploading ? ' hidden' : ''}>or use link to external video hosting (YouTube, Vimeo, etc)</h5>
-          <Input
-            className={`external-video-link${isUploading ? ' hidden' : ''}`}
-            type="text"
-            value={url}
-            onChange={({ target: { value } }) => this.setState({ url: value })}
-          />
-          <div className="video-duration-range">
-            <DurationRange
-              classNames={{
-                activeTrack: 'input-range__track input-range__track--active video-range-track',
-                disabledInputRange: 'input-range--disabled',
-                inputRange: 'input-range',
-                labelContainer: 'input-range__label-container',
-                slider: 'input-range__slider video-range-slider',
-                sliderContainer: 'input-range__slider-container',
-                track: 'input-range__track input-range__track--background',
-                valueLabel: 'input-range__label input-range__label--value',
-                maxLabel: 'hidden',
-                minLabel: 'hidden',
-              }}
-              minValue={0}
-              maxValue={60}
-              value={this.state.trim}
-              onChange={value => this.setState({ trim: value })}
-            />
-          </div>
+        {waiter ? <Waiter message={waiter.message} /> : null}
+        <div className="video-upload-container">
+          {videoMeta ?
+            <div className="video-range-container">
+              <label htmlFor="duration-range">
+                {`Trim your video (selected duration can't be longer than ${videoConfig.maxDuration} seconds)`}
+              </label>
+              <DurationRange
+                id="duration-range"
+                classNames={{
+                  activeTrack: 'input-range__track input-range__track--active video-range-track',
+                  disabledInputRange: 'input-range--disabled',
+                  inputRange: 'input-range video-range',
+                  labelContainer: 'input-range__label-container',
+                  slider: 'input-range__slider video-range-slider',
+                  sliderContainer: 'input-range__slider-container',
+                  track: 'input-range__track input-range__track--background video-range-track-background',
+                  valueLabel: 'input-range__label input-range__label--value',
+                  maxLabel: 'hidden',
+                  minLabel: 'hidden',
+                }}
+                formatLabel={value => `${value.toFixed(2)}s`}
+                minValue={0}
+                maxValue={videoMeta ? videoMeta.duration : 0}
+                value={this.state.trim}
+                step={0.01}
+                onChange={(value) => {
+                  if (value.max - value.min > videoConfig.maxDuration) {
+                    return;
+                  }
+                  this.setState({ trim: value });
+                }}
+              />
+            </div> :
+            <div className="video-upload-box">
+              <DropZone
+                className={`upload-dropzone${isUploading ? ' hidden' : ''}`}
+                activeClassName="upload-dropzone hot"
+                onDrop={([file]) => this.handleFileDrop(file)}
+                accept="video/*"
+              >
+                <div className="dropzone-inner">
+                  <img className="icon" src="../../static/images/upload.png" alt="Video upload" />
+                  <h5 className="label">Click or drag your file here to start uploading it</h5>
+                </div>
+              </DropZone>
+              <div className={`upload-progress${!isUploading ? ' hidden' : ''}`}>
+                <h5 className="label">
+                  {uploadPercentage < 1 ? `${(uploadPercentage * 100).toFixed(0)}%` : 'Processing your media...'}
+                </h5>
+                <Progress
+                  animated
+                  className="upload-progress-bar"
+                  value={uploadPercentage * 100}
+                />
+              </div>
+              <h5 className={isUploading ? ' hidden' : ''}>
+                or use link to external video hosting (YouTube, Vimeo,
+                etc)
+              </h5>
+              <Input
+                className={`external-video-link${isUploading ? ' hidden' : ''}`}
+                type="text"
+                value={url}
+                onChange={({ target: { value } }) => this.setState({ url: value })}
+              />
+              <Alert className="alert-error" color="danger" isOpen={error} toggle={() => this.setState({ error: null })}>
+                {error}
+              </Alert>
+            </div>}
           <div className="external-video-submit-container">
             <button
               className={`go-button external-video-submit${isUploading ? ' hidden' : ''}`}
-              onClick={() => this.retrieveVideoFromUrl()}
-            >Get Video
+              onClick={() => videoMeta ? this.submitVideo() : this.retrieveVideoFromUrl()}
+            >
+              {videoMeta ? 'Continue' : 'Retrieve video data'}
             </button>
           </div>
-          <Alert className="alert-error" color="danger" isOpen={error} toggle={() => this.setState({ error: null })}>
-            {error}
-          </Alert>
         </div>
       </Fragment>
     );
