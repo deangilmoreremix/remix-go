@@ -25,7 +25,7 @@ class Api {
     }
     Object.assign(this, source);
     const { common } = this;
-    this.perPage = common.templates.perPage;
+    this.perPage = common.pagination.perPage;
     this.authorization = `Basic ${btoa(`${common.clientId}:${common.clientSecret}`)}`;
     this.setupNetworkServices(isServer);
   }
@@ -52,8 +52,9 @@ class Api {
   }
 
   @action
-  async templates(page = 0, query = '') {
+  async templates(count = 0, query = '') {
     this.isLoading = true;
+    const page = count / this.perPage;
     try {
       return this.request(
         `/api/makes/go?segment=templates&perPage=${this.perPage}&page=${page + 1}&q=${query}`, {
@@ -68,8 +69,9 @@ class Api {
   }
 
   @action
-  async nicheScripts(page = 0, query = '') {
+  async nicheScripts(count = 0, query = '') {
     this.isLoading = true;
+    const page = count / this.perPage;
     try {
       return this.request(
         `/api/makes/go?segment=nicheScripts&perPage=${this.perPage}&page=${page + 1}&q=${query}`, {
@@ -84,8 +86,9 @@ class Api {
   }
 
   @action
-  async cta(page = 0, query = '') {
+  async cta(count = 0, query = '') {
     this.isLoading = true;
+    const page = count / this.perPage;
     try {
       return this.request(
         `/api/makes/go?segment=cta&perPage=${this.perPage}&page=${page + 1}&q=${query}`, {

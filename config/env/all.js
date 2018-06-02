@@ -25,8 +25,8 @@ module.exports = {
   appHostname: process.env.APP_HOSTNAME || 'http://localhost:3000',
   cookieDomain: process.env.COOKIE_DOMAIN || '',
   forceSsl: process.env.FORCE_SSL || false,
-  templates: {
-    perPage: process.env.TEMPLATES_PER_PAGE || 25,
+  pagination: {
+    perPage: process.env.PAGINATION_PER_PAGE || 25,
   },
   prefixes: {
     projects: process.env.PROJECTS_PREFIX || 'projects',
