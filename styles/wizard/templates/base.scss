@@ -3,7 +3,7 @@
 }
 
 .wizard-gallery {
-  margin: $header-height auto $footer-height auto;
+  margin: $header-height auto ($footer-height + 10px)  auto;
   text-align: center;
 }
 
