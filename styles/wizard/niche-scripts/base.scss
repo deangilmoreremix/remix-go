@@ -1,9 +1,10 @@
 .niche-scripts {
   width: 50vw;
   height: 50vh;
-  overflow: scroll;
+  overflow: auto;
 
   .wizard-list {
+    width: 100% !important;
 
     .list-item {
       width: 100%;
