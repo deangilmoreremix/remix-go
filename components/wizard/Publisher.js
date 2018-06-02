@@ -55,7 +55,7 @@ export default class Publisher extends Component {
           elements={[
             {
               key: 'getting-started',
-              title: ((project && project.usedWizard) ||
+              title: ((activeProject && activeProject.usedWizard) ||
                 GettingStarted.WIZARD_TYPES.FROM_TEMPLATE).label,
               active: false,
               available: true,
@@ -124,7 +124,7 @@ export default class Publisher extends Component {
         </Container>
         <Container fluid className={`editor-wrapper ${!activeProject && 'hidden'}`}>
           <Row className="canvas full-height">
-            <Col className="workspace">
+            <Col className="workspace scrollable">
               <div className="publish-overview">
                 <ProjectNameChanger
                   className="overview-item title-edit"
