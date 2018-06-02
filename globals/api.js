@@ -263,8 +263,8 @@ export async function initApiAndPreload(isServer, source, req, preloader) {
       assetsPath: config.assetsPath,
       clientId: config.client.id,
       clientSecret: config.client.secret,
-      templates: {
-        perPage: config.templates.perPage,
+      pagination: {
+        perPage: config.pagination.perPage,
       },
     };
   }
