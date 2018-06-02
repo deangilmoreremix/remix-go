@@ -66,7 +66,7 @@ export default class Menu extends React.Component {
                     </a>
                   </DropdownItem>
                   <DropdownItem>
-                    <a onClick={() => Router.push('/account')}>
+                    <a target="_blank" href="/account">
                       Settings
                     </a>
                   </DropdownItem>

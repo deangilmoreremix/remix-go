@@ -30,7 +30,7 @@ export default class CheckpointsList extends Component {
   render() {
     const { className, at } = this.props;
     return (
-      <div className={`thumbnail-container ${className}`} style={{width: '100%', height: '100%', position: 'relative'}}>
+      <div className={`thumbnail-container ${className}`}>
         <div
           className="wrapper cf faded embed full-height full-width"
           ref={(c) => { this.embedWrapper = c; }}

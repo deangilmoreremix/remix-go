@@ -8,6 +8,10 @@
   align-content: center;
   justify-content: center;
 
+  * {
+    cursor: pointer;
+  }
+
   .icon {
     height: 100%;
     width: auto;
