@@ -1,3 +1,5 @@
+@import '../../../styles/common/zoomer';
+
 .popcorn-editor {
   height: 60%;
   width: 100%;
@@ -5,10 +7,6 @@
   flex-direction: row;
   align-content: center;
   justify-content: center;
-
-  * {
-    margin: 0 2px;
-  }
 
   .icon {
     height: 100%;
@@ -22,6 +20,7 @@
   .color-picker-button-container {
     display: flex;
     height: 100%;
+    margin: 0 2px;
     justify-content: center;
 
     .color-picker-button {
@@ -36,6 +35,7 @@
 
   .color-picker {
     position: absolute;
+    margin: 0;
     z-index: 1000;
 
     .color-picker-inner {

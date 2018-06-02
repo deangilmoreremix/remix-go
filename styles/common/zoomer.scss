@@ -1,14 +1,11 @@
 .zoomer {
+  display: block;
 
   .slider {
-
+    margin-top: 9px;
   }
 
-  .zoom-in {
-
-  }
-
-  .zoom-out {
-
+  .zoom-in, .zoom-out {
+    margin: 0 7px 7px;
   }
 }
