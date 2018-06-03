@@ -31,6 +31,9 @@ module.exports = {
   loaderIo: {
     key: process.env.LOADER_IO_KEY || '',
   },
+  newRelic: {
+    key: process.env.NEW_RELIC_LICENSE_KEY || '',
+  },
   prefixes: {
     projects: process.env.PROJECTS_PREFIX || 'projects',
   },

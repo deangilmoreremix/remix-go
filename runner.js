@@ -3,6 +3,7 @@
  */
 
 const throng = require('throng');
+require('newrelic');
 
 const WORKERS = process.env.WEB_CONCURRENCY || 1;
 
