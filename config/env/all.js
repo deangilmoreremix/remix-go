@@ -28,6 +28,9 @@ module.exports = {
   pagination: {
     perPage: process.env.PAGINATION_PER_PAGE || 25,
   },
+  loaderId: {
+    key: process.env.LOADER_IO_KEY || '',
+  },
   prefixes: {
     projects: process.env.PROJECTS_PREFIX || 'projects',
   },
