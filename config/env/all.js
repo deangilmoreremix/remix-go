@@ -1,5 +1,6 @@
 module.exports = {
   port: process.env.PORT || 3000,
+  self: process.env.SELF,
   backend: process.env.BACKEND || 'dev-api.videoremix.io',
   editor: process.env.EDITOR || 'dev-app.videoremix.io',
   assetsPath: process.env.ASSETS_PATH || 'dev-cdn.videoremix.io/resources/go',
