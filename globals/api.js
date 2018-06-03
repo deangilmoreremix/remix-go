@@ -215,7 +215,7 @@ class Api {
           onProgress(loaded / total);
         };
       }
-      xhr.open('PUT', '/api/media', true);
+      xhr.open('PUT', `//${this.common.self}/api/media`, true);
       xhr.onload = () => {
         if (onProgress) {
           onProgress(1.0);
