@@ -30,6 +30,7 @@ app.prepare().then(() => {
   require('./lib/express/webmaker-auth')(server);
   server.use(express.json());
   server.use(express.urlencoded({ extended: true }));
+  require('./lib/express/loaderio')(server);
   // server.post('/api/media/join', join);
   server.put('/api/media', processForm, isValidMedia, mediaUpload);
   server.get('/api/get-content-type', getContentType);
