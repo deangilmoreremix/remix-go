@@ -53,7 +53,7 @@ export default class VideoSelectionWorkspace extends Component {
     this.setState({
       elements: elements.concat(newElements),
       // for now we have no pagination for such resources
-      hasMore: false,
+      hasMore: newElements.length > 0,
     });
   };
 
