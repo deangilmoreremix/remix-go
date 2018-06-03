@@ -158,26 +158,22 @@ export default class GettingStarted extends Component {
     this.setState({ waiter: { message: 'Preparing your project...' } });
     switch (wizardType) {
       case GettingStarted.WIZARD_TYPES.FROM_TEMPLATE:
-        store.activeProject = Project.fromTemplate(data, true);
-        store.activeProject.usedWizard = wizardType;
-        Router.push({ pathname: '/edit' });
+        store.activeProject = Project.fromTemplate(data, true);    
         break;
       case GettingStarted.WIZARD_TYPES.GENERATOR:
         store.activeProject = Project.fromTemplate(data.script, true);
         await store.activeProject.updateVideo(data.video);
-        store.activeProject.usedWizard = wizardType;
-        Router.push({ pathname: '/edit' });
         break;
       case GettingStarted.WIZARD_TYPES.VIDEO_UPLOAD:
         store.activeProject = Project.fromTemplate((await api.defaults())[0], true);
         await store.activeProject.updateVideo(data.video, data.trim);
-        store.activeProject.usedWizard = wizardType;
-        Router.push({ pathname: '/edit' });
         break;
       default:
         break;
     }
-    this.setState({ waiter: null });
+    store.activeProject.usedWizard = wizardType;
+    Router.push({ pathname: '/edit' });
+    this.setState({ waiter: { message: null } });
   }
 
   render() {
