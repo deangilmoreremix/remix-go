@@ -1,4 +1,4 @@
-const { port, forceSsl } = require('./config/config');
+const { port, forceSsl, nakedRun } = require('./config/config');
 
 const dev = process.env.NODE_ENV !== 'production';
 
@@ -35,12 +35,14 @@ app.prepare().then(() => {
   server.put('/api/media', processForm, isValidMedia, mediaUpload);
   server.get('/api/get-content-type', getContentType);
 
-  server.get('/_next/*', (req, res) => {
-    handle(req, res);
-  });
-  server.get('*', checkAccess, (req, res) => {
-    handle(req, res);
-  });
+  if (!nakedRun) {
+    server.get('/_next/*', (req, res) => {
+      handle(req, res);
+    });
+    server.get('*', checkAccess, (req, res) => {
+      handle(req, res);
+    });
+  }
   server.listen(port);
   console.log(`> Ready on http://localhost:${port}`);
 });

@@ -1,9 +1,11 @@
 module.exports = {
   port: process.env.PORT || 3000,
+  self: process.env.SELF,
   backend: process.env.BACKEND || 'dev-api.videoremix.io',
   editor: process.env.EDITOR || 'dev-app.videoremix.io',
   assetsPath: process.env.ASSETS_PATH || 'dev-cdn.videoremix.io/resources/go',
   socketProtocol: process.env.SOCKET_PROTOCOL || 'ws',
+  nakedRun: process.env.NAKED_RUN || false,
   client: {
     id: process.env.CLIENT_ID || 'service',
     secret: process.env.CLIENT_SECRET || 'q39Jy70X6ao9dTca',
