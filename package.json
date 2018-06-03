@@ -8,12 +8,12 @@
     "npm": "5.5.1"
   },
   "scripts": {
-    "dev": "node server.js",
+    "dev": "node runner.js",
     "build": "next build && next export",
     "eslint": "eslint .",
     "export": "cross-env NODE_ENV=production next export",
     "postinstall": "npm run build",
-    "start": "cross-env NODE_ENV=production node server.js",
+    "start": "cross-env NODE_ENV=production node runner.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
@@ -80,11 +80,13 @@
     "react-popupbox": "^2.0.3",
     "react-select": "^1.2.1",
     "reactstrap": "5.0.0-beta",
+    "redis": "^2.8.0",
     "request": "^2.85.0",
     "sass-loader": "^6.0.6",
     "sharp": "^0.20.2",
     "socket.io-client": "^2.0.4",
     "sweetalert": "^2.1.0",
+    "throng": "^4.0.0",
     "validator": "^9.4.1",
     "webmaker-auth": "git://github.com/strategic-limited/webmaker-auth2#a6f7d5033c780f5511158b6a26f9fbe0dd4d2f78",
     "webpack": "^3.10.0"
