@@ -39,13 +39,14 @@ class Api {
   }
 
   @action
-  async assets(assetType) {
+  async assets(assetType, count = 0) {
     this.isLoading = true;
     try {
-      return this.assetsRequest(
+      const response = await this.assetsRequest(
         `/${assetType}/index.json`, {
           method: 'GET',
         });
+      return response.slice(count, count + this.perPage);
     } finally {
       this.isLoading = false;
     }
