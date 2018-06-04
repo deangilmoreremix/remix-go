@@ -13,4 +13,8 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  .direct-link {
+    text-decoration: none;
+    color: $white;
+  }
 }
