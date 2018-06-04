@@ -37,7 +37,9 @@ export default class ConstructionWorkspace extends Component {
 
   onProjectSeek(at) {
     const { popcorn } = this.state;
+    const { store: { activeProject } } = this.props;
     popcorn.currentTime(at);
+    activeProject.currentCheckpoint = at;
   }
 
   render() {
