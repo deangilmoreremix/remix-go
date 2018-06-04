@@ -17,6 +17,11 @@ export default class ConstructionWorkspace extends Component {
     popcorn: null,
   };
 
+  componentWillUnmount() {
+    const { store: { activeProject } } = this.props;
+    activeProject.activeElement = null;
+  }
+
   onPopcornInitialize(wrapper) {
     const { store, store: { activeProject } } = this.props;
     const popcorn = store.activeProject.attach(
@@ -48,7 +53,12 @@ export default class ConstructionWorkspace extends Component {
       return null;
     }
     return (
-      <Container className={`construction-workspace ${className || ''}`}>
+      <Container
+        className={`construction-workspace ${className || ''}`}
+        onClick={() => {
+          activeProject.activeElement = null;
+        }}
+      >
         <ConstructionScene
           onPopcornInitialize={popcornWrapper => this.onPopcornInitialize(popcornWrapper)}
         />
