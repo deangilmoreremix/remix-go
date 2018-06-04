@@ -52,9 +52,9 @@ export default class Templates extends Component {
   };
 
   onSearch = async (query) => {
+    this.setState({ elements: [] });
     const { api } = this.props;
-    const { elements } = this.state;
-    const newElements = await api.templates(elements.length, query);
+    const newElements = await api.templates(0, query);
     this.setState({
       elements: newElements,
       hasMore: newElements.length > 0,

@@ -8,6 +8,7 @@ import {
 
 import VideoGallery from 'react-masonry-infinite';
 
+import Search from '../../../common/Search';
 import VideoGridItem from './gridItems/VideoGridItem';
 import InfiniteLoading from '../../../common/InfiniteLoading';
 import PropTypes from '../../../../lib/PropTypes';
@@ -24,6 +25,7 @@ export default class VideoSelectionWorkspace extends Component {
   state = {
     hasMore: true,
     elements: [],
+    query: '',
   };
 
   onPreview = (title, url) => {
@@ -47,12 +49,21 @@ export default class VideoSelectionWorkspace extends Component {
   @observable
   currentPlayback = null;
 
+  onSearch = async (query) => {
+    this.setState({ elements: [] });
+    const { api } = this.props;
+    const newElements = await api.assets(api.constructor.ASSET_TYPE.VIDEOS, 0, query);
+    this.setState({
+      elements: newElements,
+      hasMore: newElements.length > 0,
+      query,
+    });
+  };
+
   loadMore = async () => {
     const { api } = this.props;
-    const { elements } = this.state;
-    const newElements = await api.assets(api.constructor.ASSET_TYPE.VIDEOS, elements.length);
-    console.log(newElements);
-    console.log(newElements.length > 0);
+    const { elements, query } = this.state;
+    const newElements = await api.assets(api.constructor.ASSET_TYPE.VIDEOS, elements.length, query);
     this.setState({
       elements: elements.concat(newElements),
       // for now we have no pagination for such resources
@@ -77,6 +88,9 @@ export default class VideoSelectionWorkspace extends Component {
       ];
     return (
       <Fragment>
+        <Search
+          onSearch={q => this.onSearch(q)}
+        />
         <VideoGallery
           useWindow={!inWindow}
           className={`media-gallery ${className}`}
