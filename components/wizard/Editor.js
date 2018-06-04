@@ -151,7 +151,7 @@ export default class Editor extends Component {
                   .call(this, activeProject.activeElement, updatedProps);
                 activeProject.update(activeProject.activeElement, updatedProps);
               }}
-            /> : <NewElementBar />}
+            /> : <NewElementBar project={activeProject} />}
           </Row>
           <Row className="canvas full-height">
             <Col className="col-2 paddingless editor-pane">
