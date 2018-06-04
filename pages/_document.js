@@ -17,6 +17,7 @@ export default class MyDocument extends Document {
       <html lang="en">
         <head>
           <title>VideoRemix GO</title>
+          <link rel="shortcut icon" href="//cdv.vidcloud.io/wl/videoremix.io/resources/vc_favicon" />
         </head>
         <body>
           {/* eslint-disable react/no-danger */}
