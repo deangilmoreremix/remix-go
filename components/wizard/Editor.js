@@ -21,6 +21,7 @@ import CallToActions from './editor/call-to-actions/CallToActions';
 import NicheScriptsWorkspace from './niche-scripts/NicheScriptsWorkspace';
 import EmbeddedPlayback from '../common/EmbeddedPlayback';
 import NewElementBar from '../../lib/popcorn/plugins/new/editor.popcorn.new';
+import StateManager from "../../lib/editor/editorStateManager";
 
 const insertAtCaret = (element, offset, text) => {
   const front = (element.innerText).substring(0, offset);
@@ -142,7 +143,7 @@ export default class Editor extends Component {
           {(project || remix) ? <InfiniteLoading /> : <div>There is no active project.</div>}
         </Container>
         <Container fluid className={`editor-wrapper ${!activeProject && 'hidden'}`}>
-          <Row className="toolbar">
+          <Row className={`toolbar ${editorStateManager.stage === StateManager.STAGE_TYPES.CAPTION_CUSTOMISE ? '' : 'hidden'}`}>
             {activeProject && activeProject.activeElement ? <ToolbarEditor
               element={activeProject && activeProject.activeElement}
               onElementUpdate={(updatedProps) => {
