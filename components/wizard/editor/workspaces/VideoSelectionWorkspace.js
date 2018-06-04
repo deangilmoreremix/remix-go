@@ -17,6 +17,7 @@ import PropTypes from '../../../../lib/PropTypes';
 export default class VideoSelectionWorkspace extends Component {
   static propTypes = {
     className: PropTypes.string,
+    inWindow: PropTypes.bool,
     onVideoSelected: PropTypes.func.isRequired,
   };
 
@@ -50,6 +51,8 @@ export default class VideoSelectionWorkspace extends Component {
     const { api } = this.props;
     const { elements } = this.state;
     const newElements = await api.assets(api.constructor.ASSET_TYPE.VIDEOS, elements.length);
+    console.log(newElements);
+    console.log(newElements.length > 0);
     this.setState({
       elements: elements.concat(newElements),
       // for now we have no pagination for such resources
@@ -58,22 +61,29 @@ export default class VideoSelectionWorkspace extends Component {
   };
 
   render() {
-    const { className, onVideoSelected } = this.props;
+    const { className, inWindow = false, onVideoSelected } = this.props;
+    const sizes = inWindow ?
+      [
+        { columns: 1, gutter: 20 },
+        { mq: '694px', columns: 2, gutter: 20 },
+        { mq: '1000px', columns: 3, gutter: 20 },
+        { mq: '1536px', columns: 4, gutter: 20 },
+      ] : [
+        { columns: 1, gutter: 30 },
+        { mq: '512px', columns: 2, gutter: 30 },
+        { mq: '768px', columns: 3, gutter: 30 },
+        { mq: '1024px', columns: 4, gutter: 30 },
+        { mq: '1536px', columns: 5, gutter: 30 },
+      ];
     return (
       <Fragment>
         <VideoGallery
-          useWindow={false}
+          useWindow={!inWindow}
           className={`media-gallery ${className}`}
           hasMore={this.state.hasMore}
           loader={<InfiniteLoading key="loader" />}
           loadMore={this.loadMore}
-          sizes={[
-            { columns: 1, gutter: 30 },
-            { mq: '512px', columns: 2, gutter: 30 },
-            { mq: '768px', columns: 3, gutter: 30 },
-            { mq: '1024px', columns: 4, gutter: 30 },
-            { mq: '1536px', columns: 5, gutter: 30 },
-          ]}
+          sizes={sizes}
         >
           {
             this.state.elements.map(({ title, url, preview }, idx) => (
