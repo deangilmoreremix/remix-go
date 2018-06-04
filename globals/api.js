@@ -58,7 +58,7 @@ class Api {
     const page = Math.ceil(count / this.perPage);
     try {
       return this.request(
-        `/api/makes/go?segment=templates&perPage=${this.perPage}&page=${page + 1}&q=${query}`, {
+        `/api/makes/templates?editor=go&perPage=${this.perPage}&page=${page + 1}&q=${query}`, {
           method: 'GET',
           headers: {
             'on-behalf': this.currentUser.id,
