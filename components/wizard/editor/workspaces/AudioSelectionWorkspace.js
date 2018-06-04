@@ -7,6 +7,7 @@ import {
 
 import AudioGallery from 'react-masonry-infinite';
 
+import Search from '../../../common/Search';
 import AudioGridItem from './gridItems/AudioGridItem';
 import InfiniteLoading from '../../../common/InfiniteLoading';
 import PropTypes from '../../../../lib/PropTypes';
@@ -23,6 +24,7 @@ export default class AudioSelectionWorkspace extends Component {
   state = {
     hasMore: true,
     elements: [],
+    query: '',
   };
 
   onPreview = (title, url) => {
@@ -43,10 +45,21 @@ export default class AudioSelectionWorkspace extends Component {
     });
   };
 
+  onSearch = async (query) => {
+    this.setState({ elements: [] });
+    const { api } = this.props;
+    const newElements = await api.assets(api.constructor.ASSET_TYPE.AUDIOS, 0, query);
+    this.setState({
+      elements: newElements,
+      hasMore: newElements.length > 0,
+      query,
+    });
+  };
+
   loadMore = async () => {
     const { api } = this.props;
-    const { elements } = this.state;
-    const newElements = await api.assets(api.constructor.ASSET_TYPE.AUDIOS, elements.length);
+    const { elements, query } = this.state;
+    const newElements = await api.assets(api.constructor.ASSET_TYPE.AUDIOS, elements.length, query);
     this.setState({
       elements: elements.concat(newElements),
       // for now we have no pagination for such resources
@@ -71,6 +84,9 @@ export default class AudioSelectionWorkspace extends Component {
       ];
     return (
       <Fragment>
+        <Search
+          onSearch={q => this.onSearch(q)}
+        />
         <AudioGallery
           useWindow={!inWindow}
           className={`media-gallery ${className}`}
