@@ -18,8 +18,7 @@ export default class ConstructionWorkspace extends Component {
   };
 
   componentWillUnmount() {
-    const { store: { activeProject } } = this.props;
-    activeProject.activeElement = null;
+    this.resignActiveElement();
   }
 
   onPopcornInitialize(wrapper) {
@@ -47,6 +46,13 @@ export default class ConstructionWorkspace extends Component {
     activeProject.currentCheckpoint = at;
   }
 
+  resignActiveElement() {
+    const { store: { activeProject } } = this.props;
+    const { popcorn } = this.state;
+    activeProject.activeElement = null;
+    popcorn.emit('elementSelected', { element: null });
+  }
+
   render() {
     const { className, store: { activeProject } } = this.props;
     if (!activeProject) {
@@ -55,9 +61,7 @@ export default class ConstructionWorkspace extends Component {
     return (
       <Container
         className={`construction-workspace ${className || ''}`}
-        onClick={() => {
-          activeProject.activeElement = null;
-        }}
+        onClick={() => this.resignActiveElement()}
       >
         <ConstructionScene
           onPopcornInitialize={popcornWrapper => this.onPopcornInitialize(popcornWrapper)}
