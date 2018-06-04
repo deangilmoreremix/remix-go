@@ -39,13 +39,19 @@ class Api {
   }
 
   @action
-  async assets(assetType, count = 0) {
+  async assets(assetType, count = 0, query = '') {
     this.isLoading = true;
     try {
-      const response = await this.assetsRequest(
+      let response = await this.assetsRequest(
         `/${assetType}/index.json`, {
           method: 'GET',
         });
+      if (query.length > 0) {
+        const lookup = new RegExp(`.*${query}.*`, 'i');
+        response = response.filter(item => lookup.test(item.title));
+        console.log(query);
+        console.log(response);
+      }
       return response.slice(count, count + this.perPage);
     } finally {
       this.isLoading = false;

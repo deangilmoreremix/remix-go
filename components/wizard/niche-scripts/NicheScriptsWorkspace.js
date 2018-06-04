@@ -3,6 +3,7 @@ import { observer, inject } from 'mobx-react';
 
 import NicheScriptsList from 'react-masonry-infinite';
 
+import Search from '../../common/Search';
 import PropTypes from '../../../lib/PropTypes';
 import InfiniteLoading from '../../common/InfiniteLoading';
 import NicheScriptItem from './NicheScriptItem';
@@ -22,6 +23,7 @@ export default class NicheScriptsWorkspace extends Component {
     this.state = {
       hasMore: true,
       elements: [],
+      query: '',
     };
   }
 
@@ -30,10 +32,21 @@ export default class NicheScriptsWorkspace extends Component {
     onScriptSelected(item);
   };
 
+  onSearch = async (query) => {
+    this.setState({ elements: [] });
+    const { api } = this.props;
+    const newElements = await api.nicheScripts(0, query);
+    this.setState({
+      elements: newElements,
+      hasMore: newElements.length > 0,
+      query,
+    });
+  };
+
   loadMore = async () => {
     const { api } = this.props;
-    const { elements } = this.state;
-    const newElements = await api.nicheScripts(elements.length);
+    const { elements, query } = this.state;
+    const newElements = await api.nicheScripts(elements.length, query);
     this.setState({
       elements: elements.concat(newElements),
       hasMore: newElements.length > 0,
@@ -44,6 +57,9 @@ export default class NicheScriptsWorkspace extends Component {
     const { className } = this.props;
     return (
       <Fragment>
+        <Search
+          onSearch={q => this.onSearch(q)}
+        />
         <div className={className}>
           <NicheScriptsList
             className="wizard-list"
