@@ -49,8 +49,6 @@ class Api {
       if (query.length > 0) {
         const lookup = new RegExp(`.*${query}.*`, 'i');
         response = response.filter(item => lookup.test(item.title));
-        console.log(query);
-        console.log(response);
       }
       return response.slice(count, count + this.perPage);
     } finally {
