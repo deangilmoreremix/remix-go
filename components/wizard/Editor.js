@@ -21,7 +21,7 @@ import CallToActions from './editor/call-to-actions/CallToActions';
 import NicheScriptsWorkspace from './niche-scripts/NicheScriptsWorkspace';
 import EmbeddedPlayback from '../common/EmbeddedPlayback';
 import NewElementBar from '../../lib/popcorn/plugins/new/editor.popcorn.new';
-import StateManager from "../../lib/editor/editorStateManager";
+import StateManager from '../../lib/editor/editorStateManager';
 
 const insertAtCaret = (element, offset, text) => {
   const front = (element.innerText).substring(0, offset);
@@ -147,10 +147,15 @@ export default class Editor extends Component {
             {activeProject && activeProject.activeElement ? <ToolbarEditor
               element={activeProject && activeProject.activeElement}
               onElementUpdate={(updatedProps) => {
-                /* eslint-disable no-underscore-dangle */
-                activeProject.activeElement._natives._update
-                  .call(this, activeProject.activeElement, updatedProps);
-                activeProject.update(activeProject.activeElement, updatedProps);
+                if (updatedProps) {
+                  /* eslint-disable no-underscore-dangle */
+                  activeProject.activeElement._natives._update
+                    .call(this, activeProject.activeElement, updatedProps);
+                  activeProject.update(activeProject.activeElement, updatedProps);
+                } else {
+                  activeProject.remove(activeProject.activeElement);
+                  activeProject.activeElement = null;
+                }
               }}
             /> : <NewElementBar project={activeProject} />}
           </Row>
