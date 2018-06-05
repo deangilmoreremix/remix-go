@@ -155,7 +155,6 @@ export default class Editor extends Component {
                 } else {
                   activeProject.remove(activeProject.activeElement);
                   activeProject.activeElement = null;
-                  console.log('nulling element in update');
                 }
               }}
             /> : <NewElementBar project={activeProject} />}

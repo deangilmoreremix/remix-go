@@ -50,8 +50,9 @@ export default class ConstructionWorkspace extends Component {
     const { store: { activeProject } } = this.props;
     const { popcorn } = this.state;
     activeProject.activeElement = null;
-    console.log('nulling element on resign');
-    popcorn.emit('elementSelected', { element: null });
+    if (popcorn) {
+      popcorn.emit('elementSelected', { element: null });
+    }
   }
 
   render() {
