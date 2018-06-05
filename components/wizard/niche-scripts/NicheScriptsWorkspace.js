@@ -3,6 +3,8 @@ import { observer, inject } from 'mobx-react';
 
 import NicheScriptsList from 'react-masonry-infinite';
 
+import Waiter from '../../common/Waiter';
+import Search from '../../common/Search';
 import PropTypes from '../../../lib/PropTypes';
 import InfiniteLoading from '../../common/InfiniteLoading';
 import NicheScriptItem from './NicheScriptItem';
@@ -22,11 +24,14 @@ export default class NicheScriptsWorkspace extends Component {
     this.state = {
       hasMore: true,
       elements: [],
+      query: '',
+      waiter: null,
     };
   }
 
   onUse = (item) => {
     const { onScriptSelected } = this.props;
+    this.setState({ waiter: { message: 'Loading niche script...' } });
     onScriptSelected(item);
   };
 
@@ -42,8 +47,13 @@ export default class NicheScriptsWorkspace extends Component {
 
   render() {
     const { className } = this.props;
+    const { waiter } = this.state;
     return (
       <Fragment>
+        { waiter ? <Waiter message={waiter.message} /> : null }
+        <Search
+          onSearch={q => this.onSearch(q)}
+        />
         <div className={className}>
           <NicheScriptsList
             className="wizard-list"
