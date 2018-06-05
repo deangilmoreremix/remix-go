@@ -562,7 +562,7 @@ export default class SocialCampaign extends Component {
                     id="facebook-page-tab-input"
                     className="cell facebook-page-tab"
                     type="text"
-                    value={facebookPageTab}
+                    value={facebookPageTab.name}
                     onChange={({ target: { value } }) =>
                       this.setState({ facebookPageTab: { name: value } })}
                   />

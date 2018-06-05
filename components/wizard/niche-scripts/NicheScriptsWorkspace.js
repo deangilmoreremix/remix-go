@@ -35,10 +35,21 @@ export default class NicheScriptsWorkspace extends Component {
     onScriptSelected(item);
   };
 
+  onSearch = async (query) => {
+    this.setState({ elements: [] });
+    const { api } = this.props;
+    const newElements = await api.nicheScripts(0, query);
+    this.setState({
+      elements: newElements,
+      hasMore: newElements.length > 0,
+      query,
+    });
+  };
+
   loadMore = async () => {
     const { api } = this.props;
-    const { elements } = this.state;
-    const newElements = await api.nicheScripts(elements.length);
+    const { elements, query } = this.state;
+    const newElements = await api.nicheScripts(elements.length, query);
     this.setState({
       elements: elements.concat(newElements),
       hasMore: newElements.length > 0,

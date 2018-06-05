@@ -20,6 +20,8 @@ import PopcornEditor from '../../lib/popcorn/plugins/editor.popcorn';
 import CallToActions from './editor/call-to-actions/CallToActions';
 import NicheScriptsWorkspace from './niche-scripts/NicheScriptsWorkspace';
 import EmbeddedPlayback from '../common/EmbeddedPlayback';
+import NewElementBar from '../../lib/popcorn/plugins/new/editor.popcorn.new';
+import StateManager from '../../lib/editor/editorStateManager';
 
 const insertAtCaret = (element, offset, text) => {
   const front = (element.innerText).substring(0, offset);
@@ -141,16 +143,22 @@ export default class Editor extends Component {
           {(project || remix) ? <InfiniteLoading /> : <div>There is no active project.</div>}
         </Container>
         <Container fluid className={`editor-wrapper ${!activeProject && 'hidden'}`}>
-          <Row className={`toolbar ${(!activeProject || !activeProject.activeElement) && 'hidden'}`}>
+          <Row className={`toolbar ${editorStateManager.stage === StateManager.STAGE_TYPES.CAPTION_CUSTOMISE ? '' : 'hidden'}`}>
             {activeProject && activeProject.activeElement ? <ToolbarEditor
               element={activeProject && activeProject.activeElement}
               onElementUpdate={(updatedProps) => {
-                /* eslint-disable no-underscore-dangle */
-                activeProject.activeElement._natives._update
-                  .call(this, activeProject.activeElement, updatedProps);
-                activeProject.update(activeProject.activeElement, updatedProps);
+                if (updatedProps) {
+                  /* eslint-disable no-underscore-dangle */
+                  activeProject.activeElement._natives._update
+                    .call(this, activeProject.activeElement, updatedProps);
+                  activeProject.update(activeProject.activeElement, updatedProps);
+                } else {
+                  activeProject.remove(activeProject.activeElement);
+                  activeProject.activeElement = null;
+                  console.log('nulling element in update');
+                }
               }}
-            /> : null}
+            /> : <NewElementBar project={activeProject} />}
           </Row>
           <Row className="canvas full-height">
             <Col className="col-2 paddingless editor-pane">

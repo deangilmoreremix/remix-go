@@ -28,9 +28,9 @@ export default class CallToActions extends Component {
   }
 
   onSearch = async (query) => {
+    this.setState({ elements: [] });
     const { api } = this.props;
-    const { elements } = this.state;
-    const newElements = await api.cta(elements.length, query);
+    const newElements = await api.cta(0, query);
     this.setState({
       elements: newElements,
       hasMore: newElements.length > 0,
@@ -58,7 +58,9 @@ export default class CallToActions extends Component {
     return (
       <Fragment>
         <div className={className}>
-          {/*<Search onSearch={q => this.onSearch(q)} />*/}
+          <Search
+            onSearch={q => this.onSearch(q)}
+          />
           <CTAGallery
             className="cta-library-inner"
             useWindow={false}

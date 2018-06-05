@@ -12,7 +12,6 @@ export default class CheckpointsList extends Component {
     className: PropTypes.string,
     checkpoints: PropTypes.arrayOf(PropTypes.number),
     onCheckpointSelect: PropTypes.func.isRequired,
-    // onCheckpointToggle: PropTypes.func.isRequired,
   };
 
   render() {
