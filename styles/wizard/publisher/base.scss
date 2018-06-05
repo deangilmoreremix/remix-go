@@ -7,6 +7,11 @@
     display: block;
     width: 50%;
     margin: 10px 20px;
+
+    &:focus {
+      border: 2px solid $secondary-color;
+      box-shadow: none;
+    }
   }
 
   .embed-url {
@@ -26,6 +31,11 @@
       resize: none;
       background: transparent;
       color: $primary-color;
+
+      &:focus {
+        border: 2px solid $secondary-color;
+        box-shadow: none;
+      }
     }
   }
 
