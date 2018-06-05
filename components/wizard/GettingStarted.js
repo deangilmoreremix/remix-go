@@ -158,7 +158,7 @@ export default class GettingStarted extends Component {
     this.setState({ waiter: { message: 'Preparing your project...' } });
     switch (wizardType) {
       case GettingStarted.WIZARD_TYPES.FROM_TEMPLATE:
-        store.activeProject = Project.fromTemplate(data, true);    
+        store.activeProject = Project.fromTemplate(data, true);
         break;
       case GettingStarted.WIZARD_TYPES.GENERATOR:
         store.activeProject = Project.fromTemplate(data.script, true);
