@@ -20,7 +20,7 @@ export default class CheckpointsList extends Component {
     window.addEventListener('resize', this.updateSceneSize.bind(this));
     window.addEventListener('layoutUpdated', this.updateSceneSize.bind(this));
     this.updateSceneSize();
-    popcorn.currentTime(at);
+    popcorn.seek(at);
   }
 
   componentWillUnmount() {
