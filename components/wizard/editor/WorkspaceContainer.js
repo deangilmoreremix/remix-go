@@ -42,7 +42,7 @@ export default class EditorStageChanger extends Component {
                   <VideoSelectionWorkspace
                     inWindow
                     onVideoSelected={async (video) => {
-                      this.setState({ waiter: { message: 'Loading video' } });
+                      this.setState({ waiter: { message: 'Loading video...' } });
                       await activeProject.updateVideo(video);
                       activeProject.version = Math.random();
                       editorStateManager.stage = EditorStateManager.STAGE_TYPES.CAPTION_CUSTOMISE;
@@ -57,7 +57,7 @@ export default class EditorStageChanger extends Component {
                   <AudioSelectionWorkspace
                     inWindow
                     onAudioSelected={async (audio) => {
-                      this.setState({ waiter: { message: 'Loading audio' } });
+                      this.setState({ waiter: { message: 'Loading audio...' } });
                       await activeProject.updateAudio(audio);
                       activeProject.version = Math.random();
                       editorStateManager.stage = EditorStateManager.STAGE_TYPES.CAPTION_CUSTOMISE;
