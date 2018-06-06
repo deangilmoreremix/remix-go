@@ -125,27 +125,14 @@ class Api {
   }
 
   @action
-  async get(projectId) {
+  async get(projectId, isSource) {
     this.isLoading = true;
+    const path = isSource ?
+      `/api/users/me/makes/${projectId}` :
+      `/api/users/me/makes/${projectId}/remix`;
     try {
       return this.request(
-        `/api/users/me/makes/${projectId}`, {
-          method: 'GET',
-          headers: {
-            'on-behalf': this.currentUser.id,
-          },
-        });
-    } finally {
-      this.isLoading = false;
-    }
-  }
-
-  @action
-  async remix(projectId) {
-    this.isLoading = true;
-    try {
-      return this.request(
-        `/api//makes/${projectId}/remix`, {
+        path, {
           method: 'GET',
           headers: {
             'on-behalf': this.currentUser.id,
