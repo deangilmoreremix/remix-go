@@ -49,7 +49,7 @@ export default class Editor extends Component {
 
   retrieveProject = async (projectId, isRemix) => {
     const { api, store } = this.props;
-    const source = await api.get(projectId);
+    const source = await api.get(projectId, !isRemix);
     store.activeProject = isRemix ? Project.fromTemplate(source) : new Project(source);
   };
 

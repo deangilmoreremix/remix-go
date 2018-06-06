@@ -125,11 +125,14 @@ class Api {
   }
 
   @action
-  async get(projectId) {
+  async get(projectId, isSource) {
     this.isLoading = true;
+    const path = isSource ?
+      `/api/users/me/makes/${projectId}` :
+      `/api/users/me/makes/${projectId}/remix`;
     try {
       return this.request(
-        `/api/users/me/makes/${projectId}`, {
+        path, {
           method: 'GET',
           headers: {
             'on-behalf': this.currentUser.id,
