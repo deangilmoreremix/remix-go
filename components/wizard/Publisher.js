@@ -122,87 +122,88 @@ export default class Publisher extends Component {
         <Container fluid className={`editor-wrapper project-expector ${activeProject && 'hidden'}`}>
           {project ? <InfiniteLoading /> : <div>There is no active project.</div>}
         </Container>
-        <Container fluid className={`editor-wrapper ${!activeProject && 'hidden'}`}>
-          <Row className="canvas full-height">
-            <Col className="workspace scrollable">
-              <div className="publish-overview">
-                <Container fluid className="publish-overview-inner">
-                  <Col className="overview-column">
-                    <h5>Your project details</h5>
-                    <ProjectDetailsChanger
-                      className="overview-item title-edit"
-                      project={activeProject || {}}
-                      onChange={updatedProject => this.onProjectUpdate(updatedProject)}
-                    />
-                  </Col>
-                  <Col className="overview-column">
-                    <h5>Preview & Embed</h5>
-                    <EmbeddedPlayback
-                      className="overview-item"
-                      source={activeProject && activeProject.make.url}
-                      title={activeProject && activeProject.make.title}
-                      width="50%"
-                      height="28%"
-                    />
-                    <label className="overview-item">URL</label>
-                    <Input className="overview-item embed-url" type="text" value={activeProject && activeProject.make.url} readOnly />
-                    <label className="overview-item">Embed</label>
-                    <EmbedDataContainer className="overview-item embed-item" url={activeProject && activeProject.make.url} />
-                  </Col>
-                </Container>
-              </div>
-            </Col>
-            <Col className="col-2 paddingless editor-pane">
-              <ActionsPane className="actions-pane">
-                <button
-                  className="go-button action-button"
-                  onClick={() => {
-                    PopupboxManager.open({
-                      content: <EmailCampaign
-                        className="campaign"
-                        project={activeProject}
-                        onCampaignFinished={() => PopupboxManager.close()}
-                      />,
-                      config: {
-                        titleBar: {
-                          enable: true,
-                          text: 'Email Campaign',
+        {activeProject ?
+          <Container fluid className={`editor-wrapper ${!activeProject && 'hidden'}`}>
+            <Row className="canvas full-height">
+              <Col className="workspace scrollable">
+                <div className="publish-overview">
+                  <Container fluid className="publish-overview-inner">
+                    <Col className="overview-column">
+                      <h5 className="overview-item">Your project details</h5>
+                      <ProjectDetailsChanger
+                        className="overview-item overview-edit"
+                        project={activeProject || {}}
+                        onChange={updatedProject => this.onProjectUpdate(updatedProject)}
+                      />
+                    </Col>
+                    <Col className="overview-column">
+                      <h5 className="overview-item">Preview & Embed</h5>
+                      <EmbeddedPlayback
+                        className="overview-item"
+                        source={activeProject && activeProject.make.url}
+                        title={activeProject && activeProject.make.title}
+                        width="50%"
+                        height="28%"
+                      />
+                      <label className="overview-item">URL</label>
+                      <Input className="overview-item embed-url" type="text" value={activeProject && activeProject.make.url} readOnly />
+                      <label className="overview-item">Embed</label>
+                      <EmbedDataContainer className="overview-item embed-item" url={activeProject && activeProject.make.url} />
+                    </Col>
+                  </Container>
+                </div>
+              </Col>
+              <Col className="col-2 paddingless editor-pane">
+                <ActionsPane className="actions-pane">
+                  <button
+                    className="go-button action-button"
+                    onClick={() => {
+                      PopupboxManager.open({
+                        content: <EmailCampaign
+                          className="campaign"
+                          project={activeProject}
+                          onCampaignFinished={() => PopupboxManager.close()}
+                        />,
+                        config: {
+                          titleBar: {
+                            enable: true,
+                            text: 'Email Campaign',
+                          },
+                          fadeIn: true,
+                          fadeInSpeed: 200,
                         },
-                        fadeIn: true,
-                        fadeInSpeed: 200,
-                      },
-                    });
-                  }}
-                >
-                  Email Campaign
-                </button>
-                <button
-                  className="go-button action-button"
-                  onClick={() => {
-                    PopupboxManager.open({
-                      content: <SocialCampaign
-                        className="campaign"
-                        project={activeProject}
-                        facebookConductor={this.facebookConductor}
-                        onCampaignFinished={() => PopupboxManager.close()}
-                      />,
-                      config: {
-                        titleBar: {
-                          enable: true,
-                          text: 'Facebook',
+                      });
+                    }}
+                  >
+                    Email Campaign
+                  </button>
+                  <button
+                    className="go-button action-button"
+                    onClick={() => {
+                      PopupboxManager.open({
+                        content: <SocialCampaign
+                          className="campaign"
+                          project={activeProject}
+                          facebookConductor={this.facebookConductor}
+                          onCampaignFinished={() => PopupboxManager.close()}
+                        />,
+                        config: {
+                          titleBar: {
+                            enable: true,
+                            text: 'Facebook',
+                          },
+                          fadeIn: true,
+                          fadeInSpeed: 200,
                         },
-                        fadeIn: true,
-                        fadeInSpeed: 200,
-                      },
-                    });
-                  }}
-                >
-                  Facebook
-                </button>
-              </ActionsPane>
-            </Col>
-          </Row>
-        </Container>
+                      });
+                    }}
+                  >
+                    Facebook
+                  </button>
+                </ActionsPane>
+              </Col>
+            </Row>
+          </Container> : null}
       </Fragment>
     );
   }

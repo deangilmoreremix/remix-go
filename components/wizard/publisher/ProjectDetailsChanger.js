@@ -17,7 +17,7 @@ export default class ProjectDetailsChanger extends Component {
   constructor(props) {
     super(props);
 
-    const { project: { make: { title, description, thumbnail } } } = props;
+    const { project: { name: title, description, thumbnail } } = props;
     this.state = { title, description, thumbnail };
   }
 
@@ -30,9 +30,9 @@ export default class ProjectDetailsChanger extends Component {
   onValueChange = () => {
     const { onChange, project } = this.props;
     const { title, description, thumbnail } = this.state;
-    project.make.title = title;
-    project.make.description = description;
-    project.make.thumbnail = thumbnail;
+    project.name = title;
+    project.description = description;
+    project.thumbnail = thumbnail;
     onChange(project);
   };
 
@@ -41,37 +41,48 @@ export default class ProjectDetailsChanger extends Component {
     const { title, description, thumbnail } = this.state;
     return (
       <div className={className}>
-        <input
-          className="title-field"
-          type="text"
-          value={title}
-          onChange={({ target: { value } }) => this.setState({ title: value })}
-        />
-        <Input
-          type="textarea"
-          rows={4}
-          value={description}
-          onChange={({ target: { value } }) => this.setState({ description: value })}
-        />
-        <img src={thumbnail} alt="Project Posterframe" />
         <FormGroup>
-          <label>Set Image URL</label>
-          <input
+          <label htmlFor="project-details-description">Project Description</label>
+          <Input
+            id="project-details-title"
+            className="overview-item title-field"
             type="text"
-            onChange={({ target: { value } }) => this.setState({ thumbnail: value })}
+            value={title}
+            onChange={({ target: { value } }) => this.setState({ title: value })}
           />
         </FormGroup>
         <FormGroup>
-          <label>or upload file directly from your computer</label>
-          <input
-            type="file"
-            onChange={async ({ target: { files: [file] } }) => {
-              const response = await api.uploadMedia(file);
-              this.setState({ thumbnail: response.url });
-            }}
+          <label htmlFor="project-details-description">Project Description</label>
+          <Input
+            id="project-details-description"
+            className="overview-item description-field"
+            type="textarea"
+            rows={4}
+            value={description}
+            onChange={({ target: { value } }) => this.setState({ description: value })}
           />
         </FormGroup>
-        <a className="button button-primary" onClick={() => this.onValueChange()}>save</a>
+        <FormGroup className="thumbnail-field">
+          <label htmlFor="project-details-thumbnail">Project thumbnail</label>
+          <img id="project-details-thumbnail" src={thumbnail} alt="Project Posterframe" />
+          <div className="upload-box">
+            <label>Set Image URL</label>
+            <Input
+              className="overview-item link-input"
+              type="text"
+              onChange={({ target: { value } }) => this.setState({ thumbnail: value })}
+            />
+            <label>or upload file directly from your computer</label>
+            <Input
+              type="file"
+              onChange={async ({ target: { files: [file] } }) => {
+                const response = await api.uploadMedia(file);
+                this.setState({ thumbnail: response.url });
+              }}
+            />
+          </div>
+        </FormGroup>
+        <a className="button button-primary submit" onClick={() => this.onValueChange()}>save</a>
       </div>
     );
   }
