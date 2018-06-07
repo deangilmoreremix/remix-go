@@ -36,7 +36,7 @@ export default class VideoUpload extends Component {
     }
     const videoMeta = await new MediaTypeDetector().getMetadata(file.preview, 'video/*');
     const { api } = this.props;
-    this.setState({ isUploading: true });
+    this.setState({ isUploading: true, error: null });
     try {
       const response = await api.uploadMedia(
         file,
@@ -69,7 +69,7 @@ export default class VideoUpload extends Component {
   };
 
   retrieveVideoFromUrl = async () => {
-    this.setState({ uploadPercentage: 1, isUploading: true });
+    this.setState({ uploadPercentage: 1, isUploading: true, error: null });
     const { store: { common: { video: videoConfig } } } = this.props;
     const { url } = this.state;
     try {
