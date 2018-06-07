@@ -49,9 +49,9 @@ export default class Personalizer extends Component {
     const actualToken = currentToken !== 'CUSTOM' ? currentToken : customTokenValue;
     switch (tokenMode) {
       case Personalizer.TOKEN_MODE.FALLBACK:
-        return `{{d '${actualToken}' '${fallbackValue.replace(/'/g, "\\'")}'}}`;
+        return `{{d ${actualToken} '${fallbackValue.replace(/'/g, "\\'")}'}}`;
       case Personalizer.TOKEN_MODE.UPPERCASE:
-        return `{{up '${actualToken}'}}`;
+        return `{{up ${actualToken}}}`;
       case Personalizer.TOKEN_MODE.PLAIN:
         return `{{${actualToken}}}`;
       default:
