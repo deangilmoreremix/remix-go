@@ -14,7 +14,7 @@ import ActionsPane from './editor/ActionsPane';
 import InfiniteLoading from '../common/InfiniteLoading';
 import EmbeddedPlayback from '../common/EmbeddedPlayback';
 import EmbedDataContainer from './publisher/EmbedDataContainer';
-import ProjectNameChanger from './publisher/ProjectNameChanger';
+import ProjectDetailsChanger from './publisher/ProjectDetailsChanger';
 import EmailCampaign from './publisher/campaigns/EmailCampaign';
 import SocialCampaign from './publisher/campaigns/SocialCampaign';
 
@@ -31,10 +31,10 @@ export default class Publisher extends Component {
     }
   }
 
-  onTitleUpdate = async (title) => {
-    const { api, store: { activeProject } } = this.props;
-    activeProject.name = title;
-    await api.save(activeProject);
+  onProjectUpdate = async (project) => {
+    const { api, store } = this.props;
+    await api.save(project);
+    store.activeProject = project;
   };
 
   retrieveProject = async (projectId) => {
@@ -126,22 +126,30 @@ export default class Publisher extends Component {
           <Row className="canvas full-height">
             <Col className="workspace scrollable">
               <div className="publish-overview">
-                <ProjectNameChanger
-                  className="overview-item title-edit"
-                  title={activeProject && activeProject.make.title}
-                  onChange={title => this.onTitleUpdate(title)}
-                />
-                <EmbeddedPlayback
-                  className="overview-item"
-                  source={activeProject && activeProject.make.url}
-                  title={activeProject && activeProject.make.title}
-                  width="50%"
-                  height="50%"
-                />
-                <label className="overview-item">URL</label>
-                <Input className="overview-item embed-url" type="text" value={activeProject && activeProject.make.url} readOnly />
-                <label className="overview-item">Embed</label>
-                <EmbedDataContainer className="overview-item embed-item" url={activeProject && activeProject.make.url} />
+                <Container fluid className="publish-overview-inner">
+                  <Col className="overview-column">
+                    <h5>Your project details</h5>
+                    <ProjectDetailsChanger
+                      className="overview-item title-edit"
+                      project={activeProject || {}}
+                      onChange={updatedProject => this.onProjectUpdate(updatedProject)}
+                    />
+                  </Col>
+                  <Col className="overview-column">
+                    <h5>Preview & Embed</h5>
+                    <EmbeddedPlayback
+                      className="overview-item"
+                      source={activeProject && activeProject.make.url}
+                      title={activeProject && activeProject.make.title}
+                      width="50%"
+                      height="28%"
+                    />
+                    <label className="overview-item">URL</label>
+                    <Input className="overview-item embed-url" type="text" value={activeProject && activeProject.make.url} readOnly />
+                    <label className="overview-item">Embed</label>
+                    <EmbedDataContainer className="overview-item embed-item" url={activeProject && activeProject.make.url} />
+                  </Col>
+                </Container>
               </div>
             </Col>
             <Col className="col-2 paddingless editor-pane">
