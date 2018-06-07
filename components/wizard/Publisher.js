@@ -143,7 +143,7 @@ export default class Publisher extends Component {
                         source={activeProject && activeProject.make.url}
                         title={activeProject && activeProject.make.title}
                         width="50%"
-                        height="28%"
+                        height="40%"
                       />
                       <label className="overview-item">URL</label>
                       <Input className="overview-item embed-url" type="text" value={activeProject && activeProject.make.url} readOnly />
