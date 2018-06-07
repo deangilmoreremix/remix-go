@@ -53,4 +53,5 @@ module.exports = {
     maxDuration: process.env.MAX_VIDEO_DURATION || 60, // in seconds
     maxSize: process.env.MAX_VIDEO_SIZE || 100 * 1024 * 1024, // in bytes
   },
+  posterframe: process.env.DEFAULT_POSTERFRAME || 'https://cdn.vidcloud.io/resources/go/posterframe_default.jpg',
 };
