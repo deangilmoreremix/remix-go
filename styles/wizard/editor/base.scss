@@ -49,6 +49,10 @@
         display: flex;
         flex-direction: column;
 
+        &.max-height {
+          height: 95%;
+        }
+
         .construction-container {
           position: relative;
           width: 100%;
