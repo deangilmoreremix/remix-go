@@ -38,6 +38,7 @@ export default class EmbeddedPlayback extends Component {
         showExtendedEndroll: false,
         showShare: false,
         allowFacebook: false,
+        thumbnailSrc: source.thumbnail,
         data: JSON.stringify(source.popcornObject),
       },
     }, this.frameConductor.src);
