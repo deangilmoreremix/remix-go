@@ -302,6 +302,7 @@ export default class Editor extends Component {
                           className="niche-scripts"
                           onScriptSelected={async (script) => {
                             const regeneratedProject = Project.fromTemplate(script, true);
+                            regeneratedProject.thumbnail = store.defaultPosterframe;
                             await regeneratedProject.updateVideo(activeProject.video);
                             regeneratedProject.usedWizard = activeProject.wizardType;
                             store.activeProject = regeneratedProject;

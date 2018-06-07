@@ -162,10 +162,12 @@ export default class GettingStarted extends Component {
         break;
       case GettingStarted.WIZARD_TYPES.GENERATOR:
         store.activeProject = Project.fromTemplate(data.script, true);
+        store.activeProject.thumbnail = store.defaultPosterframe;
         await store.activeProject.updateVideo(data.video);
         break;
       case GettingStarted.WIZARD_TYPES.VIDEO_UPLOAD:
         store.activeProject = Project.fromTemplate((await api.defaults())[0], true);
+        store.activeProject.thumbnail = store.defaultPosterframe;
         await store.activeProject.updateVideo(data.video, data.trim);
         break;
       default:

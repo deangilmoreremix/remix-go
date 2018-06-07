@@ -126,6 +126,7 @@ export async function initStoreAndPreload(isServer, source, req, preloader) {
       clientSecret: config.client.secret,
       features: config.access.features,
       video: config.video,
+      defaultPosterframe: config.posterframe,
     };
   }
 
