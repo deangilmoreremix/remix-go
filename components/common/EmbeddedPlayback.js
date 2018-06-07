@@ -20,12 +20,12 @@ export default class EmbeddedPlayback extends Component {
 
   preplayHandler(event) {
     const { source } = this.props;
-    const { topic } = event.data;
+    const { source: frameConductor, data: { topic } } = event;
     if (topic !== 'preplay') {
       return;
     }
 
-    this.frameConductor.contentWindow.postMessage({
+    frameConductor.postMessage({
       topic: 'preplay',
       config: {
         domain: 'vidcloud.io',
@@ -38,9 +38,10 @@ export default class EmbeddedPlayback extends Component {
         showExtendedEndroll: false,
         showShare: false,
         allowFacebook: false,
+        thumbnail: source.thumbnail,
         data: JSON.stringify(source.popcornObject),
       },
-    }, this.frameConductor.src);
+    }, POSTMESSAGE_URL);
   }
 
   render() {
@@ -60,7 +61,6 @@ export default class EmbeddedPlayback extends Component {
       mozallowfullscreen="true"
       webkitallowfullscreen="true"
       allowFullScreen
-      ref={(c) => { this.frameConductor = c; }}
     />);
   }
 }
