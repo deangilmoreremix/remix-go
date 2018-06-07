@@ -145,10 +145,10 @@ export default class VideoUpload extends Component {
                   if (file) {
                     return this.handleFileDrop(file);
                   } else if (noFile) {
-                    return this.setState({ error: 'This media format is not supported. Please try to upload MP4 video file.' });
+                    return this.setState({ error: 'This media format is not supported. Please try to upload MP4 or WebM video file.' });
                   }
                 }}
-                accept="video/*"
+                accept={['video/mp4', 'video/webm']}
               >
                 <div className="dropzone-inner">
                   <img className="icon" src="../../static/images/upload.png" alt="Video upload" />
