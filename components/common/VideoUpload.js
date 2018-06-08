@@ -152,7 +152,16 @@ export default class VideoUpload extends Component {
               >
                 <div className="dropzone-inner">
                   <img className="icon" src="../../static/images/upload.png" alt="Video upload" />
-                  <h5 className="label">Click or drag your file here to start uploading it</h5>
+                  <h5 className="label">
+                    Click or drag your file here to start uploading it.
+                    <br />
+                    Maximum file size: 100mb.  Format: mp4/WebM.
+                    <br />
+                    After upload you we be prompted to select up to 60 seconds
+                    <br />
+                    for use in your project.
+                    <br />
+                  </h5>
                 </div>
               </DropZone>
               <div className={`upload-progress${!isUploading ? ' hidden' : ''}`}>
