@@ -4,6 +4,7 @@ import { observer, inject } from 'mobx-react';
 
 import CTAGallery from 'react-masonry-infinite';
 
+import Waiter from '../../../common/Waiter';
 import PropTypes from '../../../../lib/PropTypes';
 import InfiniteLoading from '../../../common/InfiniteLoading';
 import Search from '../../../common/Search';
@@ -24,6 +25,7 @@ export default class CallToActions extends Component {
       hasMore: true,
       elements: [],
       query: '',
+      waiter: null,
     };
   }
 
@@ -55,9 +57,12 @@ export default class CallToActions extends Component {
 
   render() {
     const { className } = this.props;
+    const { waiter } = this.state;
+
     return (
       <Fragment>
         <div className={className}>
+          { waiter ? <Waiter message={waiter.message} /> : null }
           <Search
             onSearch={q => this.onSearch(q)}
           />
@@ -81,6 +86,7 @@ export default class CallToActions extends Component {
                   key={idx}
                   cta={item}
                   onUse={(cta) => {
+                    this.setState({ waiter: { message: 'Loading niche script...' } });
                     const { onCtaSelected } = this.props;
                     onCtaSelected(cta);
                   }}
