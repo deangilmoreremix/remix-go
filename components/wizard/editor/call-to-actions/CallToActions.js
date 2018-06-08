@@ -86,7 +86,7 @@ export default class CallToActions extends Component {
                   key={idx}
                   cta={item}
                   onUse={(cta) => {
-                    this.setState({ waiter: { message: 'Loading niche script...' } });
+                    this.setState({ waiter: { message: 'Loading CTA...' } });
                     const { onCtaSelected } = this.props;
                     onCtaSelected(cta);
                   }}
