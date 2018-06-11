@@ -142,7 +142,7 @@ export default class Editor extends Component {
         <Container fluid className={`editor-wrapper project-expector ${activeProject && 'hidden'}`}>
           {(project || remix) ? <InfiniteLoading /> : <div>There is no active project.</div>}
         </Container>
-        <Container fluid className={`editor-wrapper ${!activeProject && 'hidden'}`}>
+        {activeProject ? <Container fluid className={`editor-wrapper ${!activeProject && 'hidden'}`}>
           <Row className={`toolbar ${editorStateManager.stage === StateManager.STAGE_TYPES.CAPTION_CUSTOMISE ? '' : 'hidden'}`}>
             {activeProject && activeProject.activeElement ? <ToolbarEditor
               element={activeProject && activeProject.activeElement}
@@ -330,7 +330,7 @@ export default class Editor extends Component {
               </ActionsPane>
             </Col>
           </Row>
-        </Container>
+        </Container> : null}
       </Fragment>
     );
   }
