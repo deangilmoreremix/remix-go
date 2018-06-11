@@ -55,27 +55,41 @@ export default class Menu extends React.Component {
           <Collapse isOpen={this.state.isOpen} navbar>
             <Nav className="ml-auto" navbar>
               <UncontrolledDropdown nav>
-                <DropdownToggle nav caret>
-                  <img className="userpic" src={currentUser.avatar} />
-                  {currentUser.fullName}
-                </DropdownToggle>
-                <DropdownMenu >
-                  <DropdownItem>
-                    <a target="_blank" href={`//${prefixes.projects}.videoremix.io/me`}>
-                      Projects and Courses
-                    </a>
-                  </DropdownItem>
-                  <DropdownItem>
-                    <a target="_blank" href="/account">
-                      Settings
-                    </a>
-                  </DropdownItem>
-                  <DropdownItem>
-                    <Link href="/logout">
-                      <a>Log Out</a>
-                    </Link>
-                  </DropdownItem>
-                </DropdownMenu>
+                <div className="language-picker">
+                  <DropdownToggle nav>
+                    <img className="world-image" src="../static/images/world-icon.svg" />
+                    <span className="label">English (US)</span>
+                  </DropdownToggle>
+                </div>
+                <div className="menu-button">
+                  <DropdownToggle nav>
+                    <img src="../static/images/menu.svg" />
+                  </DropdownToggle>
+                </div>
+                <div className="group-bordered">
+                  <DropdownToggle nav caret>
+                    <img className="userpic" src={currentUser.avatar} />
+                    Hi {currentUser.fullName}
+                  </DropdownToggle>
+                  <DropdownMenu >
+                    <DropdownItem>
+                      <a target="_blank" href={`//${prefixes.projects}.videoremix.io/me`}>
+                        Projects and Courses
+                      </a>
+                    </DropdownItem>
+                    <DropdownItem>
+                      <a target="_blank" href="/account">
+                        Settings
+                      </a>
+                    </DropdownItem>
+                    <DropdownItem>
+                      <Link href="/logout">
+                        <a>Log Out</a>
+                      </Link>
+                    </DropdownItem>
+                  </DropdownMenu>
+                </div>
+
               </UncontrolledDropdown>
             </Nav>
           </Collapse>
