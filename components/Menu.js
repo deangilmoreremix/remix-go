@@ -9,6 +9,7 @@ import {
   NavbarToggler,
   NavbarBrand,
   Nav,
+  NavItem,
   UncontrolledDropdown,
   DropdownToggle,
   DropdownMenu,
@@ -55,27 +56,30 @@ export default class Menu extends React.Component {
           <Collapse isOpen={this.state.isOpen} navbar>
             <Nav className="ml-auto" navbar>
               <UncontrolledDropdown nav>
-                <DropdownToggle nav caret>
-                  <img className="userpic" src={currentUser.avatar} />
-                  {currentUser.fullName}
-                </DropdownToggle>
-                <DropdownMenu >
-                  <DropdownItem>
-                    <a target="_blank" href={`//${prefixes.projects}.videoremix.io/me`}>
-                      Projects and Courses
-                    </a>
-                  </DropdownItem>
-                  <DropdownItem>
-                    <a target="_blank" href="/account">
-                      Settings
-                    </a>
-                  </DropdownItem>
-                  <DropdownItem>
-                    <Link href="/logout">
-                      <a>Log Out</a>
-                    </Link>
-                  </DropdownItem>
-                </DropdownMenu>
+                <div className="group-bordered">
+                  <DropdownToggle nav caret>
+                    <img className="userpic" src={currentUser.avatar} />
+                    Hi {currentUser.fullName}
+                  </DropdownToggle>
+                  <DropdownMenu >
+                    <DropdownItem>
+                      <a target="_blank" href={`//${prefixes.projects}.videoremix.io/me`}>
+                        Projects and Courses
+                      </a>
+                    </DropdownItem>
+                    <DropdownItem>
+                      <a target="_blank" href="/account">
+                        Settings
+                      </a>
+                    </DropdownItem>
+                    <DropdownItem>
+                      <Link href="/logout">
+                        <a>Log Out</a>
+                      </Link>
+                    </DropdownItem>
+                  </DropdownMenu>
+                </div>
+
               </UncontrolledDropdown>
             </Nav>
           </Collapse>
