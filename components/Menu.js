@@ -9,6 +9,7 @@ import {
   NavbarToggler,
   NavbarBrand,
   Nav,
+  NavItem,
   UncontrolledDropdown,
   DropdownToggle,
   DropdownMenu,
@@ -54,18 +55,13 @@ export default class Menu extends React.Component {
           <NavbarToggler onClick={this.toggle} />
           <Collapse isOpen={this.state.isOpen} navbar>
             <Nav className="ml-auto" navbar>
+              <div className="language-picker">
+                <NavItem nav>
+                  <img className="world-image" src="../static/images/world-icon.svg" />
+                  <span className="label">English (US)</span>
+                </NavItem>
+              </div>
               <UncontrolledDropdown nav>
-                <div className="language-picker">
-                  <DropdownToggle nav>
-                    <img className="world-image" src="../static/images/world-icon.svg" />
-                    <span className="label">English (US)</span>
-                  </DropdownToggle>
-                </div>
-                <div className="menu-button">
-                  <DropdownToggle nav>
-                    <img src="../static/images/menu.svg" />
-                  </DropdownToggle>
-                </div>
                 <div className="group-bordered">
                   <DropdownToggle nav caret>
                     <img className="userpic" src={currentUser.avatar} />

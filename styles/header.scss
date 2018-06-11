@@ -13,13 +13,12 @@
     padding-right: 0;
   }
 
-  .nav-item {
+  .language-picker {
+    margin-right: 15px;
     display: flex;
     align-items: center;
 
-    .language-picker, .menu-button {
-      margin-right: 15px;
-
+    .nav-item {
       .world-image {
         width: 12px;
         margin-right: 3px;
@@ -31,11 +30,11 @@
         text-transform: uppercase;
       }
     }
+  }
 
-    .group-bordered {
-      border: 1px solid $secondary-color;
-      padding-right: 5px;
-    }
+  .group-bordered {
+    border: 1px solid $secondary-color;
+    padding-right: 5px;
   }
 
   .userpic {
