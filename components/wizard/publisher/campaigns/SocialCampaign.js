@@ -399,7 +399,7 @@ export default class SocialCampaign extends Component {
     const { facebookConductor } = this.props;
     facebookConductor.style.width = '100%';
     facebookConductor.style.height = '100%';
-    facebookConductor.style.zIndex = '9999999999';
+    facebookConductor.style.zIndex = '10000';
     facebookConductor.style.position = 'fixed';
     facebookConductor.style.top = 0;
     facebookConductor.style.left = 0;
