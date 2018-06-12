@@ -194,7 +194,7 @@ form,
   }
   &.btn-primary {
     background: $black;
-    color: $primary;
+    color: $secondary-color;
   }
   &.btn-link {
     padding: 0;
@@ -250,7 +250,7 @@ form,
       background-color: lighten($black, 25%);
     }
     &.is-focused:not(.is-open) > .Select-control {
-      border-color: $primary;
+      border-color: $secondary-color;
     }
     &-arrow {
       border-color: $white transparent transparent;

@@ -1,3 +1,5 @@
+$popupbox-zindex:    10000;
+
 .popupbox {
   width: 100%;
   height: 100%;
@@ -26,7 +28,7 @@
   left: 0;
   width: 100%;
   height: 100%;
-  z-index: 1002;
+  z-index: $popupbox-zindex - 1;
   background: none repeat scroll 0% 0% #000;
 }
 
@@ -45,7 +47,7 @@
   -ms-flex-direction: column;
   -o-flex-direction: column;
   flex-direction: column;
-  z-index: 1003;
+  z-index: $popupbox-zindex;
   position: relative;
 }
 
@@ -56,7 +58,7 @@
 }
 
 .popupbox-btn--close {
-  z-index: 1004;
+  z-index: $popupbox-zindex;
 }
 
 .popupbox[data-title='bottom'] .popupbox-content {
