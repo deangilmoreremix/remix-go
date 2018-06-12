@@ -52,6 +52,7 @@ export default class GettingStarted extends Component {
               onVideoSelected={(video) => {
                 const nicheSelection = (<NicheScriptsWorkspace
                   className="niche-scripts"
+                  caller="gettingStarted"
                   onScriptSelected={(script) => {
                     this.handleWizardSelection({ script, video });
                   }}
