@@ -63,7 +63,7 @@ export default class ProjectDetailsChanger extends Component {
           />
         </FormGroup>
         <FormGroup className="thumbnail-field">
-          <label htmlFor="project-details-thumbnail">Project thumbnail</label>
+          <label htmlFor="project-details-thumbnail">Project Thumbnail</label>
           <img id="project-details-thumbnail" src={thumbnail} alt="Project Posterframe" />
           <div className="upload-box">
             <label>Set Image URL</label>
