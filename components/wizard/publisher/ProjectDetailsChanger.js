@@ -42,7 +42,7 @@ export default class ProjectDetailsChanger extends Component {
     return (
       <div className={className}>
         <FormGroup>
-          <label htmlFor="project-details-description">Project Description</label>
+          <label htmlFor="project-details-description">Project Title</label>
           <Input
             id="project-details-title"
             className="overview-item title-field"
