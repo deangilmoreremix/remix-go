@@ -8,7 +8,7 @@ export default () => (
         <a className="direct-link" href="http://dashboard.vidcloud.io/terms-of-service/">
           View our terms of service
         </a> |
-        <a className="direct-link" href="//projects.videoremix.io/changelog">
+        <a className="direct-link" href="//projects.videoremix.io/changelog?scope=go">
           Changelog
         </a>
       </div>
