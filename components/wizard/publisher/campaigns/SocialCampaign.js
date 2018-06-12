@@ -12,6 +12,7 @@ const FB_APP_ID = '1728968890675795';
 const FACEBOOK_PERMISSIONS = 'manage_pages,pages_show_list';
 const FB_DEFAULT_USERPIC = 'http://emblemsbf.com/img/11864.jpg';
 const BACKEND_URL = 'https://api.videoremix.io';
+const MIN_FANS_PAGE = 2000;
 
 const EMBED_LOCATIONS = [
   {
@@ -154,7 +155,14 @@ export default class SocialCampaign extends Component {
   };
 
   componentDidMount() {
+    const { facebookConductor } = this.props;
     window.addEventListener('message', e => this.receiveFacebookMessage(e));
+    facebookConductor.contentWindow.postMessage({
+      topic: 'Initial load',
+      config: {},
+      topics: this.constructor.FACEBOOK_MESSAGE_TOPICS,
+      parentWindowUrl: window.location.origin + window.location.pathname,
+    }, facebookConductor.src);
   }
 
   componentWillUnmount() {
@@ -171,6 +179,40 @@ export default class SocialCampaign extends Component {
     currentStage.bootstrap(this);
     if (currentStage.bootstrap) {
       currentStage.bootstrap(this);
+    }
+  }
+
+  canBypassStage(stage) {
+    const {
+      isLoading,
+      embedPage,
+      facebookPages,
+      selectedFbPage,
+      facebookPageTab,
+      facebookUserData,
+      facebookPostData,
+    } = this.state;
+    if (isLoading) {
+      return false;
+    }
+    switch (stage.key) {
+      case 'embed-engine':
+        return true;
+      case 'embed-location':
+        return embedPage && embedPage.length > 0;
+      case 'facebook-login':
+        return !!facebookUserData;
+      case 'facebook-page':
+        return selectedFbPage &&
+          facebookPages.find(page => page.id === selectedFbPage).fanCount >= MIN_FANS_PAGE &&
+          facebookPageTab && facebookPageTab.name.length > 0;
+      case 'facebook-post':
+        return facebookUserData && facebookPostData &&
+          facebookPostData.title.length > 0 &&
+          facebookPostData.description.length > 0 &&
+          facebookPostData.thumbnail.length > 0;
+      default:
+        return false;
     }
   }
 
@@ -214,7 +256,19 @@ export default class SocialCampaign extends Component {
             fanCount: page.fan_count,
           });
         });
-        this.setState({ facebookPages });
+        this.setState({
+          selectedFbPage: facebookPages[0].id,
+          facebookPages,
+        });
+        if (facebookPages[0].fanCount >= MIN_FANS_PAGE) {
+          this.postFacebookMessage({
+            topic: this.constructor.FACEBOOK_MESSAGE_TOPICS.getPageTabs,
+            arguments: {
+              pageId: facebookPages[0].id,
+              pageAccessToken: facebookPages[0].token,
+            },
+          });
+        }
       }
     },
     [this.constructor.FACEBOOK_MESSAGE_TOPICS.getPageTabs]: (data) => {
@@ -554,20 +608,31 @@ export default class SocialCampaign extends Component {
                     )}
                   </select>
                 </div>
-                <div className="row embed-group">
-                  <label className="cell" htmlFor="facebook-page-tab-input">
-                    Facebook Page tab name
-                  </label>
-                  <Input
-                    id="facebook-page-tab-input"
-                    className="cell facebook-page-tab"
-                    type="text"
-                    value={facebookPageTab.name}
-                    onChange={({ target: { value } }) =>
-                      this.setState({ facebookPageTab: { name: value } })}
-                  />
-                </div>
+                {
+                  selectedFbPage && (facebookPages.find(page => page.id === selectedFbPage).fanCount >= MIN_FANS_PAGE) ?
+                    <div className="row embed-group">
+                      <label className="cell" htmlFor="facebook-page-tab-input">
+                        Facebook Page tab name
+                      </label>
+                      <Input
+                        id="facebook-page-tab-input"
+                        className="cell facebook-page-tab"
+                        type="text"
+                        value={facebookPageTab.name}
+                        onChange={({ target: { value } }) =>
+                          this.setState({ facebookPageTab: { name: value } })}
+                      />
+                    </div> : null
+                }
               </div>
+              {!selectedFbPage || (facebookPages.find(page => page.id === selectedFbPage).fanCount < MIN_FANS_PAGE) ?
+                <div
+                  className="no-enough-fans"
+                >
+                  <strong>Warning! </strong>The selected page has less than 2,000 fans. As a result, and due to a
+                  new Facebook limitation introduced on February 5th, 2018, your video can only be shared on
+                  Facebook and not embedded in a tab. This will be corrected soon.
+                </div> : null}
             </div>
             <div className={`facebook-post ${currentStage.key !== 'facebook-post' && 'hidden'}`}>
               <h5 className="embed-title">
@@ -666,10 +731,12 @@ export default class SocialCampaign extends Component {
               className={
                 `go-button ${currentStage.key === this.constructor.STAGES[this.constructor.STAGES.length - 1].key ?
                   'next fb-login' :
-                  'next'}`
+                  'next'} ${this.canBypassStage(currentStage) ?
+                  '' :
+                  'inactive'}`
               }
               onClick={() => {
-                if (isLoading) {
+                if (!this.canBypassStage(currentStage)) {
                   return;
                 }
                 if (currentStage.key ===

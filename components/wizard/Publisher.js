@@ -104,14 +104,6 @@ export default class Publisher extends Component {
           className="conductor-iframe"
           id="conductor-iframe"
           ref={(c) => { this.facebookConductor = c; }}
-          onLoad={() => {
-            this.facebookConductor.contentWindow.postMessage({
-              topic: 'Initial load',
-              config: {},
-              topics: SocialCampaign.FACEBOOK_MESSAGE_TOPICS,
-              parentWindowUrl: window.location.origin + window.location.pathname,
-            }, this.facebookConductor.src);
-          }}
         />
         <PopupboxContainer
           ref={(c) => { this.popupboxContainer = c; }}

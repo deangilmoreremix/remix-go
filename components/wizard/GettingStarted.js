@@ -35,11 +35,6 @@ export default class GettingStarted extends Component {
     };
   }
 
-  state = {
-    wizardType: null,
-    waiter: null,
-  };
-
   getWizard(wizardType) {
     const { store: { common: { features }, currentUser } } = this.props;
     switch (wizardType) {
