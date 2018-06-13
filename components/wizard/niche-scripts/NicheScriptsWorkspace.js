@@ -16,7 +16,7 @@ export default class NicheScriptsWorkspace extends Component {
   static propTypes = {
     onScriptSelected: PropTypes.func.isRequired,
     className: PropTypes.string,
-    caller: PropTypes.string,
+    deferUseWaiter: PropTypes.bool,
   };
 
   constructor(props) {
@@ -58,12 +58,11 @@ export default class NicheScriptsWorkspace extends Component {
   };
 
   render() {
-    const { className, caller } = this.props;
+    const { className, deferUseWaiter } = this.props;
     const { waiter } = this.state;
-    console.log('props', this.props);
     return (
       <Fragment>
-        { waiter && caller !== 'gettingStarted' ? <Waiter message={waiter.message} /> : null }
+        { waiter && !deferUseWaiter ? <Waiter message={waiter.message} /> : null }
         <Search
           onSearch={q => this.onSearch(q)}
         />
