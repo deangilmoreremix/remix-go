@@ -154,9 +154,13 @@ export default class SocialCampaign extends Component {
     facebookPostData: {},
   };
 
+  onMessageHandler = (e) => {
+    this.receiveFacebookMessage(e);
+  };
+
   componentDidMount() {
     const { facebookConductor } = this.props;
-    window.addEventListener('message', e => this.receiveFacebookMessage(e));
+    window.addEventListener('message', this.onMessageHandler);
     facebookConductor.contentWindow.postMessage({
       topic: 'Initial load',
       config: {},
@@ -166,7 +170,7 @@ export default class SocialCampaign extends Component {
   }
 
   componentWillUnmount() {
-    window.removeEventListener('message', e => this.receiveFacebookMessage(e));
+    window.removeEventListener('message', this.onMessageHandler);
   }
 
   setStage(stageName) {
@@ -176,7 +180,6 @@ export default class SocialCampaign extends Component {
     }
     currentStage = this.constructor.STAGES.find(item => item.key === stageName);
     this.setState({ currentStage });
-    currentStage.bootstrap(this);
     if (currentStage.bootstrap) {
       currentStage.bootstrap(this);
     }
@@ -339,14 +342,25 @@ export default class SocialCampaign extends Component {
       this.constructor.STAGES.findIndex(item => currentStage.key === item.key) + 1,
       this.constructor.STAGES.length - 1,
     );
-    if (this.constructor.STAGES[nextStageIdx].key === 'embed-location' &&
-      ['default', 'facebook-page'].indexOf(embedLocation.key) !== -1) {
-      nextStageIdx += 1;
+    if (currentStage.key === 'facebook-login') {
+      switch (embedLocation.key) {
+        case 'facebook-page':
+          currentStage = this.constructor.STAGES.find(item => item.key === 'facebook-page');
+          break;
+        default:
+          currentStage = this.constructor.STAGES.find(item => item.key === 'facebook-post');
+          break;
+      }
+    } else {
+      if (this.constructor.STAGES[nextStageIdx].key === 'embed-location' &&
+        ['default', 'facebook-page'].indexOf(embedLocation.key) !== -1) {
+        nextStageIdx += 1;
+      }
+      if (this.constructor.STAGES[nextStageIdx].key === 'facebook-page' && embedLocation.key !== 'facebook-page') {
+        nextStageIdx += 1;
+      }
+      currentStage = this.constructor.STAGES[nextStageIdx];
     }
-    if (this.constructor.STAGES[nextStageIdx].key === 'facebook-page' && embedLocation.key !== 'facebook-page') {
-      nextStageIdx += 1;
-    }
-    currentStage = this.constructor.STAGES[nextStageIdx];
     this.setState({ currentStage });
     if (currentStage.bootstrap) {
       currentStage.bootstrap(this);
