@@ -241,6 +241,11 @@
       display: inline-block;
       height: 100%;
       width: 15%;
+      &.inactive {
+        opacity: 0.3;
+        pointer-events: none;
+        cursor: default;
+      }
     }
 
     .back {
