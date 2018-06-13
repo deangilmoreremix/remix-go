@@ -109,7 +109,7 @@ export default class SocialCampaign extends Component {
       bootstrap: (instance) => {
         const { project } = instance.props;
         const { facebookPages, facebookPageTab, selectedFbPage } = instance.state;
-        if (selectedFbPage.length > 0 && !facebookPageTab.id) {
+        if (selectedFbPage && facebookPageTab) {
           const fbPage = facebookPages.find(page => page.id === selectedFbPage);
           instance.postFacebookMessage({
             topic: instance.constructor.FACEBOOK_MESSAGE_TOPICS.createTab,
@@ -201,7 +201,7 @@ export default class SocialCampaign extends Component {
       case 'embed-location':
         return embedPage && embedPage.length > 0;
       case 'facebook-login':
-        return !!facebookUserData;
+        return facebookUserData;
       case 'facebook-page':
         return selectedFbPage &&
           facebookPages.find(page => page.id === selectedFbPage).fanCount >= MIN_FANS_PAGE &&
@@ -290,10 +290,7 @@ export default class SocialCampaign extends Component {
     },
     [this.constructor.FACEBOOK_MESSAGE_TOPICS.fetchUserData]: (data) => {
       const { error, result } = data;
-      const facebookUserData = error ? {
-        name: 'You',
-        userpic: FB_DEFAULT_USERPIC,
-      } : {
+      const facebookUserData = error ? null : {
         name: result.NAME,
         userpic: result.IMAGE || FB_DEFAULT_USERPIC,
       };
@@ -371,6 +368,9 @@ export default class SocialCampaign extends Component {
   prevStage() {
     const { embedLocation } = this.state;
     let { currentStage } = this.state;
+    if (currentStage.key === 'facebook-page') {
+      this.setState({ selectedFbPage: null });
+    }
     let prevStageIdx = Math.min(
       this.constructor.STAGES.findIndex(item => currentStage.key === item.key) - 1,
       0,
