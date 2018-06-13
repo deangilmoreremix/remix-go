@@ -208,9 +208,8 @@ export default class SocialCampaign extends Component {
           facebookPageTab && facebookPageTab.name.length > 0;
       case 'facebook-post':
         return facebookUserData && facebookPostData &&
-          facebookPostData.title.length > 0 &&
-          facebookPostData.description.length > 0 &&
-          facebookPostData.thumbnail.length > 0;
+          facebookPostData.title && facebookPostData.title.length > 0 &&
+          facebookPostData.thumbnail && facebookPostData.thumbnail.length > 0;
       default:
         return false;
     }
