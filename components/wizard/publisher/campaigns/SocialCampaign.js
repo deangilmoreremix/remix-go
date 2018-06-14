@@ -109,7 +109,7 @@ export default class SocialCampaign extends Component {
       bootstrap: (instance) => {
         const { project } = instance.props;
         const { facebookPages, facebookPageTab, selectedFbPage } = instance.state;
-        if (selectedFbPage.length > 0 && !facebookPageTab.id) {
+        if (selectedFbPage && facebookPageTab) {
           const fbPage = facebookPages.find(page => page.id === selectedFbPage);
           instance.postFacebookMessage({
             topic: instance.constructor.FACEBOOK_MESSAGE_TOPICS.createTab,
@@ -154,9 +154,13 @@ export default class SocialCampaign extends Component {
     facebookPostData: {},
   };
 
+  onMessageHandler = (e) => {
+    this.receiveFacebookMessage(e);
+  };
+
   componentDidMount() {
     const { facebookConductor } = this.props;
-    window.addEventListener('message', e => this.receiveFacebookMessage(e));
+    window.addEventListener('message', this.onMessageHandler);
     facebookConductor.contentWindow.postMessage({
       topic: 'Initial load',
       config: {},
@@ -166,7 +170,7 @@ export default class SocialCampaign extends Component {
   }
 
   componentWillUnmount() {
-    window.removeEventListener('message', e => this.receiveFacebookMessage(e));
+    window.removeEventListener('message', this.onMessageHandler);
   }
 
   setStage(stageName) {
@@ -176,7 +180,6 @@ export default class SocialCampaign extends Component {
     }
     currentStage = this.constructor.STAGES.find(item => item.key === stageName);
     this.setState({ currentStage });
-    currentStage.bootstrap(this);
     if (currentStage.bootstrap) {
       currentStage.bootstrap(this);
     }
@@ -201,16 +204,15 @@ export default class SocialCampaign extends Component {
       case 'embed-location':
         return embedPage && embedPage.length > 0;
       case 'facebook-login':
-        return !!facebookUserData;
+        return facebookUserData;
       case 'facebook-page':
         return selectedFbPage &&
           facebookPages.find(page => page.id === selectedFbPage).fanCount >= MIN_FANS_PAGE &&
           facebookPageTab && facebookPageTab.name.length > 0;
       case 'facebook-post':
         return facebookUserData && facebookPostData &&
-          facebookPostData.title.length > 0 &&
-          facebookPostData.description.length > 0 &&
-          facebookPostData.thumbnail.length > 0;
+          facebookPostData.title && facebookPostData.title.length > 0 &&
+          facebookPostData.thumbnail && facebookPostData.thumbnail.length > 0;
       default:
         return false;
     }
@@ -291,10 +293,7 @@ export default class SocialCampaign extends Component {
     },
     [this.constructor.FACEBOOK_MESSAGE_TOPICS.fetchUserData]: (data) => {
       const { error, result } = data;
-      const facebookUserData = error ? {
-        name: 'You',
-        userpic: FB_DEFAULT_USERPIC,
-      } : {
+      const facebookUserData = error ? null : {
         name: result.NAME,
         userpic: result.IMAGE || FB_DEFAULT_USERPIC,
       };
@@ -343,14 +342,25 @@ export default class SocialCampaign extends Component {
       this.constructor.STAGES.findIndex(item => currentStage.key === item.key) + 1,
       this.constructor.STAGES.length - 1,
     );
-    if (this.constructor.STAGES[nextStageIdx].key === 'embed-location' &&
-      ['default', 'facebook-page'].indexOf(embedLocation.key) !== -1) {
-      nextStageIdx += 1;
+    if (currentStage.key === 'facebook-login') {
+      switch (embedLocation.key) {
+        case 'facebook-page':
+          currentStage = this.constructor.STAGES.find(item => item.key === 'facebook-page');
+          break;
+        default:
+          currentStage = this.constructor.STAGES.find(item => item.key === 'facebook-post');
+          break;
+      }
+    } else {
+      if (this.constructor.STAGES[nextStageIdx].key === 'embed-location' &&
+        ['default', 'facebook-page'].indexOf(embedLocation.key) !== -1) {
+        nextStageIdx += 1;
+      }
+      if (this.constructor.STAGES[nextStageIdx].key === 'facebook-page' && embedLocation.key !== 'facebook-page') {
+        nextStageIdx += 1;
+      }
+      currentStage = this.constructor.STAGES[nextStageIdx];
     }
-    if (this.constructor.STAGES[nextStageIdx].key === 'facebook-page' && embedLocation.key !== 'facebook-page') {
-      nextStageIdx += 1;
-    }
-    currentStage = this.constructor.STAGES[nextStageIdx];
     this.setState({ currentStage });
     if (currentStage.bootstrap) {
       currentStage.bootstrap(this);
@@ -372,6 +382,9 @@ export default class SocialCampaign extends Component {
   prevStage() {
     const { embedLocation } = this.state;
     let { currentStage } = this.state;
+    if (currentStage.key === 'facebook-page') {
+      this.setState({ selectedFbPage: null });
+    }
     let prevStageIdx = Math.min(
       this.constructor.STAGES.findIndex(item => currentStage.key === item.key) - 1,
       0,
