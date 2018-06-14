@@ -60,7 +60,6 @@ export default class NicheScriptsWorkspace extends Component {
   render() {
     const { className, useWaiter } = this.props;
     const { waiter } = this.state;
-    console.log(this.props);
     return (
       <Fragment>
         { waiter && useWaiter ? <Waiter message={waiter.message} /> : null }
