@@ -300,6 +300,7 @@ export default class Editor extends Component {
                       PopupboxManager.open({
                         content: <NicheScriptsWorkspace
                           className="niche-scripts"
+                          useWaiter
                           onScriptSelected={async (script) => {
                             const regeneratedProject = Project.fromTemplate(script, true);
                             await regeneratedProject.updateVideo(activeProject.video);
