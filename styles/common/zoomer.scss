@@ -1,12 +1,14 @@
 .zoomer {
-  display: block;
   width: 230px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 22px;
 
-  .slider {
-    margin-top: 9px;
+  .icon {
+    &.zoom-in, &.zoom-out {
+      height: 17px;
+    }
   }
 
-  .zoom-in, .zoom-out {
-    margin: 0 7px 7px;
-  }
 }
