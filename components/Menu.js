@@ -43,6 +43,10 @@ export default class Menu extends React.Component {
     });
   }
 
+  preventRightClick(e) {
+    e.preventDefault();
+  }
+
   render() {
     const { store: { common: { prefixes }, currentUser = { } } } = this.props;
     return (
@@ -74,7 +78,7 @@ export default class Menu extends React.Component {
                     </DropdownItem>
                     <DropdownItem>
                       <Link href="/logout">
-                        <a>Log Out</a>
+                        <a onContextMenu={this.preventRightClick} >Log Out</a>
                       </Link>
                     </DropdownItem>
                   </DropdownMenu>
