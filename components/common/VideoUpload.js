@@ -90,9 +90,10 @@ export default class VideoUpload extends Component {
       });
     } catch (err) {
       this.setState({
+        waiter: null,
         uploadPercentage: 0,
         isUploading: false,
-        error: err.message,
+        error: err.message || err,
       });
     }
   };
