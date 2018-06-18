@@ -36,14 +36,12 @@ export default class ConstructionScene extends Component {
   render() {
     const { className } = this.props;
     return (
-      <div className={`full-height full-width ${className || ''}`}>
-        <div
-          className="wrapper cf faded embed full-height full-width"
-          ref={(c) => { this.embedWrapper = c; }}
-        >
-          <div id="video-container-scene" className="construction-container" data-butter="target">
-            <div ref={(c) => { this.popcornWrapper = c; }} />
-          </div>
+      <div
+        className={`wrapper cf faded embed full-height full-width ${className || ''}`}
+        ref={(c) => { this.embedWrapper = c; }}
+      >
+        <div id="video-container-scene" className="construction-container" data-butter="target">
+          <div ref={(c) => { this.popcornWrapper = c; }} />
         </div>
       </div>
     );

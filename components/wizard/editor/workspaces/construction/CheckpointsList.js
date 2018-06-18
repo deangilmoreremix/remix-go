@@ -17,17 +17,15 @@ export default class CheckpointsList extends Component {
   render() {
     const { className, checkpoints, onCheckpointSelect } = this.props;
     return (
-      <Container className={`full-height full-width ${className || ''}`}>
-        <div className="thumbnail-canvas">
-          <div className="thumbnail-canvas-scroll">
-            {checkpoints.map((item, idx) => (
-              <div key={idx} className="thumbnail-wrapper" onClick={() => onCheckpointSelect(item)}>
-                <Checkpoint at={item} />
-              </div>
-            ))}
-          </div>
+      <div className={`thumbnail-canvas full-height full-width ${className || ''}`}>
+        <div className="thumbnail-canvas-scroll">
+          {checkpoints.map((item, idx) => (
+            <div key={idx} className="thumbnail-wrapper" onClick={() => onCheckpointSelect(item)}>
+              <Checkpoint at={item} />
+            </div>
+          ))}
         </div>
-      </Container>
+      </div>
     );
   }
 }
