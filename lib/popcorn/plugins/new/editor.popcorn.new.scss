@@ -1,7 +1,17 @@
 .new-bar {
+  display: flex;
+  justify-content: center;
 
-  .icon {
-    margin: 0 2%;
+  .icon-group {
+    width: 20%;
+    display: flex;
+    justify-content: left;
+    
+    .icon {
+      margin: 0 2%;
+      width: 22px;
+    }
+
   }
 
   .cta-pause {

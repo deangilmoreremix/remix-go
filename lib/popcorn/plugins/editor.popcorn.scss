@@ -1,7 +1,7 @@
 @import '../../../styles/common/zoomer';
 
 .popcorn-editor {
-  height: 60%;
+  height: 22px;
   width: 100%;
   display: flex;
   flex-direction: row;
@@ -12,9 +12,19 @@
     cursor: pointer;
   }
 
+  .icon-group {
+    width: 10%;
+    display: flex;
+    justify-content: space-evenly;
+
+    &.right-align {
+      justify-content: flex-end;
+    }
+  }
+
   .icon {
-    height: 100%;
-    width: auto;
+    width: 22px;
+    height: 22px;
   }
 
   .active {
