@@ -17,14 +17,20 @@ export default class CheckpointsList extends Component {
     const popcorn = store.activeProject
       .attach(store.activeProject.popcornify(this.popcornWrapper), `video-container-${at}`);
     this.updateSceneSize = videoResizer(this.embedWrapper, 2);
-    window.addEventListener('resize', this.updateSceneSize.bind(this));
-    this.updateSceneSize();
+    window.addEventListener('resize', this.sceneResize);
     popcorn.seek(at);
+    this.sceneResize();
   }
 
   componentWillUnmount() {
-    window.removeEventListener('resize', this.updateSceneSize.bind(this));
+    if (process.browser) {
+      window.removeEventListener('resize', this.sceneResize);
+    }
   }
+
+  sceneResize = () => {
+    this.updateSceneSize();
+  };
 
   render() {
     const { className, at } = this.props;

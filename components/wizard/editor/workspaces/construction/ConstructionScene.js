@@ -18,14 +18,20 @@ export default class ConstructionScene extends Component {
     if (process.browser) {
       onPopcornInitialize(this.popcornWrapper);
       this.updateSceneSize = videoResizer(this.embedWrapper);
-      window.addEventListener('resize', this.updateSceneSize.bind(this));
-      this.updateSceneSize();
+      window.addEventListener('resize', this.sceneResize);
+      this.sceneResize();
     }
   }
 
   componentWillUnmount() {
-    window.removeEventListener('resize', this.updateSceneSize.bind(this));
+    if (process.browser) {
+      window.removeEventListener('resize', this.sceneResize);
+    }
   }
+
+  sceneResize = () => {
+    this.updateSceneSize();
+  };
 
   render() {
     const { className } = this.props;
