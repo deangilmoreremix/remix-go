@@ -19,7 +19,6 @@ export default class ConstructionScene extends Component {
       onPopcornInitialize(this.popcornWrapper);
       this.updateSceneSize = videoResizer(this.embedWrapper);
       window.addEventListener('resize', this.updateSceneSize.bind(this));
-      window.addEventListener('layoutUpdated', this.updateSceneSize.bind(this));
       this.updateSceneSize();
     }
   }
