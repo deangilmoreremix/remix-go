@@ -43,10 +43,6 @@ export default class Menu extends React.Component {
     });
   }
 
-  preventRightClick(e) {
-    
-  }
-
   render() {
     const { store: { common: { prefixes }, currentUser = { } } } = this.props;
     return (
