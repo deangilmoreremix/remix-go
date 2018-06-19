@@ -310,6 +310,27 @@ export default class EmailCampaign extends Component {
     ].join('?');
   }
 
+  canBypassStage(stage) {
+    const {
+      isLoading,
+      embedPage,
+      emailProvider,
+    } = this.state;
+    if (isLoading) {
+      return false;
+    }
+    switch (stage.key) {
+      case 'embed-engine':
+        return true;
+      case 'embed-location':
+        return embedPage && embedPage.length > 0;
+      case 'service-provider':
+        return emailProvider;
+      default:
+        return false;
+    }
+  }
+
   render() {
     const { className, project, onCampaignFinished } = this.props;
     const {
@@ -439,8 +460,11 @@ export default class EmailCampaign extends Component {
               Back
             </button>
             <button
-              className="go-button next"
+              className={`go-button next ${this.canBypassStage(currentStage) ? '' : 'inactive'}`}
               onClick={() => {
+                if (!this.canBypassStage(currentStage)) {
+                  return;
+                }
                 if (currentStage.key === STAGES[STAGES.length - 1].key) {
                   onCampaignFinished();
                 } else {
