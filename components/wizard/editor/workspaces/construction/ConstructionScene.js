@@ -18,27 +18,30 @@ export default class ConstructionScene extends Component {
     if (process.browser) {
       onPopcornInitialize(this.popcornWrapper);
       this.updateSceneSize = videoResizer(this.embedWrapper);
-      window.addEventListener('resize', this.updateSceneSize.bind(this));
-      window.addEventListener('layoutUpdated', this.updateSceneSize.bind(this));
-      this.updateSceneSize();
+      window.addEventListener('resize', this.sceneResize);
+      this.sceneResize();
     }
   }
 
   componentWillUnmount() {
-    window.removeEventListener('resize', this.updateSceneSize.bind(this));
+    if (process.browser) {
+      window.removeEventListener('resize', this.sceneResize);
+    }
   }
+
+  sceneResize = () => {
+    this.updateSceneSize();
+  };
 
   render() {
     const { className } = this.props;
     return (
-      <div className={`full-height full-width ${className || ''}`}>
-        <div
-          className="wrapper cf faded embed full-height full-width"
-          ref={(c) => { this.embedWrapper = c; }}
-        >
-          <div id="video-container-scene" className="construction-container" data-butter="target">
-            <div ref={(c) => { this.popcornWrapper = c; }} />
-          </div>
+      <div
+        className={`wrapper cf faded embed full-height full-width ${className || ''}`}
+        ref={(c) => { this.embedWrapper = c; }}
+      >
+        <div id="video-container-scene" className="construction-container" data-butter="target">
+          <div ref={(c) => { this.popcornWrapper = c; }} />
         </div>
       </div>
     );
