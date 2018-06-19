@@ -8,6 +8,8 @@ import Waiter from './Waiter';
 import PropTypes from '../../lib/PropTypes';
 import MediaTypeDetector from '../../lib/popcorn/util/mediaTypeDetector';
 
+const supportedMimeTypes = ['video/mp4', 'video/webm'];
+
 @inject('api')
 @inject('store')
 @observer
@@ -80,6 +82,12 @@ export default class VideoUpload extends Component {
       });
       this.setState({ waiter: { message: '' } });
       const videoMeta = await new MediaTypeDetector().getMetadata(url);
+      if (supportedMimeTypes.indexOf(videoMeta.contentType) === -1) {
+        return this.setState({
+          waiter: null,
+          error: 'This media format is not supported. Please try to upload MP4 or WebM video file.',
+        });
+      }
       this.setState({
         waiter: null,
         videoMeta,
@@ -149,7 +157,7 @@ export default class VideoUpload extends Component {
                     return this.setState({ error: 'This media format is not supported. Please try to upload MP4 or WebM video file.' });
                   }
                 }}
-                accept={['video/mp4', 'video/webm']}
+                accept={supportedMimeTypes}
               >
                 <div className="dropzone-inner">
                   <img className="icon" src="../../static/images/upload.png" alt="Video upload" />
