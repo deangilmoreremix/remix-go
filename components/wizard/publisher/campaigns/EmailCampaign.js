@@ -303,7 +303,7 @@ export default class EmailCampaign extends Component {
       '';
     return [
       basicPath, [
-        autoplay ? 'autoplay=true' : null,
+        autoplay ? 'autoplay=1' : null,
         !preload ? 'preload=none' : null,
         providerParams,
       ].filter(item => !!item).join('&'),
