@@ -50,6 +50,7 @@ const EMBED_LOCATIONS = [
 ];
 
 @inject('api')
+@inject('store')
 @observer
 export default class SocialCampaign extends Component {
   static propTypes = {
@@ -409,7 +410,7 @@ export default class SocialCampaign extends Component {
   }
 
   async sharePost() {
-    const { api, project, onCampaignFinished } = this.props;
+    const { api, store, project, onCampaignFinished } = this.props;
     const {
       autoplay,
       preload,
@@ -418,6 +419,14 @@ export default class SocialCampaign extends Component {
       embedPage,
       facebookPostData,
     } = this.state;
+
+    project.name = facebookPostData.title;
+    project.description = facebookPostData.description;
+    project.thumbnail = facebookPostData.thumbnail;
+
+    await api.save(project);
+    store.activeProject = project;
+
     const shareOptions = {
       shouldCreateTab: embedLocation.key === 'facebook-page',
     };
