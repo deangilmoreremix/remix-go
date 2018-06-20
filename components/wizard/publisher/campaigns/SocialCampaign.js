@@ -455,6 +455,8 @@ export default class SocialCampaign extends Component {
     await api.publish(await api.save(project));
     store.activeProject = project;
 
+    await api.invalidateFbCache(shareOptions.projectUrl);
+
     onCampaignFinished();
     this.expandConductor();
     this.postFacebookMessage({
