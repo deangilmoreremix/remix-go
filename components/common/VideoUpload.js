@@ -82,7 +82,7 @@ export default class VideoUpload extends Component {
       });
       this.setState({ waiter: { message: '' } });
       const videoMeta = await new MediaTypeDetector().getMetadata(url);
-      if (supportedMimeTypes.indexOf(videoMeta.contentType) === -1) {
+      if (videoMeta.type === 'HTML5' && supportedMimeTypes.indexOf(videoMeta.contentType) === -1) {
         return this.setState({
           waiter: null,
           error: 'This media format is not supported. Please try to upload MP4 or WebM video file.',
@@ -199,7 +199,7 @@ export default class VideoUpload extends Component {
             </div>}
           <div className="external-video-submit-container">
             <button
-              className={`go-button external-video-submit${isUploading ? ' hidden' : ''}`}
+              className={`go-button external-video-submit${isUploading ? ' hidden' : ''}${url.length > 0 ? '' : ' inactive'}`}
               onClick={() => videoMeta ? this.submitVideo() : this.retrieveVideoFromUrl()}
             >
               {videoMeta ? 'Continue' : 'Retrieve video data'}

@@ -103,6 +103,13 @@
     }
   }
 
+  .go-button {
+    &.inactive {
+      opacity: 0.5;
+      pointer-events: none;
+    }
+  }
+
   .video-range-container {
     width: 100%;
     height: auto;
