@@ -1,5 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import { Progress, Input } from 'reactstrap';
+import ReactTooltip from 'react-tooltip';
 
 import Project from '../../../../lib/editor/Project';
 import PropTypes from '../../../../lib/PropTypes';
@@ -345,6 +346,9 @@ export default class EmailCampaign extends Component {
     return (
       <Fragment>
         <div className={`email-campaign ${className}`}>
+          <ReactTooltip
+            effect="solid"
+          />
           <div className="workspace">
             <Progress
               className="embed-progress"
@@ -430,6 +434,7 @@ export default class EmailCampaign extends Component {
                         className={`provider-item ${emailProvider && emailProvider.key === item.key && 'selected'}`}
                         key={idx}
                         onClick={() => this.setState({ emailProvider: item })}
+                        data-tip={item.label}
                       >
                         <img src={item.image} alt={item.label} />
                       </li>
