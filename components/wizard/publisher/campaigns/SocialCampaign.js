@@ -150,7 +150,7 @@ export default class SocialCampaign extends Component {
       id: null,
       name: '',
     },
-    facebookUserData: {},
+    facebookUserData: null,
     facebookPostData: {},
   };
 
