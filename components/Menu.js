@@ -43,10 +43,6 @@ export default class Menu extends React.Component {
     });
   }
 
-  preventShitClick(e) {
-    console.log('e.shiftClick', e.shiftClick);
-  }
-
   render() {
     const { store: { common: { prefixes }, currentUser = { } } } = this.props;
     return (
