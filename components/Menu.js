@@ -74,7 +74,12 @@ export default class Menu extends React.Component {
                     </DropdownItem>
                     <DropdownItem>
                       <Link href="/logout">
-                        <a onContextMenu={e => e.preventDefault()} >Log Out</a>
+                        <a
+                          onClick={e => e.preventDefault()}
+                          onContextMenu={e => e.preventDefault()}
+                        >
+                          Log Out
+                        </a>
                       </Link>
                     </DropdownItem>
                   </DropdownMenu>
