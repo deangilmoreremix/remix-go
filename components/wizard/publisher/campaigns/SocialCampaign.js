@@ -50,6 +50,7 @@ const EMBED_LOCATIONS = [
 ];
 
 @inject('api')
+@inject('store')
 @observer
 export default class SocialCampaign extends Component {
   static propTypes = {
@@ -409,7 +410,7 @@ export default class SocialCampaign extends Component {
   }
 
   async sharePost() {
-    const { api, project, onCampaignFinished } = this.props;
+    const { api, store, project, onCampaignFinished } = this.props;
     const {
       autoplay,
       preload,
@@ -418,6 +419,14 @@ export default class SocialCampaign extends Component {
       embedPage,
       facebookPostData,
     } = this.state;
+
+    project.name = facebookPostData.title;
+    project.description = facebookPostData.description;
+    project.thumbnail = facebookPostData.thumbnail;
+
+    await api.save(project);
+    store.activeProject = project;
+
     const shareOptions = {
       shouldCreateTab: embedLocation.key === 'facebook-page',
     };
@@ -438,16 +447,16 @@ export default class SocialCampaign extends Component {
       ].filter(item => !!item).join('&'),
     ].join('?');
     shareOptions.backendUrl = BACKEND_URL;
-    if (facebookPostData.title) {
-      project.name = facebookPostData.title;
-    }
-    if (facebookPostData.description) {
-      project.description = facebookPostData.description;
-    }
-    if (facebookPostData.thumbnail) {
-      project.thumbnail = facebookPostData.thumbnail;
-    }
+
+    project.name = facebookPostData.title;
+    project.description = facebookPostData.description;
+    project.thumbnail = facebookPostData.thumbnail;
+
     await api.publish(await api.save(project));
+    store.activeProject = project;
+
+    await api.invalidateFbCache(shareOptions.projectUrl);
+
     onCampaignFinished();
     this.expandConductor();
     this.postFacebookMessage({
