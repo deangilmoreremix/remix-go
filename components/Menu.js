@@ -43,6 +43,10 @@ export default class Menu extends React.Component {
     });
   }
 
+  preventShitClick(e) {
+    console.log('e.shiftClick', e.shiftClick);
+  }
+
   render() {
     const { store: { common: { prefixes }, currentUser = { } } } = this.props;
     return (
@@ -74,7 +78,12 @@ export default class Menu extends React.Component {
                     </DropdownItem>
                     <DropdownItem>
                       <Link href="/logout">
-                        <a onContextMenu={e => e.preventDefault()} >Log Out</a>
+                        <a
+                          onClick={e => e.preventDefault()}
+                          onContextMenu={e => e.preventDefault()}
+                        >
+                          Log Out
+                        </a>
                       </Link>
                     </DropdownItem>
                   </DropdownMenu>
