@@ -1,5 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import { Progress, Input } from 'reactstrap';
+import ReactTooltip from 'react-tooltip';
 
 import Project from '../../../../lib/editor/Project';
 import PropTypes from '../../../../lib/PropTypes';
@@ -303,11 +304,32 @@ export default class EmailCampaign extends Component {
       '';
     return [
       basicPath, [
-        autoplay ? 'autoplay=true' : null,
+        autoplay ? 'autoplay=1' : null,
         !preload ? 'preload=none' : null,
         providerParams,
       ].filter(item => !!item).join('&'),
     ].join('?');
+  }
+
+  canBypassStage(stage) {
+    const {
+      isLoading,
+      embedPage,
+      emailProvider,
+    } = this.state;
+    if (isLoading) {
+      return false;
+    }
+    switch (stage.key) {
+      case 'embed-engine':
+        return true;
+      case 'embed-location':
+        return embedPage && embedPage.length > 0;
+      case 'service-provider':
+        return emailProvider;
+      default:
+        return false;
+    }
   }
 
   render() {
@@ -324,6 +346,9 @@ export default class EmailCampaign extends Component {
     return (
       <Fragment>
         <div className={`email-campaign ${className}`}>
+          <ReactTooltip
+            effect="solid"
+          />
           <div className="workspace">
             <Progress
               className="embed-progress"
@@ -409,6 +434,7 @@ export default class EmailCampaign extends Component {
                         className={`provider-item ${emailProvider && emailProvider.key === item.key && 'selected'}`}
                         key={idx}
                         onClick={() => this.setState({ emailProvider: item })}
+                        data-tip={item.label}
                       >
                         <img src={item.image} alt={item.label} />
                       </li>
@@ -439,8 +465,11 @@ export default class EmailCampaign extends Component {
               Back
             </button>
             <button
-              className="go-button next"
+              className={`go-button next ${this.canBypassStage(currentStage) ? '' : 'inactive'}`}
               onClick={() => {
+                if (!this.canBypassStage(currentStage)) {
+                  return;
+                }
                 if (currentStage.key === STAGES[STAGES.length - 1].key) {
                   onCampaignFinished();
                 } else {

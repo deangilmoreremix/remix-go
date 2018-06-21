@@ -150,7 +150,7 @@ export default class SocialCampaign extends Component {
       id: null,
       name: '',
     },
-    facebookUserData: {},
+    facebookUserData: null,
     facebookPostData: {},
   };
 
@@ -312,7 +312,7 @@ export default class SocialCampaign extends Component {
 
       if (embedLocation.key === 'facebook-page') {
         const queryString = [
-          autoplay ? 'autoplay=true' : null,
+          autoplay ? 'autoplay=1' : null,
           !preload ? 'preload=none' : null,
         ].filter(item => !!item).join('&');
 
@@ -433,7 +433,7 @@ export default class SocialCampaign extends Component {
     shareOptions.projectUrl = project.make.url;
     shareOptions.projectUrl = [
       project.make.url, [
-        autoplay ? 'autoplay=true' : null,
+        autoplay ? 'autoplay=1' : null,
         !preload ? 'preload=none' : null,
       ].filter(item => !!item).join('&'),
     ].join('?');
@@ -551,7 +551,7 @@ export default class SocialCampaign extends Component {
                   className="embed-item"
                   url={[
                     project.make.url, [
-                      autoplay ? 'autoplay=true' : null,
+                      autoplay ? 'autoplay=1' : null,
                       !preload ? 'preload=none' : null,
                     ].filter(item => !!item).join('&')]
                     .join('?')}

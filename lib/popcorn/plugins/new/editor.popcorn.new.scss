@@ -4,19 +4,23 @@
     margin: 0 2%;
   }
 
-  .cta-pause {
+  .row-group {
     display: flex;
-    flex-direction: column;
-    justify-content: center;
-    font-size: 1.1rem;
-    color: $secondary-color;
 
-    .cta-pause-label {
+    .cta-pause {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      font-size: 1.1rem;
+      color: $secondary-color;
 
-    }
+      .cta-pause-label {
 
-    .cta-pause-input {
-      margin-top: 0.18rem;
+      }
+
+      .cta-pause-input {
+        margin-top: 0.18rem;
+      }
     }
   }
 }
