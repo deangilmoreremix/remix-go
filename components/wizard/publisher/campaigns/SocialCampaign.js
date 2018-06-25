@@ -11,8 +11,8 @@ import InfiniteLoading from '../../../common/InfiniteLoading';
 const FB_APP_ID = '1728968890675795';
 const FACEBOOK_PERMISSIONS = 'manage_pages,pages_show_list';
 const FB_DEFAULT_USERPIC = 'http://emblemsbf.com/img/11864.jpg';
-const BACKEND_URL = 'https://api.videoremix.io';
-const MIN_FANS_PAGE = 2000;
+const BACKEND_URL = 'https://dev-api.videoremix.io';
+const MIN_FANS_PAGE = 1;
 
 const EMBED_LOCATIONS = [
   {
@@ -303,13 +303,14 @@ export default class SocialCampaign extends Component {
     },
     [this.constructor.FACEBOOK_MESSAGE_TOPICS.share]: async (data) => {
       const { error } = data;
-      const { api, project } = this.props;
+      const { api, project, onCampaignFinished } = this.props;
       const { preload, autoplay, embedLocation, selectedFbPage } = this.state;
+
+      this.collapseConductor();
+
       if (error) {
         return alert(error.message || 'Unable to post');
       }
-
-      this.collapseConductor();
 
       if (embedLocation.key === 'facebook-page') {
         const queryString = [
@@ -319,6 +320,7 @@ export default class SocialCampaign extends Component {
 
         await api.linkToFbPage(project, selectedFbPage, queryString);
       }
+      onCampaignFinished();
     },
     [this.constructor.FACEBOOK_MESSAGE_TOPICS.createTab]: (data) => {
       const { error, result } = data;
@@ -410,7 +412,7 @@ export default class SocialCampaign extends Component {
   }
 
   async sharePost() {
-    const { api, store, project, onCampaignFinished } = this.props;
+    const { api, store, project } = this.props;
     const {
       autoplay,
       preload,
@@ -457,7 +459,6 @@ export default class SocialCampaign extends Component {
 
     await api.invalidateFbCache(shareOptions.projectUrl);
 
-    onCampaignFinished();
     this.expandConductor();
     this.postFacebookMessage({
       topic: this.constructor.FACEBOOK_MESSAGE_TOPICS.share,
@@ -475,7 +476,7 @@ export default class SocialCampaign extends Component {
     const { facebookConductor } = this.props;
     facebookConductor.style.width = '100%';
     facebookConductor.style.height = '100%';
-    facebookConductor.style.zIndex = '10000';
+    facebookConductor.style.zIndex = '11000';
     facebookConductor.style.position = 'fixed';
     facebookConductor.style.top = 0;
     facebookConductor.style.left = 0;
