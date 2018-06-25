@@ -11,7 +11,7 @@ import InfiniteLoading from '../../../common/InfiniteLoading';
 const FB_APP_ID = '1728968890675795';
 const FACEBOOK_PERMISSIONS = 'manage_pages,pages_show_list';
 const FB_DEFAULT_USERPIC = 'http://emblemsbf.com/img/11864.jpg';
-const BACKEND_URL = 'https://dev-api.videoremix.io';
+const BACKEND_URL = 'https://api.videoremix.io';
 const MIN_FANS_PAGE = 2000;
 
 const EMBED_LOCATIONS = [
