@@ -3,7 +3,7 @@ import { observer } from 'mobx-react';
 import PropTypes from '../../lib/PropTypes';
 import Project from '../../lib/editor/Project';
 
-const POSTMESSAGE_URL = 'https://dev-cdn.vidcloud.io/v/playback_preview';
+const POSTMESSAGE_URL = 'https://cdn.vidcloud.io/v/playback_preview';
 
 @observer
 export default class EmbeddedPlayback extends Component {
