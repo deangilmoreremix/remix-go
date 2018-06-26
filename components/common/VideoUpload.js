@@ -96,7 +96,7 @@ export default class VideoUpload extends Component {
           max: Math.min(videoMeta.duration, videoConfig.maxDuration),
         },
       });
-    } catch {
+    } catch (err) {
       this.setState({
         waiter: null,
         uploadPercentage: 0,
