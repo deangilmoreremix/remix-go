@@ -14,6 +14,14 @@ const FB_DEFAULT_USERPIC = 'http://emblemsbf.com/img/11864.jpg';
 const BACKEND_URL = 'https://api.videoremix.io';
 const MIN_FANS_PAGE = 2000;
 
+const iframeStyling = `<!--- VideoRemix embed styling ---->
+<style> 
+  .iframe-container { position:relative; padding-bottom:56.25%; padding-top:30px; height:0; overflow:hidden; border:1px solid #ccc; }
+  .iframe-container iframe,.iframe-container object,.iframe-container embed { position:absolute; top:0; left:0; width:100%; height:100%; }
+</style>
+<!--- End of VideoRemix embed styling ---->
+`;
+
 const EMBED_LOCATIONS = [
   {
     key: 'default',
@@ -23,19 +31,19 @@ const EMBED_LOCATIONS = [
     key: 'leadpages',
     label: 'LeadPages',
     prompt: 'Copy and paste this embed code into your LeadPage',
-    embedGenerator: (url, width, height) => `<iframe id='vr' src='${url}' width='${width}' height='${height}' frameborder='0' mozallowfullscreen webkitallowfullscreen allowfullscreen></iframe>`,
+  embedGenerator: (url, width, height) => `${iframeStyling} <div class="iframe-container"><iframe id='vr' src='${url}' width='${width}' height='${height}' frameborder='0' mozallowfullscreen webkitallowfullscreen allowfullscreen></iframe></div>`,
   },
   {
     key: 'wordpress',
     label: 'WordPress',
     prompt: 'Copy and paste this embed code into your WordPress',
-    embedGenerator: (url, width, height) => `<iframe id='vr' src='${url}' width='${width}' height='${height}' frameborder='0' mozallowfullscreen webkitallowfullscreen allowfullscreen></iframe>`,
+    embedGenerator: (url, width, height) => `${iframeStyling} <div class="iframe-container"><iframe id='vr' src='${url}' width='${width}' height='${height}' frameborder='0' mozallowfullscreen webkitallowfullscreen allowfullscreen></iframe></div>`,
   },
   {
     key: 'optimizepress',
     label: 'OptimizePress 2.0',
     prompt: 'Copy and paste this embed code into your Video Player OP 2.0 element',
-    embedGenerator: (url, width, height) => `<iframe id='vr' src='${url}' width='${width}' height='${height}' frameborder='0' mozallowfullscreen webkitallowfullscreen allowfullscreen></iframe>`,
+    embedGenerator: (url, width, height) => `${iframeStyling} <div class="iframe-container"><iframe id='vr' src='${url}' width='${width}' height='${height}' frameborder='0' mozallowfullscreen webkitallowfullscreen allowfullscreen></iframe></div>`,
   },
   {
     key: 'facebook-page',
@@ -45,7 +53,7 @@ const EMBED_LOCATIONS = [
     key: 'other',
     label: 'Other',
     prompt: 'Copy & Paste this embed code inside the custom HTML element',
-    embedGenerator: (url, width, height) => `<iframe id='vr' src='${url}' width='${width}' height='${height}' frameborder='0' mozallowfullscreen webkitallowfullscreen allowfullscreen></iframe>`,
+    embedGenerator: (url, width, height) => `${iframeStyling} <div class="iframe-container"><iframe id='vr' src='${url}' width='${width}' height='${height}' frameborder='0' mozallowfullscreen webkitallowfullscreen allowfullscreen></iframe></div>`,
   },
 ];
 
