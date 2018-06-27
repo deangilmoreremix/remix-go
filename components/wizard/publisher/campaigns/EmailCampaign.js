@@ -25,10 +25,8 @@ const iframeStyling = `<!--- VideoRemix embed styling ---->
 </style>
 <!--- End of VideoRemix embed styling ---->
 `;
-
-const embedScript = (url) => {
-  return `<script>var vars={};var tempstring='';var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(m,key,value){if(value){tempstring+=key+'='+value+'&';}});if (tempstring) {document.addEventListener('DOMContentLoaded',function() {document.getElementById('vr').src='${url}?'+tempstring.slice(0, -1);});}</script>\n\n`;
-};
+const embedScript = url => `<script>var vars={};var tempstring='';var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(m,key,value){if(value){tempstring+=key+'='+value+'&';}});if (tempstring) {document.addEventListener('DOMContentLoaded',function() {document.getElementById('vr').src='${url}?'+tempstring.slice(0, -1);});}</script>\n\n`;
+const iframeTag = (url, width, height) => `<div class="iframe-container"><iframe id='vr' src='${url}' width='${width}' height='${height}' frameborder='0' mozallowfullscreen webkitallowfullscreen allowfullscreen></iframe></div>`;
 
 const EMBED_LOCATIONS = [
   {
@@ -39,25 +37,25 @@ const EMBED_LOCATIONS = [
     key: 'leadpages',
     label: 'LeadPages',
     prompt: 'Copy and paste this embed code into your LeadPage',
-    embedGenerator: (url, width, height) => `${embedScript(url)}${iframeStyling}<div class="iframe-container"><iframe id='vr' src='${url}' width='${width}' height='${height}' frameborder='0' mozallowfullscreen webkitallowfullscreen allowfullscreen></iframe></div>`,
+    embedGenerator: (url, width, height) => `${embedScript(url)}${iframeStyling}${iframeTag(url, width, height)}`,
   },
   {
     key: 'wordpress',
     label: 'WordPress',
     prompt: 'Copy and paste this embed code into your WordPress',
-    embedGenerator: (url, width, height) => `${iframeStyling}<div class="iframe-container"><iframe id='vr' src='${url}' width='${width}' height='${height}' frameborder='0' mozallowfullscreen webkitallowfullscreen allowfullscreen></iframe></div>`,
+    embedGenerator: (url, width, height) => `${iframeStyling}${iframeTag(url, width, height)}`,
   },
   {
     key: 'optimizepress',
     label: 'OptimizePress 2.0',
     prompt: 'Copy and paste this embed code into your Video Player OP 2.0 element',
-    embedGenerator: (url, width, height) => `${embedScript(url)}${iframeStyling}<div class="iframe-container"><iframe id='vr' src='${url}' width='${width}' height='${height}' frameborder='0' mozallowfullscreen webkitallowfullscreen allowfullscreen></iframe></div>`,
+    embedGenerator: (url, width, height) => `${embedScript(url)}${iframeStyling}${iframeTag(url, width, height)}`,
   },
   {
     key: 'other',
     label: 'Other',
     prompt: 'Copy & Paste this embed code inside the custom HTML element',
-    embedGenerator: (url, width, height) => `${embedScript(url)}${iframeStyling}<div class="iframe-container"><iframe id='vr' src='${url}' width='${width}' height='${height}' frameborder='0' mozallowfullscreen webkitallowfullscreen allowfullscreen></iframe></div>`,
+    embedGenerator: (url, width, height) => `${embedScript(url)}${iframeStyling}${iframeTag(url, width, height)}`,
   },
 ];
 
