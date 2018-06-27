@@ -101,7 +101,7 @@ export default class VideoUpload extends Component {
         waiter: null,
         uploadPercentage: 0,
         isUploading: false,
-        error: err.message || err,
+        error: 'This media format is not supported. Please try to upload MP4 or WebM video file.',
       });
     }
   };
@@ -193,7 +193,7 @@ export default class VideoUpload extends Component {
                 value={url}
                 onChange={({ target: { value } }) => this.setState({ url: value })}
               />
-              <Alert className="alert-error" color="danger" isOpen={error} toggle={() => this.setState({ error: null })}>
+              <Alert className="alert-error" color="danger" isOpen={!!error} toggle={() => this.setState({ error: null })}>
                 {error}
               </Alert>
             </div>}

@@ -14,6 +14,14 @@ const FB_DEFAULT_USERPIC = 'http://emblemsbf.com/img/11864.jpg';
 const BACKEND_URL = 'https://api.videoremix.io';
 const MIN_FANS_PAGE = 2000;
 
+const iframeStyling = `<!--- VideoRemix embed styling ---->
+<style> 
+  .iframe-container { position:relative; padding-bottom:56.25%; padding-top:30px; height:0; overflow:hidden; border:1px solid #ccc; }
+  .iframe-container iframe,.iframe-container object,.iframe-container embed { position:absolute; top:0; left:0; width:100%; height:100%; }
+</style>
+<!--- End of VideoRemix embed styling ---->
+`;
+
 const EMBED_LOCATIONS = [
   {
     key: 'default',
@@ -23,19 +31,19 @@ const EMBED_LOCATIONS = [
     key: 'leadpages',
     label: 'LeadPages',
     prompt: 'Copy and paste this embed code into your LeadPage',
-    embedGenerator: (url, width, height) => `<iframe id='vr' src='${url}' width='${width}' height='${height}' frameborder='0' mozallowfullscreen webkitallowfullscreen allowfullscreen></iframe>`,
+  embedGenerator: (url, width, height) => `${iframeStyling} <div class="iframe-container"><iframe id='vr' src='${url}' width='${width}' height='${height}' frameborder='0' mozallowfullscreen webkitallowfullscreen allowfullscreen></iframe></div>`,
   },
   {
     key: 'wordpress',
     label: 'WordPress',
     prompt: 'Copy and paste this embed code into your WordPress',
-    embedGenerator: (url, width, height) => `<iframe id='vr' src='${url}' width='${width}' height='${height}' frameborder='0' mozallowfullscreen webkitallowfullscreen allowfullscreen></iframe>`,
+    embedGenerator: (url, width, height) => `${iframeStyling} <div class="iframe-container"><iframe id='vr' src='${url}' width='${width}' height='${height}' frameborder='0' mozallowfullscreen webkitallowfullscreen allowfullscreen></iframe></div>`,
   },
   {
     key: 'optimizepress',
     label: 'OptimizePress 2.0',
     prompt: 'Copy and paste this embed code into your Video Player OP 2.0 element',
-    embedGenerator: (url, width, height) => `<iframe id='vr' src='${url}' width='${width}' height='${height}' frameborder='0' mozallowfullscreen webkitallowfullscreen allowfullscreen></iframe>`,
+    embedGenerator: (url, width, height) => `${iframeStyling} <div class="iframe-container"><iframe id='vr' src='${url}' width='${width}' height='${height}' frameborder='0' mozallowfullscreen webkitallowfullscreen allowfullscreen></iframe></div>`,
   },
   {
     key: 'facebook-page',
@@ -45,11 +53,12 @@ const EMBED_LOCATIONS = [
     key: 'other',
     label: 'Other',
     prompt: 'Copy & Paste this embed code inside the custom HTML element',
-    embedGenerator: (url, width, height) => `<iframe id='vr' src='${url}' width='${width}' height='${height}' frameborder='0' mozallowfullscreen webkitallowfullscreen allowfullscreen></iframe>`,
+    embedGenerator: (url, width, height) => `${iframeStyling} <div class="iframe-container"><iframe id='vr' src='${url}' width='${width}' height='${height}' frameborder='0' mozallowfullscreen webkitallowfullscreen allowfullscreen></iframe></div>`,
   },
 ];
 
 @inject('api')
+@inject('store')
 @observer
 export default class SocialCampaign extends Component {
   static propTypes = {
@@ -302,13 +311,14 @@ export default class SocialCampaign extends Component {
     },
     [this.constructor.FACEBOOK_MESSAGE_TOPICS.share]: async (data) => {
       const { error } = data;
-      const { api, project } = this.props;
+      const { api, project, onCampaignFinished } = this.props;
       const { preload, autoplay, embedLocation, selectedFbPage } = this.state;
+
+      this.collapseConductor();
+
       if (error) {
         return alert(error.message || 'Unable to post');
       }
-
-      this.collapseConductor();
 
       if (embedLocation.key === 'facebook-page') {
         const queryString = [
@@ -318,6 +328,7 @@ export default class SocialCampaign extends Component {
 
         await api.linkToFbPage(project, selectedFbPage, queryString);
       }
+      onCampaignFinished();
     },
     [this.constructor.FACEBOOK_MESSAGE_TOPICS.createTab]: (data) => {
       const { error, result } = data;
@@ -409,7 +420,7 @@ export default class SocialCampaign extends Component {
   }
 
   async sharePost() {
-    const { api, project, onCampaignFinished } = this.props;
+    const { api, store, project } = this.props;
     const {
       autoplay,
       preload,
@@ -418,6 +429,14 @@ export default class SocialCampaign extends Component {
       embedPage,
       facebookPostData,
     } = this.state;
+
+    project.name = facebookPostData.title;
+    project.description = facebookPostData.description;
+    project.thumbnail = facebookPostData.thumbnail;
+
+    await api.save(project);
+    store.activeProject = project;
+
     const shareOptions = {
       shouldCreateTab: embedLocation.key === 'facebook-page',
     };
@@ -438,17 +457,16 @@ export default class SocialCampaign extends Component {
       ].filter(item => !!item).join('&'),
     ].join('?');
     shareOptions.backendUrl = BACKEND_URL;
-    if (facebookPostData.title) {
-      project.name = facebookPostData.title;
-    }
-    if (facebookPostData.description) {
-      project.description = facebookPostData.description;
-    }
-    if (facebookPostData.thumbnail) {
-      project.thumbnail = facebookPostData.thumbnail;
-    }
+
+    project.name = facebookPostData.title;
+    project.description = facebookPostData.description;
+    project.thumbnail = facebookPostData.thumbnail;
+
     await api.publish(await api.save(project));
-    onCampaignFinished();
+    store.activeProject = project;
+
+    await api.invalidateFbCache(shareOptions.projectUrl);
+
     this.expandConductor();
     this.postFacebookMessage({
       topic: this.constructor.FACEBOOK_MESSAGE_TOPICS.share,
@@ -466,7 +484,7 @@ export default class SocialCampaign extends Component {
     const { facebookConductor } = this.props;
     facebookConductor.style.width = '100%';
     facebookConductor.style.height = '100%';
-    facebookConductor.style.zIndex = '10000';
+    facebookConductor.style.zIndex = '11000';
     facebookConductor.style.position = 'fixed';
     facebookConductor.style.top = 0;
     facebookConductor.style.left = 0;

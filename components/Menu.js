@@ -2,6 +2,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import Link from 'next/link';
 import Router from 'next/router';
+
 import {
   Collapse,
   Container,
@@ -43,6 +44,13 @@ export default class Menu extends React.Component {
     });
   }
 
+  logoutHandler(e) {
+    e.preventDefault();
+    if (!e.shiftKey) {
+      return Router.push('/logout');
+    }
+  }
+
   render() {
     const { store: { common: { prefixes }, currentUser = { } } } = this.props;
     return (
@@ -73,9 +81,9 @@ export default class Menu extends React.Component {
                       </a>
                     </DropdownItem>
                     <DropdownItem>
-                      <Link href="/logout">
-                        <a onContextMenu={e => e.preventDefault()} >Log Out</a>
-                      </Link>
+                      <a onClick={e => this.logoutHandler(e)} onContextMenu={e => e.preventDefault()}>
+                        Log Out
+                      </a>
                     </DropdownItem>
                   </DropdownMenu>
                 </div>
