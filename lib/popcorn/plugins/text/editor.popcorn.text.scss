@@ -1,4 +1,16 @@
 .text-editor {
+  display: flex;
+  align-items: center;
+
+  .icon-group {
+    display: flex;
+    height: 100%;
+    align-items: center;
+
+    & > div {
+      height: 100%;
+    }
+  }
 
   .font-input {
     width: auto;

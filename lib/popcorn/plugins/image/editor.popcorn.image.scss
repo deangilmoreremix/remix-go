@@ -1,4 +1,11 @@
 .image-editor {
+  display: flex;
+  align-items: center;
+
+  .icon-group {
+    display: flex;
+    align-items: center;
+  }
 
   .image-upload {
     height: 100%;
