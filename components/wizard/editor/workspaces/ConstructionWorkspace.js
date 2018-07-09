@@ -37,6 +37,7 @@ export default class ConstructionWorkspace extends Component {
       activeProject.update(element, options);
     });
     popcorn.seek(activeProject.checkpoints[0]);
+    activeProject.currentCheckpoint = activeProject.checkpoints[0];
   }
 
   onProjectSeek(at) {
