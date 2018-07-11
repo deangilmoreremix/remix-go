@@ -26,7 +26,7 @@ export default class GettingStarted extends Component {
 
   constructor(props) {
     super(props);
-    const { store: { wizard } } = this.props;
+    const wizard = this.props.store.wizard || (process.browser && Router.query.wizard);
     const foundWizardType = Object
       .entries(this.constructor.WIZARD_TYPES)
       .find(([key, item]) => item.key === wizard);
