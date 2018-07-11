@@ -40,6 +40,7 @@ export default class Publisher extends Component {
     this.setState({ waiter: { message: 'Updating your project details...' } });
     const { api, store } = this.props;
     await api.save(project);
+    await api.publish(project);
     store.activeProject = project;
     this.setState({ waiter: null });
   };
