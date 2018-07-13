@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
-import { FormGroup } from 'reactstrap';
+import { FormGroup, Alert } from 'reactstrap';
 
 import InfiniteLoading from '../common/InfiniteLoading';
 import PropTypes from '../../lib/PropTypes';
+import MediaTypeDetector from '../../lib/popcorn/util/mediaTypeDetector';
 
 @inject('api')
 @observer
@@ -13,6 +14,7 @@ export default class ImageUpload extends Component {
   };
 
   state = {
+    error: null,
     file: null,
     url: null,
     isUploading: false,
@@ -20,7 +22,7 @@ export default class ImageUpload extends Component {
 
   render() {
     const { onFileUploaded, api } = this.props;
-    const { isUploading, file, url } = this.state;
+    const { isUploading, file, url, error } = this.state;
     return (
       <div className="image-upload">
         <FormGroup>
@@ -31,18 +33,38 @@ export default class ImageUpload extends Component {
           <label>or upload file directly from your computer</label>
           <input type="file" onChange={event => this.setState({ file: event.target.files[0], url: null })} />
         </FormGroup>
+        <Alert className="alert-error" color="danger" isOpen={!!error} toggle={() => this.setState({ error: null })}>
+          {error}
+        </Alert>
         {isUploading ?
           <InfiniteLoading /> :
           <button
             className="go-button submit-button"
             onClick={async () => {
               this.setState({ isUploading: true });
-              onFileUploaded(file ? (await api.uploadMedia(file || url)).url : url);
-              this.setState({
-                isUploading: false,
-                file: null,
-                url: null,
-              });
+              try {
+                const videoMeta = await new MediaTypeDetector()
+                  .getMetadata(file ? (await api.uploadMedia(file)).url : url);
+                console.log(videoMeta);
+                if (videoMeta.type === 'HTML5' && videoMeta.contentType.indexOf('image/') === 0) {
+                  onFileUploaded(videoMeta.source);
+                } else {
+                  this.setState({
+                    error: 'This image format is not supported.',
+                  });
+                }
+              } catch (err) {
+                this.setState({
+                  error: err.message || 'This image format is not supported.',
+                });
+              }
+              finally {
+                this.setState({
+                  isUploading: false,
+                  file: null,
+                  url: null,
+                });
+              }
             }}
           >Upload
           </button>}
