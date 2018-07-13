@@ -45,7 +45,6 @@ export default class ImageUpload extends Component {
               try {
                 const videoMeta = await new MediaTypeDetector()
                   .getMetadata(file ? (await api.uploadMedia(file)).url : url);
-                console.log(videoMeta);
                 if (videoMeta.type === 'HTML5' && videoMeta.contentType.indexOf('image/') === 0) {
                   onFileUploaded(videoMeta.source);
                 } else {
