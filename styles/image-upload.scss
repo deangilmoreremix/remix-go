@@ -19,4 +19,16 @@
     border: none;
     text-transform: uppercase;
   }
+
+  .alert-error {
+    text-align: left;
+
+    .close {
+      padding: 0 1.25rem;
+
+      span {
+        margin: 0;
+      }
+    }
+  }
 }
