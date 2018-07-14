@@ -31,7 +31,7 @@ export default class ImageUpload extends Component {
         </FormGroup>
         <FormGroup>
           <label>or upload file directly from your computer</label>
-          <input type="file" onChange={event => this.setState({ file: event.target.files[0], url: null })} />
+          <input type="file" accept="image/*" onChange={event => this.setState({ file: event.target.files[0], url: null })} />
         </FormGroup>
         <Alert className="alert-error" color="danger" isOpen={!!error} toggle={() => this.setState({ error: null })}>
           {error}
