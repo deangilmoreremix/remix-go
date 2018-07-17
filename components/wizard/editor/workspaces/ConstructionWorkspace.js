@@ -23,6 +23,7 @@ export default class ConstructionWorkspace extends Component {
 
   onPopcornInitialize(wrapper) {
     const { store, store: { activeProject } } = this.props;
+    activeProject.engines = [];
     const popcorn = store.activeProject.attach(
       store.activeProject.popcornify(wrapper),
       wrapper.parentNode.id,
@@ -37,7 +38,7 @@ export default class ConstructionWorkspace extends Component {
       activeProject.update(element, options);
     });
     popcorn.seek(activeProject.checkpoints[0]);
-    activeProject.currentCheckpoint = activeProject.checkpoints[0];
+    [activeProject.currentCheckpoint] = activeProject.checkpoints;
   }
 
   onProjectSeek(at) {
