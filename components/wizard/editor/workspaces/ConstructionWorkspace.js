@@ -27,6 +27,7 @@ export default class ConstructionWorkspace extends Component {
       store.activeProject.popcornify(wrapper),
       wrapper.parentNode.id,
     );
+    popcorn.main = true;
     this.setState({ popcorn });
     popcorn.on('elementSelected', (event) => {
       const { element } = event;
