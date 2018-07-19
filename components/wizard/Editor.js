@@ -111,7 +111,7 @@ export default class Editor extends Component {
               key: 'publish',
               title: 'Publish & Share',
               active: false,
-              available: activeProject && activeProject.make && activeProject.make._id,
+              available: false,
             },
           ]}
           onPhaseChanged={(element) => {
