@@ -38,8 +38,12 @@ export default class Editor extends Component {
 
     const { store: { activeProject, project, remix } } = this.props;
 
-    if (!activeProject && (project || remix)) {
-      this.retrieveProject(project || remix, !!remix);
+    if (process.browser && !activeProject) {
+      if (project || remix) {
+        this.retrieveProject(project || remix, !!remix);
+      } else {
+        Router.push('/');
+      }
     }
   }
 
@@ -140,7 +144,7 @@ export default class Editor extends Component {
         /> : null }
         { waiter ? <Waiter message={waiter.message} /> : null }
         <Container fluid className={`editor-wrapper project-expector ${activeProject && 'hidden'}`}>
-          {(project || remix) ? <InfiniteLoading /> : <div>There is no active project.</div>}
+          <InfiniteLoading />
         </Container>
         {activeProject ? <Container fluid className={`editor-wrapper ${!activeProject && 'hidden'}`}>
           <Row className={`toolbar ${editorStateManager.stage === StateManager.STAGE_TYPES.CAPTION_CUSTOMISE ? '' : 'hidden'}`}>
