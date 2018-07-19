@@ -29,6 +29,8 @@ const insertAtCaret = (element, offset, text) => {
   element.innerText = front + text + back;
 };
 
+const PERSONALIZABLE_ELEMENT_TYPES = ['text', 'personalizedImage'];
+
 @inject('api')
 @inject('store')
 @observer
@@ -226,8 +228,23 @@ export default class Editor extends Component {
                 >Publish & Share
                 </button>
                 <button
-                  title={(!activeProject || !activeProject.activeElement) ? 'To use personalizer, please select any video element first.' : ''}
-                  className={`addon-button ${(!activeProject || !activeProject.activeElement) && 'inactive'}`}
+                  title={
+                    activeProject &&
+                      activeProject.activeElement &&
+                      PERSONALIZABLE_ELEMENT_TYPES
+                        .indexOf(activeProject.activeElement._natives.type) !== -1 ?
+                      '' :
+                      'To use personalizer, please select any personalizable element first.'
+                  }
+                  className={
+                    `addon-button ${
+                      (activeProject &&
+                        activeProject.activeElement &&
+                        PERSONALIZABLE_ELEMENT_TYPES
+                          .indexOf(activeProject.activeElement._natives.type) !== -1) ?
+                        '' :
+                        'inactive'}`
+                  }
                   onClick={() => {
                     if (activeProject && activeProject.activeElement) {
                       PopupboxManager.open({
