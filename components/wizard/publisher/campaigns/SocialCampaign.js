@@ -12,6 +12,15 @@ const FB_APP_ID = '1728968890675795';
 const FACEBOOK_PERMISSIONS = 'manage_pages,pages_show_list';
 const FB_DEFAULT_USERPIC = 'http://emblemsbf.com/img/11864.jpg';
 const BACKEND_URL = 'https://api.videoremix.io';
+const MIN_FANS_PAGE = 2000;
+
+const iframeStyling = `<!--- VideoRemix embed styling ---->
+<style> 
+  .iframe-container { position:relative; padding-bottom:56.25%; padding-top:30px; height:0; overflow:hidden; border:1px solid #ccc; }
+  .iframe-container iframe,.iframe-container object,.iframe-container embed { position:absolute; top:0; left:0; width:100%; height:100%; }
+</style>
+<!--- End of VideoRemix embed styling ---->
+`;
 
 const EMBED_LOCATIONS = [
   {
@@ -22,19 +31,19 @@ const EMBED_LOCATIONS = [
     key: 'leadpages',
     label: 'LeadPages',
     prompt: 'Copy and paste this embed code into your LeadPage',
-    embedGenerator: (url, width, height) => `<iframe id='vr' src='${url}' width='${width}' height='${height}' frameborder='0' mozallowfullscreen webkitallowfullscreen allowfullscreen></iframe>`,
+  embedGenerator: (url, width, height) => `${iframeStyling} <div class="iframe-container"><iframe id='vr' src='${url}' width='${width}' height='${height}' frameborder='0' mozallowfullscreen webkitallowfullscreen allowfullscreen></iframe></div>`,
   },
   {
     key: 'wordpress',
     label: 'WordPress',
     prompt: 'Copy and paste this embed code into your WordPress',
-    embedGenerator: (url, width, height) => `<iframe id='vr' src='${url}' width='${width}' height='${height}' frameborder='0' mozallowfullscreen webkitallowfullscreen allowfullscreen></iframe>`,
+    embedGenerator: (url, width, height) => `${iframeStyling} <div class="iframe-container"><iframe id='vr' src='${url}' width='${width}' height='${height}' frameborder='0' mozallowfullscreen webkitallowfullscreen allowfullscreen></iframe></div>`,
   },
   {
     key: 'optimizepress',
     label: 'OptimizePress 2.0',
     prompt: 'Copy and paste this embed code into your Video Player OP 2.0 element',
-    embedGenerator: (url, width, height) => `<iframe id='vr' src='${url}' width='${width}' height='${height}' frameborder='0' mozallowfullscreen webkitallowfullscreen allowfullscreen></iframe>`,
+    embedGenerator: (url, width, height) => `${iframeStyling} <div class="iframe-container"><iframe id='vr' src='${url}' width='${width}' height='${height}' frameborder='0' mozallowfullscreen webkitallowfullscreen allowfullscreen></iframe></div>`,
   },
   {
     key: 'facebook-page',
@@ -44,11 +53,12 @@ const EMBED_LOCATIONS = [
     key: 'other',
     label: 'Other',
     prompt: 'Copy & Paste this embed code inside the custom HTML element',
-    embedGenerator: (url, width, height) => `<iframe id='vr' src='${url}' width='${width}' height='${height}' frameborder='0' mozallowfullscreen webkitallowfullscreen allowfullscreen></iframe>`,
+    embedGenerator: (url, width, height) => `${iframeStyling} <div class="iframe-container"><iframe id='vr' src='${url}' width='${width}' height='${height}' frameborder='0' mozallowfullscreen webkitallowfullscreen allowfullscreen></iframe></div>`,
   },
 ];
 
 @inject('api')
+@inject('store')
 @observer
 export default class SocialCampaign extends Component {
   static propTypes = {
@@ -108,7 +118,7 @@ export default class SocialCampaign extends Component {
       bootstrap: (instance) => {
         const { project } = instance.props;
         const { facebookPages, facebookPageTab, selectedFbPage } = instance.state;
-        if (selectedFbPage.length > 0 && !facebookPageTab.id) {
+        if (selectedFbPage && facebookPageTab) {
           const fbPage = facebookPages.find(page => page.id === selectedFbPage);
           instance.postFacebookMessage({
             topic: instance.constructor.FACEBOOK_MESSAGE_TOPICS.createTab,
@@ -149,16 +159,27 @@ export default class SocialCampaign extends Component {
       id: null,
       name: '',
     },
-    facebookUserData: {},
+    facebookUserData: null,
     facebookPostData: {},
   };
 
+  onMessageHandler = (e) => {
+    this.receiveFacebookMessage(e);
+  };
+
   componentDidMount() {
-    window.addEventListener('message', e => this.receiveFacebookMessage(e));
+    const { facebookConductor } = this.props;
+    window.addEventListener('message', this.onMessageHandler);
+    facebookConductor.contentWindow.postMessage({
+      topic: 'Initial load',
+      config: {},
+      topics: this.constructor.FACEBOOK_MESSAGE_TOPICS,
+      parentWindowUrl: window.location.origin + window.location.pathname,
+    }, facebookConductor.src);
   }
 
   componentWillUnmount() {
-    window.removeEventListener('message', e => this.receiveFacebookMessage(e));
+    window.removeEventListener('message', this.onMessageHandler);
   }
 
   setStage(stageName) {
@@ -168,9 +189,41 @@ export default class SocialCampaign extends Component {
     }
     currentStage = this.constructor.STAGES.find(item => item.key === stageName);
     this.setState({ currentStage });
-    currentStage.bootstrap(this);
     if (currentStage.bootstrap) {
       currentStage.bootstrap(this);
+    }
+  }
+
+  canBypassStage(stage) {
+    const {
+      isLoading,
+      embedPage,
+      facebookPages,
+      selectedFbPage,
+      facebookPageTab,
+      facebookUserData,
+      facebookPostData,
+    } = this.state;
+    if (isLoading) {
+      return false;
+    }
+    switch (stage.key) {
+      case 'embed-engine':
+        return true;
+      case 'embed-location':
+        return embedPage && embedPage.length > 0;
+      case 'facebook-login':
+        return facebookUserData;
+      case 'facebook-page':
+        return selectedFbPage &&
+          facebookPages.find(page => page.id === selectedFbPage).fanCount >= MIN_FANS_PAGE &&
+          facebookPageTab && facebookPageTab.name.length > 0;
+      case 'facebook-post':
+        return facebookUserData && facebookPostData &&
+          facebookPostData.title && facebookPostData.title.length > 0 &&
+          facebookPostData.thumbnail && facebookPostData.thumbnail.length > 0;
+      default:
+        return false;
     }
   }
 
@@ -214,7 +267,19 @@ export default class SocialCampaign extends Component {
             fanCount: page.fan_count,
           });
         });
-        this.setState({ facebookPages });
+        this.setState({
+          selectedFbPage: facebookPages[0].id,
+          facebookPages,
+        });
+        if (facebookPages[0].fanCount >= MIN_FANS_PAGE) {
+          this.postFacebookMessage({
+            topic: this.constructor.FACEBOOK_MESSAGE_TOPICS.getPageTabs,
+            arguments: {
+              pageId: facebookPages[0].id,
+              pageAccessToken: facebookPages[0].token,
+            },
+          });
+        }
       }
     },
     [this.constructor.FACEBOOK_MESSAGE_TOPICS.getPageTabs]: (data) => {
@@ -237,10 +302,7 @@ export default class SocialCampaign extends Component {
     },
     [this.constructor.FACEBOOK_MESSAGE_TOPICS.fetchUserData]: (data) => {
       const { error, result } = data;
-      const facebookUserData = error ? {
-        name: 'You',
-        userpic: FB_DEFAULT_USERPIC,
-      } : {
+      const facebookUserData = error ? null : {
         name: result.NAME,
         userpic: result.IMAGE || FB_DEFAULT_USERPIC,
       };
@@ -249,22 +311,24 @@ export default class SocialCampaign extends Component {
     },
     [this.constructor.FACEBOOK_MESSAGE_TOPICS.share]: async (data) => {
       const { error } = data;
-      const { api, project } = this.props;
+      const { api, project, onCampaignFinished } = this.props;
       const { preload, autoplay, embedLocation, selectedFbPage } = this.state;
+
+      this.collapseConductor();
+
       if (error) {
         return alert(error.message || 'Unable to post');
       }
 
-      this.collapseConductor();
-
       if (embedLocation.key === 'facebook-page') {
         const queryString = [
-          autoplay ? 'autoplay=true' : null,
+          autoplay ? 'autoplay=1' : null,
           !preload ? 'preload=none' : null,
         ].filter(item => !!item).join('&');
 
         await api.linkToFbPage(project, selectedFbPage, queryString);
       }
+      onCampaignFinished();
     },
     [this.constructor.FACEBOOK_MESSAGE_TOPICS.createTab]: (data) => {
       const { error, result } = data;
@@ -289,14 +353,25 @@ export default class SocialCampaign extends Component {
       this.constructor.STAGES.findIndex(item => currentStage.key === item.key) + 1,
       this.constructor.STAGES.length - 1,
     );
-    if (this.constructor.STAGES[nextStageIdx].key === 'embed-location' &&
-      ['default', 'facebook-page'].indexOf(embedLocation.key) !== -1) {
-      nextStageIdx += 1;
+    if (currentStage.key === 'facebook-login') {
+      switch (embedLocation.key) {
+        case 'facebook-page':
+          currentStage = this.constructor.STAGES.find(item => item.key === 'facebook-page');
+          break;
+        default:
+          currentStage = this.constructor.STAGES.find(item => item.key === 'facebook-post');
+          break;
+      }
+    } else {
+      if (this.constructor.STAGES[nextStageIdx].key === 'embed-location' &&
+        ['default', 'facebook-page'].indexOf(embedLocation.key) !== -1) {
+        nextStageIdx += 1;
+      }
+      if (this.constructor.STAGES[nextStageIdx].key === 'facebook-page' && embedLocation.key !== 'facebook-page') {
+        nextStageIdx += 1;
+      }
+      currentStage = this.constructor.STAGES[nextStageIdx];
     }
-    if (this.constructor.STAGES[nextStageIdx].key === 'facebook-page' && embedLocation.key !== 'facebook-page') {
-      nextStageIdx += 1;
-    }
-    currentStage = this.constructor.STAGES[nextStageIdx];
     this.setState({ currentStage });
     if (currentStage.bootstrap) {
       currentStage.bootstrap(this);
@@ -318,6 +393,9 @@ export default class SocialCampaign extends Component {
   prevStage() {
     const { embedLocation } = this.state;
     let { currentStage } = this.state;
+    if (currentStage.key === 'facebook-page') {
+      this.setState({ selectedFbPage: null });
+    }
     let prevStageIdx = Math.min(
       this.constructor.STAGES.findIndex(item => currentStage.key === item.key) - 1,
       0,
@@ -342,7 +420,7 @@ export default class SocialCampaign extends Component {
   }
 
   async sharePost() {
-    const { api, project, onCampaignFinished } = this.props;
+    const { api, store, project } = this.props;
     const {
       autoplay,
       preload,
@@ -351,6 +429,14 @@ export default class SocialCampaign extends Component {
       embedPage,
       facebookPostData,
     } = this.state;
+
+    project.name = facebookPostData.title;
+    project.description = facebookPostData.description;
+    project.thumbnail = facebookPostData.thumbnail;
+
+    await api.save(project);
+    store.activeProject = project;
+
     const shareOptions = {
       shouldCreateTab: embedLocation.key === 'facebook-page',
     };
@@ -366,22 +452,21 @@ export default class SocialCampaign extends Component {
     shareOptions.projectUrl = project.make.url;
     shareOptions.projectUrl = [
       project.make.url, [
-        autoplay ? 'autoplay=true' : null,
+        autoplay ? 'autoplay=1' : null,
         !preload ? 'preload=none' : null,
       ].filter(item => !!item).join('&'),
     ].join('?');
     shareOptions.backendUrl = BACKEND_URL;
-    if (facebookPostData.title) {
-      project.name = facebookPostData.title;
-    }
-    if (facebookPostData.description) {
-      project.description = facebookPostData.description;
-    }
-    if (facebookPostData.thumbnail) {
-      project.thumbnail = facebookPostData.thumbnail;
-    }
+
+    project.name = facebookPostData.title;
+    project.description = facebookPostData.description;
+    project.thumbnail = facebookPostData.thumbnail;
+
     await api.publish(await api.save(project));
-    onCampaignFinished();
+    store.activeProject = project;
+
+    await api.invalidateFbCache(shareOptions.projectUrl);
+
     this.expandConductor();
     this.postFacebookMessage({
       topic: this.constructor.FACEBOOK_MESSAGE_TOPICS.share,
@@ -399,7 +484,7 @@ export default class SocialCampaign extends Component {
     const { facebookConductor } = this.props;
     facebookConductor.style.width = '100%';
     facebookConductor.style.height = '100%';
-    facebookConductor.style.zIndex = '9999999999';
+    facebookConductor.style.zIndex = '11000';
     facebookConductor.style.position = 'fixed';
     facebookConductor.style.top = 0;
     facebookConductor.style.left = 0;
@@ -484,7 +569,7 @@ export default class SocialCampaign extends Component {
                   className="embed-item"
                   url={[
                     project.make.url, [
-                      autoplay ? 'autoplay=true' : null,
+                      autoplay ? 'autoplay=1' : null,
                       !preload ? 'preload=none' : null,
                     ].filter(item => !!item).join('&')]
                     .join('?')}
@@ -554,20 +639,31 @@ export default class SocialCampaign extends Component {
                     )}
                   </select>
                 </div>
-                <div className="row embed-group">
-                  <label className="cell" htmlFor="facebook-page-tab-input">
-                    Facebook Page tab name
-                  </label>
-                  <Input
-                    id="facebook-page-tab-input"
-                    className="cell facebook-page-tab"
-                    type="text"
-                    value={facebookPageTab.name}
-                    onChange={({ target: { value } }) =>
-                      this.setState({ facebookPageTab: { name: value } })}
-                  />
-                </div>
+                {
+                  selectedFbPage && (facebookPages.find(page => page.id === selectedFbPage).fanCount >= MIN_FANS_PAGE) ?
+                    <div className="row embed-group">
+                      <label className="cell" htmlFor="facebook-page-tab-input">
+                        Facebook Page tab name
+                      </label>
+                      <Input
+                        id="facebook-page-tab-input"
+                        className="cell facebook-page-tab"
+                        type="text"
+                        value={facebookPageTab.name}
+                        onChange={({ target: { value } }) =>
+                          this.setState({ facebookPageTab: { name: value } })}
+                      />
+                    </div> : null
+                }
               </div>
+              {!selectedFbPage || (facebookPages.find(page => page.id === selectedFbPage).fanCount < MIN_FANS_PAGE) ?
+                <div
+                  className="no-enough-fans"
+                >
+                  <strong>Warning! </strong>The selected page has less than 2,000 fans. As a result, and due to a
+                  new Facebook limitation introduced on February 5th, 2018, your video can only be shared on
+                  Facebook and not embedded in a tab. This will be corrected soon.
+                </div> : null}
             </div>
             <div className={`facebook-post ${currentStage.key !== 'facebook-post' && 'hidden'}`}>
               <h5 className="embed-title">
@@ -666,10 +762,12 @@ export default class SocialCampaign extends Component {
               className={
                 `go-button ${currentStage.key === this.constructor.STAGES[this.constructor.STAGES.length - 1].key ?
                   'next fb-login' :
-                  'next'}`
+                  'next'} ${this.canBypassStage(currentStage) ?
+                  '' :
+                  'inactive'}`
               }
               onClick={() => {
-                if (isLoading) {
+                if (!this.canBypassStage(currentStage)) {
                   return;
                 }
                 if (currentStage.key ===

@@ -29,6 +29,8 @@ const insertAtCaret = (element, offset, text) => {
   element.innerText = front + text + back;
 };
 
+const PERSONALIZABLE_ELEMENT_TYPES = ['text', 'personalizedImage'];
+
 @inject('api')
 @inject('store')
 @observer
@@ -38,8 +40,12 @@ export default class Editor extends Component {
 
     const { store: { activeProject, project, remix } } = this.props;
 
-    if (!activeProject && (project || remix)) {
-      this.retrieveProject(project || remix, !!remix);
+    if (process.browser && !activeProject) {
+      if (project || remix) {
+        this.retrieveProject(project || remix, !!remix);
+      } else {
+        Router.push('/');
+      }
     }
   }
 
@@ -111,7 +117,7 @@ export default class Editor extends Component {
               key: 'publish',
               title: 'Publish & Share',
               active: false,
-              available: activeProject && activeProject.make && activeProject.make._id,
+              available: false,
             },
           ]}
           onPhaseChanged={(element) => {
@@ -140,9 +146,9 @@ export default class Editor extends Component {
         /> : null }
         { waiter ? <Waiter message={waiter.message} /> : null }
         <Container fluid className={`editor-wrapper project-expector ${activeProject && 'hidden'}`}>
-          {(project || remix) ? <InfiniteLoading /> : <div>There is no active project.</div>}
+          <InfiniteLoading />
         </Container>
-        <Container fluid className={`editor-wrapper ${!activeProject && 'hidden'}`}>
+        {activeProject ? <Container fluid className={`editor-wrapper ${!activeProject && 'hidden'}`}>
           <Row className={`toolbar ${editorStateManager.stage === StateManager.STAGE_TYPES.CAPTION_CUSTOMISE ? '' : 'hidden'}`}>
             {activeProject && activeProject.activeElement ? <ToolbarEditor
               element={activeProject && activeProject.activeElement}
@@ -222,8 +228,23 @@ export default class Editor extends Component {
                 >Publish & Share
                 </button>
                 <button
-                  title={(!activeProject || !activeProject.activeElement) ? 'To use personalizer, please select any video element first.' : ''}
-                  className={`addon-button ${(!activeProject || !activeProject.activeElement) && 'inactive'}`}
+                  title={
+                    activeProject &&
+                      activeProject.activeElement &&
+                      PERSONALIZABLE_ELEMENT_TYPES
+                        .indexOf(activeProject.activeElement._natives.type) !== -1 ?
+                      '' :
+                      'To use personalizer, please select any personalizable element first.'
+                  }
+                  className={
+                    `addon-button ${
+                      (activeProject &&
+                        activeProject.activeElement &&
+                        PERSONALIZABLE_ELEMENT_TYPES
+                          .indexOf(activeProject.activeElement._natives.type) !== -1) ?
+                        '' :
+                        'inactive'}`
+                  }
                   onClick={() => {
                     if (activeProject && activeProject.activeElement) {
                       PopupboxManager.open({
@@ -300,6 +321,7 @@ export default class Editor extends Component {
                       PopupboxManager.open({
                         content: <NicheScriptsWorkspace
                           className="niche-scripts"
+                          useWaiter
                           onScriptSelected={async (script) => {
                             const regeneratedProject = Project.fromTemplate(script, true);
                             await regeneratedProject.updateVideo(activeProject.video);
@@ -330,7 +352,7 @@ export default class Editor extends Component {
               </ActionsPane>
             </Col>
           </Row>
-        </Container>
+        </Container> : null}
       </Fragment>
     );
   }

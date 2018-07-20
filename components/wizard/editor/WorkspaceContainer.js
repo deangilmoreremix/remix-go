@@ -66,7 +66,7 @@ export default class EditorStageChanger extends Component {
                 </div>
               );
             case EditorStateManager.STAGE_TYPES.CAPTION_CUSTOMISE:
-              return <ConstructionWorkspace className="max-height full-width" />;
+              return <ConstructionWorkspace className="full-height full-width" />;
             default:
               return null;
           }

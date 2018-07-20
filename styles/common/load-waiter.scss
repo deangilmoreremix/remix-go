@@ -20,7 +20,7 @@
 }
 
 .load-waiter {
-  position: absolute;
+  position: fixed;
   top: 0;
   bottom: 0;
   left: 0;
@@ -30,6 +30,8 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
+  width: 100%;
+  height: 100%;
 
   .spinner {
     display: block;
@@ -42,7 +44,7 @@
     border-top-color: #ffffff;
     -webkit-animation: spin 2s linear infinite;
     animation: spin 2s linear infinite;
-    z-index: 1001;
+    z-index: 10001;
   }
 
   .spinner:before {

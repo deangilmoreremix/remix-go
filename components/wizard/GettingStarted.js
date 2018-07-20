@@ -26,7 +26,7 @@ export default class GettingStarted extends Component {
 
   constructor(props) {
     super(props);
-    const { store: { wizard } } = this.props;
+    const wizard = this.props.store.wizard || (process.browser && Router.query.wizard);
     const foundWizardType = Object
       .entries(this.constructor.WIZARD_TYPES)
       .find(([key, item]) => item.key === wizard);
@@ -34,11 +34,6 @@ export default class GettingStarted extends Component {
       wizardType: foundWizardType && foundWizardType[1],
     };
   }
-
-  state = {
-    wizardType: null,
-    waiter: null,
-  };
 
   getWizard(wizardType) {
     const { store: { common: { features }, currentUser } } = this.props;
@@ -94,6 +89,15 @@ export default class GettingStarted extends Component {
       default:
         return (
           <div className="scrollable full-height getting-started">
+            <div className="welcome">
+              <h2>Welcome to GO!</h2>
+              <a
+                href="//projects.videoremix.io/strategy-course?course=5b17f9f5cf295900145d416b&section=1"
+                target="_blank"
+              >
+                Click here to view the tutorials.
+              </a>
+            </div>
             <div className="getting-started-list">
               <div className="getting-started-item">
                 <div

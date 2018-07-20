@@ -194,7 +194,7 @@ form,
   }
   &.btn-primary {
     background: $black;
-    color: $primary;
+    color: $secondary-color;
   }
   &.btn-link {
     padding: 0;
@@ -250,7 +250,7 @@ form,
       background-color: lighten($black, 25%);
     }
     &.is-focused:not(.is-open) > .Select-control {
-      border-color: $primary;
+      border-color: $secondary-color;
     }
     &-arrow {
       border-color: $white transparent transparent;
@@ -350,7 +350,19 @@ form,
   right: 0;
   position: absolute;
   display: flex;
+  flex-direction: column;
   color: $primary-color;
+  text-align: center;
+
+  .welcome {
+    height: 10%;
+    width: 50%;
+    margin: 5% auto 0 auto;
+
+    * {
+      color: $secondary-color;
+    }
+  }
 
   .getting-started-list {
     width: 60%;
@@ -360,7 +372,6 @@ form,
     flex-direction: row;
     align-content: center;
     justify-content: center;
-    text-align: center;
 
     .getting-started-item {
       width: 33%;

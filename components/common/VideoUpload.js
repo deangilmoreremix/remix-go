@@ -8,6 +8,8 @@ import Waiter from './Waiter';
 import PropTypes from '../../lib/PropTypes';
 import MediaTypeDetector from '../../lib/popcorn/util/mediaTypeDetector';
 
+const supportedMimeTypes = ['video/mp4', 'video/webm'];
+
 @inject('api')
 @inject('store')
 @observer
@@ -80,6 +82,12 @@ export default class VideoUpload extends Component {
       });
       this.setState({ waiter: { message: '' } });
       const videoMeta = await new MediaTypeDetector().getMetadata(url);
+      if (videoMeta.type === 'HTML5' && supportedMimeTypes.indexOf(videoMeta.contentType) === -1) {
+        return this.setState({
+          waiter: null,
+          error: 'This media format is not supported. Please try to upload MP4 or WebM video file.',
+        });
+      }
       this.setState({
         waiter: null,
         videoMeta,
@@ -90,9 +98,10 @@ export default class VideoUpload extends Component {
       });
     } catch (err) {
       this.setState({
+        waiter: null,
         uploadPercentage: 0,
         isUploading: false,
-        error: err.message,
+        error: 'This media format is not supported. Please try to upload MP4 or WebM video file.',
       });
     }
   };
@@ -148,7 +157,7 @@ export default class VideoUpload extends Component {
                     return this.setState({ error: 'This media format is not supported. Please try to upload MP4 or WebM video file.' });
                   }
                 }}
-                accept={['video/mp4', 'video/webm']}
+                accept={supportedMimeTypes}
               >
                 <div className="dropzone-inner">
                   <img className="icon" src="../../static/images/upload.png" alt="Video upload" />
@@ -184,13 +193,20 @@ export default class VideoUpload extends Component {
                 value={url}
                 onChange={({ target: { value } }) => this.setState({ url: value })}
               />
-              <Alert className="alert-error" color="danger" isOpen={error} toggle={() => this.setState({ error: null })}>
+              <Alert className="alert-error" color="danger" isOpen={!!error} toggle={() => this.setState({ error: null })}>
                 {error}
               </Alert>
             </div>}
           <div className="external-video-submit-container">
             <button
-              className={`go-button external-video-submit${isUploading ? ' hidden' : ''}`}
+              className={`go-button back-button${(url.length > 0 || videoMeta) ? '' : ' hidden'}`}
+              onClick={() => this.setState({ url: '', videoMeta: null })}
+            >
+              <span className="fa fa-caret-left" />
+              Upload Video
+            </button>
+            <button
+              className={`go-button external-video-submit${isUploading ? ' hidden' : ''}${(url.length > 0 || videoMeta) ? '' : ' inactive'}`}
               onClick={() => videoMeta ? this.submitVideo() : this.retrieveVideoFromUrl()}
             >
               {videoMeta ? 'Continue' : 'Retrieve video data'}

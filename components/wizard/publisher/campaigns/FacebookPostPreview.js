@@ -4,9 +4,11 @@ import PropTypes from '../../../../lib/PropTypes';
 
 const FacebookPostPreview = (props) => {
   const {
-    user: { name, userpic },
+    user,
     post: { title, thumbnail, description, link },
   } = props;
+  const { name, userpic } = user || {};
+
   return (
     <div className="postPreview">
       <div className="post-wrapper">

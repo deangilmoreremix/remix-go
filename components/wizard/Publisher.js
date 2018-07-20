@@ -7,6 +7,7 @@ import {
   PopupboxContainer,
 } from 'react-popupbox';
 
+import Waiter from '../common/Waiter';
 import GettingStarted from './GettingStarted';
 import PhaseView from '../common/Phaser/PhaseView';
 import Project from '../../lib/editor/Project';
@@ -31,10 +32,17 @@ export default class Publisher extends Component {
     }
   }
 
+  state = {
+    waiter: null,
+  };
+
   onProjectUpdate = async (project) => {
+    this.setState({ waiter: { message: 'Updating your project details...' } });
     const { api, store } = this.props;
     await api.save(project);
+    await api.publish(project);
     store.activeProject = project;
+    this.setState({ waiter: null });
   };
 
   retrieveProject = async (projectId) => {
@@ -49,6 +57,7 @@ export default class Publisher extends Component {
         project,
       },
     } = this.props;
+    const { waiter } = this.state;
     return (
       <Fragment>
         { activeProject ? <PhaseView
@@ -104,14 +113,6 @@ export default class Publisher extends Component {
           className="conductor-iframe"
           id="conductor-iframe"
           ref={(c) => { this.facebookConductor = c; }}
-          onLoad={() => {
-            this.facebookConductor.contentWindow.postMessage({
-              topic: 'Initial load',
-              config: {},
-              topics: SocialCampaign.FACEBOOK_MESSAGE_TOPICS,
-              parentWindowUrl: window.location.origin + window.location.pathname,
-            }, this.facebookConductor.src);
-          }}
         />
         <PopupboxContainer
           ref={(c) => { this.popupboxContainer = c; }}
@@ -119,6 +120,7 @@ export default class Publisher extends Component {
             this.popupboxContainer.state.children = null;
           }}
         />
+        { waiter ? <Waiter message={waiter.message} /> : null }
         <Container fluid className={`editor-wrapper project-expector ${activeProject && 'hidden'}`}>
           {project ? <InfiniteLoading /> : <div>There is no active project.</div>}
         </Container>
@@ -143,7 +145,7 @@ export default class Publisher extends Component {
                         source={activeProject && activeProject.make.url}
                         title={activeProject && activeProject.make.title}
                         width="50%"
-                        height="28%"
+                        height="40%"
                       />
                       <label className="overview-item">URL</label>
                       <Input className="overview-item embed-url" type="text" value={activeProject && activeProject.make.url} readOnly />

@@ -2,6 +2,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import Link from 'next/link';
 import Router from 'next/router';
+
 import {
   Collapse,
   Container,
@@ -9,6 +10,7 @@ import {
   NavbarToggler,
   NavbarBrand,
   Nav,
+  NavItem,
   UncontrolledDropdown,
   DropdownToggle,
   DropdownMenu,
@@ -42,6 +44,13 @@ export default class Menu extends React.Component {
     });
   }
 
+  logoutHandler(e) {
+    e.preventDefault();
+    if (!e.shiftKey) {
+      return Router.push('/logout');
+    }
+  }
+
   render() {
     const { store: { common: { prefixes }, currentUser = { } } } = this.props;
     return (
@@ -55,27 +64,30 @@ export default class Menu extends React.Component {
           <Collapse isOpen={this.state.isOpen} navbar>
             <Nav className="ml-auto" navbar>
               <UncontrolledDropdown nav>
-                <DropdownToggle nav caret>
-                  <img className="userpic" src={currentUser.avatar} />
-                  {currentUser.fullName}
-                </DropdownToggle>
-                <DropdownMenu >
-                  <DropdownItem>
-                    <a target="_blank" href={`//${prefixes.projects}.videoremix.io/me`}>
-                      Projects and Courses
-                    </a>
-                  </DropdownItem>
-                  <DropdownItem>
-                    <a target="_blank" href="/account">
-                      Settings
-                    </a>
-                  </DropdownItem>
-                  <DropdownItem>
-                    <Link href="/logout">
-                      <a>Log Out</a>
-                    </Link>
-                  </DropdownItem>
-                </DropdownMenu>
+                <div className="group-bordered">
+                  <DropdownToggle nav caret>
+                    <img className="userpic" src={currentUser.avatar} />
+                    Hi {currentUser.fullName}
+                  </DropdownToggle>
+                  <DropdownMenu >
+                    <DropdownItem>
+                      <a target="_blank" href={`//${prefixes.projects}.videoremix.io/me`}>
+                        Projects and Courses
+                      </a>
+                    </DropdownItem>
+                    <DropdownItem>
+                      <a target="_blank" href="/account">
+                        Settings
+                      </a>
+                    </DropdownItem>
+                    <DropdownItem>
+                      <a onClick={e => this.logoutHandler(e)} onContextMenu={e => e.preventDefault()}>
+                        Log Out
+                      </a>
+                    </DropdownItem>
+                  </DropdownMenu>
+                </div>
+
               </UncontrolledDropdown>
             </Nav>
           </Collapse>

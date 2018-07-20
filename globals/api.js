@@ -258,6 +258,23 @@ class Api {
       this.isLoading = false;
     }
   }
+
+  @action
+  async invalidateFbCache(url) {
+    this.isLoading = true;
+    try {
+      return this.request(
+        '/api/makes/update-fb-cache', {
+          method: 'POST',
+          headers: {
+            'on-behalf': this.currentUser.id,
+          },
+          body: { publishUrl: url },
+        });
+    } finally {
+      this.isLoading = false;
+    }
+  }
 }
 
 export async function initApiAndPreload(isServer, source, req, preloader) {
