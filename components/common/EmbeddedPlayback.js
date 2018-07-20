@@ -9,7 +9,6 @@ const POSTMESSAGE_URL = 'https://cdn.vidcloud.io/v/playback_preview';
 export default class EmbeddedPlayback extends Component {
   static propTypes = {
     className: PropTypes.string,
-    id: PropTypes.string,
     source: PropTypes.oneOfType([
       PropTypes.string,
       PropTypes.instanceOf(Project),
