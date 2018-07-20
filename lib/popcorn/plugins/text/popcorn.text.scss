@@ -10,6 +10,34 @@
     white-space: pre-wrap;
     padding: 0 3%;
   }
+
+  .personalized-token {
+    border: 1px solid white;
+    color: black; border-radius: 3px;
+    background: white;
+    display: inline;
+
+    .token-uppercase:before {
+      content: "";
+      display: block;
+      background: url('/static/images/editor/token-uppercase.svg') no-repeat;
+      width: 20px;
+      height: 20px;
+      float: left;
+      margin: auto 6px auto 0;
+    }
+
+    .token-default:before {
+      content: "";
+      display: block;
+      background: url('/static/images/editor/token-default.svg') no-repeat;
+      width: 20px;
+      height: 20px;
+      float: left;
+      margin: auto 6px auto 0;
+    }
+  }
+
   .text-inner-div a {
     text-decoration: none;
   }
