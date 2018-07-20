@@ -9,6 +9,7 @@ const POSTMESSAGE_URL = 'https://cdn.vidcloud.io/v/playback_preview';
 export default class EmbeddedPlayback extends Component {
   static propTypes = {
     className: PropTypes.string,
+    id: PropTypes.string,
     source: PropTypes.oneOfType([
       PropTypes.string,
       PropTypes.instanceOf(Project),
@@ -45,7 +46,7 @@ export default class EmbeddedPlayback extends Component {
   }
 
   render() {
-    const { title, source, width, height, className } = this.props;
+    const { title, source, width, height, className, id } = this.props;
     if (source instanceof Project) {
       if (process.browser) {
         window.addEventListener('message', event => this.preplayHandler(event));
@@ -53,6 +54,7 @@ export default class EmbeddedPlayback extends Component {
     }
     return (<iframe
       className={className}
+      id={id}
       title={title}
       src={source instanceof Project ? POSTMESSAGE_URL : source}
       width={width}
