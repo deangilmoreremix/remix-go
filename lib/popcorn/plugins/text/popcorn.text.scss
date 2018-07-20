@@ -8,6 +8,8 @@
 
   & > .text-inner-div {
     white-space: pre-wrap;
+    overflow: hidden;
+    height: 100%;
     padding: 0 3%;
   }
   .text-inner-div a {
