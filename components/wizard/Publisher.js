@@ -144,6 +144,7 @@ export default class Publisher extends Component {
                       <h5 className="overview-item">Preview & Embed</h5>
                       <EmbeddedPlayback
                         className="overview-item"
+                        key={activeProject && activeProject.version}
                         source={activeProject && activeProject.make.url}
                         title={activeProject && activeProject.make.title}
                         width="50%"
