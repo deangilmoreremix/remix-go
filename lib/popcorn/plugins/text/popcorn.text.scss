@@ -16,24 +16,21 @@
     color: black; border-radius: 3px;
     background: white;
     display: inline;
+    padding: 0 3px;
 
-    .token-uppercase:before {
-      content: "";
-      display: block;
-      background: url('/static/images/editor/token-uppercase.svg') no-repeat;
-      width: 20px;
-      height: 20px;
-      float: left;
+    .token-uppercase {
+      content: url('/static/images/editor/token-uppercase.svg');
+      background: white;
+      width: 10%;
+      height: 100%;
       margin: auto 6px auto 0;
     }
 
-    .token-default:before {
-      content: "";
-      display: block;
-      background: url('/static/images/editor/token-default.svg') no-repeat;
-      width: 20px;
-      height: 20px;
-      float: left;
+    .token-default {
+      content: url('/static/images/editor/token-default.svg');
+      background:  white;
+      width: 10%;
+      height: 100%;
       margin: auto 6px auto 0;
     }
   }
