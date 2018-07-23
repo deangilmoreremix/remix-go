@@ -23,10 +23,11 @@ import EmbeddedPlayback from '../common/EmbeddedPlayback';
 import NewElementBar from '../../lib/popcorn/plugins/new/editor.popcorn.new';
 import StateManager from '../../lib/editor/editorStateManager';
 
-const insertAtCaret = (element, offset, text) => {
-  const front = (element.innerText).substring(0, offset);
-  const back = (element.innerText).substring(offset, element.innerText.length);
-  element.innerText = front + text + back;
+const insertAtCaret = (base, offset, text) => {
+  offset += (base.substring(0, offset).match(/([{}])/g) || []).length;
+  const front = base.substring(0, offset);
+  const back = base.substring(offset, base.length);
+  return front + text + back;
 };
 
 const PERSONALIZABLE_ELEMENT_TYPES = ['text', 'personalizedImage'];
@@ -255,13 +256,16 @@ export default class Editor extends Component {
                               _activeHandle: { type, target },
                               caretOffsets: offset,
                             } = activeProject.activeElement;
-                            insertAtCaret(target, offset[type], token);
+                            const newText = insertAtCaret(
+                              activeProject.activeElement[type], offset[type], token,
+                            );
+                            console.log(activeProject.activeElement[type].substr(offset[type]), offset[type], newText);
 
                             const event = new Event('input');
                             target.dispatchEvent(event);
 
                             const updatedProps = {};
-                            updatedProps[type] = target.innerText;
+                            updatedProps[type] = newText;
                             activeProject.activeElement._natives._update
                               .call(this, activeProject.activeElement, updatedProps);
                             activeProject.update(activeProject.activeElement, updatedProps);
