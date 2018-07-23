@@ -24,10 +24,14 @@ import NewElementBar from '../../lib/popcorn/plugins/new/editor.popcorn.new';
 import StateManager from '../../lib/editor/editorStateManager';
 
 const insertAtCaret = (base, offset, text) => {
+  const GHOST_CHARS = ['{', '}', '\n', '\r'];
   offset += (base.substring(0, offset).match(/([{}])/g) || []).length;
-  const front = base.substring(0, offset);
-  const back = base.substring(offset, base.length);
-  return front + text + back;
+  for (let i = 0; i <= offset; i++) {
+    if (GHOST_CHARS.indexOf(base[i]) !== -1) {
+      offset += 1;
+    }
+  }
+  return `${base.slice(0, offset)}${text}${base.slice(offset)}`;
 };
 
 const PERSONALIZABLE_ELEMENT_TYPES = ['text', 'personalizedImage'];
@@ -259,7 +263,7 @@ export default class Editor extends Component {
                             const newText = insertAtCaret(
                               activeProject.activeElement[type], offset[type], token,
                             );
-                            console.log(activeProject.activeElement[type].substr(offset[type]), offset[type], newText);
+                            console.log(activeProject.activeElement[type].substr(0, offset[type]), offset[type], newText);
 
                             const event = new Event('input');
                             target.dispatchEvent(event);
