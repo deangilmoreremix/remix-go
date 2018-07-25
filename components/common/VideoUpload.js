@@ -199,7 +199,7 @@ export default class VideoUpload extends Component {
             </div>}
           <div className="external-video-submit-container">
             <button
-              className={`go-button back-button${(url.length > 0 || videoMeta) ? '' : ' hidden'}`}
+              className={`go-button back-button${videoMeta ? '' : ' hidden'}`}
               onClick={() => this.setState({ url: '', videoMeta: null })}
             >
               <span className="fa fa-caret-left" />
