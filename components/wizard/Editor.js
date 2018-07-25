@@ -24,13 +24,29 @@ import NewElementBar from '../../lib/popcorn/plugins/new/editor.popcorn.new';
 import StateManager from '../../lib/editor/editorStateManager';
 
 const insertAtCaret = (base, offset, text) => {
-  const GHOST_CHARS = ['{', '}', '\n', '\r'];
-  offset += (base.substring(0, offset).match(/([{}])/g) || []).length;
-  for (let i = 0; i <= offset; i++) {
-    if (GHOST_CHARS.indexOf(base[i]) !== -1) {
-      offset += 1;
-    }
+  const tokenRegex = /{{(up \w*|d \w* ("[^{}]*"|'[^{}]*')|"\w*"|\w*)}}/im;
+
+  const reducedTokens = [];
+
+  let reductionString = base;
+  while (reductionString.indexOf('{{') !== -1) {
+    reducedTokens.push(tokenRegex.exec(reductionString));
+    reductionString = reductionString.replace(tokenRegex, (match) => {
+      match = match.replace(/[{}]/gm, '');
+      if (match.split(' ').length > 1) {
+        return match.split(' ')[1];
+      } else {
+        return match;
+      }
+    });
   }
+
+  reducedTokens.filter(token => token.index <= offset).forEach((token) => {
+    console.log(reductionString.substring(0, offset));
+    offset += token[0].length - (token[1].split(' ').length > 1 ? token[1].split(' ')[1] : token[1]).length;
+    console.log(`${base.slice(0, offset)}${text}${base.slice(offset)}`);
+  });
+
   return `${base.slice(0, offset)}${text}${base.slice(offset)}`;
 };
 
@@ -263,7 +279,6 @@ export default class Editor extends Component {
                             const newText = insertAtCaret(
                               activeProject.activeElement[type], offset[type], token,
                             );
-                            console.log(activeProject.activeElement[type].substr(0, offset[type]), offset[type], newText);
 
                             const event = new Event('input');
                             target.dispatchEvent(event);

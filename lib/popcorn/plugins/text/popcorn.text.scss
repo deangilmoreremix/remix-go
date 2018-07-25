@@ -18,6 +18,10 @@
     display: inline;
     padding: 0 3px;
 
+    .parameter {
+      display: none;
+    }
+
     .token-uppercase {
       content: url('/static/images/editor/token-uppercase.svg');
       background: white;
