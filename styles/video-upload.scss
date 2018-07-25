@@ -93,6 +93,16 @@
         height: 100%;
         width: 25%;
       }
+
+      .back-button {
+        float: left;
+        height: 100%;
+        width: 25%;
+
+        span {
+          margin-right: 5%;
+        }
+      }
     }
   }
   .alert-error {
