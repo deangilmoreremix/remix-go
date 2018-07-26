@@ -46,6 +46,7 @@ class Api {
         `/${assetType}/index.json`, {
           method: 'GET',
         });
+      response.reverse();
       if (query.length > 0) {
         const lookup = new RegExp(`.*${query}.*`, 'i');
         response = response.filter(item => lookup.test(item.title));
