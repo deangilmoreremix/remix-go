@@ -42,9 +42,7 @@ const insertAtCaret = (base, offset, text) => {
   }
 
   reducedTokens.filter(token => token.index <= offset).forEach((token) => {
-    console.log(reductionString.substring(0, offset));
     offset += token[0].length - (token[1].split(' ').length > 1 ? token[1].split(' ')[1] : token[1]).length;
-    console.log(`${base.slice(0, offset)}${text}${base.slice(offset)}`);
   });
 
   return `${base.slice(0, offset)}${text}${base.slice(offset)}`;
