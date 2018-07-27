@@ -32,7 +32,7 @@ PositionSelector.propTypes = {
   className: PropTypes.string,
   position: PropTypes.shape({
     vertical: PropTypes.oneOf(VERTICALS.concat(['custom'])).isRequired,
-    horizontal: PropTypes.oneOf(HORIZONTALS).isRequired,
+    horizontal: PropTypes.oneOf(HORIZONTALS.concat(['custom'])).isRequired,
   }).isRequired,
   onPositionChanged: PropTypes.func.isRequired,
 };
