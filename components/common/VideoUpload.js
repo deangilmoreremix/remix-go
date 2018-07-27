@@ -199,6 +199,13 @@ export default class VideoUpload extends Component {
             </div>}
           <div className="external-video-submit-container">
             <button
+              className={`go-button back-button${videoMeta ? '' : ' hidden'}`}
+              onClick={() => this.setState({ url: '', videoMeta: null })}
+            >
+              <span className="fa fa-caret-left" />
+              Upload Video
+            </button>
+            <button
               className={`go-button external-video-submit${isUploading ? ' hidden' : ''}${(url.length > 0 || videoMeta) ? '' : ' inactive'}`}
               onClick={() => videoMeta ? this.submitVideo() : this.retrieveVideoFromUrl()}
             >

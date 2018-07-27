@@ -1,6 +1,7 @@
 .popcorn-text {
   color: #FFF;
   font-size: 22.5em;
+  overflow: hidden;
 
   &.off {
     visibility: hidden;
@@ -8,8 +9,6 @@
 
   & > .text-inner-div {
     white-space: pre-wrap;
-    overflow: hidden;
-    height: 100%;
     padding: 0 3%;
   }
   .text-inner-div a {
