@@ -5,6 +5,34 @@
     display: inline-block;
   }
 
+  .personalized-token {
+    border: 1px solid white;
+    color: black; border-radius: 3px;
+    background: white;
+    display: inline;
+    padding: 0 3px;
+
+    .parameter {
+      display: none;
+    }
+
+    .token-uppercase {
+      content: url('/static/images/editor/token-uppercase.svg');
+      background: white;
+      width: 10%;
+      height: 100%;
+      margin: auto 6px auto 0;
+    }
+
+    .token-default {
+      content: url('/static/images/editor/token-default.svg');
+      background:  white;
+      width: 10%;
+      height: 100%;
+      margin: auto 6px auto 0;
+    }
+  }
+
   .image-plugin-link {
     position: absolute;
     top: 0;
