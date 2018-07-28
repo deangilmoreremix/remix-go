@@ -40,6 +40,10 @@
       position: relative;
       margin-top: 42.5%;
 
+      &.preview {
+        margin-top: 25%;
+      }
+
       .button {
         cursor: pointer;
         height: 25px;
@@ -49,6 +53,24 @@
         border: white solid 0.5px;
         border-radius: 10px;
         margin: 0 5px;
+
+        &.btn-preview {
+          height: 40px;
+          width: 40px;
+          border-radius: 50%;
+          font-size: 20px;
+          margin-bottom: 10px;
+          position: relative;
+          i {
+            position: absolute;
+            left: 15px;
+            top: 10px;
+          }
+          &:hover {
+            background: rgba(15, 15, 15, 0.5);
+            cursor: pointer;
+          }
+        }
       }
 
       .button-primary {
