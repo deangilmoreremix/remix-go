@@ -4,9 +4,8 @@ import PropTypes from '../../../../../lib/PropTypes';
 
 const AudioGridItem = (props) => {
   const { onPreview, onUse, artwork, title, url } = props;
-  const testAW = 'https://cdn.vidcloud.io/resources/go/audios/laughing-female-friends-with-ukuleles_23-2147829691.jpg';
   return (
-    <div className="card" style={{ backgroundImage: `url(${testAW || '/static/images/editor/default-artwork.png'})` }}>
+    <div className="card" style={{ backgroundImage: `url(${artwork || '/static/images/editor/default-artwork.png'})` }}>
       <div className="overlay">
         <div className="buttons-container preview">
           <a className="button btn-preview" onClick={() => onPreview(title, url)}>
