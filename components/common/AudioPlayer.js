@@ -8,7 +8,12 @@ export default class AudioPlayer extends Component {
     isPlaying: PropTypes.bool.isRequired,
   };
 
-  audio = new Audio();
+  constructor(props) {
+    super();
+    this.audio = new Audio();
+    this.audio.src = props.url;
+    this.audio.preplay = true;
+  }
 
   playAudio = () => {
     this.audio.play();
@@ -19,13 +24,9 @@ export default class AudioPlayer extends Component {
   }
 
   render() {
-    const { url, isPlaying, onAudioPreview } = this.props;
+    const { isPlaying, onAudioPreview } = this.props;
 
     if (isPlaying) {
-      if (!this.audio.src) {
-        this.audio.src = url;
-        this.audio.preplay = true;
-      }
       this.playAudio();
     } else {
       this.pauseAudio();
