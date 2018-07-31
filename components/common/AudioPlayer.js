@@ -9,7 +9,7 @@ export default class AudioPlayer extends Component {
   };
 
   constructor(props) {
-    super();
+    super(props);
     this.audio = new Audio();
     this.audio.src = props.url;
     this.audio.preplay = true;
