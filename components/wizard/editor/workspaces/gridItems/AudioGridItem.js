@@ -16,6 +16,14 @@ export default class AudioGridItem extends Component {
   };
 
   onAudioPreview = (playingState) => {
+    let playing = [];
+    playing = document.getElementsByClassName('playing');
+    if (playing && playing.length > 0) {
+      for (let i = 0; i < playing.length; i++) {
+        playing[i].click();
+      }
+    }
+
     this.setState({
       isPlaying: !playingState,
     });
