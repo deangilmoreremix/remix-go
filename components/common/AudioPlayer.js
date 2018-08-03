@@ -6,7 +6,6 @@ export default class AudioPlayer extends Component {
     url: PropTypes.string.isRequired,
     onAudioPreview: PropTypes.func.isRequired,
     isPlaying: PropTypes.bool.isRequired,
-    idx: PropTypes.number,
   };
 
   constructor(props) {
