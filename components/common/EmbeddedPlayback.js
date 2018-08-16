@@ -58,6 +58,7 @@ export default class EmbeddedPlayback extends Component {
       width={width}
       height={height}
       frameBorder="0"
+      allow="autoplay; fullscreen"
       mozallowfullscreen="true"
       webkitallowfullscreen="true"
       allowFullScreen

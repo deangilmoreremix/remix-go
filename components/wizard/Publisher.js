@@ -39,8 +39,10 @@ export default class Publisher extends Component {
   onProjectUpdate = async (project) => {
     this.setState({ waiter: { message: 'Updating your project details...' } });
     const { api, store } = this.props;
+    const { activeProject } = store;
     await api.save(project);
     await api.publish(project);
+    activeProject.version = Math.random();
     store.activeProject = project;
     this.setState({ waiter: null });
   };
@@ -142,6 +144,7 @@ export default class Publisher extends Component {
                       <h5 className="overview-item">Preview & Embed</h5>
                       <EmbeddedPlayback
                         className="overview-item"
+                        key={activeProject && activeProject.version}
                         source={activeProject && activeProject.make.url}
                         title={activeProject && activeProject.make.title}
                         width="50%"

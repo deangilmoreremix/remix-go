@@ -1,10 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import { inject, observer } from 'mobx-react';
 
-import {
-  PopupboxManager,
-} from 'react-popupbox';
-
 import AudioGallery from 'react-masonry-infinite';
 
 import Search from '../../../common/Search';
@@ -25,24 +21,6 @@ export default class AudioSelectionWorkspace extends Component {
     hasMore: true,
     elements: [],
     query: '',
-  };
-
-  onPreview = (title, url) => {
-    this.currentPlayback = (
-      <audio controls>
-        <source src={url} />
-      </audio>);
-    PopupboxManager.open({
-      content: this.currentPlayback,
-      config: {
-        titleBar: {
-          enable: true,
-          text: title,
-        },
-        fadeIn: true,
-        fadeInSpeed: 200,
-      },
-    });
   };
 
   onSearch = async (query) => {
@@ -102,7 +80,6 @@ export default class AudioSelectionWorkspace extends Component {
                 title={title}
                 url={url}
                 artwork={artwork}
-                onPreview={this.onPreview}
                 onUse={audio => onAudioSelected(audio)}
               />
             ))
