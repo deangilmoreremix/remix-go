@@ -76,7 +76,7 @@ export default class Personalizer extends Component {
         </ul>
         <div className="separator vertical" />
         <div className="setup-area">
-          <span>{
+          <span>{'{{'}{
             currentToken !== 'CUSTOM' ?
               <span>{currentToken}</span> :
               <input
@@ -84,7 +84,7 @@ export default class Personalizer extends Component {
                 value={customTokenValue}
                 onChange={event => this.setState({ customTokenValue: event.target.value })}
               />
-          }
+          }{'}}'}
           </span>
           <div className="separator horizontal" />
           <ul className="configuration-list">
