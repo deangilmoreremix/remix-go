@@ -26,7 +26,7 @@ const iframeStyling = `<!--- VideoRemix embed styling ---->
 <!--- End of VideoRemix embed styling ---->
 `;
 const embedScript = url => `<script>var vars={};var tempstring='';var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(m,key,value){if(value){tempstring+=key+'='+value+'&';}});if (tempstring) {document.addEventListener('DOMContentLoaded',function() {document.getElementById('vr').src='${url}?'+tempstring.slice(0, -1);});}</script>\n\n`;
-const iframeTag = (url, width, height) => `<div class="iframe-container"><iframe id='vr' src='${url}' width='${width}' height='${height}' frameborder='0' mozallowfullscreen webkitallowfullscreen allowfullscreen></iframe></div>`;
+const iframeTag = (url, width, height) => `<div class="iframe-container"><iframe id='vr' src='${url}' width='${width}' height='${height}' frameborder='0' allow="autoplay; fullscreen" mozallowfullscreen webkitallowfullscreen allowfullscreen></iframe></div>`;
 
 const EMBED_LOCATIONS = [
   {

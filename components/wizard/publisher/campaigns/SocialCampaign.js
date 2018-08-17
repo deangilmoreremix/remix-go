@@ -31,19 +31,19 @@ const EMBED_LOCATIONS = [
     key: 'leadpages',
     label: 'LeadPages',
     prompt: 'Copy and paste this embed code into your LeadPage',
-  embedGenerator: (url, width, height) => `${iframeStyling} <div class="iframe-container"><iframe id='vr' src='${url}' width='${width}' height='${height}' frameborder='0' mozallowfullscreen webkitallowfullscreen allowfullscreen></iframe></div>`,
+  embedGenerator: (url, width, height) => `${iframeStyling} <div class="iframe-container"><iframe id='vr' src='${url}' width='${width}' height='${height}' frameborder='0' allow="autoplay; fullscreen" mozallowfullscreen webkitallowfullscreen allowfullscreen></iframe></div>`,
   },
   {
     key: 'wordpress',
     label: 'WordPress',
     prompt: 'Copy and paste this embed code into your WordPress',
-    embedGenerator: (url, width, height) => `${iframeStyling} <div class="iframe-container"><iframe id='vr' src='${url}' width='${width}' height='${height}' frameborder='0' mozallowfullscreen webkitallowfullscreen allowfullscreen></iframe></div>`,
+    embedGenerator: (url, width, height) => `${iframeStyling} <div class="iframe-container"><iframe id='vr' src='${url}' width='${width}' height='${height}' frameborder='0' allow="autoplay; fullscreen" mozallowfullscreen webkitallowfullscreen allowfullscreen></iframe></div>`,
   },
   {
     key: 'optimizepress',
     label: 'OptimizePress 2.0',
     prompt: 'Copy and paste this embed code into your Video Player OP 2.0 element',
-    embedGenerator: (url, width, height) => `${iframeStyling} <div class="iframe-container"><iframe id='vr' src='${url}' width='${width}' height='${height}' frameborder='0' mozallowfullscreen webkitallowfullscreen allowfullscreen></iframe></div>`,
+    embedGenerator: (url, width, height) => `${iframeStyling} <div class="iframe-container"><iframe id='vr' src='${url}' width='${width}' height='${height}' frameborder='0' allow="autoplay; fullscreen" mozallowfullscreen webkitallowfullscreen allowfullscreen></iframe></div>`,
   },
   {
     key: 'facebook-page',
@@ -53,7 +53,7 @@ const EMBED_LOCATIONS = [
     key: 'other',
     label: 'Other',
     prompt: 'Copy & Paste this embed code inside the custom HTML element',
-    embedGenerator: (url, width, height) => `${iframeStyling} <div class="iframe-container"><iframe id='vr' src='${url}' width='${width}' height='${height}' frameborder='0' mozallowfullscreen webkitallowfullscreen allowfullscreen></iframe></div>`,
+    embedGenerator: (url, width, height) => `${iframeStyling} <div class="iframe-container"><iframe id='vr' src='${url}' width='${width}' height='${height}' frameborder='0' allow="autoplay; fullscreen" mozallowfullscreen webkitallowfullscreen allowfullscreen></iframe></div>`,
   },
 ];
 
