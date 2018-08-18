@@ -6,6 +6,7 @@ import {
   PopupboxManager,
   PopupboxContainer,
 } from 'react-popupbox';
+import Head from 'next/head';
 
 import Waiter from '../common/Waiter';
 import GettingStarted from './GettingStarted';
@@ -62,6 +63,13 @@ export default class Publisher extends Component {
     const { waiter } = this.state;
     return (
       <Fragment>
+        <Head>
+          <title>
+            {activeProject && activeProject.make && activeProject.make._id ?
+              `${activeProject.name} - VideoRemix GO` :
+              'VideoRemix GO'}
+          </title>
+        </Head>
         { activeProject ? <PhaseView
           elements={[
             {
