@@ -24,35 +24,29 @@ import EmbeddedPlayback from '../common/EmbeddedPlayback';
 import NewElementBar from '../../lib/popcorn/plugins/new/editor.popcorn.new';
 import StateManager from '../../lib/editor/editorStateManager';
 
-// const insertAtCaret = (base, offset, text) => {
-//   const tokenRegex = /{{(up \w*|d \w* ("[^{}]*"|'[^{}]*')|"\w*"|\w*)}}/im;
-//
-//   const reducedTokens = [];
-//
-//   let reductionString = base;
-//   while (reductionString.indexOf('{{') !== -1) {
-//     reducedTokens.push(tokenRegex.exec(reductionString));
-//     reductionString = reductionString.replace(tokenRegex, (match) => {
-//       match = match.replace(/[{}]/gm, '');
-//       if (match.split(' ').length > 1) {
-//         return match.split(' ')[1];
-//       } else {
-//         return match;
-//       }
-//     });
-//   }
-//
-//   reducedTokens.filter(token => token.index <= offset).forEach((token) => {
-//     offset += token[0].length - (token[1].split(' ').length > 1 ? token[1].split(' ')[1] : token[1]).length;
-//   });
-//
-//   return `${base.slice(0, offset)}${text}${base.slice(offset)}`;
-// };
+const insertAtCaret = (base, offset, text) => {
+  const tokenRegex = /{{(up \w*|d \w* ("[^{}]*"|'[^{}]*')|"\w*"|\w*)}}/im;
 
-const insertAtCaret = (element, offset, text) => {
-  const front = (element.innerText).substring(0, offset);
-  const back = (element.innerText).substring(offset, element.innerText.length);
-  element.innerText = front + text + back;
+  const reducedTokens = [];
+
+  let reductionString = base;
+  while (reductionString.indexOf('{{') !== -1) {
+    reducedTokens.push(tokenRegex.exec(reductionString));
+    reductionString = reductionString.replace(tokenRegex, (match) => {
+      match = match.replace(/[{}]/gm, '');
+      if (match.split(' ').length > 1) {
+        return match.split(' ')[1];
+      } else {
+        return match;
+      }
+    });
+  }
+
+  reducedTokens.filter(token => token.index <= offset).forEach((token) => {
+    offset += token[0].length - (token[1].split(' ').length > 1 ? token[1].split(' ')[1] : token[1]).length;
+  });
+
+  return `${base.slice(0, offset)}${text}${base.slice(offset)}`;
 };
 
 const PERSONALIZABLE_ELEMENT_TYPES = ['text', 'personalizedImage'];
@@ -288,17 +282,15 @@ export default class Editor extends Component {
                               _activeHandle: { type, target },
                               caretOffsets: offset,
                             } = activeProject.activeElement;
-                            // const newText = insertAtCaret(
-                            //   activeProject.activeElement[type], offset[type], token,
-                            // );
-                            insertAtCaret(target, offset[type], token);
+                            const newText = insertAtCaret(
+                              activeProject.activeElement[type], offset[type], token,
+                            );
 
                             const event = new Event('input');
                             target.dispatchEvent(event);
 
                             const updatedProps = {};
-                            // updatedProps[type] = newText;
-                            updatedProps[type] = target.innerText;
+                            updatedProps[type] = newText;
                             activeProject.activeElement._natives._update
                               .call(this, activeProject.activeElement, updatedProps);
                             activeProject.update(activeProject.activeElement, updatedProps);
