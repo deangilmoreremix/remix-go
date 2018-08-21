@@ -1,5 +1,5 @@
 import React from 'react';
-import Document, { Main, NextScript } from 'next/document';
+import Document, { Head, Main, NextScript } from 'next/document';
 import stylesheet from 'styles/index.scss';
 
 export default class MyDocument extends Document {
@@ -15,10 +15,10 @@ export default class MyDocument extends Document {
   render() {
     return (
       <html lang="en">
-        <head>
+        <Head>
           <title>VideoRemix GO</title>
           <link rel="shortcut icon" href="//cdn.vidcloud.io/resources/go/favicon.png" />
-        </head>
+        </Head>
         <body>
           {/* eslint-disable react/no-danger */}
           <style dangerouslySetInnerHTML={{ __html: stylesheet }} />

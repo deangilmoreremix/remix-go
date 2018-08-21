@@ -1,4 +1,5 @@
 import React, { Component, Fragment } from 'react';
+import Head from 'next/head';
 import { Container, Col, Row } from 'reactstrap';
 import { inject, observer } from 'mobx-react';
 import Router from 'next/router';
@@ -117,6 +118,13 @@ export default class Editor extends Component {
 
     return (
       <Fragment>
+        <Head>
+          <title>
+            {activeProject && activeProject.make && activeProject.make._id ?
+              `${activeProject.name} - VideoRemix GO` :
+              'VideoRemix GO'}
+          </title>
+        </Head>
         <PopupboxContainer
           ref={(c) => { this.popupboxContainer = c; }}
           onClosed={() => {

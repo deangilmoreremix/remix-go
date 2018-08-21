@@ -49,7 +49,9 @@ class Api {
       response.reverse();
       if (query.length > 0) {
         const lookup = new RegExp(`.*${query}.*`, 'i');
-        response = response.filter(item => lookup.test(item.title));
+        response = response.filter(
+          item => lookup.test(item.title) || (item.keywords && lookup.test(item.keywords)),
+        );
       }
       return response.slice(count, count + this.perPage);
     } finally {
