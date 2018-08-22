@@ -29,8 +29,6 @@ const insertAtCaret = (base, offset, text) => {
 
   const reducedTokens = [];
 
-  console.log(`base is ${base}, offset is ${offset}, text is ${text}`);
-
   let reductionString = base;
   while (reductionString.indexOf('{{') !== -1) {
     reducedTokens.push(tokenRegex.exec(reductionString));
