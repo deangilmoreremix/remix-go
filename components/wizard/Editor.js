@@ -29,6 +29,8 @@ const insertAtCaret = (base, offset, text) => {
 
   const reducedTokens = [];
 
+  console.log(`base is ${base}, offset is ${offset}, text is ${text}`);
+
   let reductionString = base;
   while (reductionString.indexOf('{{') !== -1) {
     reducedTokens.push(tokenRegex.exec(reductionString));
@@ -42,7 +44,7 @@ const insertAtCaret = (base, offset, text) => {
     });
   }
 
-  reducedTokens.filter(token => token.index <= offset).forEach((token) => {
+  reducedTokens.filter(token => token.index < offset).forEach((token) => {
     offset += token[0].length - (token[1].split(' ').length > 1 ? token[1].split(' ')[1] : token[1]).length;
   });
 
