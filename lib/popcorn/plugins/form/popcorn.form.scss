@@ -1,14 +1,46 @@
 .popcorn {
   &.lead-form {
+    background-size: cover !important;
+    background-position: center !important;
     position: absolute;
+    text-align: center;
+
+    .form-scrollable-inner {
+      padding: 0 3%;
+    }
+
+    .brand-logo {
+      width: 40%;
+      margin-bottom: 3%;
+    }
 
     .lead-form-caption {
       padding: 0 0 2% 0;
-      font-weight: 300;
+      font-weight: bold;
+    }
+
+    input {
+      padding: 3% 5%;
+    }
+
+    .input-wrapper {
+      padding: 1% 0;
+      display: block;
+    }
+
+    input[type="date"]:before {
+      content: attr(placeholder) !important;
+      color: #aaa;
+      margin-right: 0.5em;
+    }
+
+    input[type="date"]:focus:before {
+      content: "" !important;
     }
 
     .form-inner {
       position: absolute;
+      min-height: 7.5em;
       top: 0;
       bottom: 0;
       left: 0;
@@ -27,6 +59,46 @@
       padding: 3%;
       position: relative;
       margin: auto 0;
+
+      .privacy-disclaimer {
+        font-size: 35%;
+        display: inline-block;
+      }
+
+      .privacy-policy-link {
+        font-size: 35%;
+        display: block;
+        text-decoration: underline;
+        color: inherit;
+      }
+
+      @media only screen and (max-height: 480px) {
+        .privacy-disclaimer {
+          font-size: 50%;
+          display: inline-block;
+        }
+
+        .privacy-policy-link {
+          font-size: 50%;
+          display: block;
+          text-decoration: underline;
+          color: inherit;
+        }
+      }
+
+      @media only screen and (max-width: 480px) {
+        .privacy-disclaimer {
+          font-size: 50%;
+          display: inline-block;
+        }
+
+        .privacy-policy-link {
+          font-size: 50%;
+          display: block;
+          text-decoration: underline;
+          color: inherit;
+        }
+      }
     }
 
     label {
@@ -39,14 +111,29 @@
       -moz-box-sizing: border-box;
       box-sizing: border-box;
       width: 100%;
+      height: 2.5em;
+      border: 1px #c1c1c1 solid;
     }
 
-    input[type=submit], button {
-      position: relative;
-      display: block;
-      float: right;
-      bottom: 0;
-      cursor: pointer;
+    .buttons-inner {
+      display: inline-block;
+      width: 100%;
+      margin: 2% 0;
+      height: auto;
+
+      input[type=submit], button {
+        position: relative;
+        height: 2.5em;
+        box-sizing: content-box;
+        overflow: visible;
+        display: block;
+        float: right;
+        width: 10%;
+        min-width: 85px;
+        margin: 0 auto;
+        bottom: 0;
+        cursor: pointer;
+      }
     }
 
     @media only screen {
