@@ -19,6 +19,7 @@ import EmbedDataContainer from './publisher/EmbedDataContainer';
 import ProjectDetailsChanger from './publisher/ProjectDetailsChanger';
 import EmailCampaign from './publisher/campaigns/EmailCampaign';
 import SocialCampaign from './publisher/campaigns/SocialCampaign';
+import RetargetCampaign from './publisher/campaigns/RetargetCampaign';
 
 @inject('api')
 @inject('store')
@@ -212,6 +213,28 @@ export default class Publisher extends Component {
                     }}
                   >
                     Facebook
+                  </button>
+                  <button
+                    className="go-button action-button"
+                    onClick={() => {
+                      PopupboxManager.open({
+                        content: <RetargetCampaign
+                          className="campaign"
+                          project={activeProject}
+                          onCampaignFinished={() => PopupboxManager.close()}
+                        />,
+                        config: {
+                          titleBar: {
+                            enable: true,
+                            text: 'Opt-In/Retarget',
+                          },
+                          fadeIn: true,
+                          fadeInSpeed: 200,
+                        },
+                      });
+                    }}
+                  >
+                    Opt-In/Retarget
                   </button>
                 </ActionsPane>
               </Col>
