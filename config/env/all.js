@@ -16,6 +16,7 @@ module.exports = {
       main: process.env.GO_FEATURE_NAME || 'go:editor',
       generator: process.env.GO_TEMPLATE_GENERATOR || 'go:generator',
       cta: process.env.GO_CTA_LIBRARY || 'go:cta',
+      retarget: process.env.GO_RETARGET || 'optinCode',
     },
   },
   loginServer: {
