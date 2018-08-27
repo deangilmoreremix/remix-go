@@ -238,6 +238,8 @@ export default class Publisher extends Component {
                             fadeInSpeed: 200,
                           },
                         });
+                      } else if (currentUser.features[features.retarget].link) {
+                        window.open(currentUser.features[features.retarget].link, '_blank');
                       }
                     }}
                   >
