@@ -7,7 +7,7 @@ import Project from '../../../../lib/editor/Project';
 import PropTypes from '../../../../lib/PropTypes';
 import EmbedDataContainer from '../EmbedDataContainer';
 
-const SortableItem = SortableElement(({ value }) => <li className="token-list-item" >{value}</li>);
+const SortableItem = SortableElement(({ value }) => <li className="token-list-item">{value}</li>);
 
 const SortableList = SortableContainer(({ items }) => (
   <ul className="tokens-list">
@@ -51,10 +51,10 @@ export default class EmailCampaign extends Component {
           <div className="workspace">
             <ul className="steps-list">
               <li className="list-step">
-                <p>Reorder personalized tokens by dragging as they defined at your form</p>
+                <p className="list-step-caption">Reorder personalized tokens by dragging as they defined at your form</p>
                 <SortableList
                   className="tokens-list"
-                  hideSortableGhost={false}
+                  helperClass="token-list-drag-helper"
                   items={personalizations}
                   onSortEnd={({ oldIndex, newIndex }) => {
                     this.setState({
@@ -64,7 +64,7 @@ export default class EmailCampaign extends Component {
                 />
               </li>
               <li className="list-step">
-                <p>Copy & Paste this embed code inside the custom HTML element</p>
+                <p className="list-step-caption">Copy & Paste this embed code inside the custom HTML element</p>
                 <EmbedDataContainer
                   className="embed-item"
                   url={project.make.url}
