@@ -58,6 +58,10 @@ export default class Publisher extends Component {
     const {
       store: {
         activeProject,
+        common: {
+          features,
+        },
+        currentUser,
         project,
       },
     } = this.props;
@@ -215,23 +219,26 @@ export default class Publisher extends Component {
                     Facebook
                   </button>
                   <button
-                    className="go-button action-button"
+                    className={`go-button action-button ${(currentUser.features[features.retarget] && currentUser.features[features.retarget].state === 'enabled') ? '' : 'inactive'}`}
+                    title={(currentUser.features[features.retarget] && currentUser.features[features.retarget].state === 'enabled') ? '' : 'This feature is not available on your type of subscription.'}
                     onClick={() => {
-                      PopupboxManager.open({
-                        content: <RetargetCampaign
-                          className="campaign"
-                          project={activeProject}
-                          onCampaignFinished={() => PopupboxManager.close()}
-                        />,
-                        config: {
-                          titleBar: {
-                            enable: true,
-                            text: 'Opt-In/Retarget',
+                      if (currentUser.features[features.retarget] && currentUser.features[features.retarget].state === 'enabled') {
+                        PopupboxManager.open({
+                          content: <RetargetCampaign
+                            className="campaign"
+                            project={activeProject}
+                            onCampaignFinished={() => PopupboxManager.close()}
+                          />,
+                          config: {
+                            titleBar: {
+                              enable: true,
+                              text: 'Opt-In/Retarget',
+                            },
+                            fadeIn: true,
+                            fadeInSpeed: 200,
                           },
-                          fadeIn: true,
-                          fadeInSpeed: 200,
-                        },
-                      });
+                        });
+                      }
                     }}
                   >
                     Opt-In/Retarget

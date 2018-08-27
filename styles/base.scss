@@ -312,6 +312,11 @@ form,
   text-align: center;
   border-radius: 7px;
   background: $secondary-color;
+
+  &.inactive {
+    opacity: 0.3;
+    cursor: default;
+  }
 }
 
 .video-popup {
