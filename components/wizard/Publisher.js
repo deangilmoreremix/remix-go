@@ -220,7 +220,7 @@ export default class Publisher extends Component {
                   </button>
                   <button
                     className={`go-button action-button ${(currentUser.features[features.retarget] && currentUser.features[features.retarget].state === 'enabled') ? '' : 'inactive'}`}
-                    title={(currentUser.features[features.retarget] && currentUser.features[features.retarget].state === 'enabled') ? '' : 'This feature is not available on your type of subscription.'}
+                    title={(currentUser.features[features.retarget] && currentUser.features[features.retarget].state === 'enabled') ? '' : 'This feature is not available on your type of subscription. Click here to details.'}
                     onClick={() => {
                       if (currentUser.features[features.retarget] && currentUser.features[features.retarget].state === 'enabled') {
                         PopupboxManager.open({
