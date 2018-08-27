@@ -1,0 +1,45 @@
+.retarget-campaign {
+  display: flex;
+  flex-direction: column;
+
+  .workspace {
+    .steps-list {
+      list-style-type: decimal;
+
+      .list-step {
+        margin: 5px 0;
+
+        .tokens-list {
+          list-style-type: none;
+          padding: 0;
+          margin: 10px 0;
+          width: 90%;
+
+          .token-list-item {
+            background-color: white;
+          }
+        }
+
+        .embed-item {
+          min-height: 20%;
+
+          .resizer {
+            margin-bottom: 10px;
+          }
+
+          textarea[type="textarea"] {
+            width: 100%;
+            resize: none;
+            background: transparent;
+            color: $primary-color;
+
+            &:focus {
+              border: 2px solid $secondary-color;
+              box-shadow: none;
+            }
+          }
+        }
+      }
+    }
+  }
+}

@@ -7,10 +7,10 @@ import Project from '../../../../lib/editor/Project';
 import PropTypes from '../../../../lib/PropTypes';
 import EmbedDataContainer from '../EmbedDataContainer';
 
-const SortableItem = SortableElement(({ value }) => <li>{value}</li>);
+const SortableItem = SortableElement(({ value }) => <li className="token-list-item" >{value}</li>);
 
 const SortableList = SortableContainer(({ items }) => (
-  <ul>
+  <ul className="tokens-list">
     {items.map((value, index) => (
       <SortableItem key={`item-${index}`} index={index} value={value} />
     ))}
@@ -47,34 +47,31 @@ export default class EmailCampaign extends Component {
 
     return (
       <Fragment>
-        <div className={`email-campaign ${className}`}>
-          <ReactTooltip
-            effect="solid"
-          />
+        <div className={`retarget-campaign ${className}`}>
           <div className="workspace">
-            <div className="service-provider">
-              <ul className="service-provider-inner">
-                <li className="service-provider-step">
-                  <span>Reorder personalized tokens by dragging as they defined at your form</span>
-                  <SortableList
-                    items={personalizations}
-                    onSortEnd={({ oldIndex, newIndex }) => {
-                      this.setState({
-                        personalizations: arrayMove(personalizations, oldIndex, newIndex),
-                      });
-                    }}
-                  />
-                </li>
-                <li className="service-provider-step">
-                  <span>Copy & Paste this embed code inside the custom HTML element</span>
-                  <EmbedDataContainer
-                    className="embed-item"
-                    url={project.make.url}
-                    stringGenerator={() => this.embedCodeGenerator()}
-                  />
-                </li>
-              </ul>
-            </div>
+            <ul className="steps-list">
+              <li className="list-step">
+                <p>Reorder personalized tokens by dragging as they defined at your form</p>
+                <SortableList
+                  className="tokens-list"
+                  hideSortableGhost={false}
+                  items={personalizations}
+                  onSortEnd={({ oldIndex, newIndex }) => {
+                    this.setState({
+                      personalizations: arrayMove(personalizations, oldIndex, newIndex),
+                    });
+                  }}
+                />
+              </li>
+              <li className="list-step">
+                <p>Copy & Paste this embed code inside the custom HTML element</p>
+                <EmbedDataContainer
+                  className="embed-item"
+                  url={project.make.url}
+                  stringGenerator={() => this.embedCodeGenerator()}
+                />
+              </li>
+            </ul>
           </div>
           <div className="controls">
             <button
