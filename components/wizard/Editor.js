@@ -85,8 +85,6 @@ export default class Editor extends Component {
       store,
       store: {
         activeProject,
-        project,
-        remix,
         common: {
           features,
         },
@@ -236,7 +234,11 @@ export default class Editor extends Component {
                   onClick={async () => {
                     // no need to have it working now, but who knows for future...
                     // if (activeProject.audio) {
-                    //   this.setState({ waiter: { message: 'Making your media mobile-friendly...' } });
+                    //   this.setState({
+                    //     waiter: {
+                    //       message: 'Making your media mobile-friendly...',
+                    //     },
+                    //   });
                     //   const { url } = await api.mergeMedia(
                     //     activeProject.video,
                     //     activeProject.audio,

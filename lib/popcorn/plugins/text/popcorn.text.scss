@@ -90,7 +90,8 @@
     display: block;
 
     .text-container {
-      display: block;
+      display:inline-block;
+      white-space: pre-wrap;
     }
 
     .url-container {
