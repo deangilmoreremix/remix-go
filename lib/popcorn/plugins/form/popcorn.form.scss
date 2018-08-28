@@ -1,5 +1,12 @@
 .popcorn {
   &.lead-form {
+    max-width: unset;
+    margin: unset;
+    padding: unset;
+    background-color: #000000;
+    border: none;
+    border-radius: unset;
+
     background-size: cover !important;
     background-position: center !important;
     position: absolute;
