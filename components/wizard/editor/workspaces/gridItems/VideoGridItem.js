@@ -42,11 +42,11 @@ export default class VideoGridItem extends Component {
             <a className="button btn-preview" onClick={() => { onPreview(title, url); }}>
               <i className="fa fa-play" />
             </a>
-            <p
-              onMouseOver={() => this.togglePreview(true)}
-            >
-              {title}
-            </p>
+            {/*<p*/}
+              {/*onMouseOver={() => this.togglePreview(true)}*/}
+            {/*>*/}
+              {/*{title}*/}
+            {/*</p>*/}
             <a className="button button-primary" onClick={() => onUse(url)}>use</a>
           </div>
         </div>
