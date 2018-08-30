@@ -57,12 +57,15 @@
         margin: 0 5px;
 
         &.btn-preview {
+          display: block;
           height: 40px;
           width: 40px;
           border-radius: 50%;
           font-size: 20px;
+          margin: auto;
           margin-bottom: 10px;
           position: relative;
+
           i {
             position: absolute;
             left: 14px;
@@ -79,6 +82,7 @@
       }
 
       .button-primary {
+        display: block;
         background: $secondary-color;
         border-color: $secondary-color;
       }
