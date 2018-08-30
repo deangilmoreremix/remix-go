@@ -3,6 +3,7 @@ const { port, forceSsl, nakedRun } = require('./config/config');
 const dev = process.env.NODE_ENV !== 'production';
 
 const express = require('express');
+const compression = require('compression');
 const next = require('next');
 const mobxReact = require('mobx-react');
 
@@ -18,6 +19,7 @@ mobxReact.useStaticRendering(true);
 
 app.prepare().then(() => {
   const server = express();
+  server.use(compression());
   server.use((req, res, next) => {
     const schema = req.headers['x-forwarded-proto'] || req.protocol;
     if (schema !== 'https' && forceSsl) {

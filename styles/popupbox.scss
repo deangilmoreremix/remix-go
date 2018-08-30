@@ -15,7 +15,7 @@ $popupbox-zindex:    10000;
   justify-content: center;
   opacity: 0;
   pointer-events: none;
-  z-index: 10000;
+  z-index: $popupbox-zindex;
 }
 
 .popupbox[hidden] {

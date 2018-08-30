@@ -19,6 +19,7 @@ import EmbedDataContainer from './publisher/EmbedDataContainer';
 import ProjectDetailsChanger from './publisher/ProjectDetailsChanger';
 import EmailCampaign from './publisher/campaigns/EmailCampaign';
 import SocialCampaign from './publisher/campaigns/SocialCampaign';
+import RetargetCampaign from './publisher/campaigns/RetargetCampaign';
 
 @inject('api')
 @inject('store')
@@ -57,6 +58,10 @@ export default class Publisher extends Component {
     const {
       store: {
         activeProject,
+        common: {
+          features,
+        },
+        currentUser,
         project,
       },
     } = this.props;
@@ -213,6 +218,33 @@ export default class Publisher extends Component {
                   >
                     Facebook
                   </button>
+                  {/*<button*/}
+                    {/*className={`go-button action-button ${(currentUser.features[features.retarget] && currentUser.features[features.retarget].state === 'enabled') ? '' : 'inactive'}`}*/}
+                    {/*title={(currentUser.features[features.retarget] && currentUser.features[features.retarget].state === 'enabled') ? '' : 'This feature is not available on your type of subscription. Click here to details.'}*/}
+                    {/*onClick={() => {*/}
+                      {/*if (currentUser.features[features.retarget] && currentUser.features[features.retarget].state === 'enabled') {*/}
+                        {/*PopupboxManager.open({*/}
+                          {/*content: <RetargetCampaign*/}
+                            {/*className="campaign"*/}
+                            {/*project={activeProject}*/}
+                            {/*onCampaignFinished={() => PopupboxManager.close()}*/}
+                          {/*/>,*/}
+                          {/*config: {*/}
+                            {/*titleBar: {*/}
+                              {/*enable: true,*/}
+                              {/*text: 'Opt-In/Retarget',*/}
+                            {/*},*/}
+                            {/*fadeIn: true,*/}
+                            {/*fadeInSpeed: 200,*/}
+                          {/*},*/}
+                        {/*});*/}
+                      {/*} else if (currentUser.features[features.retarget].link) {*/}
+                        {/*window.open(currentUser.features[features.retarget].link, '_blank');*/}
+                      {/*}*/}
+                    {/*}}*/}
+                  {/*>*/}
+                    {/*Opt-In/Retarget*/}
+                  {/*</button>*/}
                 </ActionsPane>
               </Col>
             </Row>

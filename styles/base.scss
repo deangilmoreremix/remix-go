@@ -312,6 +312,11 @@ form,
   text-align: center;
   border-radius: 7px;
   background: $secondary-color;
+
+  &.inactive {
+    opacity: 0.3;
+    cursor: default;
+  }
 }
 
 .video-popup {
@@ -333,6 +338,7 @@ form,
     }
     .overlay {
       position: absolute;
+      display: flex;
       top: 0;
       bottom: 0;
       left: 0;
