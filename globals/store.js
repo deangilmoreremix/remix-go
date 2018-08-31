@@ -1,4 +1,3 @@
-import crypto from 'crypto';
 import _ from 'lodash';
 import { observable } from 'mobx';
 import Cookies from 'js-cookie';
@@ -41,14 +40,18 @@ class Store {
       // eslint-disable-next-line global-require
       global.fetch = require('isomorphic-fetch');
       global.btoa = string => Buffer.from(string).toString('base64');
-      this.req = req;
-      this.currentUser = req.session && req.session.user;
       const getIntercomUserHash = (email) => {
+        // eslint-disable-next-line global-require
+        const crypto = require('crypto');
         const hmac = crypto.createHmac('sha256', source.common.intercom.secret);
         hmac.update(email);
         return hmac.digest('hex');
       };
-      this.currentUser.hash = getIntercomUserHash(this.currentUser.email);
+      this.req = req;
+      this.currentUser = req.session && req.session.user;
+      if (this.currentUser) {
+        this.currentUser.hash = getIntercomUserHash(this.currentUser.email);
+      }
     }
     Object.assign(this, source);
     const { common } = this;
