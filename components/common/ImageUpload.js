@@ -53,6 +53,7 @@ export default class ImageUpload extends Component {
                   });
                 }
               } catch (err) {
+                console.log(err);
                 this.setState({
                   error: err.message || 'This image format is not supported.',
                 });
@@ -60,7 +61,6 @@ export default class ImageUpload extends Component {
               finally {
                 this.setState({
                   isUploading: false,
-                  file: null,
                   url: null,
                 });
               }
