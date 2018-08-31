@@ -34,6 +34,10 @@ module.exports = {
   loaderIo: {
     key: process.env.LOADER_IO_KEY || '',
   },
+  intercom: {
+    appId: process.env.INTERCOM_APP_ID,
+    secret: process.env.INTERCOM_SECRET,
+  },
   newRelic: {
     key: process.env.NEW_RELIC_LICENSE_KEY || '',
   },
