@@ -50,7 +50,7 @@ export default class ProjectDetailsChanger extends Component {
 
   render() {
     const { api, className } = this.props;
-    const { title, description, thumbnail, oldThumbnail } = this.state;
+    const { title, description, oldThumbnail } = this.state;
     return (
       <div className={className}>
         <FormGroup>
