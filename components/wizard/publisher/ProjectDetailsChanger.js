@@ -18,13 +18,14 @@ export default class ProjectDetailsChanger extends Component {
     super(props);
 
     const { project: { name: title, description, thumbnail } } = props;
-    this.state = { title, description, thumbnail };
+    this.state = { title, description, thumbnail, oldThumbnail: thumbnail };
   }
 
   state = {
     title: null,
     description: null,
     thumbnail: null,
+    oldThumbnail: null,
   };
 
   onValueChange = () => {
@@ -34,11 +35,22 @@ export default class ProjectDetailsChanger extends Component {
     project.description = description;
     project.thumbnail = thumbnail;
     onChange(project);
+    this.setState({ oldThumbnail: thumbnail });
+  };
+
+  isDataValid = () => {
+    const { title, thumbnail } = this.state;
+    return title && title.length > 0 && (!thumbnail || this.isValidImageURI(thumbnail));
+  };
+
+  isValidImageURI = (value) => {
+    const imageUrlRegex = new RegExp('^(http)?s?:?(\\/\\/[^"\']*\\.(?:png|jpg|jpeg|gif|svg))$', 'i');
+    return imageUrlRegex.test(value.split('?')[0]);
   };
 
   render() {
     const { api, className } = this.props;
-    const { title, description, thumbnail } = this.state;
+    const { title, description, thumbnail, oldThumbnail } = this.state;
     return (
       <div className={className}>
         <FormGroup>
@@ -64,7 +76,11 @@ export default class ProjectDetailsChanger extends Component {
         </FormGroup>
         <FormGroup className="thumbnail-field">
           <label htmlFor="project-details-thumbnail">Project Thumbnail</label>
-          <img id="project-details-thumbnail" src={thumbnail} alt="Project Posterframe" />
+          <img
+            id="project-details-thumbnail"
+            src={oldThumbnail}
+            alt="Project Posterframe"
+          />
           <div className="upload-box">
             <label>Set Image URL</label>
             <Input
@@ -82,7 +98,16 @@ export default class ProjectDetailsChanger extends Component {
             />
           </div>
         </FormGroup>
-        <a className="button button-primary submit" onClick={() => this.onValueChange()}>save</a>
+        <button
+          className={`go-button button-primary submit ${this.isDataValid() ? '' : 'inactive'}`}
+          onClick={() => {
+            if (this.isDataValid()) {
+              this.onValueChange();
+            }
+          }}
+        >
+          save
+        </button>
       </div>
     );
   }
