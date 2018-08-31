@@ -1,3 +1,4 @@
+import crypto from 'crypto';
 import _ from 'lodash';
 import { observable } from 'mobx';
 import Cookies from 'js-cookie';
@@ -42,6 +43,12 @@ class Store {
       global.btoa = string => Buffer.from(string).toString('base64');
       this.req = req;
       this.currentUser = req.session && req.session.user;
+      const getIntercomUserHash = (email) => {
+        const hmac = crypto.createHmac('sha256', source.common.intercom.secret);
+        hmac.update(email);
+        return hmac.digest('hex');
+      };
+      this.currentUser.hash = getIntercomUserHash(this.currentUser.email);
     }
     Object.assign(this, source);
     const { common } = this;
@@ -126,6 +133,7 @@ export async function initStoreAndPreload(isServer, source, req, preloader) {
       clientSecret: config.client.secret,
       features: config.access.features,
       video: config.video,
+      intercom: config.intercom,
       defaultPosterframe: config.posterframe,
     };
   }

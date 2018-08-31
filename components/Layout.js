@@ -5,9 +5,10 @@ import { Container } from 'reactstrap';
 import { initStoreAndPreload, initStore } from '../globals/store';
 import { initApiAndPreload, initApi } from '../globals/api';
 
+import PopcornProxy from '../lib/PopcornProxy';
 import Header from './Header';
 import Footer from './Footer';
-import PopcornProxy from '../lib/PopcornProxy';
+import Intercom from './common/Intercom';
 
 class Layout extends Component {
   static async getInitialProps({ query, req }, preloader) {
@@ -34,6 +35,16 @@ class Layout extends Component {
           <Container {...this.props} className="main">
             {this.props.children}
           </Container>
+          <Intercom
+            appID={this.store.common.intercom.appId}
+            user={{
+              email: this.store.currentUser.email,
+              fullName: this.store.currentUser.fullName,
+              hash: this.store.currentUser.hash,
+              createdAt: Math.floor(Date.parse(this.store.currentUser.createdAt) / 1000),
+            }}
+            domain="videoremix.io"
+          />
           <Footer />
         </div>
       </Provider>
