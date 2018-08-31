@@ -39,8 +39,11 @@ export default class ImageUpload extends Component {
         {isUploading ?
           <InfiniteLoading /> :
           <button
-            className="go-button submit-button"
+            className={`go-button submit-button ${file || url ? '' : 'inactive'}`}
             onClick={async () => {
+              if (!file && !url) {
+                return;
+              }
               this.setState({ isUploading: true });
               try {
                 const videoMeta = await new MediaTypeDetector()
