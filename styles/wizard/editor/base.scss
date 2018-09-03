@@ -9,11 +9,11 @@
   top: $header-height + $editor-wrapper-padding + $phase-component;
   right: 0;
   position: absolute;
-  display: flex;
+  display: block;
   flex-direction: column;
 
   .toolbar {
-    height: 60px !important;
+    height: $toolbar-height;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -32,6 +32,7 @@
       display: block;
       padding: 0;
       overflow: auto;
+      margin-bottom: $toolbar-height;
 
       .scrollable {
         padding: 30px 0;
