@@ -136,11 +136,11 @@ export default class Publisher extends Component {
           }}
         />
         { waiter ? <Waiter message={waiter.message} /> : null }
-        <Container fluid className={`editor-wrapper project-expector ${activeProject && 'hidden'}`}>
+        <Container fluid className={`publisher-wrapper project-expector ${activeProject && 'hidden'}`}>
           {project ? <InfiniteLoading /> : <div>There is no active project.</div>}
         </Container>
         {activeProject ?
-          <Container fluid className={`editor-wrapper ${!activeProject && 'hidden'}`}>
+          <Container fluid className={`publisher-wrapper ${!activeProject && 'hidden'}`}>
             <Row className="canvas full-height">
               <Col className="workspace scrollable">
                 <div className="publish-overview">
@@ -171,7 +171,7 @@ export default class Publisher extends Component {
                   </Container>
                 </div>
               </Col>
-              <Col className="col-2 paddingless editor-pane">
+              <Col className="col-2 paddingless publisher-pane">
                 <ActionsPane className="actions-pane">
                   <button
                     className="go-button action-button"
