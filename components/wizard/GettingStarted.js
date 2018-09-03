@@ -117,7 +117,7 @@ export default class GettingStarted extends Component {
                 className={`getting-started-item ${(currentUser && currentUser.features[features.generator] && currentUser.features[features.generator].state === 'enabled') ? '' : 'inactive'}`}
                 href={(currentUser && currentUser.features[features.generator] && currentUser.features[features.generator].state === 'enabled') ?
                   `/?wizard=${this.constructor.WIZARD_TYPES.GENERATOR.key}` :
-                  currentUser.features[features.generator].link
+                  currentUser && currentUser.features[features.generator] && currentUser.features[features.generator].link
                 }
                 target={(currentUser && currentUser.features[features.generator] && currentUser.features[features.generator].state === 'enabled') ?
                   '_self' :
