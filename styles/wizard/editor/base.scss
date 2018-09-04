@@ -73,7 +73,7 @@
             bottom: 0;
             left: 0;
             right: 0;
-            margin: 15px 0;
+            margin: 5px 0;
             display: flex;
             flex-wrap: nowrap;
             overflow: auto;
@@ -83,15 +83,14 @@
             .thumbnail-canvas-scroll {
               display: flex;
               flex-wrap: nowrap;
-              justify-content: center;
               min-width: 100%;
 
               .thumbnail-wrapper {
                 flex: 0 0 auto;
-                float: left;
+                float: unset;
                 display: inline-block;
                 width: 20%;
-                margin: 0 5px;
+                margin: 0 auto;
                 height: 100%;
                 cursor: pointer;
 
