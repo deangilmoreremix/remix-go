@@ -1,9 +1,18 @@
 .new-bar {
   align-items: center;
 
-  .icon {
-    margin: 0 0.5%;
-    height: 22px;
+  .action-button {
+    background: none;
+    color: inherit;
+    border: none;
+    width: auto;
+    height: auto;
+    outline: none;
+
+    .icon {
+      margin: 0 0.5%;
+      height: 22px;
+    }
   }
 
   .row-group {
