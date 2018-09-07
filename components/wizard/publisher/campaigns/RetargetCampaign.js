@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from 'react';
-import ReactTooltip from 'react-tooltip';
+import { inject, observer } from 'mobx-react';
 import { SortableContainer, SortableElement, arrayMove } from 'react-sortable-hoc';
 
 
@@ -17,6 +17,8 @@ const SortableList = SortableContainer(({ items }) => (
   </ul>),
 );
 
+@inject('store')
+@observer
 export default class EmailCampaign extends Component {
   static propTypes = {
     className: PropTypes.string,
@@ -33,16 +35,16 @@ export default class EmailCampaign extends Component {
     };
   }
 
-  embedCodeGenerator = () => `<!-- Start of Vidcloud Embed Code -->
+  embedCodeGenerator = (cdnUrl) => `<!-- Start of Vidcloud Embed Code -->
 <script type="application/javascript">
   var tokens = '${this.state.personalizations.join(' ')}';
   window.addEventListener("load",function(){var f=tokens.split(" "),a=document.createElement("iframe");a.style.display="none";a.name="vidcloud-embed";a.src="https://cdn.vidcloud.io/api/embed-helper";document.body.appendChild(a);var b=document.forms["undefined"!==typeof formName&&formName||0];b&&(a=function(){for(var a=[],c=0,d=0;d<b.elements.length;d++){var e=b.elements[d];"hidden"!==e.type&&e.value&&f.length>c&&(a.push(f[c]+"="+encodeURIComponent(e.value)),c++)}document["vidcloud-embed"].postMessage({personalizedString:a.join("&")},
-      "https://cdn.vidcloud.io");return!0},b.addEventListener("submit",a),b.addEventListener("click",a))});
+      "${cdnUrl}");return!0},b.addEventListener("submit",a),b.addEventListener("click",a))});
 </script>
 <!-- End of Vidcloud Embed Code -->`;
 
   render() {
-    const { className, project, onCampaignFinished } = this.props;
+    const { store, className, project, onCampaignFinished } = this.props;
     const { personalizations } = this.state;
 
     return (
@@ -68,7 +70,7 @@ export default class EmailCampaign extends Component {
                 <EmbedDataContainer
                   className="embed-item"
                   url={project.make.url}
-                  stringGenerator={() => this.embedCodeGenerator()}
+                  stringGenerator={() => this.embedCodeGenerator(store.common.cdnHostname)}
                 />
               </li>
             </ul>

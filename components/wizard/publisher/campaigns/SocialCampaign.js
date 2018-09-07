@@ -31,7 +31,7 @@ const EMBED_LOCATIONS = [
     key: 'leadpages',
     label: 'LeadPages',
     prompt: 'Copy and paste this embed code into your LeadPage',
-  embedGenerator: (url, width, height) => `${iframeStyling} <div class="iframe-container"><iframe id='vr' src='${url}' width='${width}' height='${height}' frameborder='0' allow="autoplay; fullscreen" mozallowfullscreen webkitallowfullscreen allowfullscreen></iframe></div>`,
+    embedGenerator: (url, width, height) => `${iframeStyling} <div class="iframe-container"><iframe id='vr' src='${url}' width='${width}' height='${height}' frameborder='0' allow="autoplay; fullscreen" mozallowfullscreen webkitallowfullscreen allowfullscreen></iframe></div>`,
   },
   {
     key: 'wordpress',
@@ -163,10 +163,6 @@ export default class SocialCampaign extends Component {
     facebookPostData: {},
   };
 
-  onMessageHandler = (e) => {
-    this.receiveFacebookMessage(e);
-  };
-
   componentDidMount() {
     const { facebookConductor } = this.props;
     window.addEventListener('message', this.onMessageHandler);
@@ -181,6 +177,10 @@ export default class SocialCampaign extends Component {
   componentWillUnmount() {
     window.removeEventListener('message', this.onMessageHandler);
   }
+
+  onMessageHandler = (e) => {
+    this.receiveFacebookMessage(e);
+  };
 
   setStage(stageName) {
     let { currentStage } = this.state;
