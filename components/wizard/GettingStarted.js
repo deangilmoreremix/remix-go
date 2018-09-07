@@ -1,4 +1,5 @@
 import React, { Component, Fragment } from 'react';
+import Link from 'next/link';
 import Router from 'next/router';
 import { observer, inject } from 'mobx-react';
 import {
@@ -99,58 +100,50 @@ export default class GettingStarted extends Component {
               </a>
             </div>
             <div className="getting-started-list">
-              <div className="getting-started-item">
-                <div
-                  className="getting-started-item-inner"
-                  onClick={() => {
-                    Router.push({ pathname: '/', query: { wizard: this.constructor.WIZARD_TYPES.FROM_TEMPLATE.key } });
-                    this.setState({ wizardType: this.constructor.WIZARD_TYPES.FROM_TEMPLATE });
-                  }}
-                >
+              <a
+                className="getting-started-item"
+                href={`/?wizard=${this.constructor.WIZARD_TYPES.FROM_TEMPLATE.key}`}
+              >
+                <div className="getting-started-item-inner">
                   <img
                     src="../../static/images/getting-started/template.svg"
                     alt="From Template"
                   />
                   <span>From Template</span>
                 </div>
-              </div>
-              <div
+              </a>
+              <a
                 title={(currentUser && currentUser.features[features.generator] && currentUser.features[features.generator].state === 'enabled') ? '' : 'This feature is not available on your type of subscription. Click here to details.'}
                 className={`getting-started-item ${(currentUser && currentUser.features[features.generator] && currentUser.features[features.generator].state === 'enabled') ? '' : 'inactive'}`}
+                href={(currentUser && currentUser.features[features.generator] && currentUser.features[features.generator].state === 'enabled') ?
+                  `/?wizard=${this.constructor.WIZARD_TYPES.GENERATOR.key}` :
+                  currentUser && currentUser.features[features.generator] && currentUser.features[features.generator].link
+                }
+                target={(currentUser && currentUser.features[features.generator] && currentUser.features[features.generator].state === 'enabled') ?
+                  '_self' :
+                  '_blank'
+                }
               >
-                <div
-                  className="getting-started-item-inner"
-                  onClick={() => {
-                    if (currentUser && currentUser.features[features.generator] && currentUser.features[features.generator].state === 'enabled') {
-                      Router.push({ pathname: '/', query: { wizard: this.constructor.WIZARD_TYPES.GENERATOR.key } });
-                      this.setState({ wizardType: this.constructor.WIZARD_TYPES.GENERATOR });
-                    } else if (currentUser.features[features.generator].link) {
-                      window.open(currentUser.features[features.generator].link, '_blank');
-                    }
-                  }}
-                >
+                <div className="getting-started-item-inner">
                   <img
                     src="../../static/images/getting-started/generator.svg"
                     alt="Template Generator"
                   />
                   <span>Template Generator</span>
                 </div>
-              </div>
-              <div className="getting-started-item">
-                <div
-                  className="getting-started-item-inner"
-                  onClick={() => {
-                    Router.push({ pathname: '/', query: { wizard: this.constructor.WIZARD_TYPES.VIDEO_UPLOAD.key } });
-                    this.setState({ wizardType: this.constructor.WIZARD_TYPES.VIDEO_UPLOAD });
-                  }}
-                >
+              </a>
+              <a
+                className="getting-started-item"
+                href={`/?wizard=${this.constructor.WIZARD_TYPES.VIDEO_UPLOAD.key}`}
+              >
+                <div className="getting-started-item-inner">
                   <img
                     src="../../static/images/getting-started/upload.svg"
                     alt="Import Your Own Video"
                   />
                   <span>Import Your Own Video</span>
                 </div>
-              </div>
+              </a>
             </div>
           </div>);
     }
