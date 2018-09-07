@@ -35,7 +35,7 @@ export default class EmailCampaign extends Component {
     };
   }
 
-  embedCodeGenerator = (cdnUrl) => `<!-- Start of Vidcloud Embed Code -->
+  embedCodeGenerator = cdnUrl => `<!-- Start of Vidcloud Embed Code -->
 <script type="application/javascript">
   var tokens = '${this.state.personalizations.join(' ')}';
   window.addEventListener("load",function(){var f=tokens.split(" "),a=document.createElement("iframe");a.style.display="none";a.name="vidcloud-embed";a.src="${cdnUrl}/api/embed-helper";document.body.appendChild(a);var b=document.forms["undefined"!==typeof formName&&formName||0];b&&(a=function(){for(var a=[],c=0,d=0;d<b.elements.length;d++){var e=b.elements[d];"hidden"!==e.type&&e.value&&f.length>c&&(a.push(f[c]+"="+encodeURIComponent(e.value)),c++)}document["vidcloud-embed"].postMessage({personalizedString:a.join("&")},
@@ -52,6 +52,9 @@ export default class EmailCampaign extends Component {
         <div className={`retarget-campaign ${className}`}>
           <div className="workspace">
             <ul className="steps-list">
+              <li className="list-step">
+                <p className="list-step-caption">Make sure you have disabled `Allow Facebook` option at the previous step</p>
+              </li>
               <li className="list-step">
                 <p className="list-step-caption">Reorder personalized tokens by dragging as they defined at your form</p>
                 <SortableList
