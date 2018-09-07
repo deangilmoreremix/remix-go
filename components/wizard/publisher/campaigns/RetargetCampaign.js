@@ -53,6 +53,9 @@ export default class EmailCampaign extends Component {
           <div className="workspace">
             <ul className="steps-list">
               <li className="list-step">
+                <p className="list-step-caption">Make sure you have disabled `Allow Facebook` option at the previous step</p>
+              </li>
+              <li className="list-step">
                 <p className="list-step-caption">Reorder personalized tokens by dragging as they defined at your form</p>
                 <SortableList
                   className="tokens-list"
