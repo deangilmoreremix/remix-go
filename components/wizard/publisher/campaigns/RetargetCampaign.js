@@ -38,7 +38,7 @@ export default class EmailCampaign extends Component {
   embedCodeGenerator = (cdnUrl) => `<!-- Start of Vidcloud Embed Code -->
 <script type="application/javascript">
   var tokens = '${this.state.personalizations.join(' ')}';
-  window.addEventListener("load",function(){var f=tokens.split(" "),a=document.createElement("iframe");a.style.display="none";a.name="vidcloud-embed";a.src="https://cdn.vidcloud.io/api/embed-helper";document.body.appendChild(a);var b=document.forms["undefined"!==typeof formName&&formName||0];b&&(a=function(){for(var a=[],c=0,d=0;d<b.elements.length;d++){var e=b.elements[d];"hidden"!==e.type&&e.value&&f.length>c&&(a.push(f[c]+"="+encodeURIComponent(e.value)),c++)}document["vidcloud-embed"].postMessage({personalizedString:a.join("&")},
+  window.addEventListener("load",function(){var f=tokens.split(" "),a=document.createElement("iframe");a.style.display="none";a.name="vidcloud-embed";a.src="${cdnUrl}/api/embed-helper";document.body.appendChild(a);var b=document.forms["undefined"!==typeof formName&&formName||0];b&&(a=function(){for(var a=[],c=0,d=0;d<b.elements.length;d++){var e=b.elements[d];"hidden"!==e.type&&e.value&&f.length>c&&(a.push(f[c]+"="+encodeURIComponent(e.value)),c++)}document["vidcloud-embed"].postMessage({personalizedString:a.join("&")},
       "${cdnUrl}");return!0},b.addEventListener("submit",a),b.addEventListener("click",a))});
 </script>
 <!-- End of Vidcloud Embed Code -->`;
