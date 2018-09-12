@@ -12,6 +12,13 @@
     position: absolute;
     text-align: center;
 
+    .action-button {
+      border: none;
+      height: 100%;
+      width: auto;
+      cursor: pointer;
+    }
+
     .form-scrollable-inner {
       padding: 0 3%;
     }
@@ -33,11 +40,6 @@
       }
 
       .caption-edit {
-        border: none;
-        height: 100%;
-        width: auto;
-        cursor: pointer;
-
         img {
           content: url('/static/images/editor/elements/form/edit.svg');
           margin: 0 2%;
@@ -54,6 +56,28 @@
     .input-wrapper {
       padding: 1% 0;
       display: block;
+
+      .input-drag {
+        margin-right: 1%;
+
+        img {
+          content: url('/static/images/editor/elements/form/element-drag.svg');
+          margin: 0 2%;
+          height: 1rem;
+          width: auto;
+        }
+      }
+
+      .input-remove {
+        margin-left: 1%;
+
+        img {
+          content: url('/static/images/editor/elements/form/element-remove.svg');
+          margin: 0 2%;
+          height: 1rem;
+          width: auto;
+        }
+      }
     }
 
     input[type="date"]:before {
@@ -138,7 +162,7 @@
       -webkit-box-sizing: border-box;
       -moz-box-sizing: border-box;
       box-sizing: border-box;
-      width: 100%;
+      width: 75%;
       height: 2.5em;
       border: 1px #c1c1c1 solid;
     }
