@@ -9,11 +9,11 @@
   top: $header-height + $editor-wrapper-padding + $phase-component;
   right: 0;
   position: absolute;
-  display: flex;
+  display: block;
   flex-direction: column;
 
   .toolbar {
-    height: 60px !important;
+    height: $toolbar-height;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -32,13 +32,14 @@
       display: block;
       padding: 0;
       overflow: auto;
+      margin-bottom: $toolbar-height;
 
       .scrollable {
         padding: 30px 0;
 
         .card {
           border: 1px solid #cccccc;
-          
+
           &:hover {
             border-color: #eb5053;
           }
@@ -72,7 +73,7 @@
             bottom: 0;
             left: 0;
             right: 0;
-            margin: 15px 0;
+            margin: 5px 0;
             display: flex;
             flex-wrap: nowrap;
             overflow: auto;
@@ -82,15 +83,14 @@
             .thumbnail-canvas-scroll {
               display: flex;
               flex-wrap: nowrap;
-              justify-content: center;
               min-width: 100%;
 
               .thumbnail-wrapper {
                 flex: 0 0 auto;
-                float: left;
+                float: unset;
                 display: inline-block;
                 width: 20%;
-                margin: 0 5px;
+                margin: 0 auto;
                 height: 100%;
                 cursor: pointer;
 
@@ -114,6 +114,7 @@
       background: $secondary-color;
 
       .stage-item {
+        font-family: "Montserrat Light", sans-serif;
         height: 20%;
         min-height: 90px;
         padding: 15px;

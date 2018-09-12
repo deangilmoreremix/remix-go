@@ -39,8 +39,11 @@ export default class ImageUpload extends Component {
         {isUploading ?
           <InfiniteLoading /> :
           <button
-            className="go-button submit-button"
+            className={`go-button submit-button ${file || url ? '' : 'inactive'}`}
             onClick={async () => {
+              if (!file && !url) {
+                return;
+              }
               this.setState({ isUploading: true });
               try {
                 const videoMeta = await new MediaTypeDetector()
@@ -53,6 +56,7 @@ export default class ImageUpload extends Component {
                   });
                 }
               } catch (err) {
+                console.log(err);
                 this.setState({
                   error: err.message || 'This image format is not supported.',
                 });
@@ -60,7 +64,6 @@ export default class ImageUpload extends Component {
               finally {
                 this.setState({
                   isUploading: false,
-                  file: null,
                   url: null,
                 });
               }

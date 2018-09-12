@@ -16,6 +16,7 @@ module.exports = {
       main: process.env.GO_FEATURE_NAME || 'go:editor',
       generator: process.env.GO_TEMPLATE_GENERATOR || 'go:generator',
       cta: process.env.GO_CTA_LIBRARY || 'go:cta',
+      retarget: process.env.GO_RETARGET || 'optinCode',
     },
   },
   loginServer: {
@@ -32,6 +33,10 @@ module.exports = {
   },
   loaderIo: {
     key: process.env.LOADER_IO_KEY || '',
+  },
+  intercom: {
+    appId: process.env.INTERCOM_APP_ID,
+    secret: process.env.INTERCOM_SECRET,
   },
   newRelic: {
     key: process.env.NEW_RELIC_LICENSE_KEY || '',

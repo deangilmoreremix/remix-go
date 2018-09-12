@@ -18,7 +18,9 @@ export default class ConstructionWorkspace extends Component {
   };
 
   componentWillUnmount() {
+    const { store: { activeProject } } = this.props;
     this.resignActiveElement();
+    activeProject.engines.forEach(engine => activeProject.detach(engine));
   }
 
   onPopcornInitialize(wrapper) {

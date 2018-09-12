@@ -8,3 +8,17 @@
     background-size: $width $height;
   }
 }
+
+@mixin transition($transition...) {
+  -moz-transition:    $transition;
+  -o-transition:      $transition;
+  -webkit-transition: $transition;
+  transition:         $transition;
+}
+
+@mixin box-sizing( $property ) {
+  -webkit-box-sizing: $property; // Chrome 10-
+  -moz-box-sizing:    $property;
+  -ms-box-sizing:     $property; // IE 8+
+  box-sizing:         $property; // Opera, Safari 5.1+, Chrome 10+
+}

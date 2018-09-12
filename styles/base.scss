@@ -46,8 +46,10 @@ input, textarea, select, button {
     }
   }
   &-item {
+    font-family: "Montserrat", sans-serif;
     padding: 0.25rem .8rem;
-    font-size: 1.2rem;
+    font-size: 0.85rem;
+    text-transform: uppercase;
 
     a {
       color: $black;
@@ -307,11 +309,17 @@ form,
 }
 
 .go-button {
+  font-family: "Montserrat Light", sans-serif;
   cursor: pointer;
   color: $white;
   text-align: center;
   border-radius: 7px;
   background: $secondary-color;
+
+  &.inactive {
+    opacity: 0.3;
+    cursor: default;
+  }
 }
 
 .video-popup {
@@ -333,6 +341,7 @@ form,
     }
     .overlay {
       position: absolute;
+      display: flex;
       top: 0;
       bottom: 0;
       left: 0;
@@ -382,7 +391,12 @@ form,
       border-radius: 10px;
       cursor: pointer;
 
-      &.inactive {
+      &:link, &:visited, &:hover, &:active {
+        text-decoration: none;
+        color: inherit;
+      }
+
+        &.inactive {
         opacity: 0.5;
         cursor: default;
       }
@@ -395,7 +409,7 @@ form,
       }
 
       img {
-        height: 50%;
+        height: 35%;
         margin-bottom: 15%;
       }
 

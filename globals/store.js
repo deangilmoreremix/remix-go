@@ -40,8 +40,18 @@ class Store {
       // eslint-disable-next-line global-require
       global.fetch = require('isomorphic-fetch');
       global.btoa = string => Buffer.from(string).toString('base64');
+      const getIntercomUserHash = (email) => {
+        // eslint-disable-next-line global-require
+        const crypto = require('crypto');
+        const hmac = crypto.createHmac('sha256', source.common.intercom.secret);
+        hmac.update(email);
+        return hmac.digest('hex');
+      };
       this.req = req;
       this.currentUser = req.session && req.session.user;
+      if (this.currentUser) {
+        this.currentUser.hash = getIntercomUserHash(this.currentUser.email);
+      }
     }
     Object.assign(this, source);
     const { common } = this;
@@ -120,12 +130,14 @@ export async function initStoreAndPreload(isServer, source, req, preloader) {
     source.common = {
       hostname: req.hostname,
       prefixes: config.prefixes,
+      cdnHostname: config.s3.cdn,
       backend: config.backend,
       socketProtocol: config.socketProtocol,
       clientId: config.client.id,
       clientSecret: config.client.secret,
       features: config.access.features,
       video: config.video,
+      intercom: config.intercom,
       defaultPosterframe: config.posterframe,
     };
   }
