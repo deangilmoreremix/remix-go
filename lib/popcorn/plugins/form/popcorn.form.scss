@@ -60,7 +60,7 @@
       width: 100%;
 
       textarea, input {
-        flex-grow: 2;
+        width: inherit;
       }
 
       .input-drag {
@@ -120,13 +120,18 @@
 
     .form-scrollable {
       overflow-y: auto;
-      display: grid;
+      display: block;
+      -webkit-box-sizing: content-box;
+      -moz-box-sizing: content-box;
+      box-sizing: content-box;
       position: relative;
+      width: 100%;
       height: 100%;
     }
 
     .form-scrollable-inner {
       padding: 3%;
+      width: 100%;
       position: relative;
       margin: auto 0;
 
@@ -180,7 +185,7 @@
       -webkit-box-sizing: border-box;
       -moz-box-sizing: border-box;
       box-sizing: border-box;
-      width: auto;
+      width: 100%;
       height: 2.5em;
       border: 1px #c1c1c1 solid;
       color: #c1c1c1;
@@ -203,6 +208,7 @@
         min-width: 85px;
         margin: 0 auto;
         bottom: 0;
+        padding: 0;
         cursor: pointer;
       }
     }
