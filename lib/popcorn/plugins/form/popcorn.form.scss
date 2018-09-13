@@ -55,7 +55,13 @@
 
     .input-wrapper {
       padding: 1% 0;
-      display: block;
+      display: inline-flex;
+      align-items: center;
+      width: 100%;
+
+      textarea, input {
+        flex-grow: 2;
+      }
 
       .input-drag {
         margin-right: 1%;
@@ -162,9 +168,10 @@
       -webkit-box-sizing: border-box;
       -moz-box-sizing: border-box;
       box-sizing: border-box;
-      width: 75%;
+      width: auto;
       height: 2.5em;
       border: 1px #c1c1c1 solid;
+      color: #c1c1c1;
     }
 
     .buttons-inner {
