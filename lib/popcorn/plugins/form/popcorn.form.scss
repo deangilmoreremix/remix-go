@@ -86,6 +86,18 @@
       }
     }
 
+    .input-add {
+      display: block;
+      float: right;
+      height: 2em;
+      font-family: inherit;
+      width: auto;
+      color: $secondary-color;
+      border: $secondary-color solid 1px;
+      text-transform: uppercase;
+      margin: 0.5em;
+    }
+
     input[type="date"]:before {
       content: attr(placeholder) !important;
       color: #aaa;
