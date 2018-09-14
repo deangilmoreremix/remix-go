@@ -190,7 +190,7 @@ export default class Editor extends Component {
               }}
             /> : <NewElementBar project={activeProject} />}
           </Row>
-          <Row className="canvas full-height">
+          <Row className={`canvas full-height ${editorStateManager.stage === StateManager.STAGE_TYPES.CAPTION_CUSTOMISE ? 'with-toolbar' : ''}`}>
             <Col className="col-2 paddingless editor-pane">
               <EditorStageChanger
                 className="stage-wrapper"

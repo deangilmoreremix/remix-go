@@ -27,12 +27,15 @@
   .canvas {
     height: 100%;
 
+    &.with-toolbar {
+      padding-bottom: $toolbar-height;
+    }
+
     .workspace {
       background: $white;
       display: block;
       padding: 0;
       overflow: auto;
-      margin-bottom: $toolbar-height;
 
       .scrollable {
         padding: 30px 0;
