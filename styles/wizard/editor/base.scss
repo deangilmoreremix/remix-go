@@ -26,7 +26,10 @@
 
   .canvas {
     height: 100%;
-    padding-bottom: $toolbar-height;
+
+    &.with-toolbar {
+      padding-bottom: $toolbar-height;
+    }
 
     .workspace {
       background: $white;
