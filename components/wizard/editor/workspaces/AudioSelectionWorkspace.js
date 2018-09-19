@@ -9,11 +9,6 @@ import AudioGridItem from './gridItems/AudioGridItem';
 import InfiniteLoading from '../../../common/InfiniteLoading';
 import PropTypes from '../../../../lib/PropTypes';
 
-const LIBRARY_MODES = {
-  LIBRARY: 'LIBRARY',
-  UPLOADS: 'UPLOADS',
-};
-
 @inject('api')
 @observer
 export default class AudioSelectionWorkspace extends Component {
@@ -23,17 +18,22 @@ export default class AudioSelectionWorkspace extends Component {
     onAudioSelected: PropTypes.func.isRequired,
   };
 
-  state = {
-    libraryMode: LIBRARY_MODES.LIBRARY,
-    hasMore: true,
-    elements: [],
-    query: '',
-  };
+  constructor(props) {
+    super(props);
+
+    const { api } = props;
+    this.state = {
+      libraryMode: api.constructor.LIBRARY_MODES.LIBRARY,
+      hasMore: true,
+      elements: [],
+      query: '',
+    };
+  }
 
   onSearch = async (query) => {
     this.setState({ elements: [] });
     const { api } = this.props;
-    const newElements = await api.assets(api.constructor.ASSET_TYPE.AUDIOS, 0, query);
+    const newElements = await api.assets(api.constructor.ASSET_TYPES.AUDIOS, 0, query);
     this.setState({
       elements: newElements,
       hasMore: newElements.length > 0,
@@ -54,7 +54,9 @@ export default class AudioSelectionWorkspace extends Component {
   loadMore = async () => {
     const { api } = this.props;
     const { elements, query } = this.state;
-    const newElements = await api.assets(api.constructor.ASSET_TYPE.AUDIOS, elements.length, query);
+    const newElements = await api.assets(
+      api.constructor.ASSET_TYPES.AUDIOS, elements.length, query,
+    );
     this.setState({
       elements: elements.concat(newElements),
       // for now we have no pagination for such resources

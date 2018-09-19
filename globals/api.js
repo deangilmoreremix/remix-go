@@ -8,9 +8,14 @@ class Api {
   @observable
   isLoading = false;
 
-  static ASSET_TYPE = {
+  static ASSET_TYPES = {
     VIDEOS: 'videos',
     AUDIOS: 'audios',
+  };
+
+  static LIBRARY_MODES = {
+    LIBRARY: 'LIBRARY',
+    UPLOADS: 'UPLOADS',
   };
 
   constructor(isServer, source, req) {

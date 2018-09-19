@@ -14,11 +14,6 @@ import VideoGridItem from './gridItems/VideoGridItem';
 import InfiniteLoading from '../../../common/InfiniteLoading';
 import PropTypes from '../../../../lib/PropTypes';
 
-const LIBRARY_MODES = {
-  LIBRARY: 'LIBRARY',
-  UPLOADS: 'UPLOADS',
-};
-
 @inject('api')
 @observer
 export default class VideoSelectionWorkspace extends Component {
@@ -28,12 +23,17 @@ export default class VideoSelectionWorkspace extends Component {
     onVideoSelected: PropTypes.func.isRequired,
   };
 
-  state = {
-    libraryMode: LIBRARY_MODES.LIBRARY,
-    hasMore: true,
-    elements: [],
-    query: '',
-  };
+  constructor(props) {
+    super(props);
+
+    const { api } = props;
+    this.state = {
+      libraryMode: api.constructor.LIBRARY_MODES.LIBRARY,
+      hasMore: true,
+      elements: [],
+      query: '',
+    };
+  }
 
   onPreview = (title, url) => {
     this.currentPlayback = (
@@ -59,7 +59,7 @@ export default class VideoSelectionWorkspace extends Component {
   onSearch = async (query) => {
     this.setState({ elements: [] });
     const { api } = this.props;
-    const newElements = await api.assets(api.constructor.ASSET_TYPE.VIDEOS, 0, query);
+    const newElements = await api.assets(api.constructor.ASSET_TYPES.VIDEOS, 0, query);
     this.setState({
       elements: newElements,
       hasMore: newElements.length > 0,
@@ -80,7 +80,9 @@ export default class VideoSelectionWorkspace extends Component {
   loadMore = async () => {
     const { api } = this.props;
     const { elements, query } = this.state;
-    const newElements = await api.assets(api.constructor.ASSET_TYPE.VIDEOS, elements.length, query);
+    const newElements = await api.assets(
+      api.constructor.ASSET_TYPES.VIDEOS, elements.length, query,
+    );
     this.setState({
       elements: elements.concat(newElements),
       // for now we have no pagination for such resources
@@ -89,7 +91,7 @@ export default class VideoSelectionWorkspace extends Component {
   };
 
   render() {
-    const { className, inWindow = false, onVideoSelected } = this.props;
+    const { api, className, inWindow = false, onVideoSelected } = this.props;
     const { libraryMode, hasMore, elements } = this.state;
 
     const sizes = inWindow ?
@@ -109,14 +111,14 @@ export default class VideoSelectionWorkspace extends Component {
       <Fragment>
         <ButtonGroup className="go-switch flex-center">
           <Button
-            onClick={() => this.onModeChange(LIBRARY_MODES.LIBRARY)}
-            active={libraryMode === LIBRARY_MODES.LIBRARY}
+            onClick={() => this.onModeChange(api.constructor.LIBRARY_MODES.LIBRARY)}
+            active={libraryMode === api.constructor.LIBRARY_MODES.LIBRARY}
           >
             Library
           </Button>
           <Button
-            onClick={() => this.onModeChange(LIBRARY_MODES.UPLOADS)}
-            active={libraryMode === LIBRARY_MODES.UPLOADS}
+            onClick={() => this.onModeChange(api.constructor.LIBRARY_MODES.UPLOADS)}
+            active={libraryMode === api.constructor.LIBRARY_MODES.UPLOADS}
           >
             Uploads
           </Button>
