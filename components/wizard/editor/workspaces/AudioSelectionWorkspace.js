@@ -23,7 +23,7 @@ export default class AudioSelectionWorkspace extends Component {
 
     const { api } = props;
     this.state = {
-      libraryMode: api.constructor.LIBRARY_MODES.LIBRARY,
+      scope: api.constructor.ASSET_SCOPES.LIBRARY,
       hasMore: true,
       elements: [],
       query: '',
@@ -33,7 +33,8 @@ export default class AudioSelectionWorkspace extends Component {
   onSearch = async (query) => {
     this.setState({ elements: [] });
     const { api } = this.props;
-    const newElements = await api.assets(api.constructor.ASSET_TYPES.AUDIOS, 0, query);
+    const { scope } = this.state;
+    const newElements = await api.assets(scope, api.constructor.ASSET_TYPES.AUDIOS, 0, query);
     this.setState({
       elements: newElements,
       hasMore: newElements.length > 0,
@@ -41,9 +42,9 @@ export default class AudioSelectionWorkspace extends Component {
     });
   };
 
-  onModeChange = async (libraryMode) => {
+  onScopeChange = async (scope) => {
     this.state = {
-      libraryMode,
+      scope,
       elements: [],
       hasMore: true,
       query: '',
@@ -53,9 +54,9 @@ export default class AudioSelectionWorkspace extends Component {
 
   loadMore = async () => {
     const { api } = this.props;
-    const { elements, query } = this.state;
+    const { scope, elements, query } = this.state;
     const newElements = await api.assets(
-      api.constructor.ASSET_TYPES.AUDIOS, elements.length, query,
+      scope, api.constructor.ASSET_TYPES.AUDIOS, elements.length, query,
     );
     this.setState({
       elements: elements.concat(newElements),
@@ -65,8 +66,8 @@ export default class AudioSelectionWorkspace extends Component {
   };
 
   render() {
-    const { className, inWindow = false, onAudioSelected } = this.props;
-    const { libraryMode, hasMore, elements } = this.state;
+    const { api, className, inWindow = false, onAudioSelected } = this.props;
+    const { scope, hasMore, elements } = this.state;
 
     const sizes = inWindow ?
       [
@@ -85,14 +86,14 @@ export default class AudioSelectionWorkspace extends Component {
       <Fragment>
         <ButtonGroup className="go-switch flex-center">
           <Button
-            onClick={() => this.onModeChange(LIBRARY_MODES.LIBRARY)}
-            active={libraryMode === LIBRARY_MODES.LIBRARY}
+            onClick={() => this.onScopeChange(api.constructor.ASSET_SCOPES.LIBRARY)}
+            active={scope === api.constructor.ASSET_SCOPES.LIBRARY}
           >
             Library
           </Button>
           <Button
-            onClick={() => this.onModeChange(LIBRARY_MODES.UPLOADS)}
-            active={libraryMode === LIBRARY_MODES.UPLOADS}
+            onClick={() => this.onScopeChange(api.constructor.ASSET_SCOPES.UPLOADS)}
+            active={scope === api.constructor.ASSET_SCOPES.UPLOADS}
           >
             Uploads
           </Button>

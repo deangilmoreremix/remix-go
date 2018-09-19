@@ -28,7 +28,7 @@ export default class VideoSelectionWorkspace extends Component {
 
     const { api } = props;
     this.state = {
-      libraryMode: api.constructor.LIBRARY_MODES.LIBRARY,
+      scope: api.constructor.ASSET_SCOPES.LIBRARY,
       hasMore: true,
       elements: [],
       query: '',
@@ -59,7 +59,8 @@ export default class VideoSelectionWorkspace extends Component {
   onSearch = async (query) => {
     this.setState({ elements: [] });
     const { api } = this.props;
-    const newElements = await api.assets(api.constructor.ASSET_TYPES.VIDEOS, 0, query);
+    const { scope } = this.state;
+    const newElements = await api.assets(scope, api.constructor.ASSET_TYPES.VIDEOS, 0, query);
     this.setState({
       elements: newElements,
       hasMore: newElements.length > 0,
@@ -67,9 +68,9 @@ export default class VideoSelectionWorkspace extends Component {
     });
   };
 
-  onModeChange = async (libraryMode) => {
+  onScopeChange = async (scope) => {
     this.state = {
-      libraryMode,
+      scope,
       elements: [],
       hasMore: true,
       query: '',
@@ -79,9 +80,9 @@ export default class VideoSelectionWorkspace extends Component {
 
   loadMore = async () => {
     const { api } = this.props;
-    const { elements, query } = this.state;
+    const { elements, scope, query } = this.state;
     const newElements = await api.assets(
-      api.constructor.ASSET_TYPES.VIDEOS, elements.length, query,
+      scope, api.constructor.ASSET_TYPES.VIDEOS, elements.length, query,
     );
     this.setState({
       elements: elements.concat(newElements),
@@ -92,7 +93,7 @@ export default class VideoSelectionWorkspace extends Component {
 
   render() {
     const { api, className, inWindow = false, onVideoSelected } = this.props;
-    const { libraryMode, hasMore, elements } = this.state;
+    const { scope, hasMore, elements } = this.state;
 
     const sizes = inWindow ?
       [
@@ -111,14 +112,14 @@ export default class VideoSelectionWorkspace extends Component {
       <Fragment>
         <ButtonGroup className="go-switch flex-center">
           <Button
-            onClick={() => this.onModeChange(api.constructor.LIBRARY_MODES.LIBRARY)}
-            active={libraryMode === api.constructor.LIBRARY_MODES.LIBRARY}
+            onClick={() => this.onScopeChange(api.constructor.ASSET_SCOPES.LIBRARY)}
+            active={scope === api.constructor.ASSET_SCOPES.LIBRARY}
           >
             Library
           </Button>
           <Button
-            onClick={() => this.onModeChange(api.constructor.LIBRARY_MODES.UPLOADS)}
-            active={libraryMode === api.constructor.LIBRARY_MODES.UPLOADS}
+            onClick={() => this.onScopeChange(api.constructor.ASSET_SCOPES.UPLOADS)}
+            active={scope === api.constructor.ASSET_SCOPES.UPLOADS}
           >
             Uploads
           </Button>

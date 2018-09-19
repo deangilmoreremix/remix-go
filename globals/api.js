@@ -13,7 +13,7 @@ class Api {
     AUDIOS: 'audios',
   };
 
-  static LIBRARY_MODES = {
+  static ASSET_SCOPES = {
     LIBRARY: 'LIBRARY',
     UPLOADS: 'UPLOADS',
   };
@@ -44,21 +44,36 @@ class Api {
   }
 
   @action
-  async assets(assetType, count = 0, query = '') {
+  async assets(assetScope, assetType, count = 0, query = '') {
     this.isLoading = true;
     try {
-      let response = await this.assetsRequest(
-        `/${assetType}/index.json`, {
-          method: 'GET',
-        });
-      response.reverse();
-      if (query.length > 0) {
-        const lookup = new RegExp(`.*${query}.*`, 'i');
-        response = response.filter(
-          item => lookup.test(item.title) || (item.keywords && lookup.test(item.keywords)),
-        );
+      if (assetScope === Api.ASSET_SCOPES.LIBRARY) {
+        let response = await this.assetsRequest(
+          `/${assetType}/index.json`, {
+            method: 'GET',
+          });
+        response.reverse();
+        if (query.length > 0) {
+          const lookup = new RegExp(`.*${query}.*`, 'i');
+          response = response.filter(
+            item => lookup.test(item.title) || (item.keywords && lookup.test(item.keywords)),
+          );
+        }
+        return response.slice(count, count + this.perPage);
+      } else {
+        const page = Math.ceil(count / this.perPage);
+        const mediaAssetKinds = {
+          [Api.ASSET_TYPES.AUDIOS]: 'audio',
+          [Api.ASSET_TYPES.VIDEOS]: 'video',
+        };
+        return this.request(
+          `/api/users/me/media-assets?kind=${mediaAssetKinds[assetType]}&perPage=${this.perPage}&page=${page + 1}&q=${query}`, {
+            method: 'GET',
+            headers: {
+              'on-behalf': this.currentUser.id,
+            },
+          });
       }
-      return response.slice(count, count + this.perPage);
     } finally {
       this.isLoading = false;
     }
