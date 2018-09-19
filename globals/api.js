@@ -11,6 +11,7 @@ class Api {
   static ASSET_TYPES = {
     VIDEOS: 'videos',
     AUDIOS: 'audios',
+    IMAGES: 'images',
   };
 
   static ASSET_SCOPES = {
@@ -223,6 +224,31 @@ class Api {
       project.make.url = response.url;
       project.make.contentUrl = response.contenturl;
       return project;
+    } finally {
+      this.isLoading = false;
+    }
+  }
+
+  @action
+  async storeAsset(url, type) {
+    const mediaAssetKinds = {
+      [Api.ASSET_TYPES.AUDIOS]: 'audio',
+      [Api.ASSET_TYPES.VIDEOS]: 'video',
+      [Api.ASSET_TYPES.IMAGES]: 'image',
+    };
+    this.isLoading = true;
+    try {
+      return await this.request(
+        '/api/users/me/media-assets', {
+          method: 'POST',
+          headers: {
+            'on-behalf': this.currentUser.id,
+          },
+          body: {
+            url,
+            kind: mediaAssetKinds[type],
+          },
+        });
     } finally {
       this.isLoading = false;
     }

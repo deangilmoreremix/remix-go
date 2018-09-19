@@ -69,12 +69,12 @@ export default class VideoSelectionWorkspace extends Component {
   };
 
   onScopeChange = async (scope) => {
-    this.state = {
+    this.setState({
       scope,
       elements: [],
       hasMore: true,
       query: '',
-    };
+    });
     await this.loadMore();
   };
 

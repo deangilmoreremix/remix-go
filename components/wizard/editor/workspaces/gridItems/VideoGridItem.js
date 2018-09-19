@@ -20,16 +20,18 @@ export default class VideoGridItem extends Component {
   render() {
     const { onPreview, onUse, title, url, preview } = this.props;
     return (
-      <div className="card video-item">
-        <video
-          className="video"
-          preload="true"
-          ref={(c) => { this.previewContainer = c; }}
-          loop
-          muted
-        >
-          <source src={preview} type="video/webm" />
-        </video>
+      <div className="card video-item" style={{ backgroundImage: `url(${preview || '/static/images/editor/default-artwork.png'})` }}>
+        {preview &&
+          <video
+            className="video"
+            preload="true"
+            ref={(c) => { this.previewContainer = c; }}
+            loop
+            muted
+          >
+            <source src={preview} type="video/webm" />
+          </video>
+        }
         <div
           className="overlay"
           onMouseOver={() => this.togglePreview(true)}
@@ -42,11 +44,6 @@ export default class VideoGridItem extends Component {
             <a className="button btn-preview" onClick={() => { onPreview(title, url); }}>
               <i className="fa fa-play" />
             </a>
-            {/*<p*/}
-              {/*onMouseOver={() => this.togglePreview(true)}*/}
-            {/*>*/}
-              {/*{title}*/}
-            {/*</p>*/}
             <a className="button button-primary" onClick={() => onUse(url)}>use</a>
           </div>
         </div>

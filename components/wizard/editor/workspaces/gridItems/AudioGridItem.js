@@ -28,7 +28,7 @@ export default class AudioGridItem extends Component {
       isPlaying: !playingState,
     });
   };
-  
+
   render() {
     const { onUse, artwork, title, url } = this.props;
 

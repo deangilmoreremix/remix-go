@@ -44,6 +44,7 @@ export default class VideoUpload extends Component {
         file,
         progress => this.setState({ uploadPercentage: progress }),
       );
+      await api.storeAsset(response.url, api.constructor.ASSET_TYPES.VIDEOS);
       videoMeta.source = response.url;
       this.setState({
         uploadPercentage: 0,
