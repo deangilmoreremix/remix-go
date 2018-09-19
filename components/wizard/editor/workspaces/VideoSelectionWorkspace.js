@@ -1,4 +1,5 @@
 import React, { Component, Fragment } from 'react';
+import { ButtonGroup, Button } from 'reactstrap';
 import { observable } from 'mobx';
 import { inject, observer } from 'mobx-react';
 
@@ -13,6 +14,11 @@ import VideoGridItem from './gridItems/VideoGridItem';
 import InfiniteLoading from '../../../common/InfiniteLoading';
 import PropTypes from '../../../../lib/PropTypes';
 
+const LIBRARY_MODES = {
+  LIBRARY: 'LIBRARY',
+  UPLOADS: 'UPLOADS',
+};
+
 @inject('api')
 @observer
 export default class VideoSelectionWorkspace extends Component {
@@ -23,6 +29,7 @@ export default class VideoSelectionWorkspace extends Component {
   };
 
   state = {
+    libraryMode: LIBRARY_MODES.LIBRARY,
     hasMore: true,
     elements: [],
     query: '',
@@ -60,6 +67,16 @@ export default class VideoSelectionWorkspace extends Component {
     });
   };
 
+  onModeChange = async (libraryMode) => {
+    this.state = {
+      libraryMode,
+      elements: [],
+      hasMore: true,
+      query: '',
+    };
+    await this.loadMore();
+  };
+
   loadMore = async () => {
     const { api } = this.props;
     const { elements, query } = this.state;
@@ -73,6 +90,8 @@ export default class VideoSelectionWorkspace extends Component {
 
   render() {
     const { className, inWindow = false, onVideoSelected } = this.props;
+    const { libraryMode, hasMore, elements } = this.state;
+
     const sizes = inWindow ?
       [
         { columns: 1, gutter: 20 },
@@ -88,19 +107,33 @@ export default class VideoSelectionWorkspace extends Component {
       ];
     return (
       <Fragment>
+        <ButtonGroup className="go-switch flex-center">
+          <Button
+            onClick={() => this.onModeChange(LIBRARY_MODES.LIBRARY)}
+            active={libraryMode === LIBRARY_MODES.LIBRARY}
+          >
+            Library
+          </Button>
+          <Button
+            onClick={() => this.onModeChange(LIBRARY_MODES.UPLOADS)}
+            active={libraryMode === LIBRARY_MODES.UPLOADS}
+          >
+            Uploads
+          </Button>
+        </ButtonGroup>
         <Search
           onSearch={q => this.onSearch(q)}
         />
         <VideoGallery
           useWindow={!inWindow}
           className={`media-gallery ${className}`}
-          hasMore={this.state.hasMore}
+          hasMore={hasMore}
           loader={<InfiniteLoading key="loader" />}
           loadMore={this.loadMore}
           sizes={sizes}
         >
           {
-            this.state.elements.map(({ title, url, preview }, idx) => (
+            elements.map(({ title, url, preview }, idx) => (
               <VideoGridItem
                 key={idx}
                 title={title}

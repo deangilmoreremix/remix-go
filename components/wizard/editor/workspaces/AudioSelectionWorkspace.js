@@ -1,4 +1,5 @@
 import React, { Component, Fragment } from 'react';
+import { Button, ButtonGroup } from 'reactstrap';
 import { inject, observer } from 'mobx-react';
 
 import AudioGallery from 'react-masonry-infinite';
@@ -7,6 +8,11 @@ import Search from '../../../common/Search';
 import AudioGridItem from './gridItems/AudioGridItem';
 import InfiniteLoading from '../../../common/InfiniteLoading';
 import PropTypes from '../../../../lib/PropTypes';
+
+const LIBRARY_MODES = {
+  LIBRARY: 'LIBRARY',
+  UPLOADS: 'UPLOADS',
+};
 
 @inject('api')
 @observer
@@ -18,6 +24,7 @@ export default class AudioSelectionWorkspace extends Component {
   };
 
   state = {
+    libraryMode: LIBRARY_MODES.LIBRARY,
     hasMore: true,
     elements: [],
     query: '',
@@ -34,6 +41,16 @@ export default class AudioSelectionWorkspace extends Component {
     });
   };
 
+  onModeChange = async (libraryMode) => {
+    this.state = {
+      libraryMode,
+      elements: [],
+      hasMore: true,
+      query: '',
+    };
+    await this.loadMore();
+  };
+
   loadMore = async () => {
     const { api } = this.props;
     const { elements, query } = this.state;
@@ -47,6 +64,8 @@ export default class AudioSelectionWorkspace extends Component {
 
   render() {
     const { className, inWindow = false, onAudioSelected } = this.props;
+    const { libraryMode, hasMore, elements } = this.state;
+
     const sizes = inWindow ?
       [
         { columns: 1, gutter: 20 },
@@ -62,19 +81,33 @@ export default class AudioSelectionWorkspace extends Component {
       ];
     return (
       <Fragment>
+        <ButtonGroup className="go-switch flex-center">
+          <Button
+            onClick={() => this.onModeChange(LIBRARY_MODES.LIBRARY)}
+            active={libraryMode === LIBRARY_MODES.LIBRARY}
+          >
+            Library
+          </Button>
+          <Button
+            onClick={() => this.onModeChange(LIBRARY_MODES.UPLOADS)}
+            active={libraryMode === LIBRARY_MODES.UPLOADS}
+          >
+            Uploads
+          </Button>
+        </ButtonGroup>
         <Search
           onSearch={q => this.onSearch(q)}
         />
         <AudioGallery
           useWindow={!inWindow}
           className={`media-gallery ${className}`}
-          hasMore={this.state.hasMore}
+          hasMore={hasMore}
           loader={<InfiniteLoading key="loader" />}
           loadMore={this.loadMore}
           sizes={sizes}
         >
           {
-            this.state.elements.map(({ title, url, artwork }, idx) => (
+            elements.map(({ title, url, artwork }, idx) => (
               <AudioGridItem
                 key={idx}
                 title={title}
