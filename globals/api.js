@@ -230,7 +230,7 @@ class Api {
   }
 
   @action
-  async storeAsset(url, type) {
+  async storeAsset(url, preview, type) {
     const mediaAssetKinds = {
       [Api.ASSET_TYPES.AUDIOS]: 'audio',
       [Api.ASSET_TYPES.VIDEOS]: 'video',
@@ -246,6 +246,7 @@ class Api {
           },
           body: {
             url,
+            preview,
             kind: mediaAssetKinds[type],
           },
         });
@@ -255,7 +256,7 @@ class Api {
   }
 
   @action
-  uploadMedia(data, onProgress = () => {}) {
+  uploadMedia({ data, preview }, onProgress = () => {}) {
     this.isLoading = true;
     return new Promise((resolve, reject) => {
       if (typeof data === 'string') {
@@ -272,7 +273,7 @@ class Api {
           onProgress(loaded / total);
         };
       }
-      xhr.open('PUT', `//${this.common.self}/api/media?video_preview=true`, true);
+      xhr.open('PUT', `//${this.common.self}/api/media?${preview ? 'video_preview=true' : ''}`, true);
       xhr.onload = () => {
         if (onProgress) {
           onProgress(1.0);
