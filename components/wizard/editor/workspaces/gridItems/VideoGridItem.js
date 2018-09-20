@@ -20,7 +20,7 @@ export default class VideoGridItem extends Component {
   render() {
     const { onPreview, onUse, title, url, preview } = this.props;
     return (
-      <div className="card video-item" style={{ backgroundImage: `url(${preview || '/static/images/editor/default-artwork.png'})` }}>
+      <div className="card video-item" style={{ backgroundImage: `url(${preview ? '' : '/static/images/editor/default-video-preview.png'})` }}>
         {preview &&
           <video
             className="video"
