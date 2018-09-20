@@ -29,9 +29,16 @@ export default class VideoSelectionWorkspace extends Component {
     const { api } = props;
     this.state = {
       scope: api.constructor.ASSET_SCOPES.LIBRARY,
-      hasMore: true,
-      elements: [],
-      query: '',
+      [api.constructor.ASSET_SCOPES.LIBRARY]: {
+        hasMore: true,
+        elements: [],
+        query: '',
+      },
+      [api.constructor.ASSET_SCOPES.UPLOADS]: {
+        hasMore: true,
+        elements: [],
+        query: '',
+      },
     };
   }
 
@@ -62,38 +69,41 @@ export default class VideoSelectionWorkspace extends Component {
     const { scope } = this.state;
     const newElements = await api.assets(scope, api.constructor.ASSET_TYPES.VIDEOS, 0, query);
     this.setState({
-      elements: newElements,
-      hasMore: newElements.length > 0,
-      query,
+      [scope]: {
+        elements: newElements,
+        hasMore: newElements.length > 0,
+        query,
+      },
     });
   };
 
   onScopeChange = async (scope) => {
-    this.setState({
-      scope,
-      elements: [],
-      hasMore: true,
-      query: '',
-    });
-    await this.loadMore();
+    if (scope !== this.state.scope) {
+      this.setState({ scope });
+    }
   };
 
   loadMore = async () => {
     const { api } = this.props;
-    const { elements, scope, query } = this.state;
+    const { scope } = this.state;
+    const { elements, query } = this.state[scope];
     const newElements = await api.assets(
       scope, api.constructor.ASSET_TYPES.VIDEOS, elements.length, query,
     );
     this.setState({
-      elements: elements.concat(newElements),
-      // for now we have no pagination for such resources
-      hasMore: newElements.length > 0,
+      [scope]: {
+        query,
+        elements: elements.concat(newElements),
+        // for now we have no pagination for such resources
+        hasMore: newElements.length > 0,
+      },
     });
   };
 
   render() {
     const { api, className, inWindow = false, onVideoSelected } = this.props;
-    const { scope, hasMore, elements } = this.state;
+    const { scope } = this.state;
+    const { hasMore, elements } = this.state[scope];
 
     const sizes = inWindow ?
       [
@@ -127,7 +137,7 @@ export default class VideoSelectionWorkspace extends Component {
         <Search
           onSearch={q => this.onSearch(q)}
         />
-        <VideoGallery
+        {scope === api.constructor.ASSET_SCOPES.UPLOADS && <VideoGallery
           useWindow={!inWindow}
           className={`media-gallery ${className}`}
           hasMore={hasMore}
@@ -147,7 +157,28 @@ export default class VideoSelectionWorkspace extends Component {
               />
             ))
           }
-        </VideoGallery>
+        </VideoGallery>}
+        {scope === api.constructor.ASSET_SCOPES.LIBRARY && <VideoGallery
+          useWindow={!inWindow}
+          className={`media-gallery ${className}`}
+          hasMore={hasMore}
+          loader={<InfiniteLoading key="loader" />}
+          loadMore={this.loadMore}
+          sizes={sizes}
+        >
+          {
+            elements.map(({ title, url, preview }, idx) => (
+              <VideoGridItem
+                key={idx}
+                title={title}
+                url={url}
+                preview={preview}
+                onPreview={this.onPreview}
+                onUse={video => onVideoSelected(video)}
+              />
+            ))
+          }
+        </VideoGallery>}
       </Fragment>
     );
   }
