@@ -9,7 +9,8 @@
   }
 
   & > .text-inner-div {
-    overflow: scroll;
+    overflow-y: auto;
+    overflow-x: hidden;
     white-space: pre-wrap;
     padding: 0 3%;
   }
