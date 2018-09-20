@@ -255,7 +255,7 @@ class Api {
   }
 
   @action
-  uploadMedia(data, onProgress) {
+  uploadMedia(data, onProgress = () => {}) {
     this.isLoading = true;
     return new Promise((resolve, reject) => {
       if (typeof data === 'string') {
@@ -272,7 +272,7 @@ class Api {
           onProgress(loaded / total);
         };
       }
-      xhr.open('PUT', `//${this.common.self}/api/media`, true);
+      xhr.open('PUT', `//${this.common.self}/api/media?video_preview=true`, true);
       xhr.onload = () => {
         if (onProgress) {
           onProgress(1.0);
