@@ -44,7 +44,7 @@ export default class VideoUpload extends Component {
         file,
         progress => this.setState({ uploadPercentage: progress }),
       );
-      videoMeta.source = response.url;
+      videoMeta.source = [response.dash, response.url].join('|');
       this.setState({
         uploadPercentage: 0,
         isUploading: false,
