@@ -16,10 +16,10 @@ export default class AudioGridItem extends Component {
   };
 
   onAudioPreview = (playingState) => {
-    let playing = [];
-    playing = document.getElementsByClassName('playing');
+    // TODO: refactor this shit
+    const playing = document.getElementsByClassName('playing');
     if (playing && playing.length > 0) {
-      for (let i = 0; i < playing.length; i++) {
+      for (let i = 0; i < playing.length; i += 1) {
         playing[i].click();
       }
     }
@@ -28,7 +28,7 @@ export default class AudioGridItem extends Component {
       isPlaying: !playingState,
     });
   };
-  
+
   render() {
     const { onUse, artwork, title, url } = this.props;
 
