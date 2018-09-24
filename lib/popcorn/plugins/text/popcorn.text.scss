@@ -9,8 +9,7 @@
   }
 
   & > .text-inner-div {
-    overflow-y: auto;
-    overflow-x: hidden;
+    overflow-y: visible;
     white-space: pre-wrap;
     padding: 0 3%;
   }
