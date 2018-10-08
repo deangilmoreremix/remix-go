@@ -5,6 +5,18 @@
     display: inline-block;
   }
 
+  .url-container {
+    display: none;
+    min-width: 1px;
+    font-size: 0.8rem;
+    padding: 3%;
+    border: 0.5px dashed;
+    text-align: center;
+    bottom: -32px;
+    position: absolute;
+    width: 100%;
+  }
+
   .image-plugin-link {
     position: absolute;
     top: 0;
@@ -25,15 +37,6 @@
       left: 0;
       height: 100%;
       width: 100%;
-    }
-
-    .url-container {
-      display: none;
-      min-width: 1px;
-      font-size: 0.8rem;
-      padding: 3%;
-      border: 0.5px dashed;
-      text-align: center;
     }
   }
 
