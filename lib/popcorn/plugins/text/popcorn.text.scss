@@ -128,15 +128,18 @@
       min-width: 1px;
       white-space: pre-wrap;
     }
+  }
 
-    .url-container {
-      display: none;
-      min-width: 1px;
-      font-size: 0.8rem;
-      padding: 3%;
-      border: 0.5px dashed;
-      text-align: center;
-    }
+  .url-container {
+    display: none;
+    min-width: 1px;
+    font-size: 0.8rem;
+    padding: 3%;
+    border: 0.5px dashed;
+    text-align: center;
+    bottom: -32px;
+    position: absolute;
+    width: 100%;
   }
 
   &.active {
