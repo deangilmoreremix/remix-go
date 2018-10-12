@@ -24,11 +24,11 @@ export default class AudioPlayer extends Component {
       this.audio.src = url;
     }
     this.audio.play();
-  }
+  };
 
   pauseAudio = () => {
     this.audio.pause();
-  }
+  };
 
   render() {
     const { url, isPlaying, onAudioPreview } = this.props;
@@ -38,7 +38,10 @@ export default class AudioPlayer extends Component {
       this.pauseAudio();
     }
     return (
-      <a className={`button btn-preview ${isPlaying ? `playing` : ''}`} onClick={() => {onAudioPreview(isPlaying)}}>
+      <a
+        className={`button btn-preview ${isPlaying ? 'playing' : ''}`}
+        onClick={() => onAudioPreview(isPlaying)}
+      >
         <i className={`fa fa-${isPlaying ? 'pause' : 'play'}`} />
       </a>
     );

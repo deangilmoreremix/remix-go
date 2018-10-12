@@ -729,7 +729,7 @@ export default class SocialCampaign extends Component {
                         className="cell facebook-post-input"
                         type="file"
                         onChange={async ({ target: { files: [file] } }) => {
-                          const response = await api.uploadMedia(file);
+                          const response = await api.uploadMedia({ data: file });
                           const { facebookPostData } = this.state;
                           facebookPostData.thumbnail = response.url;
                           this.setState({ facebookPostData });
