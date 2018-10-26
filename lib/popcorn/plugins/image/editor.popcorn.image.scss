@@ -40,6 +40,13 @@
       margin-left: -20px;
       padding-left: 23px;
     }
+
+    &.errored {
+      input[type="text"] {
+        border-color: red;
+        border-width: thin;
+      }
+    }
   }
 
   .zoomer {
