@@ -20,6 +20,28 @@
     float: right;
   }
 
+  .phone-callback-input {
+    width: 15%;
+    display: flex;
+    align-items: center;
+
+    .fa {
+      float: left;
+      color: gray;
+      height: 100%;
+      margin-left: 20px;
+      z-index: 1;
+    }
+
+    input[type="text"] {
+      background: $white;
+      color: $primary-color;
+      margin: 0 10px;
+      margin-left: -20px;
+      padding-left: 23px;
+    }
+  }
+
   .zoomer {
     input[type=range] {
       height: 14px;
