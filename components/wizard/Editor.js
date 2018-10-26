@@ -177,6 +177,7 @@ export default class Editor extends Component {
           <Row className={`toolbar ${editorStateManager.stage === StateManager.STAGE_TYPES.CAPTION_CUSTOMISE ? '' : 'hidden'}`}>
             {activeProject && activeProject.activeElement ? <ToolbarEditor
               element={activeProject && activeProject.activeElement}
+              features={currentUser.features}
               onElementUpdate={(updatedProps) => {
                 if (updatedProps) {
                   /* eslint-disable no-underscore-dangle */
