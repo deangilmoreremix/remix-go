@@ -24,13 +24,12 @@ export default class ConstructionWorkspace extends Component {
   }
 
   onPopcornInitialize(wrapper) {
-    const { store, store: { activeProject } } = this.props;
+    const { store, store: { activeProject, currentUser } } = this.props;
     activeProject.engines = [];
-    const popcorn = store.activeProject.attach(
-      store.activeProject.popcornify(wrapper),
-      wrapper.parentNode.id,
-    );
+    const popcorn = store.activeProject.popcornify(wrapper);
     popcorn.main = true;
+    popcorn.currentUser = currentUser;
+    store.activeProject.attach(popcorn, wrapper.parentNode.id);
     this.setState({ popcorn });
     popcorn.on('elementSelected', (event) => {
       const { element } = event;

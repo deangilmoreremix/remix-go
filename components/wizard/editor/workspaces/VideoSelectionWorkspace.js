@@ -1,4 +1,5 @@
 import React, { Component, Fragment } from 'react';
+import { ButtonGroup, Button } from 'reactstrap';
 import { observable } from 'mobx';
 import { inject, observer } from 'mobx-react';
 
@@ -22,11 +23,24 @@ export default class VideoSelectionWorkspace extends Component {
     onVideoSelected: PropTypes.func.isRequired,
   };
 
-  state = {
-    hasMore: true,
-    elements: [],
-    query: '',
-  };
+  constructor(props) {
+    super(props);
+
+    const { api } = props;
+    this.state = {
+      scope: api.constructor.ASSET_SCOPES.LIBRARY,
+      [api.constructor.ASSET_SCOPES.LIBRARY]: {
+        hasMore: true,
+        elements: [],
+        query: '',
+      },
+      [api.constructor.ASSET_SCOPES.UPLOADS]: {
+        hasMore: true,
+        elements: [],
+        query: '',
+      },
+    };
+  }
 
   onPreview = (title, url) => {
     this.currentPlayback = (
@@ -52,27 +66,45 @@ export default class VideoSelectionWorkspace extends Component {
   onSearch = async (query) => {
     this.setState({ elements: [] });
     const { api } = this.props;
-    const newElements = await api.assets(api.constructor.ASSET_TYPE.VIDEOS, 0, query);
+    const { scope } = this.state;
+    const newElements = await api.assets(scope, api.constructor.ASSET_TYPES.VIDEOS, 0, query);
     this.setState({
-      elements: newElements,
-      hasMore: newElements.length > 0,
-      query,
+      [scope]: {
+        elements: newElements,
+        hasMore: newElements.length > 0,
+        query,
+      },
     });
+  };
+
+  onScopeChange = async (scope) => {
+    if (scope !== this.state.scope) {
+      this.setState({ scope });
+    }
   };
 
   loadMore = async () => {
     const { api } = this.props;
-    const { elements, query } = this.state;
-    const newElements = await api.assets(api.constructor.ASSET_TYPE.VIDEOS, elements.length, query);
+    const { scope } = this.state;
+    const { elements, query } = this.state[scope];
+    const newElements = await api.assets(
+      scope, api.constructor.ASSET_TYPES.VIDEOS, elements.length, query,
+    );
     this.setState({
-      elements: elements.concat(newElements),
-      // for now we have no pagination for such resources
-      hasMore: newElements.length > 0,
+      [scope]: {
+        query,
+        elements: elements.concat(newElements),
+        // for now we have no pagination for such resources
+        hasMore: newElements.length > 0,
+      },
     });
   };
 
   render() {
-    const { className, inWindow = false, onVideoSelected } = this.props;
+    const { api, className, inWindow = false, onVideoSelected } = this.props;
+    const { scope } = this.state;
+    const { hasMore, elements } = this.state[scope];
+
     const sizes = inWindow ?
       [
         { columns: 1, gutter: 20 },
@@ -88,19 +120,33 @@ export default class VideoSelectionWorkspace extends Component {
       ];
     return (
       <Fragment>
+        <ButtonGroup className="go-switch flex-center">
+          <Button
+            onClick={() => this.onScopeChange(api.constructor.ASSET_SCOPES.LIBRARY)}
+            active={scope === api.constructor.ASSET_SCOPES.LIBRARY}
+          >
+            Library
+          </Button>
+          <Button
+            onClick={() => this.onScopeChange(api.constructor.ASSET_SCOPES.UPLOADS)}
+            active={scope === api.constructor.ASSET_SCOPES.UPLOADS}
+          >
+            Uploads
+          </Button>
+        </ButtonGroup>
         <Search
           onSearch={q => this.onSearch(q)}
         />
-        <VideoGallery
+        {scope === api.constructor.ASSET_SCOPES.UPLOADS && <VideoGallery
           useWindow={!inWindow}
           className={`media-gallery ${className}`}
-          hasMore={this.state.hasMore}
+          hasMore={hasMore}
           loader={<InfiniteLoading key="loader" />}
           loadMore={this.loadMore}
           sizes={sizes}
         >
           {
-            this.state.elements.map(({ title, url, preview }, idx) => (
+            elements.map(({ title, url, preview }, idx) => (
               <VideoGridItem
                 key={idx}
                 title={title}
@@ -111,7 +157,28 @@ export default class VideoSelectionWorkspace extends Component {
               />
             ))
           }
-        </VideoGallery>
+        </VideoGallery>}
+        {scope === api.constructor.ASSET_SCOPES.LIBRARY && <VideoGallery
+          useWindow={!inWindow}
+          className={`media-gallery ${className}`}
+          hasMore={hasMore}
+          loader={<InfiniteLoading key="loader" />}
+          loadMore={this.loadMore}
+          sizes={sizes}
+        >
+          {
+            elements.map(({ title, url, preview }, idx) => (
+              <VideoGridItem
+                key={idx}
+                title={title}
+                url={url}
+                preview={preview}
+                onPreview={this.onPreview}
+                onUse={video => onVideoSelected(video)}
+              />
+            ))
+          }
+        </VideoGallery>}
       </Fragment>
     );
   }

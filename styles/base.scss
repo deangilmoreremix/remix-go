@@ -17,6 +17,11 @@ html {
   -webkit-text-size-adjust: 100%;
 }
 
+.flex-center {
+  display: flex;
+  justify-content: center;
+}
+
 input, textarea, select, button {
   font-family: $SourceSans;
 }
