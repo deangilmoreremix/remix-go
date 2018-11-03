@@ -5,12 +5,11 @@ import { inject, observer } from 'mobx-react';
 import Project from '../../../../lib/editor/Project';
 import PropTypes from '../../../../lib/PropTypes';
 import EmbedDataContainer from '../EmbedDataContainer';
-import FacebookPostPreview from './FacebookPostPreview';
 import InfiniteLoading from '../../../common/InfiniteLoading';
 
+import FacebookSocialProvider from '../../../../lib/social-providers/FacebookSocialProvider';
+
 const FB_APP_ID = '1728968890675795';
-const FACEBOOK_PERMISSIONS = 'manage_pages,pages_show_list';
-const FB_DEFAULT_USERPIC = 'http://emblemsbf.com/img/11864.jpg';
 const BACKEND_URL = 'https://api.videoremix.io';
 const MIN_FANS_PAGE = 2000;
 
@@ -68,17 +67,6 @@ export default class SocialCampaign extends Component {
     facebookConductor: PropTypes.node.isRequired,
   };
 
-  static FACEBOOK_MESSAGE_TOPICS = {
-    logIn: 'LOG_IN',
-    settleAuth: 'SETTLE_AUTH',
-    init: 'INIT',
-    fetchUserData: 'FETCH_USER_DATA',
-    fetchPagesData: 'FETCH_PAGE_DATA',
-    getPageTabs: 'GET_PAGE_TABS',
-    createTab: 'CREATE_TAB',
-    share: 'SHARE',
-  };
-
   static TOPIC_LOADING_MESSAGES = {
     logIn: 'Logging in...',
     settleAuth: 'Checking current authorization...',
@@ -96,42 +84,74 @@ export default class SocialCampaign extends Component {
     {
       key: 'facebook-login',
       completionPercentage: 50,
-      bootstrap: (instance) => {
-        instance.postFacebookMessage({
-          topic: instance.constructor.FACEBOOK_MESSAGE_TOPICS.init,
-          arguments: FB_APP_ID,
-        });
+      bootstrap: async (instance) => {
+        const { facebookConductor } = instance.props;
+        instance.provider = new FacebookSocialProvider({ conductor: facebookConductor });
+        await instance.provider.init();
+        try {
+          if (await instance.provider.isAuthorized()) {
+            return instance.nextStage();
+          }
+          return instance.setStage('facebook-login');
+        } catch (error) {
+          alert(error.message);
+          return instance.setStage('facebook-login');
+        }
       },
     },
     {
       key: 'facebook-page',
       completionPercentage: 50,
-      bootstrap: (instance) => {
-        instance.postFacebookMessage({
-          topic: instance.constructor.FACEBOOK_MESSAGE_TOPICS.fetchPagesData,
-        });
+      bootstrap: async (instance) => {
+        try {
+          const facebookPages = await instance.provider.fetchPagesData();
+          if (facebookPages.length) {
+            instance.setState({
+              selectedFbPage: facebookPages[0].id,
+              facebookPages,
+            });
+            if (facebookPages[0].fanCount >= MIN_FANS_PAGE) {
+              const pageTabs = await instance.provider
+                .getPageTabs(facebookPages[0].id, facebookPages[0].token);
+              instance.setState({
+                facebookPageTab: pageTabs[0],
+              });
+            }
+          }
+        } catch (error) {
+          return alert(error.message);
+        }
       },
     },
     {
       key: 'facebook-post',
       completionPercentage: 75,
-      bootstrap: (instance) => {
+      bootstrap: async (instance) => {
         const { project } = instance.props;
         const { facebookPages, facebookPageTab, selectedFbPage } = instance.state;
         if (selectedFbPage && facebookPageTab) {
           const fbPage = facebookPages.find(page => page.id === selectedFbPage);
-          instance.postFacebookMessage({
-            topic: instance.constructor.FACEBOOK_MESSAGE_TOPICS.createTab,
-            arguments: {
-              pageId: fbPage.id,
-              pageAccessToken: fbPage.token,
-              tabName: facebookPageTab.name,
-            },
-          });
+          try {
+            const result = instance.provider.createTab(
+              fbPage.id, fbPage.token, facebookPageTab.name,
+            );
+            const parsedTabUrl = result.url.split('/');
+            facebookPageTab.id = parsedTabUrl[parsedTabUrl.length - 1];
+            if (!facebookPageTab.id) {
+              facebookPageTab.id = parsedTabUrl[parsedTabUrl.length - 2];
+            }
+            try {
+              const userData = await instance.provider.fetchUserData();
+              instance.setState({ userData });
+            } catch (e) {
+            }
+          } catch (error) {
+            return alert(error.message);
+          }
         } else {
-          instance.postFacebookMessage({
-            topic: instance.constructor.FACEBOOK_MESSAGE_TOPICS.fetchUserData,
-          });
+          const userData = await instance.provider.fetchUserData();
+          console.log(userData);
+          instance.setState({ userData });
         }
         instance.setState({
           facebookPostData: {
@@ -163,24 +183,12 @@ export default class SocialCampaign extends Component {
     facebookPostData: {},
   };
 
-  componentDidMount() {
+  constructor(props) {
+    super(props);
+
     const { facebookConductor } = this.props;
-    window.addEventListener('message', this.onMessageHandler);
-    facebookConductor.contentWindow.postMessage({
-      topic: 'Initial load',
-      config: {},
-      topics: this.constructor.FACEBOOK_MESSAGE_TOPICS,
-      parentWindowUrl: window.location.origin + window.location.pathname,
-    }, facebookConductor.src);
+    this.provider = new FacebookSocialProvider({ conductor: facebookConductor });
   }
-
-  componentWillUnmount() {
-    window.removeEventListener('message', this.onMessageHandler);
-  }
-
-  onMessageHandler = (e) => {
-    this.receiveFacebookMessage(e);
-  };
 
   setStage(stageName) {
     let { currentStage } = this.state;
@@ -227,125 +235,6 @@ export default class SocialCampaign extends Component {
     }
   }
 
-  facebookMessageHandlers = {
-    [this.constructor.FACEBOOK_MESSAGE_TOPICS.settleAuth]: (data) => {
-      const { error } = data;
-      if (error) {
-        alert(error.message);
-        return this.setStage('facebook-login');
-      }
-      if (data.loggedIn) {
-        return this.nextStage();
-      }
-      return this.setStage('facebook-login');
-    },
-    [this.constructor.FACEBOOK_MESSAGE_TOPICS.logIn]: (data) => {
-      const err = data.error;
-      if (err) {
-        return this.setStage('facebook-login');
-      }
-      return this.nextStage();
-    },
-    [this.constructor.FACEBOOK_MESSAGE_TOPICS.init]: () => {
-      this.postFacebookMessage({
-        topic: this.constructor.FACEBOOK_MESSAGE_TOPICS.settleAuth,
-        arguments: FACEBOOK_PERMISSIONS,
-      });
-    },
-    [this.constructor.FACEBOOK_MESSAGE_TOPICS.fetchPagesData]: (data) => {
-      const { error, result } = data;
-      const facebookPages = [];
-      if (error) {
-        return alert(error.message);
-      }
-      if (result.length) {
-        result.forEach((page) => {
-          facebookPages.push({
-            id: page.id,
-            name: page.name,
-            token: page.access_token,
-            fanCount: page.fan_count,
-          });
-        });
-        this.setState({
-          selectedFbPage: facebookPages[0].id,
-          facebookPages,
-        });
-        if (facebookPages[0].fanCount >= MIN_FANS_PAGE) {
-          this.postFacebookMessage({
-            topic: this.constructor.FACEBOOK_MESSAGE_TOPICS.getPageTabs,
-            arguments: {
-              pageId: facebookPages[0].id,
-              pageAccessToken: facebookPages[0].token,
-            },
-          });
-        }
-      }
-    },
-    [this.constructor.FACEBOOK_MESSAGE_TOPICS.getPageTabs]: (data) => {
-      const { error, result } = data;
-      if (error) {
-        return alert(error.message);
-      }
-
-      result.data.forEach((tab) => {
-        const tabAppId = tab.application && tab.application.id;
-        if (tabAppId === FB_APP_ID) {
-          this.setState({
-            facebookPageTab: {
-              name: tab.name,
-              id: tab.id,
-            },
-          });
-        }
-      });
-    },
-    [this.constructor.FACEBOOK_MESSAGE_TOPICS.fetchUserData]: (data) => {
-      const { error, result } = data;
-      const facebookUserData = error ? null : {
-        name: result.NAME,
-        userpic: result.IMAGE || FB_DEFAULT_USERPIC,
-      };
-
-      this.setState({ facebookUserData });
-    },
-    [this.constructor.FACEBOOK_MESSAGE_TOPICS.share]: async (data) => {
-      const { error } = data;
-      const { api, project, onCampaignFinished } = this.props;
-      const { preload, autoplay, embedLocation, selectedFbPage } = this.state;
-
-      this.collapseConductor();
-
-      if (error) {
-        return alert(error.message || 'Unable to post');
-      }
-
-      if (embedLocation.key === 'facebook-page') {
-        const queryString = [
-          autoplay ? 'autoplay=1' : null,
-          !preload ? 'preload=none' : null,
-        ].filter(item => !!item).join('&');
-
-        await api.linkToFbPage(project, selectedFbPage, queryString);
-      }
-      onCampaignFinished();
-    },
-    [this.constructor.FACEBOOK_MESSAGE_TOPICS.createTab]: (data) => {
-      const { error, result } = data;
-      const { facebookPageTab } = this.state;
-
-      if (error) {
-        return alert(error.message);
-      }
-      const parsedTabUrl = result.url.split('/');
-      facebookPageTab.id = parsedTabUrl[parsedTabUrl.length - 1];
-      if (!facebookPageTab.id) {
-        facebookPageTab.id = parsedTabUrl[parsedTabUrl.length - 2];
-      }
-      this.postFacebookMessage({ topic: this.constructor.FACEBOOK_MESSAGE_TOPICS.fetchUserData });
-    },
-  };
-
   nextStage() {
     const { embedLocation } = this.state;
     let { currentStage } = this.state;
@@ -378,18 +267,6 @@ export default class SocialCampaign extends Component {
     }
   }
 
-  postFacebookMessage(data) {
-    const { facebookConductor } = this.props;
-    this.setState({
-      isLoading: true,
-      loadingMessage: this.constructor.TOPIC_LOADING_MESSAGES[data.topic],
-    });
-    facebookConductor.contentWindow.postMessage({
-      topic: data.topic,
-      arguments: data.arguments,
-    }, facebookConductor.src);
-  }
-
   prevStage() {
     const { embedLocation } = this.state;
     let { currentStage } = this.state;
@@ -410,17 +287,8 @@ export default class SocialCampaign extends Component {
     this.setState({ currentStage });
   }
 
-  receiveFacebookMessage(e) {
-    const { topic } = e.data;
-
-    this.setState({ isLoading: false });
-    if (this.facebookMessageHandlers[topic]) {
-      this.facebookMessageHandlers[topic](e.data);
-    }
-  }
-
   async sharePost() {
-    const { api, store, project } = this.props;
+    const { api, store, project, onCampaignFinished } = this.props;
     const {
       autoplay,
       preload,
@@ -449,7 +317,6 @@ export default class SocialCampaign extends Component {
     } else {
       shareOptions.redirectUrl = embedPage;
     }
-    shareOptions.projectUrl = project.make.url;
     shareOptions.projectUrl = [
       project.make.url, [
         autoplay ? 'autoplay=1' : null,
@@ -468,10 +335,23 @@ export default class SocialCampaign extends Component {
     await api.invalidateFbCache(shareOptions.projectUrl);
 
     this.expandConductor();
-    this.postFacebookMessage({
-      topic: this.constructor.FACEBOOK_MESSAGE_TOPICS.share,
-      arguments: shareOptions,
-    });
+    try {
+      await this.provider.share();
+
+      this.collapseConductor();
+
+      if (embedLocation.key === 'facebook-page') {
+        const queryString = [
+          autoplay ? 'autoplay=1' : null,
+          !preload ? 'preload=none' : null,
+        ].filter(item => !!item).join('&');
+
+        await api.linkToFbPage(project, selectedFbPage, queryString);
+      }
+      onCampaignFinished();
+    } catch (error) {
+      return alert(error.message || 'Unable to post');
+    }
   }
 
   collapseConductor() {
@@ -506,6 +386,8 @@ export default class SocialCampaign extends Component {
       facebookUserData,
       facebookPostData,
     } = this.state;
+
+    const ProviderPostPreview = this.provider.constructor.PostPreview;
 
     return (
       <Fragment>
@@ -595,11 +477,13 @@ export default class SocialCampaign extends Component {
               </div>
               <button
                 className="go-button fb-login"
-                onClick={() => {
-                  this.postFacebookMessage({
-                    topic: this.constructor.FACEBOOK_MESSAGE_TOPICS.logIn,
-                    arguments: FACEBOOK_PERMISSIONS,
-                  });
+                onClick={async () => {
+                  try {
+                    await this.provider.logIn();
+                    return this.nextStage();
+                  } catch (e) {
+                    return this.setStage('facebook-login');
+                  }
                 }}
               >
                 <i className="fa fa-facebook-official" />
@@ -620,17 +504,15 @@ export default class SocialCampaign extends Component {
                     className="cell"
                     name="select"
                     value={selectedFbPage}
-                    onChange={({ target: { value } }) => {
+                    onChange={async ({ target: { value } }) => {
                       const fbPage = facebookPages.find(page => page.id === value);
                       this.setState({
                         selectedFbPage: value,
                       });
-                      this.postFacebookMessage({
-                        topic: this.constructor.FACEBOOK_MESSAGE_TOPICS.getPageTabs,
-                        arguments: {
-                          pageId: fbPage.id,
-                          pageAccessToken: fbPage.token,
-                        },
+                      const pageTabs = await this.provider
+                        .getPageTabs(fbPage.id, fbPage.token);
+                      this.setState({
+                        facebookPageTab: pageTabs[0],
                       });
                     }}
                   >
@@ -737,7 +619,7 @@ export default class SocialCampaign extends Component {
                       />
                     </div>
                   </div>
-                  <FacebookPostPreview
+                  <ProviderPostPreview
                     className="cell"
                     user={facebookUserData}
                     post={facebookPostData}

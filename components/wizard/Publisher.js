@@ -123,7 +123,7 @@ export default class Publisher extends Component {
         /> : null }
         <iframe
           title="Facebook conductor"
-          src="//cdn.vidcloud.io/social-campaign/social-campaign.html"
+          src="//dev-cdn.vidcloud.io/social-campaign/social-campaign.html"
           frameBorder="0"
           className="conductor-iframe"
           id="conductor-iframe"
@@ -208,7 +208,7 @@ export default class Publisher extends Component {
                         config: {
                           titleBar: {
                             enable: true,
-                            text: 'Facebook',
+                            text: 'Social Campaign',
                           },
                           fadeIn: true,
                           fadeInSpeed: 200,
@@ -216,7 +216,7 @@ export default class Publisher extends Component {
                       });
                     }}
                   >
-                    Facebook
+                    Social Campaign
                   </button>
                   <button
                     className={`go-button action-button ${(currentUser.features[features.retarget] && currentUser.features[features.retarget].state === 'enabled') ? '' : 'inactive'}`}
