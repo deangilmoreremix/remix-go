@@ -179,7 +179,7 @@ export default class SocialCampaign extends Component {
       id: null,
       name: '',
     },
-    facebookUserData: null,
+    userData: null,
     facebookPostData: {},
   };
 
@@ -209,7 +209,7 @@ export default class SocialCampaign extends Component {
       facebookPages,
       selectedFbPage,
       facebookPageTab,
-      facebookUserData,
+      userData,
       facebookPostData,
     } = this.state;
     if (isLoading) {
@@ -221,13 +221,13 @@ export default class SocialCampaign extends Component {
       case 'embed-location':
         return embedPage && embedPage.length > 0;
       case 'facebook-login':
-        return facebookUserData;
+        return userData;
       case 'facebook-page':
         return selectedFbPage &&
           facebookPages.find(page => page.id === selectedFbPage).fanCount >= MIN_FANS_PAGE &&
           facebookPageTab && facebookPageTab.name.length > 0;
       case 'facebook-post':
-        return facebookUserData && facebookPostData &&
+        return userData && facebookPostData &&
           facebookPostData.title && facebookPostData.title.length > 0 &&
           facebookPostData.thumbnail && facebookPostData.thumbnail.length > 0;
       default:
@@ -336,7 +336,7 @@ export default class SocialCampaign extends Component {
 
     this.expandConductor();
     try {
-      await this.provider.share();
+      await this.provider.share(shareOptions);
 
       this.collapseConductor();
 
@@ -383,7 +383,7 @@ export default class SocialCampaign extends Component {
       facebookPages,
       selectedFbPage,
       facebookPageTab,
-      facebookUserData,
+      userData,
       facebookPostData,
     } = this.state;
 
@@ -621,7 +621,7 @@ export default class SocialCampaign extends Component {
                   </div>
                   <ProviderPostPreview
                     className="cell"
-                    user={facebookUserData}
+                    user={userData}
                     post={facebookPostData}
                   />
                 </div>
