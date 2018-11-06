@@ -8,6 +8,8 @@ import InfiniteLoading from '../../../common/InfiniteLoading';
 
 import FacebookCampaignStager from './campaign-stagers/FacebookCampaignStager';
 import FacebookSocialProvider from '../../../../lib/social-providers/FacebookSocialProvider';
+import LinkedinCampaignStager from './campaign-stagers/LinkedinCampaignStager';
+import LInkedinSocialProvider from '../../../../lib/social-providers/LinkedinSocialProvider';
 
 @inject('api')
 @inject('store')
@@ -20,34 +22,79 @@ export default class SocialCampaign extends Component {
     facebookConductor: PropTypes.node.isRequired,
   };
 
-  constructor(props) {
-    super(props);
-
-    const { facebookConductor, project } = this.props;
-    this.stager = new FacebookCampaignStager(
-      new FacebookSocialProvider({ conductor: facebookConductor }),
-      project,
-    );
-  }
+  static socialSources = [{
+    key: 'facebook',
+    title: 'Facebook',
+    image: 'fb-logo',
+    loader: (props) => {
+      const { facebookConductor, project } = props;
+      return new FacebookCampaignStager(
+        new FacebookSocialProvider({ conductor: facebookConductor }),
+        project,
+      );
+    },
+  }, {
+    key: 'linkedin',
+    title: 'LinkedIn',
+    image: 'li-logo',
+    loader: (props) => {
+      const { project } = props;
+      return new LinkedinCampaignStager(
+        new LInkedinSocialProvider(),
+        project,
+      );
+    },
+  }];
 
   state = {
     isLoading: false,
   };
 
-  async sharePost() {
+  sharePost = async () => {
     const { api, store, onCampaignFinished } = this.props;
+    const { stager } = this.state;
+
     try {
-      store.activeProject = await this.stager.sharePost(api);
+      store.activeProject = await stager.sharePost(api);
       onCampaignFinished();
     } catch (error) {
       return alert(error.message || 'Unable to post');
     }
-  }
+  };
+
+  selectSocialSource = (key) => {
+    const selectedSource = this.constructor.socialSources.find(item => item.key === key);
+    this.setState({ stager: selectedSource.loader(this.props) });
+  };
+
+  handleBackButtonClick = async () => {
+    const { stager, isLoading } = this.state;
+    if (isLoading) {
+      return;
+    }
+    this.setState({ isLoading: true });
+    await stager.prevStage();
+    this.setState({ isLoading: false });
+  };
+
+  handleNextButtonClick = async () => {
+    const { stager } = this.state;
+    if (!stager.canBypassStage(stager.currentStage)) {
+      return;
+    }
+    this.setState({ isLoading: true });
+    if (stager.currentStage.key ===
+      stager.stages[stager.stages.length - 1].key) {
+      await this.sharePost();
+    } else {
+      await stager.nextStage();
+    }
+    this.setState({ isLoading: false });
+  };
 
   render() {
-    const { stager } = this;
     const { className, project } = this.props;
-    const { isLoading } = this.state;
+    const { stager, isLoading } = this.state;
 
     return (
       <Fragment>
@@ -56,26 +103,32 @@ export default class SocialCampaign extends Component {
             <InfiniteLoading />
           </div>
           <div className={`workspace ${isLoading ? 'hidden' : ''}`}>
+            {!stager &&
+            <div>
+              <ul>
+                {this.constructor.socialSources.map(({ key, title }) => (
+                  <li key={key} onClick={() => this.selectSocialSource(key)}>
+                    {title}
+                  </li>
+                ))}
+              </ul>
+            </div>}
+            {stager &&
             <Progress
               className="embed-progress"
               value={stager.currentStage.completionPercentage}
-            />
+            />}
+            {stager &&
             <stager.currentStage.element
               variables={stager.variables}
               project={project}
-            />
+            />}
           </div>
+          {stager &&
           <div className="controls">
             <button
               className={`go-button back ${stager.currentStage.key === stager.stages[0].key ? 'hidden' : ''}`}
-              onClick={async () => {
-                if (isLoading) {
-                  return;
-                }
-                this.setState({ isLoading: true });
-                await stager.prevStage();
-                this.setState({ isLoading: false });
-              }}
+              onClick={this.handleBackButtonClick}
             >
               Back
             </button>
@@ -87,19 +140,7 @@ export default class SocialCampaign extends Component {
                   '' :
                   'inactive'}`
               }
-              onClick={async () => {
-                if (!stager.canBypassStage(stager.currentStage)) {
-                  return;
-                }
-                this.setState({ isLoading: true });
-                if (stager.currentStage.key ===
-                  stager.stages[stager.stages.length - 1].key) {
-                  await this.sharePost();
-                } else {
-                  await stager.nextStage();
-                }
-                this.setState({ isLoading: false });
-              }}
+              onClick={this.handleNextButtonClick}
             >
               <i
                 className={`${stager.currentStage.key === stager.stages[stager.stages.length - 1].key ?
@@ -108,7 +149,7 @@ export default class SocialCampaign extends Component {
               />
               {stager.currentStage.key === stager.stages[stager.stages.length - 1].key ? 'Share' : 'Next'}
             </button>
-          </div>
+          </div>}
         </div>
       </Fragment>
     );
