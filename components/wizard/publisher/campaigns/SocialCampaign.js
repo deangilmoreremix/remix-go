@@ -54,7 +54,6 @@ export default class SocialCampaign extends Component {
         <div className={`social-campaign ${className}`}>
           <div className={`loading-screen workspace ${!isLoading ? 'hidden' : ''}`}>
             <InfiniteLoading />
-            {/*<span>{loadingMessage}</span>*/}
           </div>
           <div className={`workspace ${isLoading ? 'hidden' : ''}`}>
             <Progress

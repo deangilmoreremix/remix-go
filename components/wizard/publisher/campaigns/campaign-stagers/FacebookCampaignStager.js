@@ -4,119 +4,33 @@
 
 /* eslint-disable no-underscore-dangle */
 
-import React, { Component } from 'react';
+import React from 'react';
 import { action, observable } from 'mobx';
 import { Input } from 'reactstrap';
-import PropTypes from '../../../../../lib/PropTypes';
 
 import EmbedDataContainer from '../../EmbedDataContainer';
-
-// const ProviderPostPreview = this.provider.constructor.PostPreview;
-
-const iframeStyling = `<!--- VideoRemix embed styling ---->
-<style> 
-  .iframe-container { position:relative; padding-bottom:56.25%; padding-top:30px; height:0; overflow:hidden; border:1px solid #ccc; }
-  .iframe-container iframe,.iframe-container object,.iframe-container embed { position:absolute; top:0; left:0; width:100%; height:100%; }
-</style>
-<!--- End of VideoRemix embed styling ---->
-`;
+import FacebookPostPreview from '../../../../../components/common/post-previews/FacebookPostPreview';
+import CampaignStager from './CampaignStager';
 
 const FB_APP_ID = '1728968890675795';
 const BACKEND_URL = 'https://api.videoremix.io';
 const MIN_FANS_PAGE = 2000;
 
-const generateStageComponent = (render) => {
-  class StageComponent extends Component {
-    static propTypes = {
-      project: PropTypes.any,
-      variables: PropTypes.shape({
-        embedLocation: PropTypes.shape({
-          key: PropTypes.string.isRequired,
-          label: PropTypes.string.isRequired,
-          prompt: PropTypes.string,
-          embedGenerator: PropTypes.func,
-        }),
-        embedPage: PropTypes.string,
-        preload: PropTypes.boolean,
-        autoplay: PropTypes.boolean,
-        selectedFbPage: PropTypes.string,
-        facebookPageTab: PropTypes.shape({
-          id: PropTypes.string,
-          name: PropTypes.string,
-        }),
-        postData: PropTypes.shape({
-          link: PropTypes.string,
-          title: PropTypes.string,
-          thumbnail: PropTypes.string,
-          description: PropTypes.string,
-        }),
-        userData: PropTypes.shape({
-          name: PropTypes.string.isRequired,
-          userpic: PropTypes.string.isRequired,
-        }),
-      }),
-    };
+class FacebookCampaignStager extends CampaignStager {
+  static PostPreview = FacebookPostPreview;
 
-    constructor(props) {
-      super(props);
-
-      Object.assign(this.state, this.props, {
-        onVariablesUpdated: (variables) => {
-          this.setState(variables);
-        },
-      });
-    }
-
-    state = {};
-
-    render() {
-      return render(this.state);
-    }
-  }
-  return StageComponent;
-};
-
-class FacebookCampaignStager {
   static EMBED_LOCATIONS = [
-    {
-      key: 'default',
-      label: 'Direct (Default Hosting)',
-    },
-    {
-      key: 'leadpages',
-      label: 'LeadPages',
-      prompt: 'Copy and paste this embed code into your LeadPage',
-      embedGenerator: (url, width, height) => `${iframeStyling} <div class="iframe-container"><iframe id='vr' src='${url}' width='${width}' height='${height}' frameborder='0' allow="autoplay; fullscreen" mozallowfullscreen webkitallowfullscreen allowfullscreen></iframe></div>`,
-    },
-    {
-      key: 'wordpress',
-      label: 'WordPress',
-      prompt: 'Copy and paste this embed code into your WordPress',
-      embedGenerator: (url, width, height) => `${iframeStyling} <div class="iframe-container"><iframe id='vr' src='${url}' width='${width}' height='${height}' frameborder='0' allow="autoplay; fullscreen" mozallowfullscreen webkitallowfullscreen allowfullscreen></iframe></div>`,
-    },
-    {
-      key: 'optimizepress',
-      label: 'OptimizePress 2.0',
-      prompt: 'Copy and paste this embed code into your Video Player OP 2.0 element',
-      embedGenerator: (url, width, height) => `${iframeStyling} <div class="iframe-container"><iframe id='vr' src='${url}' width='${width}' height='${height}' frameborder='0' allow="autoplay; fullscreen" mozallowfullscreen webkitallowfullscreen allowfullscreen></iframe></div>`,
-    },
-    {
+    ...CampaignStager.EMBED_LOCATIONS.slice(0, CampaignStager.EMBED_LOCATIONS.length - 1), {
       key: 'facebook-page',
       label: 'Facebook Page',
-    },
-    {
-      key: 'other',
-      label: 'Other',
-      prompt: 'Copy & Paste this embed code inside the custom HTML element',
-      embedGenerator: (url, width, height) => `${iframeStyling} <div class="iframe-container"><iframe id='vr' src='${url}' width='${width}' height='${height}' frameborder='0' allow="autoplay; fullscreen" mozallowfullscreen webkitallowfullscreen allowfullscreen></iframe></div>`,
-    },
+    }, CampaignStager.EMBED_LOCATIONS[CampaignStager.EMBED_LOCATIONS.length - 1],
   ];
 
   _stages = [
     {
       key: 'embed-engine',
       completionPercentage: 25,
-      element: generateStageComponent(state => (
+      element: this.constructor.generateStageComponent(state => (
         <div className="embed-engine">
           <h5 className="embed-title">Where do you want to embed your video?</h5>
           <div className="embed-grid">
@@ -189,7 +103,7 @@ class FacebookCampaignStager {
     {
       key: 'embed-location',
       completionPercentage: 25,
-      element: generateStageComponent(state => (
+      element: this.constructor.generateStageComponent(state => (
         <div className="embed-location">
           <h5 className="embed-title">URL Link to your page with your embedded video</h5>
           <Input
@@ -206,7 +120,7 @@ class FacebookCampaignStager {
     {
       key: 'facebook-login',
       completionPercentage: 50,
-      element: generateStageComponent(() => (
+      element: this.constructor.generateStageComponent(() => (
         <div className="facebook-login">
           <div className="login-note">
             <label>
@@ -245,7 +159,7 @@ class FacebookCampaignStager {
     {
       key: 'facebook-page',
       completionPercentage: 50,
-      element: generateStageComponent(state => (
+      element: this.constructor.generateStageComponent(state => (
         <div className="facebook-page">
           <h5 className="embed-title">
             Which one of your Facebook Pages do you want to embed your Video into?
@@ -328,7 +242,7 @@ class FacebookCampaignStager {
     {
       key: 'facebook-post',
       completionPercentage: 75,
-      element: generateStageComponent(state => (
+      element: this.constructor.generateStageComponent(state => (
         <div className="facebook-post">
           <h5 className="embed-title">
             What do you want the Facebook Share to look like?
@@ -404,7 +318,7 @@ class FacebookCampaignStager {
                   />
                 </div>
               </div>
-              <this.provider.constructor.PostPreview
+              <this.constructor.PostPreview
                 className="cell"
                 user={state.variables.userData}
                 post={state.variables.postData}
@@ -450,16 +364,12 @@ class FacebookCampaignStager {
   @observable
   state = {
     currentStageIndex: 0,
+    embedLocation: this.constructor.EMBED_LOCATIONS[0],
     facebookPages: [],
     embedLocation: this.constructor.EMBED_LOCATIONS[0],
     userData: {},
     postData: {},
   };
-
-  constructor(provider, project) {
-    this.provider = provider;
-    this.project = project;
-  }
 
   async sharePost(api) {
     const { project } = this;
@@ -606,41 +516,6 @@ class FacebookCampaignStager {
       await this._stages[this.state.currentStageIndex].bootstrap(this);
     }
     return this._stages[this.state.currentStageIndex];
-  }
-
-  @action
-  async setStage(stageName) {
-    const { currentStageIndex } = this.state;
-    let currentStage = this._stages[currentStageIndex];
-    if (currentStage.key === stageName) {
-      return;
-    }
-    currentStage = this._stages.find(item => item.key === stageName);
-    this.state.currentStageIndex = this._stages.indexOf(currentStage);
-    if (currentStageIndex.bootstrap) {
-      await currentStageIndex.bootstrap(this);
-    }
-    return currentStage;
-  }
-
-  get embedLocations() {
-    return this.constructor.EMBED_LOCATIONS;
-  }
-
-  get stages() {
-    return this._stages;
-  }
-
-  get currentStage() {
-    return this._stages[this.state ? this.state.currentStageIndex : 0];
-  }
-
-  get variables() {
-    return this.state;
-  }
-
-  set variables(value) {
-    this.state = value;
   }
 }
 
