@@ -299,6 +299,7 @@ class FacebookCampaignStager {
             if (facebookPages[0].fanCount >= MIN_FANS_PAGE) {
               const pageTabs = await instance.provider
                 .getPageTabs(facebookPages[0].id, facebookPages[0].token);
+              instance.state.facebookPages = facebookPages;
               [instance.state.facebookPageTab] = pageTabs;
             }
           }
