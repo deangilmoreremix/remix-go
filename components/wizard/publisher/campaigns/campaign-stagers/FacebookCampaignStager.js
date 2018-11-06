@@ -4,7 +4,7 @@
 
 /* eslint-disable no-underscore-dangle */
 
-import React from 'react';
+import React, { Component } from 'react';
 import { action, observable } from 'mobx';
 import { Input } from 'reactstrap';
 import PropTypes from '../../../../../lib/PropTypes';
@@ -25,38 +25,55 @@ const FB_APP_ID = '1728968890675795';
 const BACKEND_URL = 'https://api.videoremix.io';
 const MIN_FANS_PAGE = 2000;
 
-const generateFunctionComponent = (render) => {
-  render.propTypes = {
-    project: PropTypes.any,
-    variables: PropTypes.shape({
-      embedLocation: PropTypes.shape({
-        key: PropTypes.string.isRequired,
-        label: PropTypes.string.isRequired,
-        prompt: PropTypes.string,
-        embedGenerator: PropTypes.func,
+const generateStageComponent = (render) => {
+  class StageComponent extends Component {
+    static propTypes = {
+      project: PropTypes.any,
+      variables: PropTypes.shape({
+        embedLocation: PropTypes.shape({
+          key: PropTypes.string.isRequired,
+          label: PropTypes.string.isRequired,
+          prompt: PropTypes.string,
+          embedGenerator: PropTypes.func,
+        }),
+        embedPage: PropTypes.string,
+        preload: PropTypes.boolean,
+        autoplay: PropTypes.boolean,
+        selectedFbPage: PropTypes.string,
+        facebookPageTab: PropTypes.shape({
+          id: PropTypes.string,
+          name: PropTypes.string,
+        }),
+        postData: PropTypes.shape({
+          link: PropTypes.string,
+          title: PropTypes.string,
+          thumbnail: PropTypes.string,
+          description: PropTypes.string,
+        }),
+        userData: PropTypes.shape({
+          name: PropTypes.string.isRequired,
+          userpic: PropTypes.string.isRequired,
+        }),
       }),
-      embedPage: PropTypes.string,
-      preload: PropTypes.boolean,
-      autoplay: PropTypes.boolean,
-      selectedFbPage: PropTypes.string,
-      facebookPageTab: PropTypes.shape({
-        id: PropTypes.string,
-        name: PropTypes.string,
-      }),
-      postData: PropTypes.shape({
-        link: PropTypes.string,
-        title: PropTypes.string,
-        thumbnail: PropTypes.string,
-        description: PropTypes.string,
-      }),
-      userData: PropTypes.shape({
-        name: PropTypes.string.isRequired,
-        userpic: PropTypes.string.isRequired,
-      }),
-    }),
-    onVariablesUpdated: PropTypes.func.isRequired,
-  };
-  return render;
+    };
+
+    constructor(props) {
+      super(props);
+
+      Object.assign(this.state, this.props, {
+        onVariablesUpdated: (variables) => {
+          this.setState(variables);
+        },
+      });
+    }
+
+    state = {};
+
+    render() {
+      return render(this.state);
+    }
+  }
+  return StageComponent;
 };
 
 class FacebookCampaignStager {
@@ -99,7 +116,7 @@ class FacebookCampaignStager {
     {
       key: 'embed-engine',
       completionPercentage: 25,
-      element: generateFunctionComponent(props => (
+      element: generateStageComponent(state => (
         <div className="embed-engine">
           <h5 className="embed-title">Where do you want to embed your video?</h5>
           <div className="embed-grid">
@@ -109,11 +126,11 @@ class FacebookCampaignStager {
                 className="cell"
                 name="select"
                 id="embed-location-select"
-                value={props.variables.embedLocation.key}
+                value={state.variables.embedLocation.key}
                 onChange={({ target: { value } }) => {
-                  props.variables.embedLocation =
+                  state.variables.embedLocation =
                     this.constructor.EMBED_LOCATIONS.find(item => item.key === value);
-                  props.onVariablesUpdated(props.variables);
+                  state.onVariablesUpdated(state.variables);
                 }}
               >
                 {this.constructor.EMBED_LOCATIONS.map(
@@ -129,10 +146,10 @@ class FacebookCampaignStager {
                 className="cell"
                 type="checkbox"
                 id="preload-check"
-                checked={props.variables.preload}
+                checked={state.variables.preload}
                 onChange={({ target: { checked } }) => {
-                  props.variables.preload = checked;
-                  props.onVariablesUpdated(props.variables);
+                  state.variables.preload = checked;
+                  state.onVariablesUpdated(state.variables);
                 }}
               />
             </div>
@@ -144,25 +161,25 @@ class FacebookCampaignStager {
                 className="cell"
                 type="checkbox"
                 id="autoplay-check"
-                checked={props.variables.autoplay}
+                checked={state.variables.autoplay}
                 onChange={({ target: { checked } }) => {
-                  props.variables.autoplay = checked;
-                  props.onVariablesUpdated(props.variables);
+                  state.variables.autoplay = checked;
+                  state.onVariablesUpdated(state.variables);
                 }}
               />
             </div>
           </div>
-          <div className={props.variables.embedLocation.embedGenerator ? 'embed-details' : 'hidden'}>
-            <span className="embed-line">{props.variables.embedLocation.prompt}</span>
+          <div className={state.variables.embedLocation.embedGenerator ? 'embed-details' : 'hidden'}>
+            <span className="embed-line">{state.variables.embedLocation.prompt}</span>
             <EmbedDataContainer
               className="embed-item"
               url={[
-                props.project.make.url, [
-                  props.variables.autoplay ? 'autoplay=1' : null,
-                  !props.variables.preload ? 'preload=none' : null,
+                state.project.make.url, [
+                  state.variables.autoplay ? 'autoplay=1' : null,
+                  !state.variables.preload ? 'preload=none' : null,
                 ].filter(item => !!item).join('&')]
                 .join('?')}
-              stringGenerator={props.variables.embedLocation.embedGenerator}
+              stringGenerator={state.variables.embedLocation.embedGenerator}
               resizable
             />
           </div>
@@ -172,15 +189,15 @@ class FacebookCampaignStager {
     {
       key: 'embed-location',
       completionPercentage: 25,
-      element: generateFunctionComponent(props => (
+      element: generateStageComponent(state => (
         <div className="embed-location">
           <h5 className="embed-title">URL Link to your page with your embedded video</h5>
           <Input
             type="text"
             className="embed-page-input"
-            value={props.variables.embedPage}
+            value={state.variables.embedPage}
             onChange={({ target: { value } }) => {
-              props.variables.embedPage = value;
+              state.variables.embedPage = value;
             }}
           />
         </div>
@@ -189,7 +206,7 @@ class FacebookCampaignStager {
     {
       key: 'facebook-login',
       completionPercentage: 50,
-      element: generateFunctionComponent(() => (
+      element: generateStageComponent(() => (
         <div className="facebook-login">
           <div className="login-note">
             <label>
@@ -228,7 +245,7 @@ class FacebookCampaignStager {
     {
       key: 'facebook-page',
       completionPercentage: 50,
-      element: generateFunctionComponent(props => (
+      element: generateStageComponent(state => (
         <div className="facebook-page">
           <h5 className="embed-title">
             Which one of your Facebook Pages do you want to embed your Video into?
@@ -242,24 +259,24 @@ class FacebookCampaignStager {
                 id="facebook-page-select"
                 className="cell"
                 name="select"
-                value={props.variables.selectedFbPage}
+                value={state.variables.selectedFbPage}
                 onChange={async ({ target: { value } }) => {
-                  const fbPage = props.variables.facebookPages.find(page => page.id === value);
-                  props.variables.selectedFbPage = value;
-                  [props.variables.facebookPageTab] = await this.provider
+                  const fbPage = state.variables.facebookPages.find(page => page.id === value);
+                  state.variables.selectedFbPage = value;
+                  [state.variables.facebookPageTab] = await this.provider
                     .getPageTabs(fbPage.id, fbPage.token);
-                  props.onVariablesUpdated(props.variables);
+                  state.onVariablesUpdated(state.variables);
                 }}
               >
-                {props.variables.facebookPages.map(
+                {state.variables.facebookPages.map(
                   ({ id, name }, idx) => <option key={idx} value={id}>{name}</option>,
                 )}
               </select>
             </div>
             {
-              props.variables.selectedFbPage &&
-              (props.variables.facebookPages.find(
-                page => page.id === props.variables.selectedFbPage,
+              state.variables.selectedFbPage &&
+              (state.variables.facebookPages.find(
+                page => page.id === state.variables.selectedFbPage,
               ).fanCount >= MIN_FANS_PAGE) ?
                 <div className="row embed-group">
                   <label className="cell" htmlFor="facebook-page-tab-input">
@@ -269,17 +286,17 @@ class FacebookCampaignStager {
                     id="facebook-page-tab-input"
                     className="cell facebook-page-tab"
                     type="text"
-                    value={props.variables.facebookPageTab.name}
+                    value={state.variables.facebookPageTab.name}
                     onChange={({ target: { value } }) => {
-                      props.variables.facebookPageTab.name = value;
+                      state.variables.facebookPageTab.name = value;
                     }}
                   />
                 </div> : null
             }
           </div>
-          {!props.variables.selectedFbPage ||
-          (props.variables.facebookPages.find(
-            page => page.id === props.variables.selectedFbPage,
+          {!state.variables.selectedFbPage ||
+          (state.variables.facebookPages.find(
+            page => page.id === state.variables.selectedFbPage,
           ).fanCount < MIN_FANS_PAGE) ?
             <div
               className="no-enough-fans"
@@ -311,7 +328,7 @@ class FacebookCampaignStager {
     {
       key: 'facebook-post',
       completionPercentage: 75,
-      element: generateFunctionComponent(props => (
+      element: generateStageComponent(state => (
         <div className="facebook-post">
           <h5 className="embed-title">
             What do you want the Facebook Share to look like?
@@ -327,12 +344,12 @@ class FacebookCampaignStager {
                     id="facebook-post-url-input"
                     className="cell facebook-post-input"
                     type="text"
-                    value={props.variables.postData.link}
+                    value={state.variables.postData.link}
                     onChange={({ target: { value } }) => {
-                      const { postData } = props.variables;
+                      const { postData } = state.variables;
                       postData.link = value;
-                      props.variables.postData = postData;
-                      props.onVariablesUpdated(props.variables);
+                      state.variables.postData = postData;
+                      state.onVariablesUpdated(state.variables);
                     }}
                   />
                 </div>
@@ -344,12 +361,12 @@ class FacebookCampaignStager {
                     id="facebook-post-title-input"
                     className="cell facebook-post-input"
                     type="text"
-                    value={props.variables.postData.title}
+                    value={state.variables.postData.title}
                     onChange={({ target: { value } }) => {
-                      const { postData } = props.variables;
+                      const { postData } = state.variables;
                       postData.title = value;
-                      props.variables.postData = postData;
-                      props.onVariablesUpdated(props.variables);
+                      state.variables.postData = postData;
+                      state.onVariablesUpdated(state.variables);
                     }}
                   />
                 </div>
@@ -361,12 +378,12 @@ class FacebookCampaignStager {
                     id="facebook-post-description-input"
                     className="cell facebook-post-input"
                     type="text"
-                    value={props.variables.postData.description}
+                    value={state.variables.postData.description}
                     onChange={({ target: { value } }) => {
-                      const { postData } = props.variables;
+                      const { postData } = state.variables;
                       postData.description = value;
-                      props.variables.postData = postData;
-                      props.onVariablesUpdated(props.variables);
+                      state.variables.postData = postData;
+                      state.onVariablesUpdated(state.variables);
                     }}
                   />
                 </div>
@@ -389,8 +406,8 @@ class FacebookCampaignStager {
               </div>
               <this.provider.constructor.PostPreview
                 className="cell"
-                user={props.variables.userData}
-                post={props.variables.postData}
+                user={state.variables.userData}
+                post={state.variables.postData}
               />
             </div>
           </div>
@@ -430,7 +447,6 @@ class FacebookCampaignStager {
     },
   ];
 
-  @observable
   state = {
     currentStageIndex: 0,
     facebookPages: [],
