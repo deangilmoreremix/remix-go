@@ -414,7 +414,7 @@ class FacebookCampaignStager {
         </div>
       )),
       bootstrap: async (instance) => {
-        const { project } = instance.props;
+        const { project } = instance;
         const { facebookPages, facebookPageTab, selectedFbPage } = instance.state;
         if (selectedFbPage && facebookPageTab) {
           const fbPage = facebookPages.find(page => page.id === selectedFbPage);
@@ -447,10 +447,13 @@ class FacebookCampaignStager {
     },
   ];
 
+  @observable
   state = {
     currentStageIndex: 0,
     facebookPages: [],
     embedLocation: this.constructor.EMBED_LOCATIONS[0],
+    userData: {},
+    postData: {},
   };
 
   constructor(provider, project) {
@@ -546,24 +549,24 @@ class FacebookCampaignStager {
     }
   }
 
+  @action
   async nextStage() {
     if (this.currentStage.key ===
       this._stages[this._stages.length - 1].key) {
       return this.sharePost();
     }
 
-    const { embedLocation } = this.state;
-    let { currentStageIndex } = this.state;
+    const { currentStageIndex, embedLocation } = this.state;
     let nextStageIdx = Math.min(currentStageIndex + 1, this._stages.length - 1);
     if (this._stages[currentStageIndex].key === 'facebook-login') {
       switch (embedLocation.key) {
         case 'facebook-page':
-          currentStageIndex = this._stages.indexOf(
+          nextStageIdx = this._stages.indexOf(
             this._stages.find(item => item.key === 'facebook-page'),
           );
           break;
         default:
-          currentStageIndex = this._stages.indexOf(
+          nextStageIdx = this._stages.indexOf(
             this._stages.find(item => item.key === 'facebook-post'),
           );
           break;
@@ -584,6 +587,7 @@ class FacebookCampaignStager {
     return this._stages[this.state.currentStageIndex];
   }
 
+  @action
   async prevStage() {
     const { currentStageIndex, embedLocation } = this.state;
     if (this._stages[currentStageIndex].key === 'facebook-page') {
@@ -604,6 +608,7 @@ class FacebookCampaignStager {
     return this._stages[this.state.currentStageIndex];
   }
 
+  @action
   async setStage(stageName) {
     const { currentStageIndex } = this.state;
     let currentStage = this._stages[currentStageIndex];

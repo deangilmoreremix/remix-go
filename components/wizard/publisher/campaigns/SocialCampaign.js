@@ -64,9 +64,6 @@ export default class SocialCampaign extends Component {
             <stager.currentStage.element
               variables={stager.variables}
               project={project}
-              onVariablesUpdated={(variables) => {
-                stager.variables = variables;
-              }}
             />
           </div>
           <div className="controls">
