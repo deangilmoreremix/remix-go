@@ -12,7 +12,6 @@ import EmbedDataContainer from '../../EmbedDataContainer';
 import FacebookPostPreview from '../../../../../components/common/post-previews/FacebookPostPreview';
 import CampaignStager from './CampaignStager';
 
-const FB_APP_ID = '1728968890675795';
 const BACKEND_URL = 'https://api.videoremix.io';
 const MIN_FANS_PAGE = 2000;
 
@@ -387,7 +386,7 @@ class FacebookCampaignStager extends CampaignStager {
     if (embedLocation.key === 'facebook-page') {
       shareOptions.pageId = selectedFbPage;
       shareOptions.redirectUrl =
-        `${BACKEND_URL}/api/makes/fb/${shareOptions.pageId}/${FB_APP_ID}?mid=${project.make._id}`;
+        `${BACKEND_URL}/api/makes/fb/${shareOptions.pageId}/${this.provider.constructor.FB_APP_ID}?mid=${project.make._id}`;
     } else if (embedLocation.key === 'default') {
       shareOptions.redirectUrl = project.make.url;
     } else {
