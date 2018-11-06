@@ -431,13 +431,14 @@ class FacebookCampaignStager {
   ];
 
   @observable
-  state = { currentStageIndex: 0 };
+  state = {};
 
   constructor(provider, project) {
     this.provider = provider;
     this.project = project;
     this.state = {
       currentStageIndex: 0,
+      facebookPages: [],
       embedLocation: this.constructor.EMBED_LOCATIONS[0],
     };
   }
