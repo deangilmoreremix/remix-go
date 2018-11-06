@@ -41,7 +41,9 @@ class Layout extends Component {
                   email: this.store.currentUser.email,
                   fullName: this.store.currentUser.fullName,
                   hash: this.store.currentUser.hash,
-                  createdAt: Math.floor(Date.parse(this.store.currentUser.createdAt) / 1000),
+                  createdAt: Math.floor(
+                    Date.parse(this.store.currentUser.createdAt) / 1000,
+                  ).toString(),
                 }}
                 domain="videoremix.io"
               /> : null}

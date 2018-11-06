@@ -46,7 +46,7 @@ export default class SocialCampaign extends Component {
 
   render() {
     const { stager } = this;
-    const { className } = this.props;
+    const { className, project } = this.props;
     const { isLoading } = this.state;
 
     return (
@@ -61,7 +61,13 @@ export default class SocialCampaign extends Component {
               className="embed-progress"
               value={stager.currentStage.completionPercentage}
             />
-            {stager.currentStage.element}
+            <stager.currentStage.element
+              variables={stager.variables}
+              project={project}
+              onVariablesUpdated={(variables) => {
+                stager.variables = variables;
+              }}
+            />
           </div>
           <div className="controls">
             <button
