@@ -1,61 +1,15 @@
 import React, { Component, Fragment } from 'react';
-import { Progress, Input } from 'reactstrap';
+import { Progress } from 'reactstrap';
 import { inject, observer } from 'mobx-react';
 
 import Project from '../../../../lib/editor/Project';
 import PropTypes from '../../../../lib/PropTypes';
-import EmbedDataContainer from '../EmbedDataContainer';
-import FacebookPostPreview from './FacebookPostPreview';
 import InfiniteLoading from '../../../common/InfiniteLoading';
 
-const FB_APP_ID = '1728968890675795';
-const FACEBOOK_PERMISSIONS = 'manage_pages,pages_show_list';
-const FB_DEFAULT_USERPIC = 'http://emblemsbf.com/img/11864.jpg';
-const BACKEND_URL = 'https://api.videoremix.io';
-const MIN_FANS_PAGE = 2000;
-
-const iframeStyling = `<!--- VideoRemix embed styling ---->
-<style> 
-  .iframe-container { position:relative; padding-bottom:56.25%; padding-top:30px; height:0; overflow:hidden; border:1px solid #ccc; }
-  .iframe-container iframe,.iframe-container object,.iframe-container embed { position:absolute; top:0; left:0; width:100%; height:100%; }
-</style>
-<!--- End of VideoRemix embed styling ---->
-`;
-
-const EMBED_LOCATIONS = [
-  {
-    key: 'default',
-    label: 'Direct (Default Hosting)',
-  },
-  {
-    key: 'leadpages',
-    label: 'LeadPages',
-    prompt: 'Copy and paste this embed code into your LeadPage',
-    embedGenerator: (url, width, height) => `${iframeStyling} <div class="iframe-container"><iframe id='vr' src='${url}' width='${width}' height='${height}' frameborder='0' allow="autoplay; fullscreen" mozallowfullscreen webkitallowfullscreen allowfullscreen></iframe></div>`,
-  },
-  {
-    key: 'wordpress',
-    label: 'WordPress',
-    prompt: 'Copy and paste this embed code into your WordPress',
-    embedGenerator: (url, width, height) => `${iframeStyling} <div class="iframe-container"><iframe id='vr' src='${url}' width='${width}' height='${height}' frameborder='0' allow="autoplay; fullscreen" mozallowfullscreen webkitallowfullscreen allowfullscreen></iframe></div>`,
-  },
-  {
-    key: 'optimizepress',
-    label: 'OptimizePress 2.0',
-    prompt: 'Copy and paste this embed code into your Video Player OP 2.0 element',
-    embedGenerator: (url, width, height) => `${iframeStyling} <div class="iframe-container"><iframe id='vr' src='${url}' width='${width}' height='${height}' frameborder='0' allow="autoplay; fullscreen" mozallowfullscreen webkitallowfullscreen allowfullscreen></iframe></div>`,
-  },
-  {
-    key: 'facebook-page',
-    label: 'Facebook Page',
-  },
-  {
-    key: 'other',
-    label: 'Other',
-    prompt: 'Copy & Paste this embed code inside the custom HTML element',
-    embedGenerator: (url, width, height) => `${iframeStyling} <div class="iframe-container"><iframe id='vr' src='${url}' width='${width}' height='${height}' frameborder='0' allow="autoplay; fullscreen" mozallowfullscreen webkitallowfullscreen allowfullscreen></iframe></div>`,
-  },
-];
+import FacebookCampaignStager from './campaign-stagers/FacebookCampaignStager';
+import FacebookSocialProvider from '../../../../lib/social-providers/FacebookSocialProvider';
+import LinkedinCampaignStager from './campaign-stagers/LinkedinCampaignStager';
+import LInkedinSocialProvider from '../../../../lib/social-providers/LinkedinSocialProvider';
 
 @inject('api')
 @inject('store')
@@ -65,727 +19,142 @@ export default class SocialCampaign extends Component {
     className: PropTypes.string,
     project: PropTypes.instanceOf(Project).isRequired,
     onCampaignFinished: PropTypes.func,
+    onTitleUpdated: PropTypes.func,
     facebookConductor: PropTypes.node.isRequired,
   };
 
-  static FACEBOOK_MESSAGE_TOPICS = {
-    logIn: 'LOG_IN',
-    settleAuth: 'SETTLE_AUTH',
-    init: 'INIT',
-    fetchUserData: 'FETCH_USER_DATA',
-    fetchPagesData: 'FETCH_PAGE_DATA',
-    getPageTabs: 'GET_PAGE_TABS',
-    createTab: 'CREATE_TAB',
-    share: 'SHARE',
-  };
-
-  static TOPIC_LOADING_MESSAGES = {
-    logIn: 'Logging in...',
-    settleAuth: 'Checking current authorization...',
-    init: '',
-    fetchUserData: 'Retrieving your profile data...',
-    fetchPagesData: 'Retrieving your pages list...',
-    getPageTabs: 'Retrieving page tabs list...',
-    createTab: 'Creating page tab...',
-    share: 'Sharing your post...',
-  };
-
-  static STAGES = [
-    { key: 'embed-engine', completionPercentage: 25 },
-    { key: 'embed-location', completionPercentage: 25 },
-    {
-      key: 'facebook-login',
-      completionPercentage: 50,
-      bootstrap: (instance) => {
-        instance.postFacebookMessage({
-          topic: instance.constructor.FACEBOOK_MESSAGE_TOPICS.init,
-          arguments: FB_APP_ID,
-        });
-      },
+  static socialSources = [{
+    key: 'facebook',
+    title: 'Facebook',
+    image: '/static/images/publisher/social-campaign/facebook-logo.svg',
+    loader: (props) => {
+      const { facebookConductor, project } = props;
+      return new FacebookCampaignStager(
+        new FacebookSocialProvider({ conductor: facebookConductor }),
+        project,
+      );
     },
-    {
-      key: 'facebook-page',
-      completionPercentage: 50,
-      bootstrap: (instance) => {
-        instance.postFacebookMessage({
-          topic: instance.constructor.FACEBOOK_MESSAGE_TOPICS.fetchPagesData,
-        });
-      },
+  }, {
+    key: 'linkedin',
+    title: 'LinkedIn',
+    image: '/static/images/publisher/social-campaign/linkedin-logo.png',
+    loader: (props) => {
+      const { project } = props;
+      return new LinkedinCampaignStager(
+        new LInkedinSocialProvider(),
+        project,
+      );
     },
-    {
-      key: 'facebook-post',
-      completionPercentage: 75,
-      bootstrap: (instance) => {
-        const { project } = instance.props;
-        const { facebookPages, facebookPageTab, selectedFbPage } = instance.state;
-        if (selectedFbPage && facebookPageTab) {
-          const fbPage = facebookPages.find(page => page.id === selectedFbPage);
-          instance.postFacebookMessage({
-            topic: instance.constructor.FACEBOOK_MESSAGE_TOPICS.createTab,
-            arguments: {
-              pageId: fbPage.id,
-              pageAccessToken: fbPage.token,
-              tabName: facebookPageTab.name,
-            },
-          });
-        } else {
-          instance.postFacebookMessage({
-            topic: instance.constructor.FACEBOOK_MESSAGE_TOPICS.fetchUserData,
-          });
-        }
-        instance.setState({
-          facebookPostData: {
-            title: project.name,
-            thumbnail: project.thumbnail,
-            description: project.description,
-            link: project.make.url,
-          },
-        });
-      },
-    },
-  ];
+  }];
 
   state = {
     isLoading: false,
-    loadingMessage: '',
-    currentStage: this.constructor.STAGES[0],
-    embedLocation: EMBED_LOCATIONS[0],
-    preload: true,
-    autoplay: false,
-    embedPage: '',
-    facebookPages: [],
-    selectedFbPage: '',
-    facebookPageTab: {
-      id: null,
-      name: '',
-    },
-    facebookUserData: null,
-    facebookPostData: {},
   };
 
-  componentDidMount() {
-    const { facebookConductor } = this.props;
-    window.addEventListener('message', this.onMessageHandler);
-    facebookConductor.contentWindow.postMessage({
-      topic: 'Initial load',
-      config: {},
-      topics: this.constructor.FACEBOOK_MESSAGE_TOPICS,
-      parentWindowUrl: window.location.origin + window.location.pathname,
-    }, facebookConductor.src);
-  }
+  sharePost = async () => {
+    const { api, store, onCampaignFinished } = this.props;
+    const { stager } = this.state;
 
-  componentWillUnmount() {
-    window.removeEventListener('message', this.onMessageHandler);
-  }
-
-  onMessageHandler = (e) => {
-    this.receiveFacebookMessage(e);
+    try {
+      store.activeProject = await stager.sharePost(api);
+      onCampaignFinished();
+    } catch (error) {
+      return alert(error.message || 'Unable to post');
+    }
   };
 
-  setStage(stageName) {
-    let { currentStage } = this.state;
-    if (currentStage.key === stageName) {
+  selectSocialSource = (key) => {
+    const { onTitleUpdated } = this.props;
+    const selectedSource = this.constructor.socialSources.find(item => item.key === key);
+    this.setState({ stager: selectedSource.loader(this.props) });
+    onTitleUpdated(`${selectedSource.title} Social Campaign`);
+  };
+
+  handleBackButtonClick = async () => {
+    const { stager, isLoading } = this.state;
+    if (isLoading) {
       return;
     }
-    currentStage = this.constructor.STAGES.find(item => item.key === stageName);
-    this.setState({ currentStage });
-    if (currentStage.bootstrap) {
-      currentStage.bootstrap(this);
-    }
-  }
-
-  canBypassStage(stage) {
-    const {
-      isLoading,
-      embedPage,
-      facebookPages,
-      selectedFbPage,
-      facebookPageTab,
-      facebookUserData,
-      facebookPostData,
-    } = this.state;
-    if (isLoading) {
-      return false;
-    }
-    switch (stage.key) {
-      case 'embed-engine':
-        return true;
-      case 'embed-location':
-        return embedPage && embedPage.length > 0;
-      case 'facebook-login':
-        return facebookUserData;
-      case 'facebook-page':
-        return selectedFbPage &&
-          facebookPages.find(page => page.id === selectedFbPage).fanCount >= MIN_FANS_PAGE &&
-          facebookPageTab && facebookPageTab.name.length > 0;
-      case 'facebook-post':
-        return facebookUserData && facebookPostData &&
-          facebookPostData.title && facebookPostData.title.length > 0 &&
-          facebookPostData.thumbnail && facebookPostData.thumbnail.length > 0;
-      default:
-        return false;
-    }
-  }
-
-  facebookMessageHandlers = {
-    [this.constructor.FACEBOOK_MESSAGE_TOPICS.settleAuth]: (data) => {
-      const { error } = data;
-      if (error) {
-        alert(error.message);
-        return this.setStage('facebook-login');
-      }
-      if (data.loggedIn) {
-        return this.nextStage();
-      }
-      return this.setStage('facebook-login');
-    },
-    [this.constructor.FACEBOOK_MESSAGE_TOPICS.logIn]: (data) => {
-      const err = data.error;
-      if (err) {
-        return this.setStage('facebook-login');
-      }
-      return this.nextStage();
-    },
-    [this.constructor.FACEBOOK_MESSAGE_TOPICS.init]: () => {
-      this.postFacebookMessage({
-        topic: this.constructor.FACEBOOK_MESSAGE_TOPICS.settleAuth,
-        arguments: FACEBOOK_PERMISSIONS,
-      });
-    },
-    [this.constructor.FACEBOOK_MESSAGE_TOPICS.fetchPagesData]: (data) => {
-      const { error, result } = data;
-      const facebookPages = [];
-      if (error) {
-        return alert(error.message);
-      }
-      if (result.length) {
-        result.forEach((page) => {
-          facebookPages.push({
-            id: page.id,
-            name: page.name,
-            token: page.access_token,
-            fanCount: page.fan_count,
-          });
-        });
-        this.setState({
-          selectedFbPage: facebookPages[0].id,
-          facebookPages,
-        });
-        if (facebookPages[0].fanCount >= MIN_FANS_PAGE) {
-          this.postFacebookMessage({
-            topic: this.constructor.FACEBOOK_MESSAGE_TOPICS.getPageTabs,
-            arguments: {
-              pageId: facebookPages[0].id,
-              pageAccessToken: facebookPages[0].token,
-            },
-          });
-        }
-      }
-    },
-    [this.constructor.FACEBOOK_MESSAGE_TOPICS.getPageTabs]: (data) => {
-      const { error, result } = data;
-      if (error) {
-        return alert(error.message);
-      }
-
-      result.data.forEach((tab) => {
-        const tabAppId = tab.application && tab.application.id;
-        if (tabAppId === FB_APP_ID) {
-          this.setState({
-            facebookPageTab: {
-              name: tab.name,
-              id: tab.id,
-            },
-          });
-        }
-      });
-    },
-    [this.constructor.FACEBOOK_MESSAGE_TOPICS.fetchUserData]: (data) => {
-      const { error, result } = data;
-      const facebookUserData = error ? null : {
-        name: result.NAME,
-        userpic: result.IMAGE || FB_DEFAULT_USERPIC,
-      };
-
-      this.setState({ facebookUserData });
-    },
-    [this.constructor.FACEBOOK_MESSAGE_TOPICS.share]: async (data) => {
-      const { error } = data;
-      const { api, project, onCampaignFinished } = this.props;
-      const { preload, autoplay, embedLocation, selectedFbPage } = this.state;
-
-      this.collapseConductor();
-
-      if (error) {
-        return alert(error.message || 'Unable to post');
-      }
-
-      if (embedLocation.key === 'facebook-page') {
-        const queryString = [
-          autoplay ? 'autoplay=1' : null,
-          !preload ? 'preload=none' : null,
-        ].filter(item => !!item).join('&');
-
-        await api.linkToFbPage(project, selectedFbPage, queryString);
-      }
-      onCampaignFinished();
-    },
-    [this.constructor.FACEBOOK_MESSAGE_TOPICS.createTab]: (data) => {
-      const { error, result } = data;
-      const { facebookPageTab } = this.state;
-
-      if (error) {
-        return alert(error.message);
-      }
-      const parsedTabUrl = result.url.split('/');
-      facebookPageTab.id = parsedTabUrl[parsedTabUrl.length - 1];
-      if (!facebookPageTab.id) {
-        facebookPageTab.id = parsedTabUrl[parsedTabUrl.length - 2];
-      }
-      this.postFacebookMessage({ topic: this.constructor.FACEBOOK_MESSAGE_TOPICS.fetchUserData });
-    },
+    this.setState({ isLoading: true });
+    await stager.prevStage();
+    this.setState({ isLoading: false });
   };
 
-  nextStage() {
-    const { embedLocation } = this.state;
-    let { currentStage } = this.state;
-    let nextStageIdx = Math.min(
-      this.constructor.STAGES.findIndex(item => currentStage.key === item.key) + 1,
-      this.constructor.STAGES.length - 1,
-    );
-    if (currentStage.key === 'facebook-login') {
-      switch (embedLocation.key) {
-        case 'facebook-page':
-          currentStage = this.constructor.STAGES.find(item => item.key === 'facebook-page');
-          break;
-        default:
-          currentStage = this.constructor.STAGES.find(item => item.key === 'facebook-post');
-          break;
-      }
+  handleNextButtonClick = async () => {
+    const { stager } = this.state;
+    if (!stager.canBypassStage(stager.currentStage)) {
+      return;
+    }
+    this.setState({ isLoading: true });
+    if (stager.currentStage.key ===
+      stager.stages[stager.stages.length - 1].key) {
+      await this.sharePost();
     } else {
-      if (this.constructor.STAGES[nextStageIdx].key === 'embed-location' &&
-        ['default', 'facebook-page'].indexOf(embedLocation.key) !== -1) {
-        nextStageIdx += 1;
-      }
-      if (this.constructor.STAGES[nextStageIdx].key === 'facebook-page' && embedLocation.key !== 'facebook-page') {
-        nextStageIdx += 1;
-      }
-      currentStage = this.constructor.STAGES[nextStageIdx];
+      await stager.nextStage();
     }
-    this.setState({ currentStage });
-    if (currentStage.bootstrap) {
-      currentStage.bootstrap(this);
-    }
-  }
-
-  postFacebookMessage(data) {
-    const { facebookConductor } = this.props;
-    this.setState({
-      isLoading: true,
-      loadingMessage: this.constructor.TOPIC_LOADING_MESSAGES[data.topic],
-    });
-    facebookConductor.contentWindow.postMessage({
-      topic: data.topic,
-      arguments: data.arguments,
-    }, facebookConductor.src);
-  }
-
-  prevStage() {
-    const { embedLocation } = this.state;
-    let { currentStage } = this.state;
-    if (currentStage.key === 'facebook-page') {
-      this.setState({ selectedFbPage: null });
-    }
-    let prevStageIdx = Math.min(
-      this.constructor.STAGES.findIndex(item => currentStage.key === item.key) - 1,
-      0,
-    );
-    if (this.constructor.STAGES[prevStageIdx].key === 'embed-location' && embedLocation.key === 'default') {
-      prevStageIdx -= 1;
-    }
-    if (this.constructor.STAGES[prevStageIdx].key === 'facebook-page' && embedLocation.key !== 'facebook-page') {
-      prevStageIdx -= 1;
-    }
-    currentStage = this.constructor.STAGES[prevStageIdx];
-    this.setState({ currentStage });
-  }
-
-  receiveFacebookMessage(e) {
-    const { topic } = e.data;
-
     this.setState({ isLoading: false });
-    if (this.facebookMessageHandlers[topic]) {
-      this.facebookMessageHandlers[topic](e.data);
-    }
-  }
-
-  async sharePost() {
-    const { api, store, project } = this.props;
-    const {
-      autoplay,
-      preload,
-      embedLocation,
-      selectedFbPage,
-      embedPage,
-      facebookPostData,
-    } = this.state;
-
-    project.name = facebookPostData.title;
-    project.description = facebookPostData.description;
-    project.thumbnail = facebookPostData.thumbnail;
-
-    await api.save(project);
-    store.activeProject = project;
-
-    const shareOptions = {
-      shouldCreateTab: embedLocation.key === 'facebook-page',
-    };
-    if (embedLocation.key === 'facebook-page') {
-      shareOptions.pageId = selectedFbPage;
-      shareOptions.redirectUrl =
-        `${BACKEND_URL}/api/makes/fb/${shareOptions.pageId}/${FB_APP_ID}?mid=${project.make._id}`;
-    } else if (embedLocation.key === 'default') {
-      shareOptions.redirectUrl = project.make.url;
-    } else {
-      shareOptions.redirectUrl = embedPage;
-    }
-    shareOptions.projectUrl = project.make.url;
-    shareOptions.projectUrl = [
-      project.make.url, [
-        autoplay ? 'autoplay=1' : null,
-        !preload ? 'preload=none' : null,
-      ].filter(item => !!item).join('&'),
-    ].join('?');
-    shareOptions.backendUrl = BACKEND_URL;
-
-    project.name = facebookPostData.title;
-    project.description = facebookPostData.description;
-    project.thumbnail = facebookPostData.thumbnail;
-
-    await api.publish(await api.save(project));
-    store.activeProject = project;
-
-    await api.invalidateFbCache(shareOptions.projectUrl);
-
-    this.expandConductor();
-    this.postFacebookMessage({
-      topic: this.constructor.FACEBOOK_MESSAGE_TOPICS.share,
-      arguments: shareOptions,
-    });
-  }
-
-  collapseConductor() {
-    const { facebookConductor } = this.props;
-    facebookConductor.style.width = '1px';
-    facebookConductor.style.height = '1px';
-  }
-
-  expandConductor() {
-    const { facebookConductor } = this.props;
-    facebookConductor.style.width = '100%';
-    facebookConductor.style.height = '100%';
-    facebookConductor.style.zIndex = '11000';
-    facebookConductor.style.position = 'fixed';
-    facebookConductor.style.top = 0;
-    facebookConductor.style.left = 0;
-  }
+  };
 
   render() {
-    const { api, className, project } = this.props;
-    const {
-      isLoading,
-      loadingMessage,
-      currentStage,
-      embedLocation,
-      preload,
-      autoplay,
-      embedPage,
-      facebookPages,
-      selectedFbPage,
-      facebookPageTab,
-      facebookUserData,
-      facebookPostData,
-    } = this.state;
+    const { className, project } = this.props;
+    const { stager, isLoading } = this.state;
 
     return (
       <Fragment>
         <div className={`social-campaign ${className}`}>
           <div className={`loading-screen workspace ${!isLoading ? 'hidden' : ''}`}>
             <InfiniteLoading />
-            <span>{loadingMessage}</span>
           </div>
           <div className={`workspace ${isLoading ? 'hidden' : ''}`}>
+            {!stager &&
+            <div className="social-source-container">
+              <span>Please select social network you want to continue with</span>
+              <ul className="social-source-list">
+                {this.constructor.socialSources.map(({ key, title, image }) => (
+                  <li
+                    className="social-source-list-item"
+                    key={key}
+                    onClick={() => this.selectSocialSource(key)}
+                  >
+                    <img src={image} alt={title} />
+                  </li>
+                ))}
+              </ul>
+            </div>}
+            {stager &&
             <Progress
               className="embed-progress"
-              value={currentStage.completionPercentage}
-            />
-            <div className={`embed-engine ${currentStage.key !== 'embed-engine' && 'hidden'}`}>
-              <h5 className="embed-title">Where do you want to embed your video?</h5>
-              <div className="embed-grid">
-                <div className="row embed-group">
-                  <label className="cell" htmlFor="embed-location-select">Embed Location</label>
-                  <select
-                    className="cell"
-                    name="select"
-                    id="embed-location-select"
-                    value={embedLocation.key}
-                    onChange={({ target: { value } }) => this.setState({
-                      embedLocation: EMBED_LOCATIONS.find(item => item.key === value),
-                    })}
-                  >
-                    {EMBED_LOCATIONS.map(
-                      ({ key, label }, idx) => <option key={idx} value={key}>{label}</option>,
-                    )}
-                  </select>
-                </div>
-                <div className="row embed-group">
-                  <label className="cell" htmlFor="preload-check">
-                    Preload
-                  </label>
-                  <Input
-                    className="cell"
-                    type="checkbox"
-                    id="preload-check"
-                    checked={preload}
-                    onChange={({ target: { checked } }) => this.setState({ preload: checked })}
-                  />
-                </div>
-                <div className="row embed-group">
-                  <label className="cell" htmlFor="autoplay-check">
-                    Autoplay
-                  </label>
-                  <Input
-                    className="cell"
-                    type="checkbox"
-                    id="autoplay-check"
-                    checked={autoplay}
-                    onChange={({ target: { checked } }) => this.setState({ autoplay: checked })}
-                  />
-                </div>
-              </div>
-              <div className={embedLocation.embedGenerator ? 'embed-details' : 'hidden'}>
-                <span className="embed-line">{embedLocation.prompt}</span>
-                <EmbedDataContainer
-                  className="embed-item"
-                  url={[
-                    project.make.url, [
-                      autoplay ? 'autoplay=1' : null,
-                      !preload ? 'preload=none' : null,
-                    ].filter(item => !!item).join('&')]
-                    .join('?')}
-                  stringGenerator={embedLocation.embedGenerator}
-                  resizable
-                />
-              </div>
-            </div>
-            <div className={`embed-location ${currentStage.key !== 'embed-location' && 'hidden'}`}>
-              <h5 className="embed-title">URL Link to your page with your embedded video</h5>
-              <Input
-                type="text"
-                className="embed-page-input"
-                value={embedPage}
-                onChange={({ target: { value } }) => this.setState({ embedPage: value })}
-              />
-            </div>
-            <div className={`facebook-login ${currentStage.key !== 'facebook-login' && 'hidden'}`}>
-              <div className="login-note">
-                <label>
-                  You must login to Facebook and authorize our app to post Videos into Facebook Pages
-                </label>
-              </div>
-              <button
-                className="go-button fb-login"
-                onClick={() => {
-                  this.postFacebookMessage({
-                    topic: this.constructor.FACEBOOK_MESSAGE_TOPICS.logIn,
-                    arguments: FACEBOOK_PERMISSIONS,
-                  });
-                }}
-              >
-                <i className="fa fa-facebook-official" />
-                Log in
-              </button>
-            </div>
-            <div className={`facebook-page ${currentStage.key !== 'facebook-page' && 'hidden'}`}>
-              <h5 className="embed-title">
-                Which one of your Facebook Pages do you want to embed your Video into?
-              </h5>
-              <div className="embed-grid">
-                <div className="row embed-group">
-                  <label className="cell" htmlFor="facebook-page-select">
-                    Facebook pages
-                  </label>
-                  <select
-                    id="facebook-page-select"
-                    className="cell"
-                    name="select"
-                    value={selectedFbPage}
-                    onChange={({ target: { value } }) => {
-                      const fbPage = facebookPages.find(page => page.id === value);
-                      this.setState({
-                        selectedFbPage: value,
-                      });
-                      this.postFacebookMessage({
-                        topic: this.constructor.FACEBOOK_MESSAGE_TOPICS.getPageTabs,
-                        arguments: {
-                          pageId: fbPage.id,
-                          pageAccessToken: fbPage.token,
-                        },
-                      });
-                    }}
-                  >
-                    {facebookPages.map(
-                      ({ id, name }, idx) => <option key={idx} value={id}>{name}</option>,
-                    )}
-                  </select>
-                </div>
-                {
-                  selectedFbPage && (facebookPages.find(page => page.id === selectedFbPage).fanCount >= MIN_FANS_PAGE) ?
-                    <div className="row embed-group">
-                      <label className="cell" htmlFor="facebook-page-tab-input">
-                        Facebook Page tab name
-                      </label>
-                      <Input
-                        id="facebook-page-tab-input"
-                        className="cell facebook-page-tab"
-                        type="text"
-                        value={facebookPageTab.name}
-                        onChange={({ target: { value } }) =>
-                          this.setState({ facebookPageTab: { name: value } })}
-                      />
-                    </div> : null
-                }
-              </div>
-              {!selectedFbPage || (facebookPages.find(page => page.id === selectedFbPage).fanCount < MIN_FANS_PAGE) ?
-                <div
-                  className="no-enough-fans"
-                >
-                  <strong>Warning! </strong>The selected page has less than 2,000 fans. As a result, and due to a
-                  new Facebook limitation introduced on February 5th, 2018, your video can only be shared on
-                  Facebook and not embedded in a tab. This will be corrected soon.
-                </div> : null}
-            </div>
-            <div className={`facebook-post ${currentStage.key !== 'facebook-post' && 'hidden'}`}>
-              <h5 className="embed-title">
-                What do you want the Facebook Share to look like?
-              </h5>
-              <div className="embed-grid">
-                <div className="row embed-group">
-                  <div className="embed-grid cell facebook-post-details">
-                    <div className="row embed-group">
-                      <label className="cell" htmlFor="facebook-post-url-input">
-                        Shared Url
-                      </label>
-                      <Input
-                        id="facebook-post-url-input"
-                        className="cell facebook-post-input"
-                        type="text"
-                        value={facebookPostData.link}
-                        onChange={({ target: { value } }) => {
-                          const { facebookPostData } = this.state;
-                          facebookPostData.link = value;
-                          this.setState({ facebookPostData });
-                        }}
-                      />
-                    </div>
-                    <div className="row embed-group">
-                      <label className="cell" htmlFor="facebook-post-title-input">
-                        Post Title
-                      </label>
-                      <Input
-                        id="facebook-post-title-input"
-                        className="cell facebook-post-input"
-                        type="text"
-                        value={facebookPostData.title}
-                        onChange={({ target: { value } }) => {
-                          const { facebookPostData } = this.state;
-                          facebookPostData.title = value;
-                          this.setState({ facebookPostData });
-                        }}
-                      />
-                    </div>
-                    <div className="row embed-group">
-                      <label className="cell" htmlFor="facebook-post-description-input">
-                        Post Description
-                      </label>
-                      <Input
-                        id="facebook-post-description-input"
-                        className="cell facebook-post-input"
-                        type="text"
-                        value={facebookPostData.description}
-                        onChange={({ target: { value } }) => {
-                          const { facebookPostData } = this.state;
-                          facebookPostData.description = value;
-                          this.setState({ facebookPostData });
-                        }}
-                      />
-                    </div>
-                    <div className="row embed-group">
-                      <label className="cell" htmlFor="facebook-post-image-input">
-                        Post Image
-                      </label>
-                      <Input
-                        id="facebook-post-image-input"
-                        className="cell facebook-post-input"
-                        type="file"
-                        onChange={async ({ target: { files: [file] } }) => {
-                          const response = await api.uploadMedia({ data: file });
-                          const { facebookPostData } = this.state;
-                          facebookPostData.thumbnail = response.url;
-                          this.setState({ facebookPostData });
-                        }}
-                      />
-                    </div>
-                  </div>
-                  <FacebookPostPreview
-                    className="cell"
-                    user={facebookUserData}
-                    post={facebookPostData}
-                  />
-                </div>
-              </div>
-            </div>
+              value={stager.currentStage.completionPercentage}
+            />}
+            {stager &&
+            <stager.currentStage.element
+              variables={stager.variables}
+              project={project}
+            />}
           </div>
+          {stager &&
           <div className="controls">
             <button
-              className={`go-button back ${currentStage.key === this.constructor.STAGES[0].key ? 'hidden' : ''}`}
-              onClick={() => {
-                if (isLoading) {
-                  return;
-                }
-                this.prevStage();
-              }}
+              className={`go-button back ${stager.currentStage.key === stager.stages[0].key ? 'hidden' : ''}`}
+              onClick={this.handleBackButtonClick}
             >
               Back
             </button>
             <button
               className={
-                `go-button ${currentStage.key === this.constructor.STAGES[this.constructor.STAGES.length - 1].key ?
-                  'next fb-login' :
-                  'next'} ${this.canBypassStage(currentStage) ?
+                `go-button ${`next ${stager.currentStage.actionButtonClassName || ''}`} ${
+                  stager.canBypassStage(stager.currentStage) ?
                   '' :
                   'inactive'}`
               }
-              onClick={() => {
-                if (!this.canBypassStage(currentStage)) {
-                  return;
-                }
-                if (currentStage.key ===
-                  this.constructor.STAGES[this.constructor.STAGES.length - 1].key) {
-                  this.sharePost();
-                } else {
-                  this.nextStage();
-                }
-              }}
+              onClick={this.handleNextButtonClick}
             >
               <i
-                className={`${currentStage.key === this.constructor.STAGES[this.constructor.STAGES.length - 1].key ?
-                  'fa fa-facebook-official' :
-                  'hidden'}`}
+                className={stager.currentStage.actionButtonIconClassName || 'hidden'}
               />
-              {currentStage.key === this.constructor.STAGES[this.constructor.STAGES.length - 1].key ? 'Share' : 'Next'}
+              {stager.currentStage.actionButtonCaption || 'Next'}
             </button>
-          </div>
+          </div>}
         </div>
       </Fragment>
     );
