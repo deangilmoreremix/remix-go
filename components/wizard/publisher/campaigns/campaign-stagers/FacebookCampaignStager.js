@@ -240,6 +240,9 @@ class FacebookCampaignStager extends CampaignStager {
     },
     {
       key: 'facebook-post',
+      actionButtonClassName: 'fb-login',
+      actionButtonIconClassName: 'fa fa-facebook-official',
+      actionButtonCaption: 'Share',
       completionPercentage: 75,
       element: this.constructor.generateStageComponent(state => (
         <div className="facebook-post">

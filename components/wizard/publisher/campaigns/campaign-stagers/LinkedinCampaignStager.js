@@ -119,7 +119,7 @@ class LinkedinCampaignStager extends CampaignStager {
             </label>
           </div>
           <button
-            className="go-button fb-login"
+            className="go-button linkedin-login"
             onClick={async () => {
               try {
                 await this.provider.logIn();
@@ -129,7 +129,7 @@ class LinkedinCampaignStager extends CampaignStager {
               }
             }}
           >
-            <i className="fa fa-linkedin" />
+            <i className="fa fa-linkedin-square" />
             Log in
           </button>
         </div>
@@ -150,6 +150,9 @@ class LinkedinCampaignStager extends CampaignStager {
     {
       key: 'post',
       completionPercentage: 75,
+      actionButtonClassName: 'linkedin-login',
+      actionButtonIconClassName: 'fa fa-linkedin-square',
+      actionButtonCaption: 'Share',
       element: this.constructor.generateStageComponent(state => (
         <div className="facebook-post">
           <h5 className="embed-title">
@@ -297,7 +300,7 @@ class LinkedinCampaignStager extends CampaignStager {
       case 'embed-location':
         return embedPage && embedPage.length > 0;
       case 'login':
-        return userData;
+        return this.provider.isAuthorized();
       case 'post':
         return userData && postData &&
           postData.title && postData.title.length > 0 &&

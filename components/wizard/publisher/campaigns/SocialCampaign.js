@@ -142,20 +142,17 @@ export default class SocialCampaign extends Component {
             </button>
             <button
               className={
-                `go-button ${stager.currentStage.key === stager.stages[stager.stages.length - 1].key ?
-                  'next fb-login' :
-                  'next'} ${stager.canBypassStage(stager.currentStage) ?
+                `go-button ${`next ${stager.currentStage.actionButtonClassName || ''}`} ${
+                  stager.canBypassStage(stager.currentStage) ?
                   '' :
                   'inactive'}`
               }
               onClick={this.handleNextButtonClick}
             >
               <i
-                className={`${stager.currentStage.key === stager.stages[stager.stages.length - 1].key ?
-                  'fa fa-facebook-official' :
-                  'hidden'}`}
+                className={stager.currentStage.actionButtonIconClassName || 'hidden'}
               />
-              {stager.currentStage.key === stager.stages[stager.stages.length - 1].key ? 'Share' : 'Next'}
+              {stager.currentStage.actionButtonCaption || 'Next'}
             </button>
           </div>}
         </div>
