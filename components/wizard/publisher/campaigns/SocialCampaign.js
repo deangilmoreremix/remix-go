@@ -28,10 +28,14 @@ export default class SocialCampaign extends Component {
     title: 'Facebook',
     image: '/static/images/publisher/social-campaign/facebook-logo.svg',
     loader: (props) => {
-      const { facebookConductor, project } = props;
+      const { facebookConductor, project, api } = props;
       return new FacebookCampaignStager(
-        new FacebookSocialProvider({ conductor: facebookConductor }),
+        new FacebookSocialProvider({
+          conductor: facebookConductor,
+          appId: '1728968890675795', // TODO: extract to env or any other vars
+        }),
         project,
+        api,
       );
     },
   }, {
@@ -39,10 +43,13 @@ export default class SocialCampaign extends Component {
     title: 'LinkedIn',
     image: '/static/images/publisher/social-campaign/linkedin-logo.png',
     loader: (props) => {
-      const { project } = props;
+      const { project, api } = props;
       return new LinkedinCampaignStager(
-        new LInkedinSocialProvider(),
+        new LInkedinSocialProvider({
+          clientId: '77kh3rpp8kfpgs', // TODO: extract to env or any other vars
+        }),
         project,
+        api,
       );
     },
   }];

@@ -37,7 +37,7 @@ export default class EmbeddedPlayback extends Component {
         hideCopyButton: true,
         showExtendedEndroll: false,
         showShare: false,
-        allowFacebook: false,
+        allowedSocials: [],
         thumbnail: source.thumbnail,
         data: JSON.stringify(source.popcornObject),
       },

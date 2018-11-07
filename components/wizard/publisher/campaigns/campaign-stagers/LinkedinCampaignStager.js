@@ -154,20 +154,20 @@ class LinkedinCampaignStager extends CampaignStager {
       actionButtonIconClassName: 'fa fa-linkedin-square',
       actionButtonCaption: 'Share',
       element: this.constructor.generateStageComponent(state => (
-        <div className="facebook-post">
+        <div className="linkedin-post">
           <h5 className="embed-title">
             What do you want the LinkedIn Share to look like?
           </h5>
           <div className="embed-grid">
             <div className="row embed-group">
-              <div className="embed-grid cell facebook-post-details">
+              <div className="embed-grid cell linkedin-post-details">
                 <div className="row embed-group">
-                  <label className="cell" htmlFor="facebook-post-url-input">
+                  <label className="cell" htmlFor="linkedin-post-url-input">
                     Shared Url
                   </label>
                   <Input
-                    id="facebook-post-url-input"
-                    className="cell facebook-post-input"
+                    id="linkedin-post-url-input"
+                    className="cell linkedin-post-input"
                     type="text"
                     value={state.variables.postData.link}
                     onChange={({ target: { value } }) => {
@@ -179,12 +179,12 @@ class LinkedinCampaignStager extends CampaignStager {
                   />
                 </div>
                 <div className="row embed-group">
-                  <label className="cell" htmlFor="facebook-post-title-input">
+                  <label className="cell" htmlFor="linkedin-post-title-input">
                     Post Title
                   </label>
                   <Input
-                    id="facebook-post-title-input"
-                    className="cell facebook-post-input"
+                    id="linkedin-post-title-input"
+                    className="cell linkedin-post-input"
                     type="text"
                     value={state.variables.postData.title}
                     onChange={({ target: { value } }) => {
@@ -196,12 +196,12 @@ class LinkedinCampaignStager extends CampaignStager {
                   />
                 </div>
                 <div className="row embed-group">
-                  <label className="cell" htmlFor="facebook-post-description-input">
+                  <label className="cell" htmlFor="linkedin-post-description-input">
                     Post Description
                   </label>
                   <Input
-                    id="facebook-post-description-input"
-                    className="cell facebook-post-input"
+                    id="linkedin-post-description-input"
+                    className="cell linkedin-post-input"
                     type="text"
                     value={state.variables.postData.description}
                     onChange={({ target: { value } }) => {
@@ -213,18 +213,19 @@ class LinkedinCampaignStager extends CampaignStager {
                   />
                 </div>
                 <div className="row embed-group">
-                  <label className="cell" htmlFor="facebook-post-image-input">
+                  <label className="cell" htmlFor="linkedin-post-image-input">
                     Post Image
                   </label>
                   <Input
-                    id="facebook-post-image-input"
-                    className="cell facebook-post-input"
+                    id="linkedin-post-image-input"
+                    className="cell linkedin-post-input"
                     type="file"
                     onChange={async ({ target: { files: [file] } }) => {
-                      // const response = await api.uploadMedia({ data: file });
-                      // const { postData } = this.state;
-                      // postData.thumbnail = response.url;
-                      // this.setState({ postData });
+                      const response = await this.api.uploadMedia({ data: file });
+                      const { postData } = state.variables;
+                      postData.thumbnail = response.url;
+                      state.variables.postData = postData;
+                      state.onVariablesUpdated(state.variables);
                     }}
                   />
                 </div>
