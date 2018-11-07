@@ -8,22 +8,14 @@ import React from 'react';
 import { action, observable } from 'mobx';
 import { Input } from 'reactstrap';
 
-import EmbedDataContainer from '../../EmbedDataContainer';
-import FacebookPostPreview from '../../../../../components/common/post-previews/FacebookPostPreview';
 import CampaignStager from './CampaignStager';
+import EmbedDataContainer from '../../EmbedDataContainer';
+import LinkedinPostPreview from '../../../../../components/common/post-previews/LinkedinPostPreview';
 
 const BACKEND_URL = 'https://api.videoremix.io';
-const MIN_FANS_PAGE = 2000;
 
 class LinkedinCampaignStager extends CampaignStager {
-  static PostPreview = FacebookPostPreview;
-
-  static EMBED_LOCATIONS = [
-    ...CampaignStager.EMBED_LOCATIONS.slice(0, CampaignStager.EMBED_LOCATIONS.length - 1), {
-      key: 'facebook-page',
-      label: 'Facebook Page',
-    }, CampaignStager.EMBED_LOCATIONS[CampaignStager.EMBED_LOCATIONS.length - 1],
-  ];
+  static PostPreview = LinkedinPostPreview;
 
   _stages = [
     {
@@ -99,12 +91,166 @@ class LinkedinCampaignStager extends CampaignStager {
         </div>
       )),
     },
+    {
+      key: 'embed-location',
+      completionPercentage: 25,
+      element: this.constructor.generateStageComponent(state => (
+        <div className="embed-location">
+          <h5 className="embed-title">URL Link to your page with your embedded video</h5>
+          <Input
+            type="text"
+            className="embed-page-input"
+            value={state.variables.embedPage}
+            onChange={({ target: { value } }) => {
+              state.variables.embedPage = value;
+            }}
+          />
+        </div>
+      )),
+    },
+    {
+      key: 'login',
+      completionPercentage: 50,
+      element: this.constructor.generateStageComponent(() => (
+        <div className="facebook-login">
+          <div className="login-note">
+            <label>
+              You must login to LinkedIn and authorize our app to share videos into timeline
+            </label>
+          </div>
+          <button
+            className="go-button fb-login"
+            onClick={async () => {
+              try {
+                await this.provider.logIn();
+                return this.nextStage();
+              } catch (e) {
+                return this.setStage('login');
+              }
+            }}
+          >
+            <i className="fa fa-linkedin" />
+            Log in
+          </button>
+        </div>
+      )),
+      bootstrap: async (instance) => {
+        await instance.provider.init();
+        try {
+          if (await instance.provider.isAuthorized()) {
+            return instance.nextStage();
+          }
+          return instance.setStage('login');
+        } catch (error) {
+          alert(error.message);
+          return instance.setStage('login');
+        }
+      },
+    },
+    {
+      key: 'post',
+      completionPercentage: 75,
+      element: this.constructor.generateStageComponent(state => (
+        <div className="facebook-post">
+          <h5 className="embed-title">
+            What do you want the LinkedIn Share to look like?
+          </h5>
+          <div className="embed-grid">
+            <div className="row embed-group">
+              <div className="embed-grid cell facebook-post-details">
+                <div className="row embed-group">
+                  <label className="cell" htmlFor="facebook-post-url-input">
+                    Shared Url
+                  </label>
+                  <Input
+                    id="facebook-post-url-input"
+                    className="cell facebook-post-input"
+                    type="text"
+                    value={state.variables.postData.link}
+                    onChange={({ target: { value } }) => {
+                      const { postData } = state.variables;
+                      postData.link = value;
+                      state.variables.postData = postData;
+                      state.onVariablesUpdated(state.variables);
+                    }}
+                  />
+                </div>
+                <div className="row embed-group">
+                  <label className="cell" htmlFor="facebook-post-title-input">
+                    Post Title
+                  </label>
+                  <Input
+                    id="facebook-post-title-input"
+                    className="cell facebook-post-input"
+                    type="text"
+                    value={state.variables.postData.title}
+                    onChange={({ target: { value } }) => {
+                      const { postData } = state.variables;
+                      postData.title = value;
+                      state.variables.postData = postData;
+                      state.onVariablesUpdated(state.variables);
+                    }}
+                  />
+                </div>
+                <div className="row embed-group">
+                  <label className="cell" htmlFor="facebook-post-description-input">
+                    Post Description
+                  </label>
+                  <Input
+                    id="facebook-post-description-input"
+                    className="cell facebook-post-input"
+                    type="text"
+                    value={state.variables.postData.description}
+                    onChange={({ target: { value } }) => {
+                      const { postData } = state.variables;
+                      postData.description = value;
+                      state.variables.postData = postData;
+                      state.onVariablesUpdated(state.variables);
+                    }}
+                  />
+                </div>
+                <div className="row embed-group">
+                  <label className="cell" htmlFor="facebook-post-image-input">
+                    Post Image
+                  </label>
+                  <Input
+                    id="facebook-post-image-input"
+                    className="cell facebook-post-input"
+                    type="file"
+                    onChange={async ({ target: { files: [file] } }) => {
+                      // const response = await api.uploadMedia({ data: file });
+                      // const { postData } = this.state;
+                      // postData.thumbnail = response.url;
+                      // this.setState({ postData });
+                    }}
+                  />
+                </div>
+              </div>
+              <this.constructor.PostPreview
+                className="cell"
+                user={state.variables.userData}
+                post={state.variables.postData}
+              />
+            </div>
+          </div>
+        </div>
+      )),
+      bootstrap: async (instance) => {
+        const { project } = instance;
+        instance.state.userData = await instance.provider.fetchUserData();
+        instance.state.postData = {
+          title: project.name,
+          thumbnail: project.thumbnail,
+          description: project.description,
+          link: project.make.url,
+        };
+      },
+    },
   ];
 
   @observable
   state = {
     currentStageIndex: 0,
-    facebookPages: [],
     embedLocation: this.constructor.EMBED_LOCATIONS[0],
     userData: {},
     postData: {},
@@ -116,30 +262,9 @@ class LinkedinCampaignStager extends CampaignStager {
       autoplay,
       preload,
       embedLocation,
-      selectedFbPage,
       embedPage,
       postData,
     } = this.state;
-
-    const shareOptions = {
-      shouldCreateTab: embedLocation.key === 'facebook-page',
-    };
-    if (embedLocation.key === 'facebook-page') {
-      shareOptions.pageId = selectedFbPage;
-      shareOptions.redirectUrl =
-        `${BACKEND_URL}/api/makes/fb/${shareOptions.pageId}/${this.provider.constructor.FB_APP_ID}?mid=${project.make._id}`;
-    } else if (embedLocation.key === 'default') {
-      shareOptions.redirectUrl = project.make.url;
-    } else {
-      shareOptions.redirectUrl = embedPage;
-    }
-    shareOptions.projectUrl = [
-      project.make.url, [
-        autoplay ? 'autoplay=1' : null,
-        !preload ? 'preload=none' : null,
-      ].filter(item => !!item).join('&'),
-    ].join('?');
-    shareOptions.backendUrl = BACKEND_URL;
 
     project.name = postData.title;
     project.description = postData.description;
@@ -147,34 +272,22 @@ class LinkedinCampaignStager extends CampaignStager {
 
     await api.publish(await api.save(project));
 
-    await api.invalidateFbCache(shareOptions.projectUrl);
-
-    this.provider.expandConductor();
-    await this.provider.share(shareOptions);
-
-    this.provider.collapseConductor();
-
-    if (embedLocation.key === 'facebook-page') {
-      const queryString = [
-        autoplay ? 'autoplay=1' : null,
-        !preload ? 'preload=none' : null,
-      ].filter(item => !!item).join('&');
-
-      await api.linkToFbPage(project, selectedFbPage, queryString);
-    }
+    await this.provider.share({
+      title: postData.title,
+      description: postData.description,
+      url: [
+        embedLocation.key === 'default' ? project.make.url : embedPage, [
+          autoplay ? 'autoplay=1' : null,
+          !preload ? 'preload=none' : null,
+        ].filter(item => !!item).join('&'),
+      ].join('?'),
+      thumbnail: postData.thumbnail,
+    });
     return project;
   }
 
   canBypassStage(stage) {
-    const {
-      isLoading,
-      embedPage,
-      facebookPages,
-      selectedFbPage,
-      facebookPageTab,
-      userData,
-      postData,
-    } = this.state;
+    const { isLoading, embedPage, userData, postData } = this.state;
     if (isLoading) {
       return false;
     }
@@ -183,13 +296,9 @@ class LinkedinCampaignStager extends CampaignStager {
         return true;
       case 'embed-location':
         return embedPage && embedPage.length > 0;
-      case 'facebook-login':
+      case 'login':
         return userData;
-      case 'facebook-page':
-        return selectedFbPage &&
-          facebookPages.find(page => page.id === selectedFbPage).fanCount >= MIN_FANS_PAGE &&
-          facebookPageTab && facebookPageTab.name.length > 0;
-      case 'facebook-post':
+      case 'post':
         return userData && postData &&
           postData.title && postData.title.length > 0 &&
           postData.thumbnail && postData.thumbnail.length > 0;
@@ -207,27 +316,9 @@ class LinkedinCampaignStager extends CampaignStager {
 
     const { currentStageIndex, embedLocation } = this.state;
     let nextStageIdx = Math.min(currentStageIndex + 1, this._stages.length - 1);
-    if (this._stages[currentStageIndex].key === 'facebook-login') {
-      switch (embedLocation.key) {
-        case 'facebook-page':
-          nextStageIdx = this._stages.indexOf(
-            this._stages.find(item => item.key === 'facebook-page'),
-          );
-          break;
-        default:
-          nextStageIdx = this._stages.indexOf(
-            this._stages.find(item => item.key === 'facebook-post'),
-          );
-          break;
-      }
-    } else {
-      if (this._stages[nextStageIdx].key === 'embed-location' &&
-        ['default', 'facebook-page'].indexOf(embedLocation.key) !== -1) {
-        nextStageIdx += 1;
-      }
-      if (this._stages[nextStageIdx].key === 'facebook-page' && embedLocation.key !== 'facebook-page') {
-        nextStageIdx += 1;
-      }
+    if (this._stages[nextStageIdx].key === 'embed-location' &&
+      ['default'].indexOf(embedLocation.key) !== -1) {
+      nextStageIdx += 1;
     }
     this.state.currentStageIndex = nextStageIdx;
     if (this._stages[this.state.currentStageIndex].bootstrap) {
@@ -239,15 +330,11 @@ class LinkedinCampaignStager extends CampaignStager {
   @action
   async prevStage() {
     const { currentStageIndex, embedLocation } = this.state;
-    if (this._stages[currentStageIndex].key === 'facebook-page') {
-      this.state.selectedFbPage = null;
-    }
     let prevStageIdx = Math.min(
       currentStageIndex - 1,
       0,
     );
-    if ((this._stages[prevStageIdx].key === 'embed-location' && embedLocation.key === 'default') ||
-      (this._stages[prevStageIdx].key === 'facebook-page' && embedLocation.key !== 'facebook-page')) {
+    if (this._stages[prevStageIdx].key === 'embed-location' && embedLocation.key === 'default') {
       prevStageIdx -= 1;
     }
     this.state.currentStageIndex = prevStageIdx;
