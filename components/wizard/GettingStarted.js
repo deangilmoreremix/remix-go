@@ -1,5 +1,4 @@
 import React, { Component, Fragment } from 'react';
-import Link from 'next/link';
 import Router from 'next/router';
 import { observer, inject } from 'mobx-react';
 import {
@@ -95,6 +94,7 @@ export default class GettingStarted extends Component {
               <a
                 href="//projects.videoremix.io/strategy-course?course=5b17f9f5cf295900145d416b&section=1"
                 target="_blank"
+                rel="noopener noreferer"
               >
                 Click here to view the tutorials.
               </a>
