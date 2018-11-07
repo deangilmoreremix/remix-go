@@ -109,9 +109,10 @@ class CampaignStager {
     embedLocation: this.constructor.EMBED_LOCATIONS[0],
   };
 
-  constructor(provider, project) {
+  constructor(provider, project, api) {
     this.provider = provider;
     this.project = project;
+    this.api = api;
   }
 
   async sharePost() {

@@ -312,10 +312,11 @@ class FacebookCampaignStager extends CampaignStager {
                     className="cell facebook-post-input"
                     type="file"
                     onChange={async ({ target: { files: [file] } }) => {
-                      // const response = await api.uploadMedia({ data: file });
-                      // const { postData } = this.state;
-                      // postData.thumbnail = response.url;
-                      // this.setState({ postData });
+                      const response = await this.api.uploadMedia({ data: file });
+                      const { postData } = state.variables;
+                      postData.thumbnail = response.url;
+                      state.variables.postData = postData;
+                      state.onVariablesUpdated(state.variables);
                     }}
                   />
                 </div>
