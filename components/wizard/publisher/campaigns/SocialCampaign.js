@@ -19,13 +19,14 @@ export default class SocialCampaign extends Component {
     className: PropTypes.string,
     project: PropTypes.instanceOf(Project).isRequired,
     onCampaignFinished: PropTypes.func,
+    onTitleUpdated: PropTypes.func,
     facebookConductor: PropTypes.node.isRequired,
   };
 
   static socialSources = [{
     key: 'facebook',
     title: 'Facebook',
-    image: 'fb-logo',
+    image: '/static/images/publisher/social-campaign/facebook-logo.svg',
     loader: (props) => {
       const { facebookConductor, project } = props;
       return new FacebookCampaignStager(
@@ -36,7 +37,7 @@ export default class SocialCampaign extends Component {
   }, {
     key: 'linkedin',
     title: 'LinkedIn',
-    image: 'li-logo',
+    image: '/static/images/publisher/social-campaign/linkedin-logo.png',
     loader: (props) => {
       const { project } = props;
       return new LinkedinCampaignStager(
@@ -63,8 +64,10 @@ export default class SocialCampaign extends Component {
   };
 
   selectSocialSource = (key) => {
+    const { onTitleUpdated } = this.props;
     const selectedSource = this.constructor.socialSources.find(item => item.key === key);
     this.setState({ stager: selectedSource.loader(this.props) });
+    onTitleUpdated(`${selectedSource.title} Social Campaign`);
   };
 
   handleBackButtonClick = async () => {
@@ -104,11 +107,16 @@ export default class SocialCampaign extends Component {
           </div>
           <div className={`workspace ${isLoading ? 'hidden' : ''}`}>
             {!stager &&
-            <div>
-              <ul>
-                {this.constructor.socialSources.map(({ key, title }) => (
-                  <li key={key} onClick={() => this.selectSocialSource(key)}>
-                    {title}
+            <div className="social-source-container">
+              <span>Please select social network you want to continue with</span>
+              <ul className="social-source-list">
+                {this.constructor.socialSources.map(({ key, title, image }) => (
+                  <li
+                    className="social-source-list-item"
+                    key={key}
+                    onClick={() => this.selectSocialSource(key)}
+                  >
+                    <img src={image} alt={title} />
                   </li>
                 ))}
               </ul>

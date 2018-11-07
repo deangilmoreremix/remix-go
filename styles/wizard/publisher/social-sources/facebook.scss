@@ -1,0 +1,32 @@
+.social-campaign {
+  .social-source-container {
+    font-size: 1.5rem;
+
+    .social-source-list {
+      justify-content: center;
+      display: flex;
+      padding: 0;
+      list-style-type: none;
+      margin-top: 2%;
+
+      .social-source-list-item {
+        float: left;
+        width: 6rem;
+        height: 6rem;
+        cursor: pointer;
+        margin: 0 1rem;
+        display: inline;
+
+        img {
+          width: 100%;
+          height: 100%;
+        }
+      }
+    }
+  }
+
+  .conductor-iframe {
+    width: 1px;
+    height: 1px;
+  }
+}

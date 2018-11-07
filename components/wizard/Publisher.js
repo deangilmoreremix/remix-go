@@ -204,6 +204,13 @@ export default class Publisher extends Component {
                           project={activeProject}
                           facebookConductor={this.facebookConductor}
                           onCampaignFinished={() => PopupboxManager.close()}
+                          onTitleUpdated={title => PopupboxManager.update({
+                            config: {
+                              titleBar: {
+                                text: title,
+                              },
+                            },
+                          })}
                         />,
                         config: {
                           titleBar: {
