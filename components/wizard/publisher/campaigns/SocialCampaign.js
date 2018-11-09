@@ -54,8 +54,25 @@ export default class SocialCampaign extends Component {
     },
   }];
 
+  constructor(props) {
+    super(props);
+
+    const { project } = this.props;
+    this.activeSocialSources = this.constructor.socialSources
+      .filter(item => project.allowedSocials.indexOf(item.key) !== -1);
+    if (this.activeSocialSources.length === 1) {
+      this.state = {
+        isLoading: false,
+        stager: this.activeSocialSources[0].loader(this.props),
+      };
+    }
+
+
+  }
+
   state = {
     isLoading: false,
+    stager: null,
   };
 
   sharePost = async () => {
@@ -72,7 +89,7 @@ export default class SocialCampaign extends Component {
 
   selectSocialSource = (key) => {
     const { onTitleUpdated } = this.props;
-    const selectedSource = this.constructor.socialSources.find(item => item.key === key);
+    const selectedSource = this.activeSocialSources.find(item => item.key === key);
     this.setState({ stager: selectedSource.loader(this.props) });
     onTitleUpdated(`${selectedSource.title} Social Campaign`);
   };
@@ -117,7 +134,7 @@ export default class SocialCampaign extends Component {
             <div className="social-source-container">
               <span>Please select social network you want to continue with</span>
               <ul className="social-source-list">
-                {this.constructor.socialSources.map(({ key, title, image }) => (
+                {this.activeSocialSources.map(({ key, title, image }) => (
                   <li
                     className="social-source-list-item"
                     key={key}
