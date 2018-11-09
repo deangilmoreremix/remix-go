@@ -189,7 +189,7 @@ export default class Editor extends Component {
                   activeProject.activeElement = null;
                 }
               }}
-            /> : <NewElementBar project={activeProject} />}
+            /> : <NewElementBar project={activeProject} features={currentUser.features} />}
           </Row>
           <Row className={`canvas full-height ${editorStateManager.stage === StateManager.STAGE_TYPES.CAPTION_CUSTOMISE ? 'with-toolbar' : ''}`}>
             <Col className="col-2 paddingless editor-pane">
