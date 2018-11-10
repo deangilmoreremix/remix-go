@@ -66,8 +66,6 @@ export default class SocialCampaign extends Component {
         stager: this.activeSocialSources[0].loader(this.props),
       };
     }
-
-
   }
 
   state = {
