@@ -46,7 +46,7 @@ export default class SocialCampaign extends Component {
       const { project, api } = props;
       return new LinkedinCampaignStager(
         new LInkedinSocialProvider({
-          clientId: '77kh3rpp8kfpgs', // TODO: extract to env or any other vars
+          clientId: '77dc93kxh13kfc', // TODO: extract to env or any other vars
         }),
         project,
         api,
