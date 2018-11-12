@@ -367,6 +367,7 @@ class FacebookCampaignStager extends CampaignStager {
   @observable
   state = {
     currentStageIndex: 0,
+    preload: true,
     facebookPages: [],
     embedLocation: this.constructor.EMBED_LOCATIONS[0],
     userData: {},

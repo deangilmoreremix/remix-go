@@ -253,6 +253,7 @@ class LinkedinCampaignStager extends CampaignStager {
   @observable
   state = {
     currentStageIndex: 0,
+    preload: true,
     embedLocation: this.constructor.EMBED_LOCATIONS[0],
     userData: {},
     postData: {},
