@@ -204,11 +204,18 @@ export default class Publisher extends Component {
                           project={activeProject}
                           facebookConductor={this.facebookConductor}
                           onCampaignFinished={() => PopupboxManager.close()}
+                          onTitleUpdated={title => PopupboxManager.update({
+                            config: {
+                              titleBar: {
+                                text: title,
+                              },
+                            },
+                          })}
                         />,
                         config: {
                           titleBar: {
                             enable: true,
-                            text: 'Facebook',
+                            text: 'Social Campaign',
                           },
                           fadeIn: true,
                           fadeInSpeed: 200,
@@ -216,7 +223,7 @@ export default class Publisher extends Component {
                       });
                     }}
                   >
-                    Facebook
+                    Social Campaign
                   </button>
                   <button
                     className={`go-button action-button ${(currentUser.features[features.retarget] && currentUser.features[features.retarget].state === 'enabled') ? '' : 'inactive'}`}
