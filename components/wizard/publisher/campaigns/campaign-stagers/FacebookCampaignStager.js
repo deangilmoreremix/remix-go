@@ -367,6 +367,7 @@ class FacebookCampaignStager extends CampaignStager {
   @observable
   state = {
     currentStageIndex: 0,
+    preload: true,
     facebookPages: [],
     embedLocation: this.constructor.EMBED_LOCATIONS[0],
     userData: {},
@@ -400,6 +401,7 @@ class FacebookCampaignStager extends CampaignStager {
       project.make.url, [
         autoplay ? 'autoplay=1' : null,
         !preload ? 'preload=none' : null,
+        'preferred_source=facebook',
       ].filter(item => !!item).join('&'),
     ].join('?');
     shareOptions.backendUrl = BACKEND_URL;
