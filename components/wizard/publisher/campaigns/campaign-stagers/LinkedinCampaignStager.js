@@ -12,8 +12,6 @@ import CampaignStager from './CampaignStager';
 import EmbedDataContainer from '../../EmbedDataContainer';
 import LinkedinPostPreview from '../../../../../components/common/post-previews/LinkedinPostPreview';
 
-const BACKEND_URL = 'https://api.videoremix.io';
-
 class LinkedinCampaignStager extends CampaignStager {
   static PostPreview = LinkedinPostPreview;
 
@@ -283,6 +281,7 @@ class LinkedinCampaignStager extends CampaignStager {
         embedLocation.key === 'default' ? project.make.url : embedPage, [
           autoplay ? 'autoplay=1' : null,
           !preload ? 'preload=none' : null,
+          'preferred_source=linkedin',
         ].filter(item => !!item).join('&'),
       ].join('?'),
       thumbnail: postData.thumbnail,

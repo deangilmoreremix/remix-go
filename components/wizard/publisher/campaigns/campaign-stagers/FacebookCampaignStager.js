@@ -400,6 +400,7 @@ class FacebookCampaignStager extends CampaignStager {
       project.make.url, [
         autoplay ? 'autoplay=1' : null,
         !preload ? 'preload=none' : null,
+        'preferred_source=facebook',
       ].filter(item => !!item).join('&'),
     ].join('?');
     shareOptions.backendUrl = BACKEND_URL;
