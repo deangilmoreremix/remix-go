@@ -111,6 +111,7 @@ export default class SocialCampaign extends Component {
     if (stager.currentStage.key ===
       stager.stages[stager.stages.length - 1].key) {
       await this.sharePost();
+      alert('This video has been posted with Social Campaign successfully.');
     } else {
       await stager.nextStage();
     }
