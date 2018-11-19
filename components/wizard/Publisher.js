@@ -203,7 +203,10 @@ export default class Publisher extends Component {
                           className="campaign"
                           project={activeProject}
                           facebookConductor={this.facebookConductor}
-                          onCampaignFinished={() => PopupboxManager.close()}
+                          onCampaignFinished={() => {
+                            PopupboxManager.close();
+                            alert('This video has been posted with Social Campaign successfully.');
+                          }}
                           onTitleUpdated={title => PopupboxManager.update({
                             config: {
                               titleBar: {
