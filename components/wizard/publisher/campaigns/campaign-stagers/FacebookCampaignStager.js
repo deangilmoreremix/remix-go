@@ -415,9 +415,13 @@ class FacebookCampaignStager extends CampaignStager {
     await api.invalidateFbCache(shareOptions.projectUrl);
 
     this.provider.expandConductor();
-    await this.provider.share(shareOptions);
+    const { result } = await this.provider.share(shareOptions);
 
     this.provider.collapseConductor();
+
+    if (result.error_code) {
+      throw new Error(result.error_message);
+    }
 
     if (embedLocation.key === 'facebook-page') {
       const queryString = [
