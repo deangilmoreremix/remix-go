@@ -415,7 +415,10 @@ class FacebookCampaignStager extends CampaignStager {
     await api.invalidateFbCache(shareOptions.projectUrl);
 
     this.provider.expandConductor();
-    await this.provider.share(shareOptions);
+    const result = await this.provider.share(shareOptions);
+    if (result.error_code) {
+      throw new Error(result.error_message);
+    }
 
     this.provider.collapseConductor();
 
