@@ -1,15 +1,31 @@
 import React from 'react';
 import { Container } from 'reactstrap';
+import PropTypes from '../lib/PropTypes';
 
-export default () => (
-  <Container>
-    <footer className="footer">
-      <div className="copyright">© VideoRemix | <a className="direct-link" href="http://dashboard.vidcloud.io/terms-of-service/">
+const Footer = (props) => {
+  const { whiteLabel } = props;
+  return (
+    <Container>
+      <footer className="footer">
+        <div className="copyright">© {whiteLabel.name} | <a
+          className="direct-link"
+          href={whiteLabel.privacyPolicyLink}
+        >
           View our terms of service
-        </a> | <a className="direct-link" href="//projects.videoremix.io/changelog?scope=go">
+        </a> | <a className="direct-link" href={`//projects.${whiteLabel.domain}/changelog?scope=go`}>
           Changelog
         </a>
-      </div>
-    </footer>
-  </Container>
-);
+        </div>
+      </footer>
+    </Container>);
+};
+
+Footer.propTypes = {
+  whiteLabel: PropTypes.shape({
+    name: PropTypes.string.isRequired,
+    domain: PropTypes.string.isRequired,
+    privacyPolicyLink: PropTypes.string.isRequired,
+  }),
+};
+
+export default Footer;

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Provider } from 'mobx-react';
 import { Container } from 'reactstrap';
+import Head from 'next/head';
 
 import { initStoreAndPreload, initStore } from '../globals/store';
 import { initApiAndPreload, initApi } from '../globals/api';
@@ -31,6 +32,11 @@ class Layout extends Component {
     return (
       <Provider store={this.store} api={this.api}>
         <div>
+          <Head>
+            <title>
+              {this.store.common.whiteLabel.name} GO
+            </title>
+          </Head>
           <Header />
           <Container {...this.props} className="main">
             {this.props.children}
@@ -48,7 +54,7 @@ class Layout extends Component {
                 domain="videoremix.io"
               /> : null}
           </Container>
-          <Footer />
+          <Footer whiteLabel={this.store.common.whiteLabel} />
         </div>
       </Provider>
     );

@@ -87,6 +87,7 @@ export default class Editor extends Component {
         activeProject,
         common: {
           features,
+          whiteLabel,
         },
         currentUser,
         editorStateManager,
@@ -113,8 +114,8 @@ export default class Editor extends Component {
         <Head>
           <title>
             {activeProject && activeProject.make && activeProject.make._id ?
-              `${activeProject.name} - VideoRemix GO` :
-              'VideoRemix GO'}
+              `${activeProject.name} - ${whiteLabel.name} GO` :
+              `${whiteLabel.name} GO`}
           </title>
         </Head>
         <PopupboxContainer

@@ -16,7 +16,7 @@ export default class MyDocument extends Document {
     return (
       <html lang="en">
         <Head>
-          <title>VideoRemix GO</title>
+          <title>VidCloud GO</title>
           <link rel="shortcut icon" href="//cdn.vidcloud.io/resources/go/favicon.png" />
         </Head>
         <body>
