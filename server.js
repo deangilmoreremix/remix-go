@@ -11,7 +11,6 @@ const app = next({ dev });
 const handle = app.getRequestHandler();
 
 const checkAccess = require('./lib/express/check-access');
-const describeWhiteLabel = require('./lib/express/describe-whitelabel');
 const { processForm, isValidMedia, mediaUpload } = require('./lib/express/media-upload');
 // const { join } = require('./lib/express/video-processing');
 const getContentType = require('./lib/express/get-content-type');
@@ -31,7 +30,6 @@ app.prepare().then(() => {
     }
   });
   require('./lib/express/webmaker-auth')(server);
-  app.use(describeWhiteLabel);
   server.use(express.json());
   server.use(express.urlencoded({ extended: true }));
   require('./lib/express/loaderio')(server);

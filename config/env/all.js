@@ -50,6 +50,7 @@ module.exports = {
   newRelic: {
     key: process.env.NEW_RELIC_LICENSE_KEY || '',
   },
+  useWhiteLabels: process.env.USE_WHITE_LABELS || false,
   prefixes: {
     app: process.env.APP_PREFIX || 'app',
     api: process.env.API_PREFIX || 'api',

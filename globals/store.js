@@ -129,6 +129,7 @@ export async function initStoreAndPreload(isServer, source, req, preloader) {
     const config = require('config/config');
     source.common = {
       hostname: req.hostname,
+      whiteLabel: req.whiteLabel,
       prefixes: config.prefixes,
       cdnHostname: config.s3.cdn,
       backend: config.backend,
