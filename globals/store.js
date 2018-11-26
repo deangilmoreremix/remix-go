@@ -87,7 +87,7 @@ class Store {
       this.authorization = this.clientAuthHeader;
     }
     this.request = requestCreator(
-      common.backend, this.authorization, isServer, () => this.refreshToken());
+      common.backend.url, this.authorization, isServer, () => this.refreshToken());
   }
 
   async refreshToken() {

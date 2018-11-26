@@ -87,6 +87,7 @@
     "reactstrap": "5.0.0-beta",
     "redis": "^2.8.0",
     "request": "^2.85.0",
+    "request-json": "^0.6.4",
     "sass-loader": "^6.0.6",
     "sharp": "^0.20.2",
     "socket.io-client": "^2.0.4",

@@ -1,7 +1,14 @@
 module.exports = {
   port: process.env.PORT || 3000,
   self: process.env.SELF,
-  backend: process.env.BACKEND || 'dev-api.videoremix.io',
+  app: {
+    prefix: process.env.APP_PREFIX || 'go',
+  },
+  backend: {
+    url: process.env.BACKEND || 'dev-api.videoremix.io',
+    clientId: process.env.BACKEND_CLIENT_ID || 'service',
+    clientSecret: process.env.BACKEND_CLIENT_SECRET || 'q39Jy70X6ao9dTca',
+  },
   editor: process.env.EDITOR || 'dev-app.videoremix.io',
   assetsPath: process.env.ASSETS_PATH || 'dev-cdn.videoremix.io/resources/go',
   socketProtocol: process.env.SOCKET_PROTOCOL || 'ws',
@@ -23,6 +30,8 @@ module.exports = {
     url: process.env.LOGIN_SERVER_URL || 'http://localhost:1340',
     authUrl: process.env.AUTH_SERVER_URL || 'http://localhost:8888',
     urlWithAuth: process.env.LOGIN_SERVER_URL_WITH_AUTH || 'http://testuser:password@localhost:1340',
+    username: process.env.LOGIN_USERNAME || 'testuser',
+    password: process.env.LOGIN_PASSWORD || 'password',
   },
   secret: process.env.SECRET || 'dummy secret value',
   appHostname: process.env.APP_HOSTNAME || 'http://localhost:3000',
@@ -42,7 +51,13 @@ module.exports = {
     key: process.env.NEW_RELIC_LICENSE_KEY || '',
   },
   prefixes: {
+    app: process.env.APP_PREFIX || 'app',
+    api: process.env.API_PREFIX || 'api',
+    login: process.env.LOGIN_PREFIX || 'api',
+    editor: process.env.EDITOR_PREFIX || 'app',
+    cdn: process.env.CDN_PREFIX || 'cdn',
     projects: process.env.PROJECTS_PREFIX || 'projects',
+    play: process.env.PLAY_PREFIX || 'play',
   },
   s3: {
     cdn: process.env.CDN_HOSTNAME || '',

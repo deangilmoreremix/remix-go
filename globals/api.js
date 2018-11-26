@@ -38,7 +38,7 @@ class Api {
 
   setupNetworkServices(isServer) {
     const { common } = this;
-    this.request = requestCreator(common.backend, this.authorization, isServer, () => {});
+    this.request = requestCreator(common.backend.url, this.authorization, isServer, () => {});
     this.assetsRequest = requestCreator(common.assetsPath, this.authorization, isServer, () => {});
     this.editorRequest = requestCreator(common.editor, null, isServer, () => {});
     this.selfRequest = requestCreator(common.self, null, isServer, () => {});
