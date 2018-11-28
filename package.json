@@ -30,6 +30,7 @@
     "babel-plugin-wrap-in-js": "^1.1.1",
     "bluebird": "^3.5.1",
     "bootstrap": "^4.0.0",
+    "chroma-js": "^1.4.1",
     "classnames": "^2.2.5",
     "compression": "^1.7.3",
     "cookie-parser": "^1.4.3",
