@@ -67,7 +67,6 @@
     "postcss-loader": "^2.0.9",
     "prop-types": "^15.6.0",
     "qrcode.react": "^0.8.0",
-    "raw-loader": "^0.5.1",
     "react": "^16.2.0",
     "react-bootstrap-typeahead": "^3.0.0-alpha.2",
     "react-color": "^2.14.1",
@@ -84,6 +83,7 @@
     "react-popupbox": "^2.0.3",
     "react-select": "^1.2.1",
     "react-sortable-hoc": "^0.8.3",
+    "react-svg-inline": "^2.1.1",
     "react-tooltip": "^3.6.1",
     "reactstrap": "5.0.0-beta",
     "redis": "^2.8.0",
@@ -99,6 +99,7 @@
     "webpack": "^3.10.0"
   },
   "devDependencies": {
-    "babel-eslint": "^8.0.2"
+    "babel-eslint": "^8.0.2",
+    "raw-loader": "^0.5.1"
   }
 }

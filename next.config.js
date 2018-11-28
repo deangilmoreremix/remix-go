@@ -37,6 +37,10 @@ module.exports = {
           },
         ],
       },
+      {
+        test: /\.svg$/,
+        loader: 'raw-loader',
+      },
     );
     return config;
   },
