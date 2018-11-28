@@ -36,7 +36,7 @@ export default class GettingStarted extends Component {
   }
 
   getWizard(wizardType) {
-    const { store: { common: { features }, currentUser } } = this.props;
+    const { store: { common: { features, whiteLabel }, currentUser } } = this.props;
     switch (wizardType) {
       case GettingStarted.WIZARD_TYPES.GENERATOR:
         return (
@@ -90,7 +90,7 @@ export default class GettingStarted extends Component {
         return (
           <div className="scrollable full-height getting-started">
             <div className="welcome">
-              <h2>Welcome to GO!</h2>
+              <h2>Welcome to {whiteLabel.go.alternateName || 'Light Video Editor'}!</h2>
               <a
                 href="//projects.videoremix.io/strategy-course?course=5b17f9f5cf295900145d416b&section=1"
                 target="_blank"

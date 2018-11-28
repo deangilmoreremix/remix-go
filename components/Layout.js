@@ -10,6 +10,7 @@ import PopcornProxy from '../lib/PopcornProxy';
 import Header from './Header';
 import Footer from './Footer';
 import Intercom from './common/Intercom';
+import WhiteLabelManager from '../lib/white-label/manager';
 
 class Layout extends Component {
   static async getInitialProps({ query, req }, preloader) {
@@ -23,6 +24,7 @@ class Layout extends Component {
     super(props);
     this.store = initStore(props.store);
     this.api = initApi(props.api);
+    this.whiteLabelManager = new WhiteLabelManager(this.store.common.whiteLabel);
   }
 
   render() {
@@ -34,11 +36,12 @@ class Layout extends Component {
         <div>
           <Head>
             <title>
-              {this.store.common.whiteLabel.name} GO
+              {this.store.common.whiteLabel.name} {this.store.common.whiteLabel.go.alternateName || 'Light Video Editor'}
             </title>
+            <style dangerouslySetInnerHTML={{ __html: this.whiteLabelManager.css }} />
           </Head>
-          <Header />
-          <Container {...this.props} className="main">
+          <Header className={`theme-${this.store.common.whiteLabel._id}`} />
+          <Container {...this.props} className={`main theme-${this.store.common.whiteLabel._id}`}>
             {this.props.children}
             {this.store.currentUser ?
               <Intercom
@@ -54,7 +57,7 @@ class Layout extends Component {
                 domain="videoremix.io"
               /> : null}
           </Container>
-          <Footer whiteLabel={this.store.common.whiteLabel} />
+          <Footer className={`theme-${this.store.common.whiteLabel._id}`} whiteLabel={this.store.common.whiteLabel} />
         </div>
       </Provider>
     );
