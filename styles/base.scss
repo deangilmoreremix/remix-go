@@ -424,9 +424,16 @@ form,
         flex-direction: column;
       }
 
-      img, svg {
+      img, .SVGInline {
         height: 35%;
         margin-bottom: 15%;
+      }
+
+      .SVGInline {
+        svg {
+          width: 100%;
+          height: 100%;
+        }
       }
 
       span {
