@@ -52,7 +52,7 @@ module.exports = {
   },
   useWhiteLabels: process.env.USE_WHITE_LABELS || false,
   prefixes: {
-    app: process.env.APP_PREFIX || 'app',
+    app: process.env.APP_PREFIX || 'go',
     api: process.env.API_PREFIX || 'api',
     login: process.env.LOGIN_PREFIX || 'api',
     editor: process.env.EDITOR_PREFIX || 'app',

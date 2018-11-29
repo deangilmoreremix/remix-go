@@ -4,7 +4,7 @@ import Cookies from 'js-cookie';
 
 import EditorStateManager from '../lib/editor/editorStateManager';
 import requestCreator from '../lib/requestCreator';
-import WhiteLabelManager from "../lib/white-label/manager";
+import WhiteLabelManager from '../lib/white-label/manager';
 
 let store = null;
 
