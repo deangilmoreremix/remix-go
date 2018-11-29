@@ -91,9 +91,9 @@ export default class Editor extends Component {
       store,
       store: {
         activeProject,
+        whiteLabelManager,
         common: {
           features,
-          whiteLabel,
         },
         currentUser,
         editorStateManager,
@@ -120,8 +120,8 @@ export default class Editor extends Component {
         <Head>
           <title>
             {activeProject && activeProject.make && activeProject.make._id ?
-              `${activeProject.name} - ${whiteLabel.name} GO` :
-              `${whiteLabel.name} GO`}
+              `${activeProject.name} - ${whiteLabelManager.brandName}` :
+              whiteLabelManager.brandName}
           </title>
         </Head>
         <PopupboxContainer

@@ -37,7 +37,15 @@ class Layout extends Component {
             <title>
               {whiteLabelManager.brandName}
             </title>
-            {whiteLabelManager &&
+            <link
+              rel="shortcut icon"
+              href={
+                whiteLabelManager.shouldOverride ?
+                  `//cdn.vidcloud.io/wl/${whiteLabelManager.domain}/resources/vc_favicon` :
+                  '//cdn.vidcloud.io/resources/go/favicon.png'
+              }
+            />
+            {whiteLabelManager.shouldOverride &&
             <style dangerouslySetInnerHTML={{ __html: whiteLabelManager.css }} />}
           </Head>
           <Header className={`theme-${whiteLabelManager.key}`} />

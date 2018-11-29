@@ -17,7 +17,6 @@ export default class MyDocument extends Document {
       <html lang="en">
         <Head>
           <title>VidCloud Light Video Editor</title>
-          <link rel="shortcut icon" href="//cdn.vidcloud.io/resources/go/favicon.png" />
         </Head>
         <body>
           {/* eslint-disable react/no-danger */}
