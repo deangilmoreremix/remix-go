@@ -68,7 +68,7 @@ class Layout extends Component {
           <Footer
             className={`theme-${whiteLabelManager.key}`}
             serviceName={whiteLabelManager.serviceName}
-            domain={whiteLabelManager.domain}
+            changelogLink={`//${this.store.common.prefixes.projects}.${whiteLabelManager.domain}/changelog?scope=go`}
             privacyPolicyLink={whiteLabelManager.privacyPolicyLink}
           />
         </div>

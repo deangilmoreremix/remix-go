@@ -3,7 +3,7 @@ import { Container } from 'reactstrap';
 import PropTypes from '../lib/PropTypes';
 
 const Footer = (props) => {
-  const { domain, serviceName, privacyPolicyLink, className } = props;
+  const { changelogLink, serviceName, privacyPolicyLink, className } = props;
   return (
     <Container>
       <footer className={`footer ${className}`}>
@@ -12,7 +12,7 @@ const Footer = (props) => {
           href={privacyPolicyLink}
         >
           View our terms of service
-        </a> | <a className="direct-link" href={`//projects.${domain}/changelog?scope=go`}>
+        </a> | <a className="direct-link" href={changelogLink}>
           Changelog
         </a>
         </div>
@@ -23,8 +23,8 @@ const Footer = (props) => {
 Footer.propTypes = {
   className: PropTypes.string,
   serviceName: PropTypes.string.isRequired,
-  domain: PropTypes.string.isRequired,
   privacyPolicyLink: PropTypes.string.isRequired,
+  changelogLink: PropTypes.string.isRequired,
 };
 
 export default Footer;
