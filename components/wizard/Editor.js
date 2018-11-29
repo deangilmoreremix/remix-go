@@ -2,6 +2,7 @@ import React, { Component, Fragment } from 'react';
 import Head from 'next/head';
 import { Container, Col, Row } from 'reactstrap';
 import { inject, observer } from 'mobx-react';
+import SVGInline from 'react-svg-inline';
 import Router from 'next/router';
 import {
   PopupboxManager,
@@ -23,6 +24,11 @@ import NicheScriptsWorkspace from './niche-scripts/NicheScriptsWorkspace';
 import EmbeddedPlayback from '../common/EmbeddedPlayback';
 import NewElementBar from '../../lib/popcorn/plugins/new/editor.popcorn.new';
 import StateManager from '../../lib/editor/editorStateManager';
+
+import SVGCallToAction from '../../static/images/editor/cta.svg';
+import SVGPersonalizer from '../../static/images/editor/personalizer.svg';
+import SVGNicheScripts from '../../static/images/editor/niche_scripts.svg';
+import SVGTemplateGenerator from "../../static/images/getting-started/generator.svg";
 
 const insertAtCaret = (base, offset, text) => {
   const tokenRegex = /{{(up \w*|d \w* ("[^{}]*"|'[^{}]*')|"\w*"|\w*)}}/im;
@@ -85,6 +91,7 @@ export default class Editor extends Component {
       store,
       store: {
         activeProject,
+        whiteLabelManager,
         common: {
           features,
         },
@@ -113,8 +120,8 @@ export default class Editor extends Component {
         <Head>
           <title>
             {activeProject && activeProject.make && activeProject.make._id ?
-              `${activeProject.name} - VideoRemix GO` :
-              'VideoRemix GO'}
+              `${activeProject.name} - ${whiteLabelManager.brandName}` :
+              whiteLabelManager.brandName}
           </title>
         </Head>
         <PopupboxContainer
@@ -312,7 +319,7 @@ export default class Editor extends Component {
                     }
                   }}
                 >
-                  <img className="icon" src="../../static/images/editor/personalizer.svg" alt="" />
+                  <SVGInline className="icon personalizer-icon" classSuffix="" svg={SVGPersonalizer} />
                   <span>Personalizer</span>
                 </button>
                 <button
@@ -342,7 +349,7 @@ export default class Editor extends Component {
                     }
                   }}
                 >
-                  <img className="icon" src="../../static/images/editor/cta.svg" alt="" />
+                  <SVGInline className="icon cta-icon" classSuffix="" svg={SVGCallToAction} />
                   <span>Call to Action</span>
                 </button>
                 <button
@@ -378,7 +385,7 @@ export default class Editor extends Component {
                     }
                   }}
                 >
-                  <img className="icon" src="../../static/images/editor/niche_scripts.svg" alt="" />
+                  <SVGInline className="icon niche-scripts-icon" classSuffix="" svg={SVGNicheScripts} />
                   <span>Niche Scripts</span>
                 </button>
               </ActionsPane>

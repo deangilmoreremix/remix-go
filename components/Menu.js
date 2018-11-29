@@ -52,7 +52,7 @@ export default class Menu extends React.Component {
   }
 
   render() {
-    const { store: { common: { prefixes }, currentUser = { } } } = this.props;
+    const { store: { whiteLabelManager, common: { prefixes }, currentUser = { } } } = this.props;
     return (
       <Container>
         <Navbar color="faded" light expand="md">
@@ -71,8 +71,8 @@ export default class Menu extends React.Component {
                   </DropdownToggle>
                   <DropdownMenu >
                     <DropdownItem>
-                      <a target="_blank" href={`//${prefixes.projects}.videoremix.io/me`}>
-                        Projects and Courses
+                      <a target="_blank" href={`//${prefixes.projects}.${whiteLabelManager.domain}/me`}>
+                        {whiteLabelManager.domain === 'videoremix.io' ? 'Projects and Courses' : 'Projects'}
                       </a>
                     </DropdownItem>
                     <DropdownItem>
@@ -81,7 +81,10 @@ export default class Menu extends React.Component {
                       </a>
                     </DropdownItem>
                     <DropdownItem>
-                      <a onClick={e => this.logoutHandler(e)} onContextMenu={e => e.preventDefault()}>
+                      <a
+                        onClick={e => this.logoutHandler(e)}
+                        onContextMenu={e => e.preventDefault()}
+                      >
                         Log Out
                       </a>
                     </DropdownItem>

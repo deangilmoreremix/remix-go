@@ -13,7 +13,7 @@
   display: flex;
   flex-direction: column;
   font-family: 'Muli', sans-serif;
-  
+
   .phase-state {
     &-title {
       text-align: center;
@@ -24,17 +24,17 @@
       display: flex;
       width: 100%;
       justify-content: center;
-      
+
       .stepper {
         display: flex;
         justify-content: space-between;
         width: 70%;
         position: relative;
         align-items: center;
-        
+
         .line {
           position: absolute;
-          border: 1px solid #eb5053;
+          border: 1px solid $secondary-color;
           top: 25px;
           left: 45px;
           right: 45px;
@@ -60,12 +60,12 @@
                 background: #e78c8d;
                 border: 1px solid #e78c8d;
                 &:hover {
-                  background: #eb5053;
+                  background: $secondary-color;
                 }
               }
             }
           }
-            
+
           .gapped {
             background: #e9ecef;
             padding: 5px;
@@ -79,15 +79,15 @@
             height: 40px;
             text-align: center;
             border-radius: 50%;
-            border: 1px solid #eb5053;
+            border: 1px solid $secondary-color;
             background: #ffffff;
             display: flex;
             justify-content: center;
             align-items: center;
             &-label {
               display: flex;
-              color: #eb5053;
-              border: 1px solid #eb5053;
+              color: $secondary-color;
+              border: 1px solid $secondary-color;
               border-radius: 50%;
               width: 30px;
               height: 30px;

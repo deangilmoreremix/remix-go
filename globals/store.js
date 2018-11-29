@@ -4,6 +4,7 @@ import Cookies from 'js-cookie';
 
 import EditorStateManager from '../lib/editor/editorStateManager';
 import requestCreator from '../lib/requestCreator';
+import WhiteLabelManager from '../lib/white-label/manager';
 
 let store = null;
 
@@ -28,6 +29,9 @@ class Store {
   currentUser = null;
 
   @observable
+  whiteLabelManager = null;
+
+  @observable
   activeProject = null;
 
   @observable
@@ -49,6 +53,11 @@ class Store {
       };
       this.req = req;
       this.currentUser = req.session && req.session.user;
+      this.whiteLabelManager = new WhiteLabelManager(
+        req.whiteLabel,
+        req.whiteLabel.domain !== 'videoremix.io',
+        `${source.common.prefixes.cdn}.vidcloud.io`,
+      );
       if (this.currentUser) {
         this.currentUser.hash = getIntercomUserHash(this.currentUser.email);
       }
@@ -87,7 +96,7 @@ class Store {
       this.authorization = this.clientAuthHeader;
     }
     this.request = requestCreator(
-      common.backend, this.authorization, isServer, () => this.refreshToken());
+      common.backend.url, this.authorization, isServer, () => this.refreshToken());
   }
 
   async refreshToken() {

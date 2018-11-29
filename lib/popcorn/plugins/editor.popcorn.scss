@@ -12,6 +12,12 @@
     cursor: pointer;
   }
 
+  span {
+    &.icon {
+      margin: 0;
+    }
+  }
+
   .icon {
     height: 22px;
     width: auto;
