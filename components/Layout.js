@@ -43,7 +43,7 @@ class Layout extends Component {
           <Header className={`theme-${whiteLabelManager.key}`} />
           <Container {...this.props} className={`main theme-${whiteLabelManager.key}`}>
             {this.props.children}
-            {this.store.currentUser && !whiteLabelManager ?
+            {this.store.currentUser && whiteLabelManager.domain === 'videoremix.io' ?
               <Intercom
                 appID={this.store.common.intercom.appId}
                 user={{

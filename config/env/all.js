@@ -5,12 +5,12 @@ module.exports = {
     prefix: process.env.APP_PREFIX || 'go',
   },
   backend: {
-    url: process.env.BACKEND || 'dev-api.videoremix.io',
+    url: process.env.BACKEND || 'dev-api.vidcloud.io',
     clientId: process.env.BACKEND_CLIENT_ID || 'service',
     clientSecret: process.env.BACKEND_CLIENT_SECRET || 'q39Jy70X6ao9dTca',
   },
-  editor: process.env.EDITOR || 'dev-app.videoremix.io',
-  assetsPath: process.env.ASSETS_PATH || 'dev-cdn.videoremix.io/resources/go',
+  editor: process.env.EDITOR || 'dev-app.vidcloud.io',
+  assetsPath: process.env.ASSETS_PATH || 'dev-cdn.vidcloud.io/resources/go',
   socketProtocol: process.env.SOCKET_PROTOCOL || 'ws',
   nakedRun: process.env.NAKED_RUN || false,
   client: {

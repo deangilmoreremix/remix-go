@@ -96,13 +96,15 @@ export default class GettingStarted extends Component {
           <div className="scrollable full-height getting-started">
             <div className="welcome">
               <h2>Welcome to {whiteLabelManager.appName}!</h2>
+              {whiteLabelManager.tutorialsLink &&
               <a
-                href="//projects.videoremix.io/strategy-course?course=5b17f9f5cf295900145d416b&section=1"
+                href={whiteLabelManager.tutorialsLink}
                 target="_blank"
                 rel="noopener noreferer"
               >
                 Click here to view the tutorials.
               </a>
+              }
             </div>
             <div className="getting-started-list">
               <a

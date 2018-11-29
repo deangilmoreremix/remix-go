@@ -58,6 +58,7 @@ export default class Publisher extends Component {
     const {
       store: {
         activeProject,
+        whiteLabelManager,
         common: {
           features,
         },
@@ -71,8 +72,8 @@ export default class Publisher extends Component {
         <Head>
           <title>
             {activeProject && activeProject.make && activeProject.make._id ?
-              `${activeProject.name} - VideoRemix GO` :
-              'VideoRemix GO'}
+              `${activeProject.name} - ${whiteLabelManager.brandName}` :
+              whiteLabelManager.brandName}
           </title>
         </Head>
         { activeProject ? <PhaseView
