@@ -55,7 +55,7 @@ class Store {
       this.currentUser = req.session && req.session.user;
       this.whiteLabelManager = new WhiteLabelManager(
         req.whiteLabel,
-        req.whiteLabel.domain !== 'videoremix.io',
+        req.whiteLabel && req.whiteLabel.domain !== 'videoremix.io',
         `${source.common.prefixes.cdn}.vidcloud.io`,
       );
       if (this.currentUser) {
@@ -96,7 +96,11 @@ class Store {
       this.authorization = this.clientAuthHeader;
     }
     this.request = requestCreator(
-      common.backend.url, this.authorization, isServer, () => this.refreshToken());
+      `${common.prefixes.api}.${common.whiteLabel && common.whiteLabel.domain}`,
+      this.authorization,
+      isServer,
+      () => this.refreshToken(),
+    );
   }
 
   async refreshToken() {

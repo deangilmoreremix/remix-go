@@ -39,13 +39,18 @@ class Api {
   setupNetworkServices(isServer) {
     const { common } = this;
     this.request = requestCreator(
-      `${common.prefixes.api}.${common.whiteLabel.domain}`,
+      `${common.prefixes.api}.${common.whiteLabel && common.whiteLabel.domain}`,
       this.authorization,
       isServer,
       () => {},
     );
     this.assetsRequest = requestCreator(common.assetsPath, this.authorization, isServer, () => {});
-    this.editorRequest = requestCreator(common.editor, null, isServer, () => {});
+    this.editorRequest = requestCreator(
+      `${common.prefixes.editor}.${common.whiteLabel && common.whiteLabel.domain}`,
+      null,
+      isServer,
+      () => {},
+    );
     this.selfRequest = requestCreator(common.self, null, isServer, () => {});
   }
 
