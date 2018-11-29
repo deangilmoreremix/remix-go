@@ -3,16 +3,16 @@ import { Container } from 'reactstrap';
 import PropTypes from '../lib/PropTypes';
 
 const Footer = (props) => {
-  const { whiteLabel, className } = props;
+  const { domain, serviceName, privacyPolicyLink, className } = props;
   return (
     <Container>
       <footer className={`footer ${className}`}>
-        <div className="copyright">© {whiteLabel.name} | <a
+        <div className="copyright">© {serviceName} | <a
           className="direct-link"
-          href={whiteLabel.privacyPolicyLink}
+          href={privacyPolicyLink}
         >
           View our terms of service
-        </a> | <a className="direct-link" href={`//projects.${whiteLabel.domain}/changelog?scope=go`}>
+        </a> | <a className="direct-link" href={`//projects.${domain}/changelog?scope=go`}>
           Changelog
         </a>
         </div>
@@ -22,11 +22,9 @@ const Footer = (props) => {
 
 Footer.propTypes = {
   className: PropTypes.string,
-  whiteLabel: PropTypes.shape({
-    name: PropTypes.string.isRequired,
-    domain: PropTypes.string.isRequired,
-    privacyPolicyLink: PropTypes.string.isRequired,
-  }),
+  serviceName: PropTypes.string.isRequired,
+  domain: PropTypes.string.isRequired,
+  privacyPolicyLink: PropTypes.string.isRequired,
 };
 
 export default Footer;

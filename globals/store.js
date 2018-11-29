@@ -4,6 +4,7 @@ import Cookies from 'js-cookie';
 
 import EditorStateManager from '../lib/editor/editorStateManager';
 import requestCreator from '../lib/requestCreator';
+import WhiteLabelManager from "../lib/white-label/manager";
 
 let store = null;
 
@@ -28,6 +29,9 @@ class Store {
   currentUser = null;
 
   @observable
+  whiteLabelManager = null;
+
+  @observable
   activeProject = null;
 
   @observable
@@ -49,6 +53,10 @@ class Store {
       };
       this.req = req;
       this.currentUser = req.session && req.session.user;
+      this.whiteLabelManager = new WhiteLabelManager(
+        req.whiteLabel,
+        req.whiteLabel.domain !== 'videoremix.io',
+      );
       if (this.currentUser) {
         this.currentUser.hash = getIntercomUserHash(this.currentUser.email);
       }
@@ -129,7 +137,6 @@ export async function initStoreAndPreload(isServer, source, req, preloader) {
     const config = require('config/config');
     source.common = {
       hostname: req.hostname,
-      whiteLabel: req.whiteLabel,
       prefixes: config.prefixes,
       cdnHostname: config.s3.cdn,
       backend: config.backend,

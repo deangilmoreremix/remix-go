@@ -10,7 +10,6 @@ import PopcornProxy from '../lib/PopcornProxy';
 import Header from './Header';
 import Footer from './Footer';
 import Intercom from './common/Intercom';
-import WhiteLabelManager from '../lib/white-label/manager';
 
 class Layout extends Component {
   static async getInitialProps({ query, req }, preloader) {
@@ -24,10 +23,10 @@ class Layout extends Component {
     super(props);
     this.store = initStore(props.store);
     this.api = initApi(props.api);
-    this.whiteLabelManager = new WhiteLabelManager(this.store.common.whiteLabel);
   }
 
   render() {
+    const { store: { whiteLabelManager } } = this.props;
     if (process.browser) {
       PopcornProxy.init(window);
     }
@@ -36,14 +35,15 @@ class Layout extends Component {
         <div>
           <Head>
             <title>
-              {this.store.common.whiteLabel.name} {this.store.common.whiteLabel.go.alternateName || 'Light Video Editor'}
+              {whiteLabelManager.brandName}
             </title>
-            <style dangerouslySetInnerHTML={{ __html: this.whiteLabelManager.css }} />
+            {whiteLabelManager &&
+            <style dangerouslySetInnerHTML={{ __html: whiteLabelManager.css }} />}
           </Head>
-          <Header className={`theme-${this.store.common.whiteLabel._id}`} />
-          <Container {...this.props} className={`main theme-${this.store.common.whiteLabel._id}`}>
+          <Header className={`theme-${whiteLabelManager.key}`} />
+          <Container {...this.props} className={`main theme-${whiteLabelManager.key}`}>
             {this.props.children}
-            {this.store.currentUser ?
+            {this.store.currentUser && !whiteLabelManager ?
               <Intercom
                 appID={this.store.common.intercom.appId}
                 user={{
@@ -57,7 +57,12 @@ class Layout extends Component {
                 domain="videoremix.io"
               /> : null}
           </Container>
-          <Footer className={`theme-${this.store.common.whiteLabel._id}`} whiteLabel={this.store.common.whiteLabel} />
+          <Footer
+            className={`theme-${whiteLabelManager.key}`}
+            serviceName={whiteLabelManager.serviceName}
+            domain={whiteLabelManager.domain}
+            privacyPolicyLink={whiteLabelManager.privacyPolicyLink}
+          />
         </div>
       </Provider>
     );
