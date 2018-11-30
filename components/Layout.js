@@ -69,7 +69,7 @@ class Layout extends Component {
             className={`theme-${whiteLabelManager.key}`}
             serviceName={whiteLabelManager.serviceName}
             changelogLink={`//${this.store.common.prefixes.projects}.${whiteLabelManager.domain}/changelog?scope=go`}
-            privacyPolicyLink={whiteLabelManager.privacyPolicyLink}
+            termsOfServiceLink={whiteLabelManager.termsOfServiceLink}
           />
         </div>
       </Provider>
