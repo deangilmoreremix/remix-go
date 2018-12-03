@@ -13,13 +13,14 @@ export default class EmbeddedPlayback extends Component {
       PropTypes.string,
       PropTypes.instanceOf(Project),
     ]).isRequired,
+    playerUrl: PropTypes.string,
     title: PropTypes.string.isRequired,
     width: PropTypes.string.isRequired,
     height: PropTypes.string.isRequired,
   };
 
   preplayHandler(event) {
-    const { source } = this.props;
+    const { source, playerUrl = POSTMESSAGE_URL } = this.props;
     const { source: frameConductor, data: { topic } } = event;
     if (topic !== 'preplay') {
       return;
@@ -41,11 +42,11 @@ export default class EmbeddedPlayback extends Component {
         thumbnail: source.thumbnail,
         data: JSON.stringify(source.popcornObject),
       },
-    }, POSTMESSAGE_URL);
+    }, playerUrl);
   }
 
   render() {
-    const { title, source, width, height, className } = this.props;
+    const { title, source, width, height, className, playerUrl = POSTMESSAGE_URL } = this.props;
     if (source instanceof Project) {
       if (process.browser) {
         window.addEventListener('message', event => this.preplayHandler(event));
@@ -54,7 +55,7 @@ export default class EmbeddedPlayback extends Component {
     return (<iframe
       className={className}
       title={title}
-      src={source instanceof Project ? POSTMESSAGE_URL : source}
+      src={source instanceof Project ? playerUrl : source}
       width={width}
       height={height}
       frameBorder="0"
