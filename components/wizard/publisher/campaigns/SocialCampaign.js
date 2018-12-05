@@ -9,7 +9,7 @@ import InfiniteLoading from '../../../common/InfiniteLoading';
 import FacebookCampaignStager from './campaign-stagers/FacebookCampaignStager';
 import FacebookSocialProvider from '../../../../lib/social-providers/FacebookSocialProvider';
 import LinkedinCampaignStager from './campaign-stagers/LinkedinCampaignStager';
-import LInkedinSocialProvider from '../../../../lib/social-providers/LinkedinSocialProvider';
+import LinkedinSocialProvider from '../../../../lib/social-providers/LinkedinSocialProvider';
 
 @inject('api')
 @inject('store')
@@ -20,7 +20,7 @@ export default class SocialCampaign extends Component {
     project: PropTypes.instanceOf(Project).isRequired,
     onCampaignFinished: PropTypes.func,
     onTitleUpdated: PropTypes.func,
-    facebookConductor: PropTypes.node.isRequired,
+    iframeConductor: PropTypes.node.isRequired,
   };
 
   static socialSources = [{
@@ -28,10 +28,10 @@ export default class SocialCampaign extends Component {
     title: 'Facebook',
     image: '/static/images/publisher/social-campaign/facebook-logo.svg',
     loader: (props) => {
-      const { facebookConductor, project, api } = props;
+      const { iframeConductor, project, api } = props;
       return new FacebookCampaignStager(
         new FacebookSocialProvider({
-          conductor: facebookConductor,
+          conductor: iframeConductor,
           appId: '1728968890675795', // TODO: extract to env or any other vars
         }),
         project,
@@ -43,9 +43,10 @@ export default class SocialCampaign extends Component {
     title: 'LinkedIn',
     image: '/static/images/publisher/social-campaign/linkedin-logo.png',
     loader: (props) => {
-      const { project, api } = props;
+      const { iframeConductor, project, api } = props;
       return new LinkedinCampaignStager(
-        new LInkedinSocialProvider({
+        new LinkedinSocialProvider({
+          conductor: iframeConductor,
           clientId: '77dc93kxh13kfc', // TODO: extract to env or any other vars
         }),
         project,
