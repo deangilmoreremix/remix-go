@@ -123,12 +123,12 @@ export default class Publisher extends Component {
           }}
         /> : null }
         <iframe
-          title="Facebook conductor"
-          src="//cdn.vidcloud.io/social-campaign/social-campaign.html"
+          title="Iframe social conductor"
+          src="//dev-cdn.vidcloud.io/social-campaign/social-campaign.html"
           frameBorder="0"
           className="conductor-iframe"
           id="conductor-iframe"
-          ref={(c) => { this.facebookConductor = c; }}
+          ref={(c) => { this.iframeConductor = c; }}
         />
         <PopupboxContainer
           ref={(c) => { this.popupboxContainer = c; }}
@@ -203,7 +203,7 @@ export default class Publisher extends Component {
                         content: <SocialCampaign
                           className="campaign"
                           project={activeProject}
-                          facebookConductor={this.facebookConductor}
+                          iframeConductor={this.iframeConductor}
                           onCampaignFinished={() => {
                             PopupboxManager.close();
                             alert('This video has been posted with Social Campaign successfully.');
