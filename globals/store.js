@@ -56,7 +56,7 @@ class Store {
       this.whiteLabelManager = new WhiteLabelManager(
         req.whiteLabel,
         req.whiteLabel && req.whiteLabel.domain !== 'videoremix.io',
-        `${source.common.prefixes.cdn}.vidcloud.io`,
+        `${source.common.cdn}`,
       );
       if (this.currentUser) {
         this.currentUser.hash = getIntercomUserHash(this.currentUser.email);
