@@ -9,7 +9,6 @@ module.exports = {
     clientId: process.env.BACKEND_CLIENT_ID || 'service',
     clientSecret: process.env.BACKEND_CLIENT_SECRET || 'q39Jy70X6ao9dTca',
   },
-  cdn: process.env.CDN_HOSTNAME || '',
   editor: process.env.EDITOR || 'dev-app.vidcloud.io',
   assetsPath: process.env.ASSETS_PATH || 'dev-cdn.vidcloud.io/resources/go',
   socketProtocol: process.env.SOCKET_PROTOCOL || 'ws',
