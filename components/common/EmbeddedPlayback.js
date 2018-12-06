@@ -55,7 +55,7 @@ export default class EmbeddedPlayback extends Component {
     return (<iframe
       className={className}
       title={title}
-      src={source instanceof Project ? playerUrl : source}
+      src={source instanceof Project ? `${playerUrl}?preplay=postMessage` : source}
       width={width}
       height={height}
       frameBorder="0"

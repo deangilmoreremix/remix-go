@@ -28,7 +28,6 @@ import StateManager from '../../lib/editor/editorStateManager';
 import SVGCallToAction from '../../static/images/editor/cta.svg';
 import SVGPersonalizer from '../../static/images/editor/personalizer.svg';
 import SVGNicheScripts from '../../static/images/editor/niche_scripts.svg';
-import SVGTemplateGenerator from "../../static/images/getting-started/generator.svg";
 
 const insertAtCaret = (base, offset, text) => {
   const tokenRegex = /{{(up \w*|d \w* ("[^{}]*"|'[^{}]*')|"\w*"|\w*)}}/im;
@@ -233,6 +232,7 @@ export default class Editor extends Component {
                     PopupboxManager.open({
                       content: <EmbeddedPlayback
                         source={activeProject}
+                        playerUrl={playbackUrl}
                         title="Preview"
                         width="840"
                         height="480"
