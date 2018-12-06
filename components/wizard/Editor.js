@@ -77,7 +77,14 @@ export default class Editor extends Component {
 
   state = {
     waiter: null,
+    playbackUrl: null,
   };
+
+  async componentDidMount() {
+    const { api } = this.props;
+    const result = await api.defaults();
+    this.setState({ playbackUrl: result[0].url });
+  }
 
   retrieveProject = async (projectId, isRemix) => {
     const { api, store } = this.props;
@@ -99,7 +106,7 @@ export default class Editor extends Component {
         editorStateManager,
       },
     } = this.props;
-    const { waiter } = this.state;
+    const { waiter, playbackUrl } = this.state;
     /* eslint-disable no-underscore-dangle */
     const ToolbarEditor = activeProject && activeProject.activeElement &&
       PopcornEditor.editors[activeProject.activeElement._natives.type];
@@ -196,7 +203,13 @@ export default class Editor extends Component {
                   activeProject.activeElement = null;
                 }
               }}
-            /> : <NewElementBar project={activeProject} features={currentUser.features} />}
+            /> :
+            <NewElementBar
+              project={activeProject}
+              features={currentUser.features}
+              defaultImage={whiteLabelManager.shouldOverride && whiteLabelManager.brandLogo}
+            />
+            }
           </Row>
           <Row className={`canvas full-height ${editorStateManager.stage === StateManager.STAGE_TYPES.CAPTION_CUSTOMISE ? 'with-toolbar' : ''}`}>
             <Col className="col-2 paddingless editor-pane">
