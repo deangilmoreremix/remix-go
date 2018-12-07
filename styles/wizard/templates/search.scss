@@ -5,7 +5,7 @@
   color: $default-gray;
   padding: 30px 20px 20px 20px;
   display: flex;
-  justify-content: center; 
+  justify-content: center;
 
   .search-field {
     display: flex;
@@ -29,16 +29,17 @@
             outline: none;
           }
         }
-      } 
+      }
     }
 
     .search-button {
       text-align: center;
       a {
         cursor: pointer;
-        img {
+        img, svg {
           &.search-icon {
             width: 15px;
+            height: 15px;
           }
         }
       }

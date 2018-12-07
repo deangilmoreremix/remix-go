@@ -3,18 +3,20 @@ import { inject, observer } from 'mobx-react/index';
 import { Container } from 'reactstrap';
 
 import Menu from './Menu';
+import PropTypes from "../lib/PropTypes";
 
 @inject('store')
 @observer
 export default class Header extends Component {
-  state = {
-    version: false,
+  static propTypes = {
+    className: PropTypes.string,
   };
 
   render() {
+    const { className } = this.props;
     return (
       <Container>
-        <header className="header">
+        <header className={`header ${className}`}>
           <Menu />
         </header>
       </Container>

@@ -8,12 +8,12 @@ import { Component } from 'react';
 import { action, observable } from 'mobx';
 import PropTypes from '../../../../../lib/PropTypes';
 
-const iframeStyling = `<!--- VideoRemix embed styling ---->
+const iframeStyling = `<!--- embed styling ---->
 <style> 
   .iframe-container { position:relative; padding-bottom:56.25%; padding-top:30px; height:0; overflow:hidden; border:1px solid #ccc; }
   .iframe-container iframe,.iframe-container object,.iframe-container embed { position:absolute; top:0; left:0; width:100%; height:100%; }
 </style>
-<!--- End of VideoRemix embed styling ---->
+<!--- End of embed styling ---->
 `;
 
 class CampaignStager {

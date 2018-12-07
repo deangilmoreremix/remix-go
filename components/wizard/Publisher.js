@@ -58,6 +58,7 @@ export default class Publisher extends Component {
     const {
       store: {
         activeProject,
+        whiteLabelManager,
         common: {
           features,
         },
@@ -71,8 +72,8 @@ export default class Publisher extends Component {
         <Head>
           <title>
             {activeProject && activeProject.make && activeProject.make._id ?
-              `${activeProject.name} - VideoRemix GO` :
-              'VideoRemix GO'}
+              `${activeProject.name} - ${whiteLabelManager.brandName}` :
+              whiteLabelManager.brandName}
           </title>
         </Head>
         { activeProject ? <PhaseView
@@ -122,12 +123,12 @@ export default class Publisher extends Component {
           }}
         /> : null }
         <iframe
-          title="Facebook conductor"
+          title="Iframe social conductor"
           src="//cdn.vidcloud.io/social-campaign/social-campaign.html"
           frameBorder="0"
           className="conductor-iframe"
           id="conductor-iframe"
-          ref={(c) => { this.facebookConductor = c; }}
+          ref={(c) => { this.iframeConductor = c; }}
         />
         <PopupboxContainer
           ref={(c) => { this.popupboxContainer = c; }}
@@ -202,7 +203,7 @@ export default class Publisher extends Component {
                         content: <SocialCampaign
                           className="campaign"
                           project={activeProject}
-                          facebookConductor={this.facebookConductor}
+                          iframeConductor={this.iframeConductor}
                           onCampaignFinished={() => {
                             PopupboxManager.close();
                             alert('This video has been posted with Social Campaign successfully.');

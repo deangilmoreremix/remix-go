@@ -2,6 +2,7 @@ import React, { Component, Fragment } from 'react';
 import Head from 'next/head';
 import { Container, Col, Row } from 'reactstrap';
 import { inject, observer } from 'mobx-react';
+import SVGInline from 'react-svg-inline';
 import Router from 'next/router';
 import {
   PopupboxManager,
@@ -23,6 +24,10 @@ import NicheScriptsWorkspace from './niche-scripts/NicheScriptsWorkspace';
 import EmbeddedPlayback from '../common/EmbeddedPlayback';
 import NewElementBar from '../../lib/popcorn/plugins/new/editor.popcorn.new';
 import StateManager from '../../lib/editor/editorStateManager';
+
+import SVGCallToAction from '../../static/images/editor/cta.svg';
+import SVGPersonalizer from '../../static/images/editor/personalizer.svg';
+import SVGNicheScripts from '../../static/images/editor/niche_scripts.svg';
 
 const insertAtCaret = (base, offset, text) => {
   const tokenRegex = /{{(up \w*|d \w* ("[^{}]*"|'[^{}]*')|"\w*"|\w*)}}/im;
@@ -71,7 +76,14 @@ export default class Editor extends Component {
 
   state = {
     waiter: null,
+    playbackUrl: null,
   };
+
+  async componentDidMount() {
+    const { api } = this.props;
+    const result = await api.defaults();
+    this.setState({ playbackUrl: result[0].url });
+  }
 
   retrieveProject = async (projectId, isRemix) => {
     const { api, store } = this.props;
@@ -85,6 +97,7 @@ export default class Editor extends Component {
       store,
       store: {
         activeProject,
+        whiteLabelManager,
         common: {
           features,
         },
@@ -92,7 +105,7 @@ export default class Editor extends Component {
         editorStateManager,
       },
     } = this.props;
-    const { waiter } = this.state;
+    const { waiter, playbackUrl } = this.state;
     /* eslint-disable no-underscore-dangle */
     const ToolbarEditor = activeProject && activeProject.activeElement &&
       PopcornEditor.editors[activeProject.activeElement._natives.type];
@@ -113,8 +126,8 @@ export default class Editor extends Component {
         <Head>
           <title>
             {activeProject && activeProject.make && activeProject.make._id ?
-              `${activeProject.name} - VideoRemix GO` :
-              'VideoRemix GO'}
+              `${activeProject.name} - ${whiteLabelManager.brandName}` :
+              whiteLabelManager.brandName}
           </title>
         </Head>
         <PopupboxContainer
@@ -189,7 +202,13 @@ export default class Editor extends Component {
                   activeProject.activeElement = null;
                 }
               }}
-            /> : <NewElementBar project={activeProject} features={currentUser.features} />}
+            /> :
+            <NewElementBar
+              project={activeProject}
+              features={currentUser.features}
+              defaultImage={whiteLabelManager.shouldOverride && whiteLabelManager.brandLogo}
+            />
+            }
           </Row>
           <Row className={`canvas full-height ${editorStateManager.stage === StateManager.STAGE_TYPES.CAPTION_CUSTOMISE ? 'with-toolbar' : ''}`}>
             <Col className="col-2 paddingless editor-pane">
@@ -213,6 +232,7 @@ export default class Editor extends Component {
                     PopupboxManager.open({
                       content: <EmbeddedPlayback
                         source={activeProject}
+                        playerUrl={playbackUrl}
                         title="Preview"
                         width="840"
                         height="480"
@@ -312,7 +332,7 @@ export default class Editor extends Component {
                     }
                   }}
                 >
-                  <img className="icon" src="../../static/images/editor/personalizer.svg" alt="" />
+                  <SVGInline className="icon personalizer-icon" classSuffix="" svg={SVGPersonalizer} />
                   <span>Personalizer</span>
                 </button>
                 <button
@@ -342,7 +362,7 @@ export default class Editor extends Component {
                     }
                   }}
                 >
-                  <img className="icon" src="../../static/images/editor/cta.svg" alt="" />
+                  <SVGInline className="icon cta-icon" classSuffix="" svg={SVGCallToAction} />
                   <span>Call to Action</span>
                 </button>
                 <button
@@ -378,7 +398,7 @@ export default class Editor extends Component {
                     }
                   }}
                 >
-                  <img className="icon" src="../../static/images/editor/niche_scripts.svg" alt="" />
+                  <SVGInline className="icon niche-scripts-icon" classSuffix="" svg={SVGNicheScripts} />
                   <span>Niche Scripts</span>
                 </button>
               </ActionsPane>

@@ -38,9 +38,19 @@ class Api {
 
   setupNetworkServices(isServer) {
     const { common } = this;
-    this.request = requestCreator(common.backend, this.authorization, isServer, () => {});
+    this.request = requestCreator(
+      `${common.prefixes.api}.${common.whiteLabel && common.whiteLabel.domain}`,
+      this.authorization,
+      isServer,
+      () => {},
+    );
     this.assetsRequest = requestCreator(common.assetsPath, this.authorization, isServer, () => {});
-    this.editorRequest = requestCreator(common.editor, null, isServer, () => {});
+    this.editorRequest = requestCreator(
+      `${common.prefixes.editor}.${common.whiteLabel && common.whiteLabel.domain}`,
+      null,
+      isServer,
+      () => {},
+    );
     this.selfRequest = requestCreator(common.self, null, isServer, () => {});
   }
 
@@ -335,9 +345,10 @@ export async function initApiAndPreload(isServer, source, req, preloader) {
     const config = require('config/config');
     source.common = {
       hostname: req.hostname,
-      backend: config.backend,
+      whiteLabel: req.whiteLabel,
+      prefixes: config.prefixes,
       editor: config.editor,
-      self: config.self || (req.get && req.get('host')),
+      self: req.get && req.get('host'),
       assetsPath: config.assetsPath,
       clientId: config.client.id,
       clientSecret: config.client.secret,

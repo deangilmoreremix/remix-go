@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
+import SVGInline from 'react-svg-inline';
 
 import PropTypes from '../../lib/PropTypes';
+
+import SVGSearch from '../../static/images/magnifying-glass.svg';
 
 export default class Search extends Component {
   static propTypes = {
@@ -36,7 +39,7 @@ export default class Search extends Component {
           </div>
           <div className="search-button">
             <a onClick={() => this.queryHandler(query)}>
-              <img className="search-icon" src="../../static/images/magnifying-glass.svg" />
+              <SVGInline className="search-icon" classSuffix="" svg={SVGSearch} />
             </a>
           </div>
         </div>

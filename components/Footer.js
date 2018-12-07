@@ -1,15 +1,30 @@
 import React from 'react';
 import { Container } from 'reactstrap';
+import PropTypes from '../lib/PropTypes';
 
-export default () => (
-  <Container>
-    <footer className="footer">
-      <div className="copyright">© VideoRemix | <a className="direct-link" href="http://dashboard.vidcloud.io/terms-of-service/">
+const Footer = (props) => {
+  const { changelogLink, serviceName, termsOfServiceLink, className } = props;
+  return (
+    <Container>
+      <footer className={`footer ${className}`}>
+        <div className="copyright">© {serviceName} | <a
+          className="direct-link"
+          href={termsOfServiceLink}
+        >
           View our terms of service
-        </a> | <a className="direct-link" href="//projects.videoremix.io/changelog?scope=go">
+        </a> | <a className="direct-link" href={changelogLink}>
           Changelog
         </a>
-      </div>
-    </footer>
-  </Container>
-);
+        </div>
+      </footer>
+    </Container>);
+};
+
+Footer.propTypes = {
+  className: PropTypes.string,
+  serviceName: PropTypes.string.isRequired,
+  termsOfServiceLink: PropTypes.string.isRequired,
+  changelogLink: PropTypes.string.isRequired,
+};
+
+export default Footer;

@@ -12,7 +12,7 @@ import EmbedDataContainer from '../../EmbedDataContainer';
 import FacebookPostPreview from '../../../../../components/common/post-previews/FacebookPostPreview';
 import CampaignStager from './CampaignStager';
 
-const BACKEND_URL = 'https://api.videoremix.io';
+const BACKEND_URL = 'https://api.vidcloud.io';
 const MIN_FANS_PAGE = 2000;
 
 class FacebookCampaignStager extends CampaignStager {

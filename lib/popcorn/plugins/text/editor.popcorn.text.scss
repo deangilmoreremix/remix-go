@@ -85,6 +85,11 @@
     filter: grayscale(1);
   }
 
+  span.alignment-icon {
+    height: 100%;
+    display: flex;
+  }
+
   .text-position-selection {
     width: 40px;
     height: 30px;

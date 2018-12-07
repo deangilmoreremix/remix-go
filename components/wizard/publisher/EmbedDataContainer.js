@@ -3,12 +3,12 @@ import { Input } from 'reactstrap';
 
 import PropTypes from '../../../lib/PropTypes';
 
-const iframeStyling = `<!--- VideoRemix embed styling ---->
+const iframeStyling = `<!--- embed styling ---->
 <style> 
   .iframe-container { position:relative; padding-bottom:56.25%; padding-top:30px; height:0; overflow:hidden; border:1px solid #ccc; }
   .iframe-container iframe,.iframe-container object,.iframe-container embed { position:absolute; top:0; left:0; width:100%; height:100%; }
 </style>
-<!--- End of VideoRemix embed styling ---->
+<!--- End of embed styling ---->
 `;
 
 const defaultStringGenerator = (url, width, height) => (`${iframeStyling} <script>var vars={};var tempstring='';var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(m,key,value){if(value){tempstring+=key+'='+value+'&';}});if (tempstring) {document.addEventListener('DOMContentLoaded',function() {document.getElementById('vr').src='${url}?'+tempstring.slice(0, -1);});}</script>\r<iframe id='vr' src='${url}' width='${width}' height='${height}' frameborder='0' allow="autoplay; fullscreen" mozallowfullscreen webkitallowfullscreen allowfullscreen></iframe>`);
