@@ -1,5 +1,9 @@
 ### Remix Go
 
+`master`: [ ![Codeship Status for strategic-limited/remix-go](https://app.codeship.com/projects/630d8d20-3b8b-0136-f448-5e3eb9768dd6/status?branch=master)](https://app.codeship.com/projects/290354)
+
+`staging`: [ ![Codeship Status for strategic-limited/remix-go](https://app.codeship.com/projects/630d8d20-3b8b-0136-f448-5e3eb9768dd6/status?branch=staging)](https://app.codeship.com/projects/290354)
+
 This is the part of the VidCloud project: lite editor of personalized videos.
 
 ## Technical Flow Diagram
