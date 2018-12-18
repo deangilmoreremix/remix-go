@@ -332,7 +332,7 @@ export default class Editor extends Component {
                     }
                   }}
                 >
-                  <SVGInline className="icon personalizer-icon" classSuffix="" svg={SVGPersonalizer} />
+                  <SVGInline className="icon personalizer-icon" classSuffix="" svg={SVGPersonalizer} cleanup={['title']} />
                   <span>Personalizer</span>
                 </button>
                 <button
@@ -362,7 +362,7 @@ export default class Editor extends Component {
                     }
                   }}
                 >
-                  <SVGInline className="icon cta-icon" classSuffix="" svg={SVGCallToAction} />
+                  <SVGInline className="icon cta-icon" classSuffix="" svg={SVGCallToAction} cleanup={['title']} />
                   <span>Call to Action</span>
                 </button>
                 <button
@@ -398,7 +398,7 @@ export default class Editor extends Component {
                     }
                   }}
                 >
-                  <SVGInline className="icon niche-scripts-icon" classSuffix="" svg={SVGNicheScripts} />
+                  <SVGInline className="icon niche-scripts-icon" classSuffix="" svg={SVGNicheScripts} cleanup={['title']} />
                   <span>Niche Scripts</span>
                 </button>
               </ActionsPane>

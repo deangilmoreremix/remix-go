@@ -72,7 +72,7 @@ export default class Personalizer extends Component {
           {Personalizer.TOKENS.map((token, idx) => (
             <li key={idx} onClick={() => this.onTokenChange(token)}>
               <span className={`token-list-item ${token === currentToken ? 'selected' : ''}`}>
-                <SVGInline className="icon item-dot-icon" classSuffix="" svg={SVGItemDot} />
+                <SVGInline className="icon item-dot-icon" classSuffix="" svg={SVGItemDot} cleanup={['title']} />
                 {token}
               </span>
             </li>
@@ -97,7 +97,7 @@ export default class Personalizer extends Component {
                 className={`configuration-list-item ${tokenMode === Personalizer.TOKEN_MODE.PLAIN ? 'selected' : ''}`}
                 onClick={() => this.setState({ tokenMode: Personalizer.TOKEN_MODE.PLAIN })}
               >
-                <SVGInline className="icon item-dot-icon" classSuffix="" svg={SVGItemDot} />
+                <SVGInline className="icon item-dot-icon" classSuffix="" svg={SVGItemDot} cleanup={['title']} />
                 plain
               </span>
             </li>
@@ -106,7 +106,7 @@ export default class Personalizer extends Component {
                 className={`configuration-list-item ${tokenMode === Personalizer.TOKEN_MODE.FALLBACK ? 'selected' : ''}`}
                 onClick={() => this.setState({ tokenMode: Personalizer.TOKEN_MODE.FALLBACK })}
               >
-                <SVGInline className="icon item-dot-icon" classSuffix="" svg={SVGItemDot} />
+                <SVGInline className="icon item-dot-icon" classSuffix="" svg={SVGItemDot} cleanup={['title']} />
                 Fallback value:
                 <input
                   type="text"
@@ -122,7 +122,7 @@ export default class Personalizer extends Component {
                 className={`configuration-list-item ${tokenMode === Personalizer.TOKEN_MODE.UPPERCASE ? 'selected' : ''}`}
                 onClick={() => this.setState({ tokenMode: Personalizer.TOKEN_MODE.UPPERCASE })}
               >
-                <SVGInline className="icon item-dot-icon" classSuffix="" svg={SVGItemDot} />
+                <SVGInline className="icon item-dot-icon" classSuffix="" svg={SVGItemDot} cleanup={['title']} />
                 UPPERCASE
               </span>
             </li>

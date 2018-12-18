@@ -112,7 +112,7 @@ export default class GettingStarted extends Component {
                 href={`/?wizard=${this.constructor.WIZARD_TYPES.FROM_TEMPLATE.key}`}
               >
                 <div className="getting-started-item-inner">
-                  <SVGInline className="from-template-icon" classSuffix="" svg={SVGFromTemplate} />
+                  <SVGInline className="from-template-icon" classSuffix="" svg={SVGFromTemplate} cleanup={['title']} />
                   <span>From Template</span>
                 </div>
               </a>
@@ -129,7 +129,7 @@ export default class GettingStarted extends Component {
                 }
               >
                 <div className="getting-started-item-inner">
-                  <SVGInline className="template-generator-icon" classSuffix="" svg={SVGTemplateGenerator} />
+                  <SVGInline className="template-generator-icon" classSuffix="" svg={SVGTemplateGenerator} cleanup={['title']} />
                   <span>Template Generator</span>
                 </div>
               </a>
@@ -138,7 +138,7 @@ export default class GettingStarted extends Component {
                 href={`/?wizard=${this.constructor.WIZARD_TYPES.VIDEO_UPLOAD.key}`}
               >
                 <div className="getting-started-item-inner">
-                  <SVGInline className="video-upload-icon" classSuffix="" svg={SVGVideoUpload} />
+                  <SVGInline className="video-upload-icon" classSuffix="" svg={SVGVideoUpload} cleanup={['title']} />
                   <span>Import Your Own Video</span>
                 </div>
               </a>

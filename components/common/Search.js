@@ -39,7 +39,7 @@ export default class Search extends Component {
           </div>
           <div className="search-button">
             <a onClick={() => this.queryHandler(query)}>
-              <SVGInline className="search-icon" classSuffix="" svg={SVGSearch} />
+              <SVGInline className="search-icon" classSuffix="" svg={SVGSearch} cleanup={['title']} />
             </a>
           </div>
         </div>
