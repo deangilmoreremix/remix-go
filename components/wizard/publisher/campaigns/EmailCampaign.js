@@ -59,10 +59,9 @@ const EMBED_LOCATIONS = [
   },
 ];
 
-const duplicateCustomVars = (string, variable) => {
-  string = string.replace('?', '').replace('&', '');
-  return string.search(variable) === -1;
-};
+const duplicateCustomVars = (string, variable) => (
+  string.split('&').map(keyPair => [keyPair.split('=')]).indexOf(variable) === -1
+);
 
 const EMAIL_PROVIDERS = [
   {
