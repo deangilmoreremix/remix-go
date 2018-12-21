@@ -402,7 +402,8 @@ class FacebookCampaignStager extends CampaignStager {
     };
     if (embedLocation.key === 'facebook-page') {
       shareOptions.pageId = selectedFbPage;
-      shareOptions.redirectUrl = `${BACKEND_URL}/api/makes/fb/${shareOptions.pageId}/${this.provider.constructor.FB_APP_ID}?mid=${project.make._id}`;
+      shareOptions.redirectUrl = `${BACKEND_URL}/api/makes/fb/${shareOptions.pageId}`
+        + `/${this.provider.constructor.FB_APP_ID}?mid=${project.make._id}`;
     } else if (embedLocation.key === 'default') {
       shareOptions.redirectUrl = project.make.url;
     } else {

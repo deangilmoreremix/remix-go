@@ -423,10 +423,8 @@ export default class EmailCampaign extends Component {
                     ? (
                       <span className="embed-line">
                       Click here to install the
-                        {' '}
                         <a href="https://cdn.vidcloud.io/wp/vr.zip">wp</a>
-                        {' '}
-plugin.
+                        plugin.
                       </span>
                     )
                     : null
