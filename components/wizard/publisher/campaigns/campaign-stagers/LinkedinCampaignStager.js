@@ -10,7 +10,7 @@ import { Input } from 'reactstrap';
 
 import CampaignStager from './CampaignStager';
 import EmbedDataContainer from '../../EmbedDataContainer';
-import LinkedinPostPreview from '../../../../../components/common/post-previews/LinkedinPostPreview';
+import LinkedinPostPreview from '../../../../common/post-previews/LinkedinPostPreview';
 
 class LinkedinCampaignStager extends CampaignStager {
   static PostPreview = LinkedinPostPreview;
@@ -31,8 +31,7 @@ class LinkedinCampaignStager extends CampaignStager {
                 id="embed-location-select"
                 value={state.variables.embedLocation.key}
                 onChange={({ target: { value } }) => {
-                  state.variables.embedLocation =
-                    this.constructor.EMBED_LOCATIONS.find(item => item.key === value);
+                  state.variables.embedLocation = this.constructor.EMBED_LOCATIONS.find(item => item.key === value);
                   state.onVariablesUpdated(state.variables);
                 }}
               >
@@ -72,6 +71,16 @@ class LinkedinCampaignStager extends CampaignStager {
               />
             </div>
           </div>
+          {
+            state.variables.autoplay
+            && (
+              <div className="embed-group warning">
+                <strong>Warning! </strong>
+                Please note that due to new autoplay policy changes in browsers, autoplay can
+                start only with muted video and then can be unmuted by explicit user interaction
+              </div>
+            )
+          }
           <div className={state.variables.embedLocation.embedGenerator ? 'embed-details' : 'hidden'}>
             <span className="embed-line">{state.variables.embedLocation.prompt}</span>
             <EmbedDataContainer
@@ -303,9 +312,9 @@ class LinkedinCampaignStager extends CampaignStager {
       case 'login':
         return this.provider.isAuthorized();
       case 'post':
-        return userData && postData &&
-          postData.title && postData.title.length > 0 &&
-          postData.thumbnail && postData.thumbnail.length > 0;
+        return userData && postData
+          && postData.title && postData.title.length > 0
+          && postData.thumbnail && postData.thumbnail.length > 0;
       default:
         return false;
     }
@@ -313,15 +322,15 @@ class LinkedinCampaignStager extends CampaignStager {
 
   @action
   async nextStage() {
-    if (this.currentStage.key ===
-      this._stages[this._stages.length - 1].key) {
+    if (this.currentStage.key
+      === this._stages[this._stages.length - 1].key) {
       return this.sharePost();
     }
 
     const { currentStageIndex, embedLocation } = this.state;
     let nextStageIdx = Math.min(currentStageIndex + 1, this._stages.length - 1);
-    if (this._stages[nextStageIdx].key === 'embed-location' &&
-      ['default'].indexOf(embedLocation.key) !== -1) {
+    if (this._stages[nextStageIdx].key === 'embed-location'
+      && ['default'].indexOf(embedLocation.key) !== -1) {
       nextStageIdx += 1;
     }
     this.state.currentStageIndex = nextStageIdx;

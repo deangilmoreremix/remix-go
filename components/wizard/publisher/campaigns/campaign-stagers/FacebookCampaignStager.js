@@ -9,7 +9,7 @@ import { action, observable } from 'mobx';
 import { Input } from 'reactstrap';
 
 import EmbedDataContainer from '../../EmbedDataContainer';
-import FacebookPostPreview from '../../../../../components/common/post-previews/FacebookPostPreview';
+import FacebookPostPreview from '../../../../common/post-previews/FacebookPostPreview';
 import CampaignStager from './CampaignStager';
 
 const BACKEND_URL = 'https://api.vidcloud.io';
@@ -41,8 +41,7 @@ class FacebookCampaignStager extends CampaignStager {
                 id="embed-location-select"
                 value={state.variables.embedLocation.key}
                 onChange={({ target: { value } }) => {
-                  state.variables.embedLocation =
-                    this.constructor.EMBED_LOCATIONS.find(item => item.key === value);
+                  state.variables.embedLocation = this.constructor.EMBED_LOCATIONS.find(item => item.key === value);
                   state.onVariablesUpdated(state.variables);
                 }}
               >
@@ -82,6 +81,16 @@ class FacebookCampaignStager extends CampaignStager {
               />
             </div>
           </div>
+          {
+            state.variables.autoplay
+            && (
+              <div className="embed-group warning">
+                <strong>Warning! </strong>
+                Please note that due to new autoplay policy changes in browsers, autoplay can
+                start only with muted video and then can be unmuted by explicit user interaction
+              </div>
+            )
+          }
           <div className={state.variables.embedLocation.embedGenerator ? 'embed-details' : 'hidden'}>
             <span className="embed-line">{state.variables.embedLocation.prompt}</span>
             <EmbedDataContainer
@@ -187,37 +196,40 @@ class FacebookCampaignStager extends CampaignStager {
               </select>
             </div>
             {
-              state.variables.selectedFbPage &&
-              (state.variables.facebookPages.find(
+              state.variables.selectedFbPage
+              && (state.variables.facebookPages.find(
                 page => page.id === state.variables.selectedFbPage,
-              ).fanCount >= MIN_FANS_PAGE) ?
-                <div className="row embed-group">
-                  <label className="cell" htmlFor="facebook-page-tab-input">
+              ).fanCount >= MIN_FANS_PAGE)
+                ? (
+                  <div className="row embed-group">
+                    <label className="cell" htmlFor="facebook-page-tab-input">
                     Facebook Page tab name
-                  </label>
-                  <Input
-                    id="facebook-page-tab-input"
-                    className="cell facebook-page-tab"
-                    type="text"
-                    value={state.variables.facebookPageTab.name}
-                    onChange={({ target: { value } }) => {
-                      state.variables.facebookPageTab.name = value;
-                    }}
-                  />
-                </div> : null
+                    </label>
+                    <Input
+                      id="facebook-page-tab-input"
+                      className="cell facebook-page-tab"
+                      type="text"
+                      value={state.variables.facebookPageTab.name}
+                      onChange={({ target: { value } }) => {
+                        state.variables.facebookPageTab.name = value;
+                      }}
+                    />
+                  </div>
+                ) : null
             }
           </div>
-          {!state.variables.selectedFbPage ||
-          (state.variables.facebookPages.find(
+          {!state.variables.selectedFbPage
+          || (state.variables.facebookPages.find(
             page => page.id === state.variables.selectedFbPage,
-          ).fanCount < MIN_FANS_PAGE) ?
-            <div
-              className="no-enough-fans"
-            >
-              <strong>Warning! </strong>The selected page has less than 2,000 fans. As a result, and due to a
-              new Facebook limitation introduced on February 5th, 2018, your video can only be shared on
-              Facebook and not embedded in a tab. This will be corrected soon.
-            </div> : null}
+          ).fanCount < MIN_FANS_PAGE)
+            ? (
+              <div className="warning">
+                <strong>Warning! </strong>
+                The selected page has less than 2,000 fans. As a result, and due to a
+                new Facebook limitation introduced on February 5th, 2018, your video can only be
+                shared on Facebook and not embedded in a tab. This will be corrected soon.
+              </div>
+            ) : null}
         </div>
       )),
       bootstrap: async (instance) => {
@@ -390,8 +402,7 @@ class FacebookCampaignStager extends CampaignStager {
     };
     if (embedLocation.key === 'facebook-page') {
       shareOptions.pageId = selectedFbPage;
-      shareOptions.redirectUrl =
-        `${BACKEND_URL}/api/makes/fb/${shareOptions.pageId}/${this.provider.constructor.FB_APP_ID}?mid=${project.make._id}`;
+      shareOptions.redirectUrl = `${BACKEND_URL}/api/makes/fb/${shareOptions.pageId}/${this.provider.constructor.FB_APP_ID}?mid=${project.make._id}`;
     } else if (embedLocation.key === 'default') {
       shareOptions.redirectUrl = project.make.url;
     } else {
@@ -455,13 +466,13 @@ class FacebookCampaignStager extends CampaignStager {
       case 'facebook-login':
         return userData;
       case 'facebook-page':
-        return selectedFbPage &&
-          facebookPages.find(page => page.id === selectedFbPage).fanCount >= MIN_FANS_PAGE &&
-          facebookPageTab && facebookPageTab.name.length > 0;
+        return selectedFbPage
+          && facebookPages.find(page => page.id === selectedFbPage).fanCount >= MIN_FANS_PAGE
+          && facebookPageTab && facebookPageTab.name.length > 0;
       case 'facebook-post':
-        return userData && postData &&
-          postData.title && postData.title.length > 0 &&
-          postData.thumbnail && postData.thumbnail.length > 0;
+        return userData && postData
+          && postData.title && postData.title.length > 0
+          && postData.thumbnail && postData.thumbnail.length > 0;
       default:
         return false;
     }
@@ -469,8 +480,8 @@ class FacebookCampaignStager extends CampaignStager {
 
   @action
   async nextStage() {
-    if (this.currentStage.key ===
-      this._stages[this._stages.length - 1].key) {
+    if (this.currentStage.key
+      === this._stages[this._stages.length - 1].key) {
       return this.sharePost();
     }
 
@@ -490,8 +501,8 @@ class FacebookCampaignStager extends CampaignStager {
           break;
       }
     } else {
-      if (this._stages[nextStageIdx].key === 'embed-location' &&
-        ['default', 'facebook-page'].indexOf(embedLocation.key) !== -1) {
+      if (this._stages[nextStageIdx].key === 'embed-location'
+        && ['default', 'facebook-page'].indexOf(embedLocation.key) !== -1) {
         nextStageIdx += 1;
       }
       if (this._stages[nextStageIdx].key === 'facebook-page' && embedLocation.key !== 'facebook-page') {
@@ -515,8 +526,8 @@ class FacebookCampaignStager extends CampaignStager {
       currentStageIndex - 1,
       0,
     );
-    if ((this._stages[prevStageIdx].key === 'embed-location' && embedLocation.key === 'default') ||
-      (this._stages[prevStageIdx].key === 'facebook-page' && embedLocation.key !== 'facebook-page')) {
+    if ((this._stages[prevStageIdx].key === 'embed-location' && embedLocation.key === 'default')
+      || (this._stages[prevStageIdx].key === 'facebook-page' && embedLocation.key !== 'facebook-page')) {
       prevStageIdx -= 1;
     }
     this.state.currentStageIndex = prevStageIdx;
