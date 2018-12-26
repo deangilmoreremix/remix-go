@@ -92,7 +92,7 @@ export default class ProjectDetailsChanger extends Component {
             <Input
               type="file"
               onChange={async ({ target: { files: [file] } }) => {
-                const response = await api.uploadMedia(file);
+                const response = await api.uploadMedia({ data: file });
                 this.setState({ thumbnail: response.url });
               }}
             />

@@ -55,11 +55,24 @@
 
   .url-container {
     display: none;
+    overflow: hidden;
     min-width: 1px;
     font-size: 0.8rem;
     padding: 3%;
     border: 0.5px dashed;
     text-align: center;
+    bottom: -32px;
+    position: absolute;
+    width: 100%;
+
+    span {
+      width: 100%;
+    }
+
+    .fa {
+      width: auto;
+      margin: 0 2px;
+    }
   }
 
   .image-plugin-hidden {
@@ -83,7 +96,7 @@
 
   &.active {
     .url-container {
-      display: block;
+      display: flex;
     }
   }
 }

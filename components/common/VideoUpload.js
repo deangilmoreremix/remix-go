@@ -41,10 +41,11 @@ export default class VideoUpload extends Component {
     this.setState({ isUploading: true, error: null });
     try {
       const response = await api.uploadMedia(
-        file,
+        { data: file, preview: true },
         progress => this.setState({ uploadPercentage: progress }),
       );
-      videoMeta.source = response.url;
+      await api.storeAsset(response.url, response.preview, api.constructor.ASSET_TYPES.VIDEOS);
+      videoMeta.source = [response.hls, response.url].join('|');
       this.setState({
         uploadPercentage: 0,
         isUploading: false,

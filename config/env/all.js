@@ -1,9 +1,16 @@
 module.exports = {
   port: process.env.PORT || 3000,
   self: process.env.SELF,
-  backend: process.env.BACKEND || 'dev-api.videoremix.io',
-  editor: process.env.EDITOR || 'dev-app.videoremix.io',
-  assetsPath: process.env.ASSETS_PATH || 'dev-cdn.videoremix.io/resources/go',
+  app: {
+    prefix: process.env.APP_PREFIX || 'go',
+  },
+  backend: {
+    url: process.env.BACKEND || 'dev-api.vidcloud.io',
+    clientId: process.env.BACKEND_CLIENT_ID || 'service',
+    clientSecret: process.env.BACKEND_CLIENT_SECRET || 'q39Jy70X6ao9dTca',
+  },
+  editor: process.env.EDITOR || 'dev-app.vidcloud.io',
+  assetsPath: process.env.ASSETS_PATH || 'dev-cdn.vidcloud.io/resources/go',
   socketProtocol: process.env.SOCKET_PROTOCOL || 'ws',
   nakedRun: process.env.NAKED_RUN || false,
   client: {
@@ -23,6 +30,8 @@ module.exports = {
     url: process.env.LOGIN_SERVER_URL || 'http://localhost:1340',
     authUrl: process.env.AUTH_SERVER_URL || 'http://localhost:8888',
     urlWithAuth: process.env.LOGIN_SERVER_URL_WITH_AUTH || 'http://testuser:password@localhost:1340',
+    username: process.env.LOGIN_USERNAME || 'testuser',
+    password: process.env.LOGIN_PASSWORD || 'password',
   },
   secret: process.env.SECRET || 'dummy secret value',
   appHostname: process.env.APP_HOSTNAME || 'http://localhost:3000',
@@ -41,13 +50,23 @@ module.exports = {
   newRelic: {
     key: process.env.NEW_RELIC_LICENSE_KEY || '',
   },
+  useWhiteLabels: process.env.USE_WHITE_LABELS || false,
   prefixes: {
+    app: process.env.APP_PREFIX || 'go',
+    api: process.env.API_PREFIX || 'api',
+    login: process.env.LOGIN_PREFIX || 'api',
+    editor: process.env.EDITOR_PREFIX || 'app',
+    cdn: process.env.CDN_PREFIX || 'cdn',
     projects: process.env.PROJECTS_PREFIX || 'projects',
+    play: process.env.PLAY_PREFIX || 'play',
   },
   s3: {
     cdn: process.env.CDN_HOSTNAME || '',
+    mediaCdn: process.env.MEDIA_CDN_HOSTNAME || '',
+    streamingCdn: process.env.STREAMING_CDN_HOSTNAME || '',
     key: process.env.S3_KEY || 'AKIAIAQ6WDZIWRHJTGVA',
     bucket: process.env.S3_BUCKET || 'videoremix',
+    mediaBucket: process.env.S3_MEDIA_BUCKET || '',
     secret: process.env.S3_SECRET || 'rVsDp2sM1AyaebUqY3WY9vDefDIE/s6WbqePUVYz',
     domain: process.env.S3_DOMAIN || 'http://videoremix.s3-website-us-west-1.amazonaws.com',
     emulation: process.env.S3_EMULATION || false,

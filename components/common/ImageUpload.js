@@ -47,7 +47,7 @@ export default class ImageUpload extends Component {
               this.setState({ isUploading: true });
               try {
                 const videoMeta = await new MediaTypeDetector()
-                  .getMetadata(file ? (await api.uploadMedia(file)).url : url);
+                  .getMetadata(file ? (await api.uploadMedia({ data: file })).url : url);
                 if (videoMeta.type === 'HTML5' && videoMeta.contentType.indexOf('image/') === 0) {
                   onFileUploaded(videoMeta.source);
                 } else {
@@ -56,12 +56,10 @@ export default class ImageUpload extends Component {
                   });
                 }
               } catch (err) {
-                console.log(err);
                 this.setState({
                   error: err.message || 'This image format is not supported.',
                 });
-              }
-              finally {
+              } finally {
                 this.setState({
                   isUploading: false,
                   url: null,

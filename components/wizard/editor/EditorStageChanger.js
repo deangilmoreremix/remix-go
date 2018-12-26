@@ -17,7 +17,7 @@ const EDITOR_STAGE_VIEWS = [{
   stage: StateManager.STAGE_TYPES.AUDIO_CUSTOMISE,
   image: <img src="../../../static/images/editor/audio.svg" alt="" />,
   validator: (project) => {
-    if (project && new MediaTypeDetector().checkUrl(project.video) !== 'HTML5') {
+    if (project && ['HTML5', 'Adaptive'].indexOf(new MediaTypeDetector().checkUrl(project.video)) === -1) {
       return 'Audio track customisation is available only for HTML5 videos.';
     }
     return null;

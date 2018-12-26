@@ -1,5 +1,5 @@
 .publisher-wrapper {
-  background: #dddddd;
+  background: $gray-200;
   bottom: $footer-height + $editor-wrapper-padding;
   left: 0;
   top: $header-height + $editor-wrapper-padding + $phase-component;
@@ -26,10 +26,10 @@
         padding: 30px 0;
 
         .card {
-          border: 1px solid #cccccc;
+          border: 1px solid $gray-300;
 
           &:hover {
-            border-color: #eb5053;
+            border-color: $secondary-color;
           }
         }
       }
@@ -242,8 +242,8 @@
 
     .embed-grid {
       display: table;
-      width: 80%;
-      margin: 0 10%;
+      width: 90%;
+      margin: 0 5%;
 
       .row {
         display: table-row;

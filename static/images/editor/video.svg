@@ -1,1 +1,22 @@
-<svg id="Layer_247" data-name="Layer 247" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 67.71 59.76"><defs><style>.cls-1{fill:none;stroke:#fff;stroke-linecap:round;stroke-linejoin:round;}</style></defs><title>Video</title><rect class="cls-1" x="0.5" y="0.5" width="66.71" height="58.76"/><circle class="cls-1" cx="33.86" cy="29.88" r="12.28"/><line class="cls-1" x1="11.22" y1="8.53" x2="11.22" y2="11.5"/><line class="cls-1" x1="11.22" y1="20.81" x2="11.22" y2="23.78"/><line class="cls-1" x1="11.22" y1="34.3" x2="11.22" y2="37.27"/><line class="cls-1" x1="11.22" y1="48.27" x2="11.22" y2="51.24"/><line class="cls-1" x1="56.5" y1="8.53" x2="56.5" y2="11.5"/><line class="cls-1" x1="56.5" y1="20.81" x2="56.5" y2="23.78"/><line class="cls-1" x1="56.5" y1="34.3" x2="56.5" y2="37.27"/><line class="cls-1" x1="56.5" y1="48.27" x2="56.5" y2="51.24"/><path class="cls-1" d="M370.62,4564.55a1.12,1.12,0,0,1,0,1.94l-3.74,2.16-3.75,2.16a1.12,1.12,0,0,1-1.68-1v-8.64a1.12,1.12,0,0,1,1.68-1l3.75,2.16Z" transform="translate(-331.62 -4535.64)"/></svg>
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 22.1.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<svg version="1.1" id="Layer_247" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 viewBox="0 0 68.7 60.8" style="enable-background:new 0 0 68.7 60.8;" xml:space="preserve">
+<style type="text/css">
+	.st0{fill:none;stroke:#FFFFFF;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;}
+</style>
+<title>Video</title>
+<path class="st0" d="M5.3,1h58.2c2.4,0,4.3,1.9,4.3,4.3v50.2c0,2.4-1.9,4.3-4.3,4.3H5.3c-2.4,0-4.3-1.9-4.3-4.3V5.3
+	C1,2.9,2.9,1,5.3,1z"/>
+<circle class="st0" cx="34.4" cy="30.4" r="12.3"/>
+<line class="st0" x1="11.7" y1="9" x2="11.7" y2="12"/>
+<line class="st0" x1="11.7" y1="21.3" x2="11.7" y2="24.3"/>
+<line class="st0" x1="11.7" y1="34.8" x2="11.7" y2="37.8"/>
+<line class="st0" x1="11.7" y1="48.8" x2="11.7" y2="51.7"/>
+<line class="st0" x1="57" y1="9" x2="57" y2="12"/>
+<line class="st0" x1="57" y1="21.3" x2="57" y2="24.3"/>
+<line class="st0" x1="57" y1="34.8" x2="57" y2="37.8"/>
+<line class="st0" x1="57" y1="48.8" x2="57" y2="51.7"/>
+<path class="st0" d="M39.5,29.4c0.5,0.3,0.7,1,0.4,1.5c-0.1,0.2-0.2,0.3-0.4,0.4l-3.7,2.2L32,35.7c-0.5,0.3-1.2,0.1-1.5-0.4
+	c-0.1-0.2-0.2-0.4-0.1-0.6V26c0-0.6,0.5-1.1,1.1-1.1c0.2,0,0.4,0,0.6,0.1l3.8,2.2L39.5,29.4z"/>
+</svg>

@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from 'react';
-import Link from 'next/link';
 import Router from 'next/router';
 import { observer, inject } from 'mobx-react';
+import SVGInline from 'react-svg-inline';
 import {
   PopupboxManager,
   PopupboxContainer,
@@ -14,6 +14,10 @@ import VideoSelectionWorkspace from './editor/workspaces/VideoSelectionWorkspace
 import NicheScriptsWorkspace from './niche-scripts/NicheScriptsWorkspace';
 import Project from '../../lib/editor/Project';
 import VideoUpload from '../common/VideoUpload';
+
+import SVGFromTemplate from '../../static/images/getting-started/template.svg';
+import SVGTemplateGenerator from '../../static/images/getting-started/generator.svg';
+import SVGVideoUpload from '../../static/images/getting-started/upload.svg';
 
 @inject('api')
 @inject('store')
@@ -37,7 +41,7 @@ export default class GettingStarted extends Component {
   }
 
   getWizard(wizardType) {
-    const { store: { common: { features }, currentUser } } = this.props;
+    const { store: { whiteLabelManager, common: { features }, currentUser } } = this.props;
     switch (wizardType) {
       case GettingStarted.WIZARD_TYPES.GENERATOR:
         return (
@@ -91,13 +95,16 @@ export default class GettingStarted extends Component {
         return (
           <div className="scrollable full-height getting-started">
             <div className="welcome">
-              <h2>Welcome to GO!</h2>
+              <h2>Welcome to {whiteLabelManager.appName}!</h2>
+              {whiteLabelManager.tutorialsLink &&
               <a
-                href="//projects.videoremix.io/strategy-course?course=5b17f9f5cf295900145d416b&section=1"
+                href={whiteLabelManager.tutorialsLink}
                 target="_blank"
+                rel="noopener noreferer"
               >
                 Click here to view the tutorials.
               </a>
+              }
             </div>
             <div className="getting-started-list">
               <a
@@ -105,10 +112,7 @@ export default class GettingStarted extends Component {
                 href={`/?wizard=${this.constructor.WIZARD_TYPES.FROM_TEMPLATE.key}`}
               >
                 <div className="getting-started-item-inner">
-                  <img
-                    src="../../static/images/getting-started/template.svg"
-                    alt="From Template"
-                  />
+                  <SVGInline className="from-template-icon" classSuffix="" svg={SVGFromTemplate} cleanup={['title']} />
                   <span>From Template</span>
                 </div>
               </a>
@@ -125,10 +129,7 @@ export default class GettingStarted extends Component {
                 }
               >
                 <div className="getting-started-item-inner">
-                  <img
-                    src="../../static/images/getting-started/generator.svg"
-                    alt="Template Generator"
-                  />
+                  <SVGInline className="template-generator-icon" classSuffix="" svg={SVGTemplateGenerator} cleanup={['title']} />
                   <span>Template Generator</span>
                 </div>
               </a>
@@ -137,10 +138,7 @@ export default class GettingStarted extends Component {
                 href={`/?wizard=${this.constructor.WIZARD_TYPES.VIDEO_UPLOAD.key}`}
               >
                 <div className="getting-started-item-inner">
-                  <img
-                    src="../../static/images/getting-started/upload.svg"
-                    alt="Import Your Own Video"
-                  />
+                  <SVGInline className="video-upload-icon" classSuffix="" svg={SVGVideoUpload} cleanup={['title']} />
                   <span>Import Your Own Video</span>
                 </div>
               </a>

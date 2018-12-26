@@ -18,12 +18,12 @@ const STAGES = [
   { key: 'service-provider', completionPercentage: 100 },
 ];
 
-const iframeStyling = `<!--- VideoRemix embed styling ---->
+const iframeStyling = `<!--- embed styling ---->
 <style> 
   .iframe-container { position:relative; padding-bottom:56.25%; padding-top:30px; height:0; overflow:hidden; border:1px solid #ccc; }
   .iframe-container iframe,.iframe-container object,.iframe-container embed { position:absolute; top:0; left:0; width:100%; height:100%; }
 </style>
-<!--- End of VideoRemix embed styling ---->
+<!--- End of embed styling ---->
 `;
 const embedScript = url => `<script>var vars={};var tempstring='';var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(m,key,value){if(value){tempstring+=key+'='+value+'&';}});if (tempstring) {document.addEventListener('DOMContentLoaded',function() {document.getElementById('vr').src='${url}?'+tempstring.slice(0, -1);});}</script>\n\n`;
 const iframeTag = (url, width, height) => `<div class="iframe-container"><iframe id='vr' src='${url}' width='${width}' height='${height}' frameborder='0' allow="autoplay; fullscreen" mozallowfullscreen webkitallowfullscreen allowfullscreen></iframe></div>`;
@@ -59,10 +59,9 @@ const EMBED_LOCATIONS = [
   },
 ];
 
-const duplicateCustomVars = (string, variable) => {
-  string = string.replace('?', '').replace('&', '');
-  return string.search(variable) === -1;
-};
+const duplicateCustomVars = (string, variable) => (
+  string.split('&').map(keyPair => [keyPair.split('=')]).indexOf(variable) === -1
+);
 
 const EMAIL_PROVIDERS = [
   {
@@ -119,8 +118,8 @@ const EMAIL_PROVIDERS = [
         IMAGE: 'image',
       };
       personalizations.forEach((personalization) => {
-        const tempvar = lookup[personalization] ||
-          personalization.charAt(0).toUpperCase() + personalization.slice(1).toLowerCase();
+        const tempvar = lookup[personalization]
+          || personalization.charAt(0).toUpperCase() + personalization.slice(1).toLowerCase();
         if (duplicateCustomVars(result, personalization)) {
           result = result + personalization + (tempvar !== 'Everywhere' ? `=%%${tempvar}%%&` : '=Everywhere&');
         }
@@ -160,8 +159,8 @@ const EMAIL_PROVIDERS = [
         IMAGE: 'Contact.Image',
       };
       personalizations.forEach((personalization) => {
-        const tempvar = lookup[personalization] ||
-          personalization.charAt(0).toUpperCase() + personalization.slice(1).toLowerCase();
+        const tempvar = lookup[personalization]
+          || personalization.charAt(0).toUpperCase() + personalization.slice(1).toLowerCase();
         if (duplicateCustomVars(result, personalization)) {
           result = `${result + personalization}=~${tempvar}~&`;
         }
@@ -309,9 +308,9 @@ export default class EmailCampaign extends Component {
     const { autoplay, preload, embedLocation, emailProvider, embedPage } = this.state;
     const basicPath = embedLocation.key === 'default' ? project.make.url : embedPage;
     personalizations = personalizations.filter(item => SKIP_VARS.indexOf(item) === -1);
-    const providerParams = (emailProvider && emailProvider.paramsBuilder) ?
-      emailProvider.paramsBuilder(personalizations) :
-      '';
+    const providerParams = (emailProvider && emailProvider.paramsBuilder)
+      ? emailProvider.paramsBuilder(personalizations)
+      : '';
     return [
       basicPath, [
         autoplay ? 'autoplay=1' : null,
@@ -375,8 +374,8 @@ export default class EmailCampaign extends Component {
                     id="embed-location-select"
                     value={embedLocation.key}
                     onChange={({ target: { value } }) => this.setState({
-                        embedLocation: EMBED_LOCATIONS.find(item => item.key === value),
-                      })}
+                      embedLocation: EMBED_LOCATIONS.find(item => item.key === value),
+                    })}
                   >
                     {EMBED_LOCATIONS.map(
                       ({ key, label }, idx) => <option key={idx} value={key}>{label}</option>,
@@ -408,13 +407,27 @@ export default class EmailCampaign extends Component {
                   />
                 </div>
               </div>
+              {
+                autoplay
+                && (
+                  <div className="embed-group warning">
+                    <strong>Warning! </strong>
+                    Please note that due to new autoplay policy changes in browsers, autoplay can
+                    start only with muted video and then can be unmuted by explicit user interaction
+                  </div>
+                )
+              }
               <div className={embedLocation.key === 'default' ? 'hidden' : 'embed-details'}>
                 {
-                  embedLocation.key === 'wordpress' ?
-                    <span className="embed-line">
-                      Click here to install the <a href="https://cdn.vidcloud.io/wp/vr.zip">wp</a> plugin.
-                    </span> :
-                    null
+                  embedLocation.key === 'wordpress'
+                    ? (
+                      <span className="embed-line">
+                      Click here to install the
+                        <a href="https://cdn.vidcloud.io/wp/vr.zip">wp</a>
+                        plugin.
+                      </span>
+                    )
+                    : null
                 }
                 <span className="embed-line">{embedLocation.prompt}</span>
                 <EmbedDataContainer

@@ -17,8 +17,14 @@
       margin: 10px 0;
       font-weight: inherit;
 
+      .item-dot-icon {
+        .cls-1 {
+          fill: #dedede;
+          stroke: none;
+        }
+      }
+
       .icon {
-        content: url('../../../static/images/editor/personalizer/grey_circle.svg');
         margin-right: 5px;
       }
 
@@ -26,8 +32,11 @@
         color: $secondary-color;
         font-weight: 500;
 
-        .icon {
-          content: url('../../../static/images/editor/personalizer/red_circle.svg');
+        .item-dot-icon {
+          .cls-1 {
+            fill: $secondary-color;
+            stroke: none;
+          }
         }
       }
     }
@@ -68,8 +77,14 @@
         font-weight: inherit;
 
         .icon {
-          content: url('../../../static/images/editor/personalizer/grey_circle.svg');
           margin-right: 5px;
+        }
+
+        .item-dot-icon {
+          .cls-1 {
+            fill: #dedede;
+            stroke: none;
+          }
         }
 
         .fallback-input {
@@ -81,8 +96,11 @@
           color: $secondary-color;
           font-weight: 500;
 
-          .icon {
-            content: url('../../../static/images/editor/personalizer/red_circle.svg');
+          .item-dot-icon {
+            .cls-1 {
+              fill: $secondary-color;
+              stroke: none;
+            }
           }
         }
       }

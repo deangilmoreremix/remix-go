@@ -27,6 +27,35 @@
     text-align: center;
   }
 
+  .phone-callback-input {
+    width: 20%;
+    display: flex;
+    align-items: center;
+
+    .fa {
+      float: left;
+      color: gray;
+      height: 100%;
+      margin-left: 20px;
+      z-index: 1;
+    }
+
+    input[type="text"] {
+      background: $white;
+      color: $primary-color;
+      margin: 0 10px;
+      margin-left: -20px;
+      padding-left: 23px;
+    }
+
+    &.errored {
+      input[type="text"] {
+        border-color: red;
+        border-width: thin;
+      }
+    }
+  }
+
   .decoration-toggle {
     cursor: pointer;
     margin: 0 7px;
@@ -54,6 +83,11 @@
     height: 60%;
     margin: auto 5px;
     filter: grayscale(1);
+  }
+
+  span.alignment-icon {
+    height: 100%;
+    display: flex;
   }
 
   .text-position-selection {

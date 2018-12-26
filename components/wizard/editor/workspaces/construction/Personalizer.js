@@ -1,5 +1,9 @@
 import React, { Component } from 'react';
+import SVGInline from 'react-svg-inline';
+
 import PropTypes from '../../../../../lib/PropTypes';
+
+import SVGItemDot from '../../../../../static/images/editor/personalizer/red_circle.svg';
 
 export default class Personalizer extends Component {
   static propTypes = {
@@ -63,12 +67,12 @@ export default class Personalizer extends Component {
     const { className, onTokenChosen } = this.props;
     const { currentToken, tokenMode, fallbackValue, customTokenValue } = this.state;
     return (
-      <div className={className} style={{width: '600px', height: '300px'}}>
+      <div className={className} style={{ width: '600px', height: '300px' }}>
         <ul className="token-list">
           {Personalizer.TOKENS.map((token, idx) => (
             <li key={idx} onClick={() => this.onTokenChange(token)}>
               <span className={`token-list-item ${token === currentToken ? 'selected' : ''}`}>
-                <span className="icon" />
+                <SVGInline className="icon item-dot-icon" classSuffix="" svg={SVGItemDot} cleanup={['title']} />
                 {token}
               </span>
             </li>
@@ -93,7 +97,7 @@ export default class Personalizer extends Component {
                 className={`configuration-list-item ${tokenMode === Personalizer.TOKEN_MODE.PLAIN ? 'selected' : ''}`}
                 onClick={() => this.setState({ tokenMode: Personalizer.TOKEN_MODE.PLAIN })}
               >
-                <span className="icon" />
+                <SVGInline className="icon item-dot-icon" classSuffix="" svg={SVGItemDot} cleanup={['title']} />
                 plain
               </span>
             </li>
@@ -102,7 +106,7 @@ export default class Personalizer extends Component {
                 className={`configuration-list-item ${tokenMode === Personalizer.TOKEN_MODE.FALLBACK ? 'selected' : ''}`}
                 onClick={() => this.setState({ tokenMode: Personalizer.TOKEN_MODE.FALLBACK })}
               >
-                <span className="icon" />
+                <SVGInline className="icon item-dot-icon" classSuffix="" svg={SVGItemDot} cleanup={['title']} />
                 Fallback value:
                 <input
                   type="text"
@@ -118,7 +122,7 @@ export default class Personalizer extends Component {
                 className={`configuration-list-item ${tokenMode === Personalizer.TOKEN_MODE.UPPERCASE ? 'selected' : ''}`}
                 onClick={() => this.setState({ tokenMode: Personalizer.TOKEN_MODE.UPPERCASE })}
               >
-                <span className="icon" />
+                <SVGInline className="icon item-dot-icon" classSuffix="" svg={SVGItemDot} cleanup={['title']} />
                 UPPERCASE
               </span>
             </li>

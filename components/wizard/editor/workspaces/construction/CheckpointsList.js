@@ -10,7 +10,7 @@ import Checkpoint from './Checkpoint';
 export default class CheckpointsList extends Component {
   static propTypes = {
     className: PropTypes.string,
-    checkpoints: PropTypes.arrayOf(PropTypes.number),
+    checkpoints: PropTypes.arrayOrObservableArrayOf(PropTypes.number),
     onCheckpointSelect: PropTypes.func.isRequired,
   };
 

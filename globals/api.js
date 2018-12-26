@@ -8,9 +8,15 @@ class Api {
   @observable
   isLoading = false;
 
-  static ASSET_TYPE = {
+  static ASSET_TYPES = {
     VIDEOS: 'videos',
     AUDIOS: 'audios',
+    IMAGES: 'images',
+  };
+
+  static ASSET_SCOPES = {
+    LIBRARY: 'LIBRARY',
+    UPLOADS: 'UPLOADS',
   };
 
   constructor(isServer, source, req) {
@@ -32,28 +38,53 @@ class Api {
 
   setupNetworkServices(isServer) {
     const { common } = this;
-    this.request = requestCreator(common.backend, this.authorization, isServer, () => {});
+    this.request = requestCreator(
+      `${common.prefixes.api}.${common.whiteLabel && common.whiteLabel.domain}`,
+      this.authorization,
+      isServer,
+      () => {},
+    );
     this.assetsRequest = requestCreator(common.assetsPath, this.authorization, isServer, () => {});
-    this.editorRequest = requestCreator(common.editor, null, isServer, () => {});
+    this.editorRequest = requestCreator(
+      `${common.prefixes.editor}.${common.whiteLabel && common.whiteLabel.domain}`,
+      null,
+      isServer,
+      () => {},
+    );
     this.selfRequest = requestCreator(common.self, null, isServer, () => {});
   }
 
   @action
-  async assets(assetType, count = 0, query = '') {
+  async assets(assetScope, assetType, count = 0, query = '') {
     this.isLoading = true;
     try {
-      let response = await this.assetsRequest(
-        `/${assetType}/index.json`, {
-          method: 'GET',
-        });
-      response.reverse();
-      if (query.length > 0) {
-        const lookup = new RegExp(`.*${query}.*`, 'i');
-        response = response.filter(
-          item => lookup.test(item.title) || (item.keywords && lookup.test(item.keywords)),
-        );
+      if (assetScope === Api.ASSET_SCOPES.LIBRARY) {
+        let response = await this.assetsRequest(
+          `/${assetType}/index.json`, {
+            method: 'GET',
+          });
+        response.reverse();
+        if (query.length > 0) {
+          const lookup = new RegExp(`.*${query}.*`, 'i');
+          response = response.filter(
+            item => lookup.test(item.title) || (item.keywords && lookup.test(item.keywords)),
+          );
+        }
+        return response.slice(count, count + this.perPage);
+      } else {
+        const page = Math.ceil(count / this.perPage);
+        const mediaAssetKinds = {
+          [Api.ASSET_TYPES.AUDIOS]: 'audio',
+          [Api.ASSET_TYPES.VIDEOS]: 'video',
+        };
+        return this.request(
+          `/api/users/me/media-assets?kind=${mediaAssetKinds[assetType]}&perPage=${this.perPage}&page=${page + 1}&q=${query}`, {
+            method: 'GET',
+            headers: {
+              'on-behalf': this.currentUser.id,
+            },
+          });
       }
-      return response.slice(count, count + this.perPage);
     } finally {
       this.isLoading = false;
     }
@@ -209,7 +240,33 @@ class Api {
   }
 
   @action
-  uploadMedia(data, onProgress) {
+  async storeAsset(url, preview, type) {
+    const mediaAssetKinds = {
+      [Api.ASSET_TYPES.AUDIOS]: 'audio',
+      [Api.ASSET_TYPES.VIDEOS]: 'video',
+      [Api.ASSET_TYPES.IMAGES]: 'image',
+    };
+    this.isLoading = true;
+    try {
+      return await this.request(
+        '/api/users/me/media-assets', {
+          method: 'POST',
+          headers: {
+            'on-behalf': this.currentUser.id,
+          },
+          body: {
+            url,
+            preview,
+            kind: mediaAssetKinds[type],
+          },
+        });
+    } finally {
+      this.isLoading = false;
+    }
+  }
+
+  @action
+  uploadMedia({ data, preview }, onProgress = () => {}) {
     this.isLoading = true;
     return new Promise((resolve, reject) => {
       if (typeof data === 'string') {
@@ -226,7 +283,7 @@ class Api {
           onProgress(loaded / total);
         };
       }
-      xhr.open('PUT', `//${this.common.self}/api/media`, true);
+      xhr.open('PUT', `//${this.common.self}/api/media?${preview ? 'video_preview=true' : ''}`, true);
       xhr.onload = () => {
         if (onProgress) {
           onProgress(1.0);
@@ -288,9 +345,10 @@ export async function initApiAndPreload(isServer, source, req, preloader) {
     const config = require('config/config');
     source.common = {
       hostname: req.hostname,
-      backend: config.backend,
+      whiteLabel: req.whiteLabel,
+      prefixes: config.prefixes,
       editor: config.editor,
-      self: config.self || (req.get && req.get('host')),
+      self: req.get && req.get('host'),
       assetsPath: config.assetsPath,
       clientId: config.client.id,
       clientSecret: config.client.secret,
