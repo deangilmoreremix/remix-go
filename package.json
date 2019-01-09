@@ -95,7 +95,7 @@
     "sweetalert": "^2.1.0",
     "throng": "^4.0.0",
     "validator": "^9.4.1",
-    "webmaker-auth": "git://github.com/strategic-limited/webmaker-auth2#a6f7d5033c780f5511158b6a26f9fbe0dd4d2f78",
+    "webmaker-auth": "git://github.com/strategic-limited/webmaker-auth2#86626fe5294f758c471d8d192b4071d5cee34d3c",
     "webpack": "^3.10.0"
   },
   "devDependencies": {

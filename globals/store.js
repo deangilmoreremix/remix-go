@@ -52,7 +52,7 @@ class Store {
         return hmac.digest('hex');
       };
       this.req = req;
-      this.currentUser = req.session && req.session.user;
+      this.currentUser = req.locals && req.locals.user;
       this.whiteLabelManager = new WhiteLabelManager(
         req.whiteLabel,
         req.whiteLabel && req.whiteLabel.domain !== 'videoremix.io',
