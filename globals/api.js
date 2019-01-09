@@ -27,7 +27,7 @@ class Api {
       global.fetch = require('isomorphic-fetch');
       global.btoa = string => Buffer.from(string).toString('base64');
       this.req = req;
-      this.currentUser = req.locals && req.locals.user;
+      this.currentUser = req.locals && req.locals.populatedUser;
     }
     Object.assign(this, source);
     const { common } = this;
