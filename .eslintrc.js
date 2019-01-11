@@ -17,10 +17,12 @@ module.exports = {
     'object-curly-newline': 0,
     'react/jsx-filename-extension': [1, { extensions: ['.js'] }],
     'react/no-array-index-key': 0,
+    'react/button-has-type': 0,
     'react/prop-types': ['error', {
       ignore: [
         'children',
         'store',
+        'api',
       ],
       customValidators: []
     }],
