@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import { computed } from 'mobx';
+import { Alert } from 'reactstrap';
 import { inject, observer } from 'mobx-react';
 
 import PropTypes from '../../../lib/PropTypes';
@@ -19,6 +21,25 @@ export default class EditorStageChanger extends Component {
     waiter: null,
   };
 
+  @computed
+  get warningList() {
+    const { store: { activeProject: { warning } } } = this.props;
+    if (warning.additionalData < 0) {
+      return;
+    }
+
+    const list = warning.additionalData.map(item => (
+      <li id={item}>
+        {item}
+      </li>
+    ));
+    return (
+      <ul>
+        {list}
+      </ul>
+    );
+  }
+
   render() {
     const { waiter } = this.state;
     const {
@@ -33,6 +54,17 @@ export default class EditorStageChanger extends Component {
     } = this.props;
     return (
       <div className={className}>
+        <Alert
+          className="alert-error"
+          color="warning"
+          isOpen={!!activeProject.warning.text || activeProject.warning.additionalData.length > 0}
+          toggle={activeProject.setWarning()}
+        >
+          <p>
+            {activeProject.warning.text}
+          </p>
+          {this.warningList}
+        </Alert>
         {(() => {
           switch (stage) {
             case EditorStateManager.STAGE_TYPES.VIDEO_CUSTOMISE:

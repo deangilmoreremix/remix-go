@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import Head from 'next/head';
-import { Container, Col, Row } from 'reactstrap';
+import {Container, Col, Row, Alert} from 'reactstrap';
 import { inject, observer } from 'mobx-react';
 import SVGInline from 'react-svg-inline';
 import Router from 'next/router';

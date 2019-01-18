@@ -38,6 +38,7 @@ export default class ConstructionWorkspace extends Component {
     popcorn.on('elementUpdated', (event) => {
       const { element, options, updateMain } = event;
       activeProject.update(element, options, updateMain);
+      activeProject.checkForm();
     });
     popcorn.seek(activeProject.checkpoints[0]);
     [activeProject.currentCheckpoint] = activeProject.checkpoints;
