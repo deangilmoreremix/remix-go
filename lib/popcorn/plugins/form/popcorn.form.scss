@@ -129,12 +129,8 @@
 
     .form-scrollable {
       overflow-y: auto;
-      display: block;
-      -webkit-box-sizing: content-box;
-      -moz-box-sizing: content-box;
-      box-sizing: content-box;
+      display: grid;
       position: relative;
-      width: 100%;
       height: 100%;
     }
 
