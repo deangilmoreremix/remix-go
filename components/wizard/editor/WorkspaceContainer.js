@@ -17,7 +17,7 @@ export default class EditorStageChanger extends Component {
     className: PropTypes.string,
     checkForm: PropTypes.func,
     setWarning: PropTypes.func,
-    warning: PropTypes.share({}),
+    warning: PropTypes.shape({}),
   };
 
   state = {
@@ -26,7 +26,7 @@ export default class EditorStageChanger extends Component {
 
   @computed
   get warningList() {
-    const { store: { activeProject: { warning } } } = this.props;
+    const { warning } = this.props;
     if (warning.additionalData < 0) {
       return;
     }
@@ -67,7 +67,7 @@ export default class EditorStageChanger extends Component {
           toggle={setWarning()}
         >
           <p>
-            {activeProject.warning.text}
+            {warning.text}
           </p>
           {this.warningList}
         </Alert>

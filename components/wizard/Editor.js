@@ -119,10 +119,10 @@ export default class Editor extends Component {
     this.checkForm();
   };
 
-  checkForm() {
+  checkForm = () => {
     const { store: { activeProject } } = this.props;
-    this.setWarning(formWarning(activeProject))();
-  }
+    this.setWarning(formWarning(activeProject.projectData))();
+  };
 
   render() {
     const {
