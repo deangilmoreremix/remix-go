@@ -15,6 +15,9 @@ import ConstructionWorkspace from './workspaces/ConstructionWorkspace';
 export default class EditorStageChanger extends Component {
   static propTypes = {
     className: PropTypes.string,
+    checkForm: PropTypes.func,
+    setWarning: PropTypes.func,
+    warning: PropTypes.share({}),
   };
 
   state = {
@@ -44,6 +47,9 @@ export default class EditorStageChanger extends Component {
     const { waiter } = this.state;
     const {
       className,
+      warning,
+      checkForm,
+      setWarning,
       store: {
         activeProject,
         editorStateManager,
@@ -57,8 +63,8 @@ export default class EditorStageChanger extends Component {
         <Alert
           className="alert-error"
           color="warning"
-          isOpen={!!activeProject.warning.text || activeProject.warning.additionalData.length > 0}
-          toggle={activeProject.setWarning()}
+          isOpen={!!warning.text || warning.additionalData.length > 0}
+          toggle={setWarning()}
         >
           <p>
             {activeProject.warning.text}
@@ -98,7 +104,11 @@ export default class EditorStageChanger extends Component {
                 </div>
               );
             case EditorStateManager.STAGE_TYPES.CAPTION_CUSTOMISE:
-              return <ConstructionWorkspace className="full-height full-width" />;
+              return (
+                <ConstructionWorkspace
+                  className="full-height full-width"
+                  checkForm={checkForm}
+                />);
             default:
               return null;
           }

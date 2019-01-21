@@ -11,6 +11,7 @@ import CheckpointsList from './construction/CheckpointsList';
 export default class ConstructionWorkspace extends Component {
   static propTypes = {
     className: PropTypes.string,
+    checkForm: PropTypes.func,
   };
 
   state = {
@@ -24,7 +25,7 @@ export default class ConstructionWorkspace extends Component {
   }
 
   onPopcornInitialize(wrapper) {
-    const { store, store: { activeProject, currentUser } } = this.props;
+    const { store, store: { activeProject, currentUser }, checkForm } = this.props;
     activeProject.engines = [];
     const popcorn = store.activeProject.popcornify(wrapper);
     popcorn.main = true;
@@ -38,6 +39,7 @@ export default class ConstructionWorkspace extends Component {
     popcorn.on('elementUpdated', (event) => {
       const { element, options, updateMain } = event;
       activeProject.update(element, options, updateMain);
+      checkForm();
     });
     popcorn.seek(activeProject.checkpoints[0]);
     [activeProject.currentCheckpoint] = activeProject.checkpoints;

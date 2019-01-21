@@ -2,6 +2,7 @@ import React, { Component, Fragment } from 'react';
 import Head from 'next/head';
 import { Container, Col, Row } from 'reactstrap';
 import { inject, observer } from 'mobx-react';
+import { observable, action } from 'mobx';
 import SVGInline from 'react-svg-inline';
 import Router from 'next/router';
 import {
@@ -24,6 +25,7 @@ import NicheScriptsWorkspace from './niche-scripts/NicheScriptsWorkspace';
 import EmbeddedPlayback from '../common/EmbeddedPlayback';
 import NewElementBar from '../../lib/popcorn/plugins/new/editor.popcorn.new';
 import StateManager from '../../lib/editor/editorStateManager';
+import { formWarning } from '../../lib/validators/projectValidator';
 
 import SVGCallToAction from '../../static/images/editor/cta.svg';
 import SVGPersonalizer from '../../static/images/editor/personalizer.svg';
@@ -74,6 +76,12 @@ export default class Editor extends Component {
     }
   }
 
+  @observable
+  warning = {
+    text: null,
+    additionalData: [],
+  };
+
   state = {
     waiter: null,
     playbackUrl: null,
@@ -90,6 +98,31 @@ export default class Editor extends Component {
     const source = await api.get(projectId, !isRemix);
     store.activeProject = isRemix ? Project.fromTemplate(source) : new Project(source);
   };
+
+  @action
+  setWarning = (options = {}) => () => {
+    const { text, additionalData = [] } = options;
+    this.warning = { text, additionalData };
+  };
+
+  onElementUpdate = (updatedProps) => {
+    const { store: { activeProject } } = this.props;
+    if (updatedProps) {
+      /* eslint-disable no-underscore-dangle */
+      activeProject.activeElement._natives._update
+        .call(this, activeProject.activeElement, updatedProps);
+      activeProject.update(activeProject.activeElement, updatedProps);
+    } else {
+      activeProject.remove(activeProject.activeElement);
+      activeProject.activeElement = null;
+    }
+    this.checkForm();
+  };
+
+  checkForm() {
+    const { store: { activeProject } } = this.props;
+    this.setWarning(formWarning(activeProject))();
+  }
 
   render() {
     const {
@@ -195,22 +228,13 @@ export default class Editor extends Component {
                 <ToolbarEditor
                   element={activeProject && activeProject.activeElement}
                   features={currentUser.features}
-                  onElementUpdate={(updatedProps) => {
-                    if (updatedProps) {
-                      /* eslint-disable no-underscore-dangle */
-                      activeProject.activeElement._natives._update
-                        .call(this, activeProject.activeElement, updatedProps);
-                      activeProject.update(activeProject.activeElement, updatedProps);
-                    } else {
-                      activeProject.remove(activeProject.activeElement);
-                      activeProject.activeElement = null;
-                    }
-                  }}
+                  onElementUpdate={this.onElementUpdate}
                 />
               ) : (
                 <NewElementBar
                   project={activeProject}
                   features={currentUser.features}
+                  checkForm={this.checkForm}
                   defaultImage={whiteLabelManager.shouldOverride && whiteLabelManager.brandLogo}
                 />
               )}
@@ -227,7 +251,13 @@ export default class Editor extends Component {
                 />
               </Col>
               <Col className="workspace" key={activeProject && activeProject.version}>
-                <WorkspaceContainer stateManager={editorStateManager} className="full-height" />
+                <WorkspaceContainer
+                  stateManager={editorStateManager}
+                  className="full-height"
+                  checkForm={this.checkForm}
+                  setWarning={this.setWarning}
+                  warning={this.warning}
+                />
               </Col>
               <Col className="col-2 paddingless editor-pane">
                 <ActionsPane className="actions-pane scrollable">
