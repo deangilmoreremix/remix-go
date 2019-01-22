@@ -124,7 +124,7 @@ export default class Publisher extends Component {
         /> : null }
         <iframe
           title="Iframe social conductor"
-          src="//cdn.vidcloud.io/social-campaign/social-campaign.html"
+          src="//dev-cdn.vidcloud.io/social-campaign/social-campaign.html"
           frameBorder="0"
           className="conductor-iframe"
           id="conductor-iframe"
