@@ -119,6 +119,26 @@ export default class Editor extends Component {
     this.checkForm();
   };
 
+  onTokenChosen =(token) => {
+    const { store: { activeProject: { activeElement }, activeProject } } = this.props;
+    const {
+      _activeHandle: { type, target },
+      caretOffsets: offset,
+    } = activeElement;
+    const newText = insertAtCaret(activeElement[type], offset[type], token);
+
+    const event = new Event('input');
+    target.dispatchEvent(event);
+
+    const updatedProps = {};
+    updatedProps[type] = newText;
+    activeElement._natives._update
+      .call(this, activeElement, updatedProps);
+    activeProject.update(activeElement, updatedProps);
+    this.checkForm();
+    PopupboxManager.close();
+  };
+
   checkForm = () => {
     const { store: { activeProject } } = this.props;
     this.setWarning(formWarning(activeProject.projectData))();
@@ -336,25 +356,7 @@ Publish & Share
                         PopupboxManager.open({
                           content: <Personalizer
                             className="personalizer"
-                            onTokenChosen={(token) => {
-                              const {
-                                _activeHandle: { type, target },
-                                caretOffsets: offset,
-                              } = activeProject.activeElement;
-                              const newText = insertAtCaret(
-                                activeProject.activeElement[type], offset[type], token,
-                              );
-
-                              const event = new Event('input');
-                              target.dispatchEvent(event);
-
-                              const updatedProps = {};
-                              updatedProps[type] = newText;
-                              activeProject.activeElement._natives._update
-                                .call(this, activeProject.activeElement, updatedProps);
-                              activeProject.update(activeProject.activeElement, updatedProps);
-                              PopupboxManager.close();
-                            }}
+                            onTokenChosen={this.onTokenChosen}
                           />,
                           config: {
                             titleBar: {
