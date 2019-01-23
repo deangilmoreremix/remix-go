@@ -407,16 +407,16 @@ export default class EmailCampaign extends Component {
                   />
                 </div>
               </div>
-              {
-                autoplay
-                && (
-                  <div className="embed-group warning">
-                    <strong>Warning! </strong>
-                    Please note that due to new autoplay policy changes in browsers, autoplay can
-                    start only with muted video and then can be unmuted by explicit user interaction
-                  </div>
-                )
-              }
+              {/*{*/}
+                {/*autoplay*/}
+                {/*&& (*/}
+                  {/*<div className="embed-group warning">*/}
+                    {/*<strong>Warning! </strong>*/}
+                    {/*Please note that due to new autoplay policy changes in browsers, autoplay can*/}
+                    {/*start only with muted video and then can be unmuted by explicit user interaction*/}
+                  {/*</div>*/}
+                {/*)*/}
+              {/*}*/}
               <div className={embedLocation.key === 'default' ? 'hidden' : 'embed-details'}>
                 {
                   embedLocation.key === 'wordpress'

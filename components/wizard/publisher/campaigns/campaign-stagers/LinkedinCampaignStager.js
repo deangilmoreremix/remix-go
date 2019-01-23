@@ -71,16 +71,16 @@ class LinkedinCampaignStager extends CampaignStager {
               />
             </div>
           </div>
-          {
-            state.variables.autoplay
-            && (
-              <div className="embed-group warning">
-                <strong>Warning! </strong>
-                Please note that due to new autoplay policy changes in browsers, autoplay can
-                start only with muted video and then can be unmuted by explicit user interaction
-              </div>
-            )
-          }
+          {/*{*/}
+            {/*state.variables.autoplay*/}
+            {/*&& (*/}
+              {/*<div className="embed-group warning">*/}
+                {/*<strong>Warning! </strong>*/}
+                {/*Please note that due to new autoplay policy changes in browsers, autoplay can*/}
+                {/*start only with muted video and then can be unmuted by explicit user interaction*/}
+              {/*</div>*/}
+            {/*)*/}
+          {/*}*/}
           <div className={state.variables.embedLocation.embedGenerator ? 'embed-details' : 'hidden'}>
             <span className="embed-line">{state.variables.embedLocation.prompt}</span>
             <EmbedDataContainer
