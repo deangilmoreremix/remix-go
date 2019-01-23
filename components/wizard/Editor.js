@@ -62,6 +62,12 @@ const PERSONALIZABLE_ELEMENT_TYPES = ['text', 'personalizedImage'];
 @inject('store')
 @observer
 export default class Editor extends Component {
+  @observable
+  warning = {
+    text: null,
+    additionalData: [],
+  };
+
   constructor(props) {
     super(props);
 
@@ -75,12 +81,6 @@ export default class Editor extends Component {
       }
     }
   }
-
-  @observable
-  warning = {
-    text: null,
-    additionalData: [],
-  };
 
   state = {
     waiter: null,
