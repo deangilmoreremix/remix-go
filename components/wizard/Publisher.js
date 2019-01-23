@@ -61,6 +61,7 @@ export default class Publisher extends Component {
         whiteLabelManager,
         common: {
           features,
+          cdnHostname,
         },
         currentUser,
         project,
@@ -71,60 +72,62 @@ export default class Publisher extends Component {
       <Fragment>
         <Head>
           <title>
-            {activeProject && activeProject.make && activeProject.make._id ?
-              `${activeProject.name} - ${whiteLabelManager.brandName}` :
-              whiteLabelManager.brandName}
+            {activeProject && activeProject.make && activeProject.make._id
+              ? `${activeProject.name} - ${whiteLabelManager.brandName}`
+              : whiteLabelManager.brandName}
           </title>
         </Head>
-        { activeProject ? <PhaseView
-          elements={[
-            {
-              key: 'getting-started',
-              title: ((activeProject && activeProject.usedWizard) ||
-                GettingStarted.WIZARD_TYPES.FROM_TEMPLATE).label,
-              active: false,
-              available: true,
-            },
-            {
-              key: 'edit',
-              title: 'Customize Video',
-              active: false,
-              available: true,
-            },
-            {
-              key: 'publish',
-              title: 'Publish & Share',
-              active: true,
-              available: true,
-            },
-          ]}
-          onPhaseChanged={(element) => {
-            switch (element.key) {
-              case 'getting-started':
-                Router.push({
-                  pathname: '/',
-                  query: {
-                    wizard: ((activeProject && activeProject.usedWizard) ||
-                      GettingStarted.WIZARD_TYPES.FROM_TEMPLATE).key,
-                  },
-                });
-                break;
-              case 'edit':
-                Router.push({
-                  pathname: '/edit',
-                  query: {
-                    project: activeProject.make._id,
-                  },
-                });
-                break;
-              default:
-                break;
-            }
-          }}
-        /> : null }
+        { activeProject ? (
+          <PhaseView
+            elements={[
+              {
+                key: 'getting-started',
+                title: ((activeProject && activeProject.usedWizard)
+                || GettingStarted.WIZARD_TYPES.FROM_TEMPLATE).label,
+                active: false,
+                available: true,
+              },
+              {
+                key: 'edit',
+                title: 'Customize Video',
+                active: false,
+                available: true,
+              },
+              {
+                key: 'publish',
+                title: 'Publish & Share',
+                active: true,
+                available: true,
+              },
+            ]}
+            onPhaseChanged={(element) => {
+              switch (element.key) {
+                case 'getting-started':
+                  Router.push({
+                    pathname: '/',
+                    query: {
+                      wizard: ((activeProject && activeProject.usedWizard)
+                      || GettingStarted.WIZARD_TYPES.FROM_TEMPLATE).key,
+                    },
+                  });
+                  break;
+                case 'edit':
+                  Router.push({
+                    pathname: '/edit',
+                    query: {
+                      project: activeProject.make._id,
+                    },
+                  });
+                  break;
+                default:
+                  break;
+              }
+            }}
+          />
+        ) : null }
         <iframe
           title="Iframe social conductor"
-          src="//dev-cdn.vidcloud.io/social-campaign/social-campaign.html"
+          src={`${cdnHostname}/social-campaign/social-campaign.html`}
           frameBorder="0"
           className="conductor-iframe"
           id="conductor-iframe"
@@ -140,102 +143,46 @@ export default class Publisher extends Component {
         <Container fluid className={`publisher-wrapper project-expector ${activeProject && 'hidden'}`}>
           {project ? <InfiniteLoading /> : <div>There is no active project.</div>}
         </Container>
-        {activeProject ?
-          <Container fluid className={`publisher-wrapper ${!activeProject && 'hidden'}`}>
-            <Row className="canvas full-height">
-              <Col className="workspace scrollable">
-                <div className="publish-overview">
-                  <Container fluid className="publish-overview-inner">
-                    <Col className="overview-column">
-                      <h5 className="overview-item">Your project details</h5>
-                      <ProjectDetailsChanger
-                        className="overview-item overview-edit"
-                        project={activeProject || {}}
-                        onChange={updatedProject => this.onProjectUpdate(updatedProject)}
-                      />
-                    </Col>
-                    <Col className="overview-column">
-                      <h5 className="overview-item">Preview & Embed</h5>
-                      <EmbeddedPlayback
-                        className="overview-item"
-                        key={activeProject && activeProject.version}
-                        source={activeProject && activeProject.make.url}
-                        title={activeProject && activeProject.make.title}
-                        width="50%"
-                        height="40%"
-                      />
-                      <label className="overview-item">URL</label>
-                      <Input className="overview-item embed-url" type="text" value={activeProject && activeProject.make.url} readOnly />
-                      <label className="overview-item">Embed</label>
-                      <EmbedDataContainer className="overview-item embed-item" url={activeProject && activeProject.make.url} />
-                    </Col>
-                  </Container>
-                </div>
-              </Col>
-              <Col className="col-2 paddingless publisher-pane">
-                <ActionsPane className="actions-pane">
-                  <button
-                    className="go-button action-button"
-                    onClick={() => {
-                      PopupboxManager.open({
-                        content: <EmailCampaign
-                          className="campaign"
-                          project={activeProject}
-                          onCampaignFinished={() => PopupboxManager.close()}
-                        />,
-                        config: {
-                          titleBar: {
-                            enable: true,
-                            text: 'Email Campaign',
-                          },
-                          fadeIn: true,
-                          fadeInSpeed: 200,
-                        },
-                      });
-                    }}
-                  >
-                    Email Campaign
-                  </button>
-                  <button
-                    className="go-button action-button"
-                    onClick={() => {
-                      PopupboxManager.open({
-                        content: <SocialCampaign
-                          className="campaign"
-                          project={activeProject}
-                          iframeConductor={this.iframeConductor}
-                          onCampaignFinished={() => {
-                            PopupboxManager.close();
-                            alert('This video has been posted with Social Campaign successfully.');
-                          }}
-                          onTitleUpdated={title => PopupboxManager.update({
-                            config: {
-                              titleBar: {
-                                text: title,
-                              },
-                            },
-                          })}
-                        />,
-                        config: {
-                          titleBar: {
-                            enable: true,
-                            text: 'Social Campaign',
-                          },
-                          fadeIn: true,
-                          fadeInSpeed: 200,
-                        },
-                      });
-                    }}
-                  >
-                    Social Campaign
-                  </button>
-                  <button
-                    className={`go-button action-button ${(currentUser.features[features.retarget] && currentUser.features[features.retarget].state === 'enabled') ? '' : 'inactive'}`}
-                    title={(currentUser.features[features.retarget] && currentUser.features[features.retarget].state === 'enabled') ? '' : 'This feature is not available on your type of subscription. Click here to details.'}
-                    onClick={() => {
-                      if (currentUser.features[features.retarget] && currentUser.features[features.retarget].state === 'enabled') {
+        {activeProject
+          ? (
+            <Container fluid className={`publisher-wrapper ${!activeProject && 'hidden'}`}>
+              <Row className="canvas full-height">
+                <Col className="workspace scrollable">
+                  <div className="publish-overview">
+                    <Container fluid className="publish-overview-inner">
+                      <Col className="overview-column">
+                        <h5 className="overview-item">Your project details</h5>
+                        <ProjectDetailsChanger
+                          className="overview-item overview-edit"
+                          project={activeProject || {}}
+                          onChange={updatedProject => this.onProjectUpdate(updatedProject)}
+                        />
+                      </Col>
+                      <Col className="overview-column">
+                        <h5 className="overview-item">Preview & Embed</h5>
+                        <EmbeddedPlayback
+                          className="overview-item"
+                          key={activeProject && activeProject.version}
+                          source={activeProject && activeProject.make.url}
+                          title={activeProject && activeProject.make.title}
+                          width="50%"
+                          height="40%"
+                        />
+                        <label className="overview-item">URL</label>
+                        <Input className="overview-item embed-url" type="text" value={activeProject && activeProject.make.url} readOnly />
+                        <label className="overview-item">Embed</label>
+                        <EmbedDataContainer className="overview-item embed-item" url={activeProject && activeProject.make.url} />
+                      </Col>
+                    </Container>
+                  </div>
+                </Col>
+                <Col className="col-2 paddingless publisher-pane">
+                  <ActionsPane className="actions-pane">
+                    <button
+                      className="go-button action-button"
+                      onClick={() => {
                         PopupboxManager.open({
-                          content: <RetargetCampaign
+                          content: <EmailCampaign
                             className="campaign"
                             project={activeProject}
                             onCampaignFinished={() => PopupboxManager.close()}
@@ -243,23 +190,81 @@ export default class Publisher extends Component {
                           config: {
                             titleBar: {
                               enable: true,
-                              text: 'Opt-In/Retarget',
+                              text: 'Email Campaign',
                             },
                             fadeIn: true,
                             fadeInSpeed: 200,
                           },
                         });
-                      } else if (currentUser.features[features.retarget].link) {
-                        window.open(currentUser.features[features.retarget].link, '_blank');
-                      }
-                    }}
-                  >
+                      }}
+                    >
+                    Email Campaign
+                    </button>
+                    <button
+                      className="go-button action-button"
+                      onClick={() => {
+                        PopupboxManager.open({
+                          content: <SocialCampaign
+                            className="campaign"
+                            project={activeProject}
+                            iframeConductor={this.iframeConductor}
+                            onCampaignFinished={() => {
+                              PopupboxManager.close();
+                              alert('This video has been posted with Social Campaign successfully.');
+                            }}
+                            onTitleUpdated={title => PopupboxManager.update({
+                              config: {
+                                titleBar: {
+                                  text: title,
+                                },
+                              },
+                            })}
+                          />,
+                          config: {
+                            titleBar: {
+                              enable: true,
+                              text: 'Social Campaign',
+                            },
+                            fadeIn: true,
+                            fadeInSpeed: 200,
+                          },
+                        });
+                      }}
+                    >
+                    Social Campaign
+                    </button>
+                    <button
+                      className={`go-button action-button ${(currentUser.features[features.retarget] && currentUser.features[features.retarget].state === 'enabled') ? '' : 'inactive'}`}
+                      title={(currentUser.features[features.retarget] && currentUser.features[features.retarget].state === 'enabled') ? '' : 'This feature is not available on your type of subscription. Click here to details.'}
+                      onClick={() => {
+                        if (currentUser.features[features.retarget] && currentUser.features[features.retarget].state === 'enabled') {
+                          PopupboxManager.open({
+                            content: <RetargetCampaign
+                              className="campaign"
+                              project={activeProject}
+                              onCampaignFinished={() => PopupboxManager.close()}
+                            />,
+                            config: {
+                              titleBar: {
+                                enable: true,
+                                text: 'Opt-In/Retarget',
+                              },
+                              fadeIn: true,
+                              fadeInSpeed: 200,
+                            },
+                          });
+                        } else if (currentUser.features[features.retarget].link) {
+                          window.open(currentUser.features[features.retarget].link, '_blank');
+                        }
+                      }}
+                    >
                     Opt-In/Retarget
-                  </button>
-                </ActionsPane>
-              </Col>
-            </Row>
-          </Container> : null}
+                    </button>
+                  </ActionsPane>
+                </Col>
+              </Row>
+            </Container>
+          ) : null}
       </Fragment>
     );
   }
