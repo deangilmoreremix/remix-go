@@ -12,9 +12,9 @@
     text-align: center;
 
     .action-button {
-      width: 8%;
+      width: auto;
       border: none;
-      height: inherit;
+      height: 1.8rem;
       cursor: pointer;
       margin-top: 10px;
       background: inherit;
@@ -42,7 +42,7 @@
     }
 
     .small-edit-button {
-      width: 5%;
+      height: 1.2rem;
       img {
         content: url('/static/images/editor/elements/form/edit.svg');
         margin: 0 2%;
@@ -75,7 +75,7 @@
       }
 
       .drag-button {
-        margin: 0 1%;
+        margin: 5px 2% 0 0;
         img {
           content: url('/static/images/editor/elements/form/element-drag.svg');
           margin: 0 2%;
@@ -93,6 +93,7 @@
           width: auto;
         }
       }
+
       .textarea-field,
       input[type="number"],
       input[type="text"] {
@@ -357,5 +358,6 @@
         transform: rotate(360deg);
       }
     }
+
   }
 }
