@@ -129,23 +129,23 @@
         &:hover {
           border-color: #c1c1c1;
         }
-      }
 
-      .drodown-button {
-        margin: auto 0;
-        width: 8%;
-        height: inherit;
-      }
+        .drodown-button {
+          margin: auto 0;
+          width: 8%;
+          height: inherit;
+        }
 
-      .dropdown-button:after {
-        display: inline-block;
-        margin-left: 0.255em;
-        vertical-align: 0.255em;
-        content: "";
-        border-top: 0.3em solid;
-        border-right: 0.3em solid transparent;
-        border-bottom: 0;
-        border-left: 0.3em solid transparent;
+        .dropdown-button:after {
+          display: inline-block;
+          margin-left: 0.255em;
+          vertical-align: 0.255em;
+          content: "";
+          border-top: 0.3em solid;
+          border-right: 0.3em solid transparent;
+          border-bottom: 0;
+          border-left: 0.3em solid transparent;
+        }
       }
     }
 
