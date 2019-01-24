@@ -16,7 +16,7 @@
       border: none;
       height: 1.8rem;
       cursor: pointer;
-      margin-top: 10px;
+      margin-top: 5px;
       background: inherit;
     }
 
@@ -119,16 +119,20 @@
         }
       }
       .input-form {
+        display: flex;
+        flex-direction: row;
         width: 100%;
         background: white;
         text-align: left;
+        box-shadow: 0 0 0 0.5px #c1c1c1;
 
         &:hover {
-          border-color: darken(#ad9d80, 10%);
+          border-color: #c1c1c1;
         }
       }
 
       .drodown-button {
+        margin: auto 0;
         width: 8%;
         height: inherit;
       }
