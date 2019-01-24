@@ -103,7 +103,7 @@
         -webkit-appearance: none;
         vertical-align: top;
         padding: 0 8px 0 0;
-        width: 90%;
+        width: 80%;
       }
 
       button[type="submit"] {
@@ -129,13 +129,12 @@
       }
 
       .drodown-button {
-        width: 10%;
+        width: 8%;
+        height: inherit;
       }
 
       .dropdown-button:after {
         display: inline-block;
-        width: 0;
-        height: 0;
         margin-left: 0.255em;
         vertical-align: 0.255em;
         content: "";
