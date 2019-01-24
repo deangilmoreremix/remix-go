@@ -11,7 +11,7 @@ import MediaTypeDetector from '../../lib/popcorn/util/mediaTypeDetector';
 export default class ImageUpload extends Component {
   static propTypes = {
     onFileUploaded: PropTypes.func.isRequired,
-    err: PropTypes.func,
+    onValidate: PropTypes.func,
   };
 
   state = {
@@ -22,9 +22,9 @@ export default class ImageUpload extends Component {
   };
 
   changeImage = (event) => {
-    const { err } = this.props;
-    if (typeof err === 'function') {
-      const error = err(event.target.files[0]);
+    const { onValidate } = this.props;
+    if (typeof onValidate === 'function') {
+      const error = onValidate(event.target.files[0]);
       if (error) {
         return this.setState({ error });
       }
