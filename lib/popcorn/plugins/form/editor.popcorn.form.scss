@@ -1,6 +1,99 @@
-.text-editor {
+.form-editor {
   display: flex;
   align-items: center;
+
+  .icon-group {
+    display: flex;
+    height: 100%;
+    align-items: center;
+
+    & > div {
+      height: 100%;
+    }
+  }
+
+  .font-input {
+    width: auto;
+    margin: 0 2px;
+    height: auto !important;
+    background: $white;
+    color: $primary-color;
+  }
+
+  .font-size-input {
+    width: 5%;
+    background: $white;
+    color: $primary-color;
+    text-align: center;
+  }
+
+  .phone-callback-input {
+    width: 20%;
+    display: flex;
+    align-items: center;
+
+    .fa {
+      float: left;
+      color: gray;
+      height: 100%;
+      margin-left: 20px;
+      z-index: 1;
+    }
+
+    input[type="text"] {
+      background: $white;
+      color: $primary-color;
+      margin: 0 10px;
+      margin-left: -20px;
+      padding-left: 23px;
+    }
+
+    &.errored {
+      input[type="text"] {
+        border-color: red;
+        border-width: thin;
+      }
+    }
+  }
+
+  .decoration-toggle {
+    cursor: pointer;
+    margin: 0 7px;
+    color: $secondary-color;
+    width: auto;
+    height: 100%;
+    font-size: 25px;
+    vertical-align: middle;
+    display: flex;
+    align-items: center;
+    filter: grayscale(1);
+  }
+
+  .bold {
+    font-weight: bold;
+  }
+
+  .italic {
+    font-family: "Times New Roman";
+    font-style: italic;
+    font-size: 28px;
+  }
+
+  .alignment-icon {
+    height: 60%;
+    margin: auto 5px;
+    filter: grayscale(1);
+  }
+
+  span.alignment-icon {
+    height: 100%;
+    display: flex;
+  }
+
+  .text-position-selection {
+    width: 40px;
+    height: 30px;
+  }
 }
 
 .button-options {
