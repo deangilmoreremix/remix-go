@@ -99,10 +99,15 @@
                   height: 100%;
                   position: relative;
 
+                  input,
+                  .textarea-field,
+                  .drodown-button,
                   .small-edit-button,
                   .action-button {
-                    height: 0;
-                    width: 0;
+                    display: none;
+                  }
+                  .input-form {
+                    height: 0.5rem;
                   }
                 }
               }
