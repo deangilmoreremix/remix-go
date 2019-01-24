@@ -16,7 +16,7 @@
       border: none;
       height: 1.8rem;
       cursor: pointer;
-      margin-top: 10px;
+      margin-top: 5px;
       background: inherit;
     }
 
@@ -122,6 +122,7 @@
         width: 100%;
         background: white;
         text-align: left;
+        box-shadow: 0 0 0 0.5px black;
 
         &:hover {
           border-color: darken(#ad9d80, 10%);
