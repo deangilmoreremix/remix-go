@@ -1,0 +1,38 @@
+.text-editor {
+  display: flex;
+  align-items: center;
+}
+
+.button-options {
+  color: #000000
+}
+
+.popup-label {
+  color: #000000;
+  display: table-row;
+  font-size: 10pt;
+  text-transform: none;
+  font-weight: normal;
+}
+
+.popup-checkbox {
+  float: left;
+  width: 14px;
+  height: 14px;
+  margin-top: 2px;
+  margin-right: 2rem;
+}
+
+input[type="text"] {
+  width: 100%;
+  margin-top: 10px;
+}
+
+.editable-text {
+  margin: 15px 0;
+}
+
+button:disabled {
+  color: gray;
+  cursor: not-allowed;
+}

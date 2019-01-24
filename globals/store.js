@@ -12,8 +12,11 @@ const AUTH_DATA_CONFIG = { accessToken: 'accessToken', refreshToken: 'refreshTok
 
 class Store {
   authorization = null;
+
   request = null;
+
   socket = null;
+
   common = {
     hostname: null,
     backend: null,
@@ -86,6 +89,11 @@ class Store {
   cleanAuthData() {
     Cookies.remove(AUTH_DATA_CONFIG.accessToken, { path: AUTH_DATA_CONFIG.path });
     Cookies.remove(AUTH_DATA_CONFIG.refreshToken, { path: AUTH_DATA_CONFIG.path });
+  }
+
+  isAdmin(user) {
+    user = user || this.currentUser;
+    return user && user.authorityLevel <= 5;
   }
 
   setupNetworkServices(accessToken, isServer) {

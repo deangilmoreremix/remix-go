@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import { computed } from 'mobx';
+import { Alert } from 'reactstrap';
 import { inject, observer } from 'mobx-react';
 
 import PropTypes from '../../../lib/PropTypes';
@@ -13,16 +15,41 @@ import ConstructionWorkspace from './workspaces/ConstructionWorkspace';
 export default class EditorStageChanger extends Component {
   static propTypes = {
     className: PropTypes.string,
+    checkForm: PropTypes.func,
+    setWarning: PropTypes.func,
+    warning: PropTypes.shape({}),
   };
 
   state = {
     waiter: null,
   };
 
+  @computed
+  get warningList() {
+    const { warning } = this.props;
+    if (warning.additionalData < 0) {
+      return;
+    }
+
+    const list = warning.additionalData.map(item => (
+      <li id={item}>
+        {item}
+      </li>
+    ));
+    return (
+      <ul>
+        {list}
+      </ul>
+    );
+  }
+
   render() {
     const { waiter } = this.state;
     const {
       className,
+      warning,
+      checkForm,
+      setWarning,
       store: {
         activeProject,
         editorStateManager,
@@ -33,6 +60,17 @@ export default class EditorStageChanger extends Component {
     } = this.props;
     return (
       <div className={className}>
+        <Alert
+          className="alert-error"
+          color="warning"
+          isOpen={!!warning.text || warning.additionalData.length > 0}
+          toggle={setWarning()}
+        >
+          <p>
+            {warning.text}
+          </p>
+          {this.warningList}
+        </Alert>
         {(() => {
           switch (stage) {
             case EditorStateManager.STAGE_TYPES.VIDEO_CUSTOMISE:
@@ -66,7 +104,11 @@ export default class EditorStageChanger extends Component {
                 </div>
               );
             case EditorStateManager.STAGE_TYPES.CAPTION_CUSTOMISE:
-              return <ConstructionWorkspace className="full-height full-width" />;
+              return (
+                <ConstructionWorkspace
+                  className="full-height full-width"
+                  checkForm={checkForm}
+                />);
             default:
               return null;
           }

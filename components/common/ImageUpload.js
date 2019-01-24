@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { FormGroup, Alert } from 'reactstrap';
 
-import InfiniteLoading from '../common/InfiniteLoading';
+import InfiniteLoading from './InfiniteLoading';
 import PropTypes from '../../lib/PropTypes';
 import MediaTypeDetector from '../../lib/popcorn/util/mediaTypeDetector';
 
@@ -36,38 +36,41 @@ export default class ImageUpload extends Component {
         <Alert className="alert-error" color="danger" isOpen={!!error} toggle={() => this.setState({ error: null })}>
           {error}
         </Alert>
-        {isUploading ?
-          <InfiniteLoading /> :
-          <button
-            className={`go-button submit-button ${file || url ? '' : 'inactive'}`}
-            onClick={async () => {
-              if (!file && !url) {
-                return;
-              }
-              this.setState({ isUploading: true });
-              try {
-                const videoMeta = await new MediaTypeDetector()
-                  .getMetadata(file ? (await api.uploadMedia({ data: file })).url : url);
-                if (videoMeta.type === 'HTML5' && videoMeta.contentType.indexOf('image/') === 0) {
-                  onFileUploaded(videoMeta.source);
-                } else {
+        {isUploading
+          ? <InfiniteLoading />
+          : (
+            <button
+              className={`go-button submit-button ${file || url ? '' : 'inactive'}`}
+              onClick={async () => {
+                if (!file && !url) {
+                  return;
+                }
+                this.setState({ isUploading: true });
+                try {
+                  const videoMeta = await new MediaTypeDetector()
+                    .getMetadata(file ? (await api.uploadMedia({ data: file })).url : url);
+                  if (videoMeta.type === 'HTML5' && videoMeta.contentType.indexOf('image/') === 0) {
+                    onFileUploaded(videoMeta.source);
+                  } else {
+                    this.setState({
+                      error: 'This image format is not supported.',
+                    });
+                  }
+                } catch (err) {
                   this.setState({
-                    error: 'This image format is not supported.',
+                    error: err.message || 'This image format is not supported.',
+                  });
+                } finally {
+                  this.setState({
+                    isUploading: false,
+                    url: null,
                   });
                 }
-              } catch (err) {
-                this.setState({
-                  error: err.message || 'This image format is not supported.',
-                });
-              } finally {
-                this.setState({
-                  isUploading: false,
-                  url: null,
-                });
-              }
-            }}
-          >Upload
-          </button>}
+              }}
+            >
+Upload
+            </button>
+          )}
       </div>
     );
   }
