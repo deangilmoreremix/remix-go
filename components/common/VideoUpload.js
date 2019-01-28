@@ -82,6 +82,7 @@ export default class VideoUpload extends Component {
         error: null,
       });
       this.setState({ waiter: { message: '' } });
+
       const videoMeta = await new MediaTypeDetector().getMetadata(url);
       if (videoMeta.type === 'HTML5' && supportedMimeTypes.indexOf(videoMeta.contentType) === -1) {
         return this.setState({
@@ -102,7 +103,8 @@ export default class VideoUpload extends Component {
         waiter: null,
         uploadPercentage: 0,
         isUploading: false,
-        error: 'This media format is not supported. Please try to upload MP4 or WebM video file.',
+        error: (err && err.message)
+          || 'This media format is not supported. Please try to upload MP4 or WebM video file.',
       });
     }
   };
@@ -115,89 +117,93 @@ export default class VideoUpload extends Component {
       <Fragment>
         {waiter ? <Waiter message={waiter.message} /> : null}
         <div className="video-upload-container">
-          {videoMeta ?
-            <div className="video-range-container">
-              <label htmlFor="duration-range">
-                {`Trim your video (selected duration can't be longer than ${videoConfig.maxDuration} seconds)`}
-              </label>
-              <DurationRange
-                id="duration-range"
-                classNames={{
-                  activeTrack: 'input-range__track input-range__track--active video-range-track',
-                  disabledInputRange: 'input-range--disabled',
-                  inputRange: 'input-range video-range',
-                  labelContainer: 'input-range__label-container',
-                  slider: 'input-range__slider video-range-slider',
-                  sliderContainer: 'input-range__slider-container',
-                  track: 'input-range__track input-range__track--background video-range-track-background',
-                  valueLabel: 'input-range__label input-range__label--value',
-                  maxLabel: 'hidden',
-                  minLabel: 'hidden',
-                }}
-                formatLabel={value => `${value.toFixed(2)}s`}
-                minValue={0}
-                maxValue={videoMeta ? videoMeta.duration : 0}
-                value={this.state.trim}
-                step={0.01}
-                onChange={(value) => {
-                  if (value.max - value.min > videoConfig.maxDuration) {
-                    return;
-                  }
-                  this.setState({ trim: value });
-                }}
-              />
-            </div> :
-            <div className="video-upload-box">
-              <DropZone
-                className={`upload-dropzone${isUploading ? ' hidden' : ''}`}
-                activeClassName="upload-dropzone hot"
-                onDrop={([file], [noFile]) => {
-                  if (file) {
-                    return this.handleFileDrop(file);
-                  } else if (noFile) {
-                    return this.setState({ error: 'This media format is not supported. Please try to upload MP4 or WebM video file.' });
-                  }
-                }}
-                accept={supportedMimeTypes}
-              >
-                <div className="dropzone-inner">
-                  <img className="icon" src="../../static/images/upload.png" alt="Video upload" />
-                  <h5 className="label">
-                    Click or drag your file here to start uploading it.
-                    <br />
-                    Maximum file size: 100mb.  Format: mp4/WebM.
-                    <br />
-                    After upload you we be prompted to select up to 60 seconds
-                    <br />
-                    for use in your project.
-                    <br />
-                  </h5>
-                </div>
-              </DropZone>
-              <div className={`upload-progress${!isUploading ? ' hidden' : ''}`}>
-                <h5 className="label">
-                  {uploadPercentage < 1 ? `${(uploadPercentage * 100).toFixed(0)}%` : 'Processing your media...'}
-                </h5>
-                <Progress
-                  animated
-                  className="upload-progress-bar"
-                  value={uploadPercentage * 100}
+          {videoMeta
+            ? (
+              <div className="video-range-container">
+                <label htmlFor="duration-range">
+                  {`Trim your video (selected duration can't be longer than ${videoConfig.maxDuration} seconds)`}
+                </label>
+                <DurationRange
+                  id="duration-range"
+                  classNames={{
+                    activeTrack: 'input-range__track input-range__track--active video-range-track',
+                    disabledInputRange: 'input-range--disabled',
+                    inputRange: 'input-range video-range',
+                    labelContainer: 'input-range__label-container',
+                    slider: 'input-range__slider video-range-slider',
+                    sliderContainer: 'input-range__slider-container',
+                    track: 'input-range__track input-range__track--background video-range-track-background',
+                    valueLabel: 'input-range__label input-range__label--value',
+                    maxLabel: 'hidden',
+                    minLabel: 'hidden',
+                  }}
+                  formatLabel={value => `${value.toFixed(2)}s`}
+                  minValue={0}
+                  maxValue={videoMeta ? videoMeta.duration : 0}
+                  value={this.state.trim}
+                  step={0.01}
+                  onChange={(value) => {
+                    if (value.max - value.min > videoConfig.maxDuration) {
+                      return;
+                    }
+                    this.setState({ trim: value });
+                  }}
                 />
               </div>
-              <h5 className={isUploading ? ' hidden' : ''}>
+            )
+            : (
+              <div className="video-upload-box">
+                <DropZone
+                  className={`upload-dropzone${isUploading ? ' hidden' : ''}`}
+                  activeClassName="upload-dropzone hot"
+                  onDrop={([file], [noFile]) => {
+                    if (file) {
+                      return this.handleFileDrop(file);
+                    } else if (noFile) {
+                      return this.setState({ error: 'This media format is not supported. Please try to upload MP4 or WebM video file.' });
+                    }
+                  }}
+                  accept={supportedMimeTypes}
+                >
+                  <div className="dropzone-inner">
+                    <img className="icon" src="../../static/images/upload.png" alt="Video upload" />
+                    <h5 className="label">
+                    Click or drag your file here to start uploading it.
+                      <br />
+                    Maximum file size: 100mb.  Format: mp4/WebM.
+                      <br />
+                    After upload you we be prompted to select up to 60 seconds
+                      <br />
+                    for use in your project.
+                      <br />
+                    </h5>
+                  </div>
+                </DropZone>
+                <div className={`upload-progress${!isUploading ? ' hidden' : ''}`}>
+                  <h5 className="label">
+                    {uploadPercentage < 1 ? `${(uploadPercentage * 100).toFixed(0)}%` : 'Processing your media...'}
+                  </h5>
+                  <Progress
+                    animated
+                    className="upload-progress-bar"
+                    value={uploadPercentage * 100}
+                  />
+                </div>
+                <h5 className={isUploading ? ' hidden' : ''}>
                 or use link to external video hosting (YouTube, Vimeo,
                 etc)
-              </h5>
-              <Input
-                className={`external-video-link${isUploading ? ' hidden' : ''}`}
-                type="text"
-                value={url}
-                onChange={({ target: { value } }) => this.setState({ url: value })}
-              />
-              <Alert className="alert-error" color="danger" isOpen={!!error} toggle={() => this.setState({ error: null })}>
-                {error}
-              </Alert>
-            </div>}
+                </h5>
+                <Input
+                  className={`external-video-link${isUploading ? ' hidden' : ''}`}
+                  type="text"
+                  value={url}
+                  onChange={({ target: { value } }) => this.setState({ url: value })}
+                />
+                <Alert className="alert-error" color="danger" isOpen={!!error} toggle={() => this.setState({ error: null })}>
+                  {error}
+                </Alert>
+              </div>
+            )}
           <div className="external-video-submit-container">
             <button
               className={`go-button back-button${videoMeta ? '' : ' hidden'}`}
@@ -208,7 +214,7 @@ export default class VideoUpload extends Component {
             </button>
             <button
               className={`go-button external-video-submit${isUploading ? ' hidden' : ''}${(url.length > 0 || videoMeta) ? '' : ' inactive'}`}
-              onClick={() => videoMeta ? this.submitVideo() : this.retrieveVideoFromUrl()}
+              onClick={() => (videoMeta ? this.submitVideo() : this.retrieveVideoFromUrl())}
             >
               {videoMeta ? 'Continue' : 'Retrieve video data'}
             </button>
