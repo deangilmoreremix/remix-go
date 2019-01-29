@@ -11,6 +11,7 @@ import MediaTypeDetector from '../../lib/popcorn/util/mediaTypeDetector';
 export default class ImageUpload extends Component {
   static propTypes = {
     onFileUploaded: PropTypes.func.isRequired,
+    onValidate: PropTypes.func,
   };
 
   state = {
@@ -20,20 +21,69 @@ export default class ImageUpload extends Component {
     isUploading: false,
   };
 
-  render() {
+  changeImage = (event) => {
+    const { onValidate } = this.props;
+    if (typeof onValidate === 'function') {
+      const error = onValidate(event.target.files[0]);
+      if (error) {
+        return this.setState({ error });
+      }
+    }
+    return this.setState({ file: event.target.files[0], url: null });
+  };
+
+  changeUrl = event => this.setState({ url: event.target.value, file: null });
+
+  uploadFile = async () => {
+    const { file, url } = this.state;
     const { onFileUploaded, api } = this.props;
+    if (!file && !url) {
+      return;
+    }
+    this.setState({ isUploading: true });
+    try {
+      const videoMeta = await new MediaTypeDetector()
+        .getMetadata(file ? (await api.uploadMedia({ data: file })).url : url);
+      if (videoMeta.type === 'HTML5' && videoMeta.contentType.indexOf('image/') === 0) {
+        onFileUploaded(videoMeta.source);
+      } else {
+        this.setState({
+          error: 'This image format is not supported.',
+        });
+      }
+    } catch (err) {
+      this.setState({
+        error: err.message || 'This image format is not supported.',
+      });
+    } finally {
+      this.setState({
+        isUploading: false,
+        url: null,
+      });
+    }
+  };
+
+  onToggleError = () => {
+    this.setState({ error: null });
+  };
+
+  render() {
     const { isUploading, file, url, error } = this.state;
     return (
       <div className="image-upload">
         <FormGroup>
-          <label>Set Image URL</label>
-          <input type="text" onChange={event => this.setState({ url: event.target.value, file: null })} />
+          <label htmlFor="image-url">
+            Set Image URL
+            <input id="image-url" type="text" onChange={this.changeUrl} />
+          </label>
         </FormGroup>
         <FormGroup>
-          <label>or upload file directly from your computer</label>
-          <input type="file" accept="image/*" onChange={event => this.setState({ file: event.target.files[0], url: null })} />
+          <label htmlFor="image-uploader">
+            or upload file directly from your computer
+            <input id="image-uploader" type="file" accept="image/*" onChange={this.changeImage} />
+          </label>
         </FormGroup>
-        <Alert className="alert-error" color="danger" isOpen={!!error} toggle={() => this.setState({ error: null })}>
+        <Alert className="alert-error" color="danger" isOpen={!!error} toggle={this.onToggleError}>
           {error}
         </Alert>
         {isUploading
@@ -41,34 +91,9 @@ export default class ImageUpload extends Component {
           : (
             <button
               className={`go-button submit-button ${file || url ? '' : 'inactive'}`}
-              onClick={async () => {
-                if (!file && !url) {
-                  return;
-                }
-                this.setState({ isUploading: true });
-                try {
-                  const videoMeta = await new MediaTypeDetector()
-                    .getMetadata(file ? (await api.uploadMedia({ data: file })).url : url);
-                  if (videoMeta.type === 'HTML5' && videoMeta.contentType.indexOf('image/') === 0) {
-                    onFileUploaded(videoMeta.source);
-                  } else {
-                    this.setState({
-                      error: 'This image format is not supported.',
-                    });
-                  }
-                } catch (err) {
-                  this.setState({
-                    error: err.message || 'This image format is not supported.',
-                  });
-                } finally {
-                  this.setState({
-                    isUploading: false,
-                    url: null,
-                  });
-                }
-              }}
+              onClick={this.uploadFile}
             >
-Upload
+              Upload
             </button>
           )}
       </div>
