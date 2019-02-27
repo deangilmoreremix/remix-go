@@ -103,7 +103,7 @@ const LinkedinPostPreview = (props) => {
               <span id="SPAN_63"> <span id="SPAN_64">{name}</span></span>
             </h3>
             <div id="DIV_66">
-              <span id="SPAN_67">{headline}</span>
+              <span id="SPAN_67">{headline || 'Your LinkedIn Headline'}</span>
             </div>
             <div id="DIV_69">
               <span id="SPAN_70"><span id="SPAN_71"><span id="SPAN_72">now</span></span></span>
