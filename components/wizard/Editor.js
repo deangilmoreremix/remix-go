@@ -255,7 +255,7 @@ export default class Editor extends Component {
                   project={activeProject}
                   features={currentUser.features}
                   checkForm={this.checkForm}
-                  defaultImage={whiteLabelManager.shouldOverride && whiteLabelManager.brandLogo}
+                  defaultImage={whiteLabelManager.shouldOverride ? whiteLabelManager.brandLogo : null}
                 />
               )}
             </Row>
