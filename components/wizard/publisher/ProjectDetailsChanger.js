@@ -96,18 +96,17 @@ export default class ProjectDetailsChanger extends Component {
                 this.setState({ thumbnail: response.url });
               }}
             />
+            <button
+              className={`go-button button-primary submit ${this.isDataValid() ? '' : 'inactive'}`}
+              onClick={() => {
+                if (this.isDataValid()) {
+                  this.onValueChange();
+                }
+              }}
+            >save
+            </button>
           </div>
         </FormGroup>
-        <button
-          className={`go-button button-primary submit ${this.isDataValid() ? '' : 'inactive'}`}
-          onClick={() => {
-            if (this.isDataValid()) {
-              this.onValueChange();
-            }
-          }}
-        >
-          save
-        </button>
       </div>
     );
   }
