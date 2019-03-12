@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import { ButtonGroup, Button } from 'reactstrap';
-import { observable } from 'mobx';
+import { observable, runInAction } from 'mobx';
 import { inject, observer } from 'mobx-react';
 
 import {
@@ -74,12 +74,14 @@ export default class VideoSelectionWorkspace extends Component {
       },
     });
     const newElements = await api.assets(scope, api.constructor.ASSET_TYPES.VIDEOS, 0, query);
-    this.setState({
-      [scope]: {
-        elements: newElements,
-        hasMore: newElements.length > 0,
-        query,
-      },
+    runInAction(() => {
+      this.setState({
+        [scope]: {
+          elements: newElements,
+          hasMore: newElements.length > 0,
+          query,
+        },
+      });
     });
   };
 
