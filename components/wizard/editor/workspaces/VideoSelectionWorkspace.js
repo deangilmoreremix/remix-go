@@ -64,9 +64,15 @@ export default class VideoSelectionWorkspace extends Component {
   currentPlayback = null;
 
   onSearch = async (query) => {
-    this.setState({ elements: [] });
     const { api } = this.props;
     const { scope } = this.state;
+    this.setState({
+      [scope]: {
+        elements: [],
+        hasMore: false,
+        query,
+      },
+    });
     const newElements = await api.assets(scope, api.constructor.ASSET_TYPES.VIDEOS, 0, query);
     this.setState({
       [scope]: {
