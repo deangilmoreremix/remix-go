@@ -31,7 +31,7 @@ export default class AudioSelectionWorkspace extends Component {
   }
 
   onSearch = async (query) => {
-    this.setState({ elements: [] });
+    this.setState({ elements: [], hasMore: false });
     const { api } = this.props;
     const { scope } = this.state;
     const newElements = await api.assets(scope, api.constructor.ASSET_TYPES.AUDIOS, 0, query);
