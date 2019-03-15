@@ -43,21 +43,12 @@
 
     .small-edit-button {
       height: 1.2rem;
-      img {
-        content: url('/static/images/editor/elements/form/edit.svg');
-        margin: 0 2%;
-        height: 100%;
-        width: auto;
-      }
+      background: url('/static/images/editor/elements/form/edit.svg') no-repeat;
     }
 
     .edit-button {
-      img {
-        content: url('/static/images/editor/elements/form/edit.svg');
-        margin: 0 2%;
-        height: 100%;
-        width: auto;
-      }
+      background: url('/static/images/editor/elements/form/edit.svg') no-repeat;
+      height: 100%;
     }
 
     input {
@@ -76,22 +67,14 @@
 
       .drag-button {
         margin: 5px 2% 0 0;
-        img {
-          content: url('/static/images/editor/elements/form/element-drag.svg');
-          margin: 0 2%;
-          height: 100%;
-          width: auto;
-        }
+        background: url('/static/images/editor/elements/form/element-drag.svg') no-repeat;
+        height: 100%;
       }
 
       .input-remove {
         margin-left: 1%;
-        img {
-          content: url('/static/images/editor/elements/form/element-remove.svg');
-          margin: 0 2%;
-          height: 100%;
-          width: auto;
-        }
+        background: url('/static/images/editor/elements/form/element-remove.svg') no-repeat;
+        height: 100%;
       }
 
       .textarea-field,
