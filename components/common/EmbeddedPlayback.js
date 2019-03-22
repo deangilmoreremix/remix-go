@@ -41,6 +41,7 @@ export default class EmbeddedPlayback extends Component {
         allowedSocials: [],
         thumbnail: source.thumbnail,
         data: JSON.stringify(source.popcornObject),
+        title: source.name,
       },
     }, playerUrl);
   }
