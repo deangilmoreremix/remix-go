@@ -56,7 +56,7 @@ const insertAtCaret = (base, offset, text) => {
   return `${base.slice(0, offset)}${text}${base.slice(offset)}`;
 };
 
-const PERSONALIZABLE_ELEMENT_TYPES = ['text', 'personalizedImage'];
+const PERSONALIZABLE_ELEMENT_TYPES = ['text', 'image', 'personalizedImage'];
 
 @inject('api')
 @inject('store')
@@ -123,9 +123,9 @@ export default class Editor extends Component {
     const { store: { activeProject: { activeElement }, activeProject } } = this.props;
     const {
       _activeHandle: { type, target },
-      caretOffsets: offset,
+      caretOffsets: offset = {},
     } = activeElement;
-    const newText = insertAtCaret(activeElement[type], offset[type], token);
+    const newText = insertAtCaret(activeElement[type], offset[type] || 0, token);
 
     const event = new Event('input');
     target.dispatchEvent(event);
@@ -165,8 +165,7 @@ export default class Editor extends Component {
 
     if (process.browser) {
       window.onbeforeunload = () => {
-        const { modified } = activeProject;
-        if (modified) {
+        if (activeProject && activeProject.modified) {
           return confirm('There are unsaved changes, do you want to continue?');
         } else {
           return null;
