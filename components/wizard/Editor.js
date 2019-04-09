@@ -123,9 +123,9 @@ export default class Editor extends Component {
     const { store: { activeProject: { activeElement }, activeProject } } = this.props;
     const {
       _activeHandle: { type, target },
-      caretOffsets: offset,
+      caretOffsets: offset = {},
     } = activeElement;
-    const newText = insertAtCaret(activeElement[type], offset[type], token);
+    const newText = insertAtCaret(activeElement[type], offset[type] || 0, token);
 
     const event = new Event('input');
     target.dispatchEvent(event);
