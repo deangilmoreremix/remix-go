@@ -56,7 +56,7 @@ const insertAtCaret = (base, offset, text) => {
   return `${base.slice(0, offset)}${text}${base.slice(offset)}`;
 };
 
-const PERSONALIZABLE_ELEMENT_TYPES = ['text', 'personalizedImage'];
+const PERSONALIZABLE_ELEMENT_TYPES = ['text', 'image', 'personalizedImage'];
 
 @inject('api')
 @inject('store')
@@ -165,8 +165,7 @@ export default class Editor extends Component {
 
     if (process.browser) {
       window.onbeforeunload = () => {
-        const { modified } = activeProject;
-        if (modified) {
+        if (activeProject && activeProject.modified) {
           return confirm('There are unsaved changes, do you want to continue?');
         } else {
           return null;
