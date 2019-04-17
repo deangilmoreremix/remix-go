@@ -142,6 +142,19 @@
     position: absolute;
     width: 100%;
 
+    .link-url-span{
+      .personalized-token {
+
+        .token-uppercase {
+          width: 15px;
+        }
+
+        .token-default {
+          width: 15px;
+        }
+      }
+    }
+
     .fa {
       width: auto;
       margin: 0 2px;
