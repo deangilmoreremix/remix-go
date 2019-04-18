@@ -86,7 +86,7 @@ export default class Personalizer extends Component {
               <input
                 type="text"
                 value={customTokenValue}
-                onChange={event => this.setState({ customTokenValue: event.target.value.toUpperCase().replace(/ |'|"/g, '') })}
+                onChange={event => this.setState({ customTokenValue: event.target.value.toUpperCase().replace(/ |'|"/g, '')})}
               />
           }
           </span>
