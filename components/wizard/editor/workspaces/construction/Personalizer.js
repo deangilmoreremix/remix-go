@@ -5,16 +5,6 @@ import PropTypes from '../../../../../lib/PropTypes';
 
 import SVGItemDot from '../../../../../static/images/editor/personalizer/red_circle.svg';
 
-const FormErrors = ({formErrors}) => {
-  let errorMessage = '';
-  Object.keys(formErrors).map((fieldName, i) => {
-    if (formErrors[fieldName].length > 0) {
-      errorMessage = <span key={i} className='error-input'>This field {formErrors[fieldName]}</span>;
-    }
-  });
-  return errorMessage;
-};
-
 export default class Personalizer extends Component {
   static propTypes = {
     className: PropTypes.string,
@@ -46,9 +36,6 @@ export default class Personalizer extends Component {
       tokenMode: Personalizer.TOKEN_MODE.PLAIN,
       fallbackValue: '',
       customTokenValue: 'CUSTOM',
-      tokenValid: false,
-      formErrors: {customTokenValue: ''},
-      formValid: true,
     };
   }
 
@@ -58,35 +45,8 @@ export default class Personalizer extends Component {
       tokenMode: Personalizer.TOKEN_MODE.PLAIN,
       fallbackValue: '',
       customTokenValue: 'CUSTOM',
-      formErrors: {customTokenValue: ''},
     });
   };
-
-  onCustomTokenChange = (e) => {
-    const value = e.target.value;
-    this.setState({customTokenValue: value},
-      () => {this.validateField('customTokenValue', value)});
-  }
-
-  validateField = (fieldName, value) => {
-    let fieldValidationErrors = this.state.formErrors;
-    let tokenValid = this.state.tokenValid;
-    switch(fieldName) {
-      case 'customTokenValue':
-        tokenValid = !value.match(/ |'|"/i);
-        fieldValidationErrors.customTokenValue = tokenValid ? '' : ' is incorrect (no spaces or quotes)';
-        break;
-      default:
-        break;
-    }
-    this.setState({formErrors: fieldValidationErrors,
-      tokenValid: tokenValid,
-    }, this.validateForm);
-  }
-
-  validateForm = () => {
-    this.setState({formValid: this.state.tokenValid});
-  }
 
   buildToken = () => {
     const { currentToken, tokenMode, fallbackValue, customTokenValue } = this.state;
@@ -120,14 +80,13 @@ export default class Personalizer extends Component {
         </ul>
         <div className="separator vertical" />
         <div className="setup-area">
-          <FormErrors formErrors={this.state.formErrors} />
           <span>{
             currentToken !== 'CUSTOM' ?
               <span>{currentToken}</span> :
               <input
                 type="text"
                 value={customTokenValue}
-                onChange={this.onCustomTokenChange}
+                onChange={event => this.setState({ customTokenValue: event.target.value.toUpperCase().replace(/ |'|"/g, '') })}
               />
           }
           </span>
@@ -173,7 +132,6 @@ export default class Personalizer extends Component {
             onClick={() => {
               onTokenChosen(this.buildToken());
             }}
-            disabled={!this.state.formValid}
           >Add
           </button>
         </div>
