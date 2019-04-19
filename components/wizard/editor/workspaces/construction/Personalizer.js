@@ -48,6 +48,11 @@ export default class Personalizer extends Component {
     });
   };
 
+  onCustomTokenChange = (e) => {
+    const value = e.target.value ? e.target.value.toUpperCase().replace(/\s|'|"/g, '') : '';
+    this.setState({ customTokenValue: value });
+  }
+
   buildToken = () => {
     const { currentToken, tokenMode, fallbackValue, customTokenValue } = this.state;
     const actualToken = currentToken !== 'CUSTOM' ? currentToken : customTokenValue;
@@ -86,7 +91,7 @@ export default class Personalizer extends Component {
               <input
                 type="text"
                 value={customTokenValue}
-                onChange={event => this.setState({ customTokenValue: event.target.value.toUpperCase().replace(/ |'|"/g, '')})}
+                onChange={this.onCustomTokenChange}
               />
           }
           </span>
