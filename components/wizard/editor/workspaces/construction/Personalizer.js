@@ -49,7 +49,8 @@ export default class Personalizer extends Component {
   };
 
   onCustomTokenChange = (e) => {
-    const value = e.target.value ? e.target.value.toUpperCase().replace(/\s|'|"/g, '') : '';
+    const searchValue = /\s|!|"|#|%|&|'|\(|\)|\*|\+|,|\.|\/|;|:|<|=|>|@|\[|\\|]|\^|ˆ|`|{|\||}|-|\$|\?|~/g;
+    const value = e.target.value ? e.target.value.toUpperCase().replace(searchValue, '') : '';
     this.setState({ customTokenValue: value });
   }
 
