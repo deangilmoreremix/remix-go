@@ -40,7 +40,7 @@ export default class EmbeddedPlayback extends Component {
         showShare: false,
         allowedSocials: [],
         thumbnail: source.thumbnail,
-        ratio: source.ratio,
+        aspectRatio: source.ratio,
         data: JSON.stringify(source.popcornObject),
         title: source.name,
       },
