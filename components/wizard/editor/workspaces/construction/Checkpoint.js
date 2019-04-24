@@ -16,7 +16,8 @@ export default class CheckpointsList extends Component {
     const { store, at } = this.props;
     const popcorn = store.activeProject
       .attach(store.activeProject.popcornify(this.popcornWrapper), `video-container-${at}`);
-    this.updateSceneSize = videoResizer(this.embedWrapper, 2);
+    this.updateSceneSize = videoResizer(this.embedWrapper,
+      { padding: 2, ratio: store.activeProject.ratio });
     window.addEventListener('resize', this.sceneResize);
     popcorn.seek(at);
     this.sceneResize();

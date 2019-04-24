@@ -13,11 +13,11 @@ export default class ConstructionScene extends Component {
   };
 
   componentDidMount() {
-    const { onPopcornInitialize } = this.props;
+    const { onPopcornInitialize, store } = this.props;
 
     if (process.browser) {
       onPopcornInitialize(this.popcornWrapper);
-      this.updateSceneSize = videoResizer(this.embedWrapper);
+      this.updateSceneSize = videoResizer(this.embedWrapper, { ratio: store.activeProject.ratio });
       window.addEventListener('resize', this.sceneResize);
       this.sceneResize();
     }

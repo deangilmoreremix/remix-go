@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import { action, observable } from 'mobx';
+import { action, observable, runInAction } from 'mobx';
 import requestCreator from '../lib/requestCreator';
 
 let api = null;
@@ -36,6 +36,7 @@ class Api {
     this.setupNetworkServices(isServer);
   }
 
+  @action
   setupNetworkServices(isServer) {
     const { common } = this;
     this.request = requestCreator(
@@ -161,9 +162,9 @@ class Api {
   @action
   async get(projectId, isSource) {
     this.isLoading = true;
-    const path = isSource ?
-      `/api/users/me/makes/${projectId}` :
-      `/api/users/me/makes/${projectId}/remix`;
+    const path = isSource
+      ? `/api/users/me/makes/${projectId}`
+      : `/api/users/me/makes/${projectId}/remix`;
     try {
       return this.request(
         path, {
@@ -181,9 +182,9 @@ class Api {
   async save(project) {
     this.isLoading = true;
     try {
-      const path = project.make ?
-        `/api/users/me/makes/${project.make._id}` :
-        '/api/users/me/makes';
+      const path = project.make
+        ? `/api/users/me/makes/${project.make._id}`
+        : '/api/users/me/makes';
       const serializedProject = project.serialize();
       project.make = await this.request(
         path, {
@@ -197,12 +198,15 @@ class Api {
             project: serializedProject,
             thumbnail: serializedProject.thumbnail,
             remixedFrom: serializedProject.source,
+            ratio: serializedProject.ratio,
           },
         });
       project.modified = false;
       return project;
     } finally {
-      this.isLoading = false;
+      runInAction(() => {
+        this.isLoading = false;
+      });
     }
   }
 
@@ -235,7 +239,9 @@ class Api {
       project.make.contentUrl = response.contenturl;
       return project;
     } finally {
-      this.isLoading = false;
+      runInAction(() => {
+        this.isLoading = false;
+      });
     }
   }
 

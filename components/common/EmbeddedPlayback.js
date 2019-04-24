@@ -40,6 +40,7 @@ export default class EmbeddedPlayback extends Component {
         showShare: false,
         allowedSocials: [],
         thumbnail: source.thumbnail,
+        ratio: source.ratio,
         data: JSON.stringify(source.popcornObject),
         title: source.name,
       },
@@ -53,18 +54,19 @@ export default class EmbeddedPlayback extends Component {
         window.addEventListener('message', event => this.preplayHandler(event));
       }
     }
-    return (<iframe
-      className={className}
-      title={title}
-      src={source instanceof Project ? `${playerUrl}?preplay=postMessage` : source}
-      width={width}
-      height={height}
-      frameBorder="0"
-      allow="autoplay; fullscreen"
-      mozallowfullscreen="true"
-      webkitallowfullscreen="true"
-      allowFullScreen
-    />);
+    return (
+      <iframe
+        className={className}
+        title={title}
+        src={source instanceof Project ? `${playerUrl}?preplay=postMessage` : source}
+        width={width}
+        height={height}
+        frameBorder="0"
+        allow="autoplay; fullscreen"
+        mozallowfullscreen="true"
+        webkitallowfullscreen="true"
+        allowFullScreen
+      />
+    );
   }
 }
-
