@@ -13,9 +13,8 @@
   }
 
   .font-input {
-    width: auto;
+    width: 12%;
     margin: 0 2px;
-    height: auto !important;
     background: $white;
     color: $primary-color;
   }
@@ -25,6 +24,10 @@
     background: $white;
     color: $primary-color;
     text-align: center;
+
+    option {
+      font-size: 1rem;
+    }
   }
 
   .phone-callback-input {
