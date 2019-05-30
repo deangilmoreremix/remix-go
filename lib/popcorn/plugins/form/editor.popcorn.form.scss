@@ -12,11 +12,27 @@
     }
   }
 
-  .font-input {
-    width: auto;
-    margin: 0 2px;
-    background: $white;
-    color: $primary-color;
+  .dropdown {
+    .font-input {
+      width: auto;
+      margin: 0 2px;
+      background: $white !important;
+      color: $primary-color !important;
+    }
+
+    .btn-secondary {
+      display: block;
+      padding: 0.375rem 0.75rem;
+      font-size: 1rem;
+      line-height: 1.5;
+      background-clip: padding-box;
+      border: 2px solid #ced4da !important;
+      border-radius: 0.25rem;
+      -webkit-transition: border-color 0.15s ease-in-out, -webkit-box-shadow 0.15s ease-in-out;
+      transition: border-color 0.15s ease-in-out, -webkit-box-shadow 0.15s ease-in-out;
+      transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+      transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out, -webkit-box-shadow 0.15s ease-in-out;
+    }
   }
 
   .font-size-input {
@@ -138,4 +154,21 @@ input[type="text"] {
 button:disabled {
   opacity: 0.3;
   cursor: default;
+}
+
+.dropdown-menu {
+  z-index: 10000;
+
+  .scrolled {
+    height: 30rem;
+    overflow-y: auto;
+  }
+
+  button {
+    font-size: 1rem;
+
+    &active {
+      background-color: $gray-200;
+    }
+  }
 }
