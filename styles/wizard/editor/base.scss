@@ -50,6 +50,12 @@
         flex-direction: column;
         overflow-y: hidden;
 
+        // todo This style adjusts the height in chrome and does not change anything in other
+        // browsers. we need to deal with the height of the flexible container in chrome
+        .construction-scene {
+          height: 70%;
+        }
+
         .construction-container {
           position: relative;
           width: 100%;
