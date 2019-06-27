@@ -36,7 +36,9 @@ export default class ConstructionScene extends Component {
   render() {
     const { className } = this.props;
     return (
-      <div className={`full-height full-width ${className || ''}`}>
+      <div
+        className={`full-height full-width construction-scene ${className || ''}`}
+      >
         <div
           className="wrapper cf faded embed full-height full-width"
           ref={(c) => { this.embedWrapper = c; }}
