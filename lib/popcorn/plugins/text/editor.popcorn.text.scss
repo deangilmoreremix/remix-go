@@ -37,6 +37,10 @@
     .scrolled {
       height: 30rem;
       overflow-y: auto;
+
+      .select-item-font {
+        background-color: $gray-200;
+      }
     }
 
     button {
