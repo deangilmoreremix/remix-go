@@ -43,13 +43,9 @@ export default class AudioSelectionWorkspace extends Component {
   };
 
   onScopeChange = async (scope) => {
-    this.state = {
-      scope,
-      elements: [],
-      hasMore: true,
-      query: '',
-    };
-    await this.loadMore();
+    if (scope !== this.state.scope) {
+      this.setState({ scope });
+    }
   };
 
   loadMore = async () => {
@@ -68,6 +64,7 @@ export default class AudioSelectionWorkspace extends Component {
   render() {
     const { api, className, inWindow = false, onAudioSelected } = this.props;
     const { scope, hasMore, elements } = this.state;
+    console.log(this);
 
     const sizes = inWindow ?
       [
@@ -121,7 +118,7 @@ export default class AudioSelectionWorkspace extends Component {
             ))
           }
         </AudioGallery>}
-        {scope === api.constructor.ASSET_SCOPES.UPLOADS && console.log('api',api)}
+        {scope === api.constructor.ASSET_SCOPES.UPLOADS && console.log('api', api)}
       </Fragment>);
   }
 }
