@@ -1,6 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import { Button, ButtonGroup } from 'reactstrap';
 import { inject, observer } from 'mobx-react';
+import { runInAction } from 'mobx';
 
 import AudioGallery from 'react-masonry-infinite';
 
@@ -38,16 +39,25 @@ export default class AudioSelectionWorkspace extends Component {
   }
 
   onSearch = async (query) => {
-    this.setState({ elements: [], hasMore: false });
+    // this.setState({ elements: [], hasMore: false });
     const { api } = this.props;
     const { scope } = this.state;
-    // const newElements = await api.assets(scope, api.constructor.ASSET_TYPES.AUDIOS, 0, query);
     this.setState({
       [scope]: {
         elements: [],
         hasMore: false,
         query,
       },
+    });
+    const newElements = await api.assets(scope, api.constructor.ASSET_TYPES.AUDIOS, 0, query);
+    runInAction(() => {
+      this.setState({
+        [scope]: {
+          elements: newElements,
+          hasMore: newElements.length > 0,
+          query,
+        },
+      });
     });
   };
 
