@@ -24,16 +24,9 @@ export default class AudioSelectionWorkspace extends Component {
     const { api } = props;
     this.state = {
       scope: api.constructor.ASSET_SCOPES.LIBRARY,
-      [api.constructor.ASSET_SCOPES.LIBRARY]: {
-        hasMore: true,
-        elements: [],
-        query: '',
-      },
-      [api.constructor.ASSET_SCOPES.UPLOADS]: {
-        hasMore: true,
-        elements: [],
-        query: '',
-      },
+      hasMore: true,
+      elements: [],
+      query: '',
     };
   }
 
@@ -50,9 +43,13 @@ export default class AudioSelectionWorkspace extends Component {
   };
 
   onScopeChange = async (scope) => {
-    if (scope !== this.state.scope) {
-      this.setState({ scope });
-    }
+    this.state = {
+      scope,
+      elements: [],
+      hasMore: true,
+      query: '',
+    };
+    await this.loadMore();
   };
 
   loadMore = async () => {
@@ -70,10 +67,8 @@ export default class AudioSelectionWorkspace extends Component {
 
   render() {
     const { api, className, inWindow = false, onAudioSelected } = this.props;
-    const { scope } = this.state;
-    const { hasMore, elements } = this.state[scope];
-    console.log('this', this);
-
+    const { scope, hasMore, elements } = this.state;
+    console.log('this  ', this );
 
     const sizes = inWindow ?
       [
@@ -107,7 +102,7 @@ export default class AudioSelectionWorkspace extends Component {
         <Search
           onSearch={q => this.onSearch(q)}
         />
-        {scope === api.constructor.ASSET_SCOPES.UPLOADS && <AudioGallery
+        <AudioGallery
           useWindow={!inWindow}
           className={`media-gallery ${className}`}
           hasMore={hasMore}
@@ -126,28 +121,7 @@ export default class AudioSelectionWorkspace extends Component {
               />
             ))
           }
-        </AudioGallery>}
-        {scope === api.constructor.ASSET_SCOPES.LIBRARY && <AudioGallery
-          useWindow={!inWindow}
-          className={`media-gallery ${className}`}
-          hasMore={hasMore}
-          loader={<InfiniteLoading key="loader" />}
-          loadMore={this.loadMore}
-          sizes={sizes}
-        >
-          {
-            elements.map(({ title, url, artwork }, idx) => (
-              <AudioGridItem
-                key={idx}
-                title={title}
-                url={url}
-                artwork={artwork}
-                onUse={audio => onAudioSelected(audio)}
-              />
-            ))
-          }
-        </AudioGallery>}
-      </Fragment>
-    );
+        </AudioGallery>
+      </Fragment>);
   }
 }
