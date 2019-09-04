@@ -78,7 +78,6 @@ export default class AudioSelectionWorkspace extends Component {
       [scope]: {
         query,
         elements: elements.concat(newElements),
-        // for now we have no pagination for such resources
         hasMore: newElements.length > 0,
       },
     });
@@ -141,7 +140,7 @@ export default class AudioSelectionWorkspace extends Component {
             ))
           }
         </AudioGallery>}
-        {scope === api.constructor.ASSET_SCOPES.UPLOADS &&  <AudioGallery
+        {scope === api.constructor.ASSET_SCOPES.UPLOADS && <AudioGallery
           useWindow={!inWindow}
           className={`media-gallery ${className}`}
           hasMore={hasMore}
