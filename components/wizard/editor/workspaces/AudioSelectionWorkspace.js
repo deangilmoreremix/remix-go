@@ -118,7 +118,26 @@ export default class AudioSelectionWorkspace extends Component {
             ))
           }
         </AudioGallery>}
-        {scope === api.constructor.ASSET_SCOPES.UPLOADS && console.log('api', api)}
+        {scope === api.constructor.ASSET_SCOPES.UPLOADS &&  <AudioGallery
+          useWindow={!inWindow}
+          className={`media-gallery ${className}`}
+          hasMore={hasMore}
+          loader={<InfiniteLoading key="loader" />}
+          loadMore={this.loadMore}
+          sizes={sizes}
+        >
+          {
+            elements.map(({ title, url, artwork }, idx) => (
+              <AudioGridItem
+                key={idx}
+                title={title}
+                url={url}
+                artwork={artwork}
+                onUse={audio => onAudioSelected(audio)}
+              />
+            ))
+          }
+        </AudioGallery>}
       </Fragment>);
   }
 }
