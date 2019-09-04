@@ -1,6 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import { Button, ButtonGroup } from 'reactstrap';
 import { inject, observer } from 'mobx-react';
+import { runInAction } from 'mobx';
 
 import AudioGallery from 'react-masonry-infinite';
 
@@ -8,6 +9,7 @@ import Search from '../../../common/Search';
 import AudioGridItem from './gridItems/AudioGridItem';
 import InfiniteLoading from '../../../common/InfiniteLoading';
 import PropTypes from '../../../../lib/PropTypes';
+
 
 @inject('api')
 @observer
@@ -24,21 +26,38 @@ export default class AudioSelectionWorkspace extends Component {
     const { api } = props;
     this.state = {
       scope: api.constructor.ASSET_SCOPES.LIBRARY,
-      hasMore: true,
-      elements: [],
-      query: '',
+      [api.constructor.ASSET_SCOPES.LIBRARY]: {
+        hasMore: true,
+        elements: [],
+        query: '',
+      },
+      [api.constructor.ASSET_SCOPES.UPLOADS]: {
+        hasMore: true,
+        elements: [],
+        query: '',
+      },
     };
   }
 
   onSearch = async (query) => {
-    this.setState({ elements: [], hasMore: false });
     const { api } = this.props;
     const { scope } = this.state;
-    const newElements = await api.assets(scope, api.constructor.ASSET_TYPES.AUDIOS, 0, query);
     this.setState({
-      elements: newElements,
-      hasMore: newElements.length > 0,
-      query,
+      [scope]: {
+        elements: [],
+        hasMore: false,
+        query,
+      },
+    });
+    const newElements = await api.assets(scope, api.constructor.ASSET_TYPES.AUDIOS, 0, query);
+    runInAction(() => {
+      this.setState({
+        [scope]: {
+          elements: newElements,
+          hasMore: newElements.length > 0,
+          query,
+        },
+      });
     });
   };
 
