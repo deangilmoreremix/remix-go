@@ -84,20 +84,20 @@ export default class AudioSelectionWorkspace extends Component {
       ];
     return (
       <Fragment>
-        {/*<ButtonGroup className="go-switch flex-center">*/}
-          {/*<Button*/}
-            {/*onClick={() => this.onScopeChange(api.constructor.ASSET_SCOPES.LIBRARY)}*/}
-            {/*active={scope === api.constructor.ASSET_SCOPES.LIBRARY}*/}
-          {/*>*/}
-            {/*Library*/}
-          {/*</Button>*/}
-          {/*<Button*/}
-            {/*onClick={() => this.onScopeChange(api.constructor.ASSET_SCOPES.UPLOADS)}*/}
-            {/*active={scope === api.constructor.ASSET_SCOPES.UPLOADS}*/}
-          {/*>*/}
-            {/*Uploads*/}
-          {/*</Button>*/}
-        {/*</ButtonGroup>*/}
+        <ButtonGroup className="go-switch flex-center">
+          <Button
+            onClick={() => this.onScopeChange(api.constructor.ASSET_SCOPES.LIBRARY)}
+            active={scope === api.constructor.ASSET_SCOPES.LIBRARY}
+          >
+            Library
+          </Button>
+          <Button
+            onClick={() => this.onScopeChange(api.constructor.ASSET_SCOPES.UPLOADS)}
+            active={scope === api.constructor.ASSET_SCOPES.UPLOADS}
+          >
+            Uploads
+          </Button>
+        </ButtonGroup>
         <Search
           onSearch={q => this.onSearch(q)}
         />
