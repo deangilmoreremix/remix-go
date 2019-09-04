@@ -1,7 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import { Button, ButtonGroup } from 'reactstrap';
 import { inject, observer } from 'mobx-react';
-import { runInAction } from 'mobx';
 
 import AudioGallery from 'react-masonry-infinite';
 
@@ -25,46 +24,32 @@ export default class AudioSelectionWorkspace extends Component {
     const { api } = props;
     this.state = {
       scope: api.constructor.ASSET_SCOPES.LIBRARY,
-      [api.constructor.ASSET_SCOPES.LIBRARY]: {
-        hasMore: true,
-        elements: [],
-        query: '',
-      },
-      [api.constructor.ASSET_SCOPES.UPLOADS]: {
-        hasMore: true,
-        elements: [],
-        query: '',
-      },
+      hasMore: true,
+      elements: [],
+      query: '',
     };
   }
 
   onSearch = async (query) => {
-    // this.setState({ elements: [], hasMore: false });
+    this.setState({ elements: [], hasMore: false });
     const { api } = this.props;
     const { scope } = this.state;
-    this.setState({
-      [scope]: {
-        elements: [],
-        hasMore: false,
-        query,
-      },
-    });
     const newElements = await api.assets(scope, api.constructor.ASSET_TYPES.AUDIOS, 0, query);
-    runInAction(() => {
-      this.setState({
-        [scope]: {
-          elements: newElements,
-          hasMore: newElements.length > 0,
-          query,
-        },
-      });
+    this.setState({
+      elements: newElements,
+      hasMore: newElements.length > 0,
+      query,
     });
   };
 
   onScopeChange = async (scope) => {
-    if (scope !== this.state.scope) {
-      this.setState({ scope });
-    }
+    this.state = {
+      scope,
+      elements: [],
+      hasMore: true,
+      query: '',
+    };
+    await this.loadMore();
   };
 
   loadMore = async () => {
@@ -83,7 +68,6 @@ export default class AudioSelectionWorkspace extends Component {
   render() {
     const { api, className, inWindow = false, onAudioSelected } = this.props;
     const { scope, hasMore, elements } = this.state;
-    console.log('this  ', this );
 
     const sizes = inWindow ?
       [
@@ -137,26 +121,7 @@ export default class AudioSelectionWorkspace extends Component {
             ))
           }
         </AudioGallery>}
-        {scope === api.constructor.ASSET_SCOPES.UPLOADS && <AudioGallery
-          useWindow={!inWindow}
-          className={`media-gallery ${className}`}
-          hasMore={hasMore}
-          loader={<InfiniteLoading key="loader" />}
-          loadMore={this.loadMore}
-          sizes={sizes}
-        >
-          {
-            elements.map(({ title, url, artwork }, idx) => (
-              <AudioGridItem
-                key={idx}
-                title={title}
-                url={url}
-                artwork={artwork}
-                onUse={audio => onAudioSelected(audio)}
-              />
-            ))
-          }
-        </AudioGallery>}
+        {scope === api.constructor.ASSET_SCOPES.UPLOADS && console.log('api',api)}
       </Fragment>);
   }
 }
