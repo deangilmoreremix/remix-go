@@ -43,13 +43,13 @@ export default class AudioSelectionWorkspace extends Component {
     const { scope } = this.state;
     await this.loadMore();
     const newElements = await api.assets(scope, api.constructor.ASSET_TYPES.AUDIOS, 0, query);
-      this.setState({
-        [scope]: {
-          elements: newElements,
-          hasMore: newElements.length === api.perPage,
-          query,
-        },
-      });
+    this.setState({
+      [scope]: {
+        elements: newElements,
+        hasMore: newElements.length === api.perPage,
+        query,
+      },
+    });
   };
 
   onScopeChange = async (scope) => {
