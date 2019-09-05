@@ -1,7 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import { Button, ButtonGroup } from 'reactstrap';
 import { inject, observer } from 'mobx-react';
-import { runInAction } from 'mobx';
 
 import AudioGallery from 'react-masonry-infinite';
 
@@ -42,23 +41,15 @@ export default class AudioSelectionWorkspace extends Component {
   onSearch = async (query) => {
     const { api } = this.props;
     const { scope } = this.state;
-    this.setState({
-      [scope]: {
-        elements: [],
-        hasMore: false,
-        query,
-      },
-    });
+    await this.loadMore();
     const newElements = await api.assets(scope, api.constructor.ASSET_TYPES.AUDIOS, 0, query);
-    runInAction(() => {
       this.setState({
         [scope]: {
           elements: newElements,
-          hasMore: newElements.length > 0,
+          hasMore: newElements.length === api.perPage,
           query,
         },
       });
-    });
   };
 
   onScopeChange = async (scope) => {
@@ -78,7 +69,7 @@ export default class AudioSelectionWorkspace extends Component {
       [scope]: {
         query,
         elements: elements.concat(newElements),
-        hasMore: newElements.length > 0,
+        hasMore: newElements.length === api.perPage,
       },
     });
   };
@@ -120,27 +111,7 @@ export default class AudioSelectionWorkspace extends Component {
         <Search
           onSearch={q => this.onSearch(q)}
         />
-        {scope === api.constructor.ASSET_SCOPES.LIBRARY && <AudioGallery
-          useWindow={!inWindow}
-          className={`media-gallery ${className}`}
-          hasMore={hasMore}
-          loader={<InfiniteLoading key="loader" />}
-          loadMore={this.loadMore}
-          sizes={sizes}
-        >
-          {
-            elements.map(({ title, url, artwork }, idx) => (
-              <AudioGridItem
-                key={idx}
-                title={title}
-                url={url}
-                artwork={artwork}
-                onUse={audio => onAudioSelected(audio)}
-              />
-            ))
-          }
-        </AudioGallery>}
-        {scope === api.constructor.ASSET_SCOPES.UPLOADS && <AudioGallery
+        {scope && <AudioGallery
           useWindow={!inWindow}
           className={`media-gallery ${className}`}
           hasMore={hasMore}
