@@ -49,13 +49,7 @@ export default class AudioSelectionWorkspace extends Component {
       },
     });
     const newElements = await api.assets(scope, api.constructor.ASSET_TYPES.AUDIOS, 0, query);
-    this.setState({
-      [scope]: {
-        elements: newElements,
-        hasMore: newElements.length === api.perPage,
-        query,
-      },
-    });
+    await this.loadMore({ newElements, query });
   };
 
   onScopeChange = async (scope) => {
@@ -65,9 +59,14 @@ export default class AudioSelectionWorkspace extends Component {
   };
 
   loadMore = async () => {
-    const { api } = this.props;
     const { scope } = this.state;
     const { elements, query } = this.state[scope];
+    await this.loadAudio({ elements, query });
+  };
+
+  loadAudio = async ({ elements, query }) => {
+    const { api } = this.props;
+    const { scope } = this.state;
     const newElements = await api.assets(
       scope, api.constructor.ASSET_TYPES.AUDIOS, elements.length, query,
     );
