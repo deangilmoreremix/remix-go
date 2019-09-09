@@ -39,17 +39,13 @@ export default class AudioSelectionWorkspace extends Component {
   }
 
   onSearch = async (query) => {
-    const { api } = this.props;
     const { scope } = this.state;
     this.setState({
       [scope]: {
         elements: [],
-        hasMore: false,
-        query,
       },
     });
-    const newElements = await api.assets(scope, api.constructor.ASSET_TYPES.AUDIOS, 0, query);
-    await this.loadMore({ newElements, query });
+    await this.loadAudio({ elements: [], query });
   };
 
   onScopeChange = async (scope) => {
@@ -116,16 +112,16 @@ export default class AudioSelectionWorkspace extends Component {
         <Search
           onSearch={q => this.onSearch(q)}
         />
-        {scope && <AudioGallery
+        <AudioGallery
           useWindow={!inWindow}
           className={`media-gallery ${className}`}
           hasMore={hasMore}
-          loader={<InfiniteLoading key="loader" />}
+          loader={<InfiniteLoading key="loader"/>}
           loadMore={this.loadMore}
           sizes={sizes}
         >
           {
-            elements.map(({ title, url, artwork }, idx) => (
+            elements.map(({title, url, artwork}, idx) => (
               <AudioGridItem
                 key={idx}
                 title={title}
@@ -135,7 +131,7 @@ export default class AudioSelectionWorkspace extends Component {
               />
             ))
           }
-        </AudioGallery>}
+        </AudioGallery>
       </Fragment>);
   }
 }
