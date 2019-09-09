@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import { ButtonGroup, Button } from 'reactstrap';
+import { observer, inject } from 'mobx-react';
 import { observable, runInAction } from 'mobx';
-import { inject, observer } from 'mobx-react';
 
 import {
   PopupboxManager,
@@ -13,8 +13,10 @@ import Search from '../../../common/Search';
 import VideoGridItem from './gridItems/VideoGridItem';
 import InfiniteLoading from '../../../common/InfiniteLoading';
 import PropTypes from '../../../../lib/PropTypes';
+import Project from '../../../../lib/editor/Project';
 
 @inject('api')
+@inject('store')
 @observer
 export default class VideoSelectionWorkspace extends Component {
   static propTypes = {
@@ -60,8 +62,11 @@ export default class VideoSelectionWorkspace extends Component {
     });
   };
 
-  @observable
-  currentPlayback = null;
+  onRename = (item, newName) => {
+    console.log('newName', newName)
+    const { store } = this.props;
+    return store.renameProject(item, newName);
+  };
 
   onSearch = async (query) => {
     const { api } = this.props;
@@ -90,6 +95,9 @@ export default class VideoSelectionWorkspace extends Component {
       this.setState({ scope });
     }
   };
+
+  @observable
+  currentPlayback = null;
 
   loadMore = async () => {
     const { api } = this.props;
@@ -154,12 +162,12 @@ export default class VideoSelectionWorkspace extends Component {
           sizes={sizes}
         >
           {
-            elements.map(({ title, url, preview }, idx) => (
+            elements.map((item, idx) => (
               <VideoGridItem
                 key={idx}
-                title={title}
-                url={url}
-                preview={preview}
+                title={item.title}
+                url={item.url}
+                preview={item.preview}
                 onPreview={this.onPreview}
                 onUse={video => onVideoSelected(video)}
               />
@@ -175,14 +183,15 @@ export default class VideoSelectionWorkspace extends Component {
           sizes={sizes}
         >
           {
-            elements.map(({ title, url, preview }, idx) => (
+            elements.map((item, idx) => (
               <VideoGridItem
                 key={idx}
-                title={title}
-                url={url}
-                preview={preview}
+                title={item.title}
+                url={item.url}
+                preview={item.preview}
                 onPreview={this.onPreview}
                 onUse={video => onVideoSelected(video)}
+                onRename={name => this.onRename(item, name)}
               />
             ))
           }
