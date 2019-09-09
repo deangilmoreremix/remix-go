@@ -116,12 +116,12 @@ export default class AudioSelectionWorkspace extends Component {
           useWindow={!inWindow}
           className={`media-gallery ${className}`}
           hasMore={hasMore}
-          loader={<InfiniteLoading key="loader"/>}
+          loader={<InfiniteLoading key="loader" />}
           loadMore={this.loadMore}
           sizes={sizes}
         >
           {
-            elements.map(({title, url, artwork}, idx) => (
+            elements.map(({ title, url, artwork }, idx) => (
               <AudioGridItem
                 key={idx}
                 title={title}
