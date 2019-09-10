@@ -111,17 +111,6 @@ class Store {
     );
   }
 
-  async renameProject(item, name) {
-    console.log('item', item);
-    await this.request(
-      `/api/users/me/makes/`, {
-        method: 'PATCH',
-        body: { title: name },
-      });
-    item.title = name;
-    return item;
-  }
-
   async refreshToken() {
     const existingRefreshToken = this.getCookies(AUTH_DATA_CONFIG.refreshToken);
     if (!existingRefreshToken) {

@@ -221,6 +221,17 @@ class Api {
   }
 
   @action
+  async renameProject(item, name) {
+    await this.request(
+      '/api/users/me/media-assets/:_id', {
+        method: 'PATCH',
+        body: { title: name },
+      });
+    item.title = name;
+    return item;
+  }
+
+  @action
   async publish(project) {
     this.isLoading = true;
     try {
