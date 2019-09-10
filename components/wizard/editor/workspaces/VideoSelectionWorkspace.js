@@ -13,6 +13,7 @@ import Search from '../../../common/Search';
 import VideoGridItem from './gridItems/VideoGridItem';
 import InfiniteLoading from '../../../common/InfiniteLoading';
 import PropTypes from '../../../../lib/PropTypes';
+import VideoGridItemUploads from './gridItems/VideoGridItemUploads';
 
 
 @inject('api')
@@ -62,9 +63,8 @@ export default class VideoSelectionWorkspace extends Component {
   };
 
   onRename = (item, newName) => {
-    console.log('newName', newName)
     const { api } = this.props;
-    return api.renameProject(item, newName);
+    return api.renameUploads(item, newName);
   };
 
   onSearch = async (query) => {
@@ -162,13 +162,14 @@ export default class VideoSelectionWorkspace extends Component {
         >
           {
             elements.map((item, idx) => (
-              <VideoGridItem
+              <VideoGridItemUploads
                 key={idx}
                 title={item.title}
                 url={item.url}
                 preview={item.preview}
                 onPreview={this.onPreview}
                 onUse={video => onVideoSelected(video)}
+                onRename={name => this.onRename(item, name)}
               />
             ))
           }
@@ -190,7 +191,6 @@ export default class VideoSelectionWorkspace extends Component {
                 preview={item.preview}
                 onPreview={this.onPreview}
                 onUse={video => onVideoSelected(video)}
-                onRename={name => this.onRename(item, name)}
               />
             ))
           }
