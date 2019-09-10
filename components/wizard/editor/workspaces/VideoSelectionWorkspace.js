@@ -13,10 +13,9 @@ import Search from '../../../common/Search';
 import VideoGridItem from './gridItems/VideoGridItem';
 import InfiniteLoading from '../../../common/InfiniteLoading';
 import PropTypes from '../../../../lib/PropTypes';
-import Project from '../../../../lib/editor/Project';
+
 
 @inject('api')
-@inject('store')
 @observer
 export default class VideoSelectionWorkspace extends Component {
   static propTypes = {
@@ -64,8 +63,8 @@ export default class VideoSelectionWorkspace extends Component {
 
   onRename = (item, newName) => {
     console.log('newName', newName)
-    const { store } = this.props;
-    return store.renameProject(item, newName);
+    const { api } = this.props;
+    return api.renameProject(item, newName);
   };
 
   onSearch = async (query) => {
