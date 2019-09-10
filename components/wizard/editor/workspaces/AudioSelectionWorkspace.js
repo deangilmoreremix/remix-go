@@ -6,6 +6,7 @@ import AudioGallery from 'react-masonry-infinite';
 
 import Search from '../../../common/Search';
 import AudioGridItem from './gridItems/AudioGridItem';
+import AudioGridItemUploads from './gridItems/AudioGridItemUploads';
 import InfiniteLoading from '../../../common/InfiniteLoading';
 import PropTypes from '../../../../lib/PropTypes';
 
@@ -75,6 +76,11 @@ export default class AudioSelectionWorkspace extends Component {
     });
   };
 
+  onRename = (item, newName) => {
+    const { api } = this.props;
+    return api.renameUploads(item, newName);
+  };
+
   render() {
     const { api, className, inWindow = false, onAudioSelected } = this.props;
     const { scope } = this.state;
@@ -112,7 +118,7 @@ export default class AudioSelectionWorkspace extends Component {
         <Search
           onSearch={q => this.onSearch(q)}
         />
-        <AudioGallery
+        { scope === api.constructor.ASSET_SCOPES.LIBRARY &&<AudioGallery
           useWindow={!inWindow}
           className={`media-gallery ${className}`}
           hasMore={hasMore}
@@ -121,17 +127,38 @@ export default class AudioSelectionWorkspace extends Component {
           sizes={sizes}
         >
           {
-            elements.map(({ title, url, artwork }, idx) => (
+            elements.map((item, idx) => (
               <AudioGridItem
                 key={idx}
-                title={title}
-                url={url}
-                artwork={artwork}
+                title={item.title}
+                url={item.url}
+                artwork={item.artwork}
                 onUse={audio => onAudioSelected(audio)}
               />
             ))
           }
-        </AudioGallery>
+        </AudioGallery>}
+        { scope === api.constructor.ASSET_SCOPES.UPLOADS &&<AudioGallery
+          useWindow={!inWindow}
+          className={`media-gallery ${className}`}
+          hasMore={hasMore}
+          loader={<InfiniteLoading key="loader" />}
+          loadMore={this.loadMore}
+          sizes={sizes}
+          >
+          {
+            elements.map((item, idx) => (
+              <AudioGridItemUploads
+                key={idx}
+                title={item.title}
+                url={item.url}
+                artwork={item.artwork}
+                onUse={audio => onAudioSelected(audio)}
+                onRename={name => this.onRename(item, name)}
+              />
+            ))
+          }
+          </AudioGallery>}
       </Fragment>);
   }
 }
