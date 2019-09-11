@@ -1,16 +1,22 @@
 import React, { Component } from 'react';
 import { observer, inject } from 'mobx-react';
-import PropTypes from '../../../../../lib/PropTypes';
 
+import PropTypes from '../../../../../lib/PropTypes';
 import { showError, showInfo } from '../../../../../services/alertService';
 import { required } from '../../../../../lib/validators';
 import VideoGridItem from './VideoGridItem';
+import AudioGridItem from './AudioGridItem';
+
 
 const validateTitle = value => required()(value);
+const ElementTypes = {
+  audio: AudioGridItem,
+  video: VideoGridItem,
+};
 
 @inject('api')
 @observer
-export default class VideoGridItemUploads extends Component {
+export default class GridItemUploads extends Component {
   static propTypes = {
     title: PropTypes.string.isRequired,
     url: PropTypes.string.isRequired,
@@ -18,6 +24,7 @@ export default class VideoGridItemUploads extends Component {
     onPreview: PropTypes.func.isRequired,
     onUse: PropTypes.func.isRequired,
     onRename: PropTypes.func.isRequired,
+    kind: PropTypes.string.isRequired,
   };
 
   constructor(props){
@@ -26,6 +33,7 @@ export default class VideoGridItemUploads extends Component {
     const { title } = this.props;
     this.state = {
       isNameEdit: false,
+      isLoading: false,
       title,
     };
   }
@@ -36,13 +44,13 @@ export default class VideoGridItemUploads extends Component {
 
   onEditLeave = () => {
     this.setState({ isNameEdit: false });
-    return this.onVideoRename();
+    return this.onUploadRename();
   };
 
-  onVideoRename = async () => {
+  onUploadRename = async () => {
     const {
       state: { title: newTitle, isLoading },
-      props: { onRename, title: oldTitle },
+      props: { onRename, title: oldTitle, kind },
     } = this;
     if (isLoading) {
       return;
@@ -51,7 +59,7 @@ export default class VideoGridItemUploads extends Component {
       if (newTitle !== oldTitle && required(newTitle)) {
         this.setState({ isLoading: true });
         try {
-          const confirmMessage = `Your video name '${newTitle}' saved successfully.`;
+          const confirmMessage = `Your ${kind} name '${newTitle}' saved successfully.`;
           await onRename(newTitle);
           showInfo(confirmMessage, 'Success');
         } catch (err) {
@@ -62,7 +70,7 @@ export default class VideoGridItemUploads extends Component {
         }
       }
     } else {
-      showError('Video title cannot be empty.');
+      showError(`${kind} title cannot be empty.`);
       this.setState({ title: oldTitle });
     }
   };
@@ -73,9 +81,14 @@ export default class VideoGridItemUploads extends Component {
 
   render() {
     const { isNameEdit, isLoading, title } = this.state;
+    const { kind } = this.props;
     return (
-      <div className="card video-item">
-        <VideoGridItem {...this.props} title={title} />
+      <div className={`${kind === 'video' ? 'card video-item' : 'card'}`}>
+        {ElementTypes[kind] === 'video' ?
+          (<VideoGridItem {...this.props} title={title} />)
+          :
+          (<AudioGridItem {...this.props} title={title} />)
+        }
         <p className="tile-head">
           <input
             type="text"
@@ -89,7 +102,7 @@ export default class VideoGridItemUploads extends Component {
           && (
             <button
               className={`rename-button fa ${isLoading ? 'fa-spinner fa-spin' : 'fa-check'}`}
-              onClick={this.onVideoRename}
+              onClick={this.onUploadRename}
             />
           )
           }

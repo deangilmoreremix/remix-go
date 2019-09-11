@@ -9,11 +9,11 @@ import {
 
 import VideoGallery from 'react-masonry-infinite';
 
+import PropTypes from '../../../../lib/PropTypes';
+import InfiniteLoading from '../../../common/InfiniteLoading';
 import Search from '../../../common/Search';
 import VideoGridItem from './gridItems/VideoGridItem';
-import InfiniteLoading from '../../../common/InfiniteLoading';
-import PropTypes from '../../../../lib/PropTypes';
-import VideoGridItemUploads from './gridItems/VideoGridItemUploads';
+import GridItemUploads from './gridItems/GridItemUploads';
 
 
 @inject('api')
@@ -62,9 +62,9 @@ export default class VideoSelectionWorkspace extends Component {
     });
   };
 
-  onRename = (item, newName) => {
+  onRename = item => (name) => {
     const { api } = this.props;
-    return api.renameUploads(item, newName);
+    return api.renameUploads(item, name);
   };
 
   onSearch = async (query) => {
@@ -162,14 +162,15 @@ export default class VideoSelectionWorkspace extends Component {
         >
           {
             elements.map((item, idx) => (
-              <VideoGridItemUploads
+              <GridItemUploads
+                kind="video"
                 key={idx}
                 title={item.title}
                 url={item.url}
                 preview={item.preview}
                 onPreview={this.onPreview}
-                onUse={video => onVideoSelected(video)}
-                onRename={name => this.onRename(item, name)}
+                onUse={onVideoSelected}
+                onRename={this.onRename(item)}
               />
             ))
           }
@@ -190,7 +191,7 @@ export default class VideoSelectionWorkspace extends Component {
                 url={item.url}
                 preview={item.preview}
                 onPreview={this.onPreview}
-                onUse={video => onVideoSelected(video)}
+                onUse={onVideoSelected}
               />
             ))
           }

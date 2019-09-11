@@ -224,7 +224,7 @@ class Api {
   async renameUploads(item, name) {
     const { _id } = item;
     await this.request(
-      `/api/users/me/media-assets${_id ? `/${_id}` : ''}`, {
+      `/api/users/me/media-assets/${_id}`, {
         method: 'PATCH',
         body: { title: name },
         headers: {
@@ -232,7 +232,6 @@ class Api {
         },
       });
     item.title = name;
-    return item;
   }
 
   @action

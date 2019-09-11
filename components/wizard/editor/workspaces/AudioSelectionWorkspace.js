@@ -4,11 +4,11 @@ import { inject, observer } from 'mobx-react';
 
 import AudioGallery from 'react-masonry-infinite';
 
+import PropTypes from '../../../../lib/PropTypes';
+import InfiniteLoading from '../../../common/InfiniteLoading';
 import Search from '../../../common/Search';
 import AudioGridItem from './gridItems/AudioGridItem';
-import AudioGridItemUploads from './gridItems/AudioGridItemUploads';
-import InfiniteLoading from '../../../common/InfiniteLoading';
-import PropTypes from '../../../../lib/PropTypes';
+import GridItemUploads from './gridItems/GridItemUploads';
 
 
 @inject('api')
@@ -76,9 +76,9 @@ export default class AudioSelectionWorkspace extends Component {
     });
   };
 
-  onRename = (item, newName) => {
+  onRename = item => (name) => {
     const { api } = this.props;
-    return api.renameUploads(item, newName);
+    return api.renameUploads(item, name);
   };
 
   render() {
@@ -118,7 +118,7 @@ export default class AudioSelectionWorkspace extends Component {
         <Search
           onSearch={q => this.onSearch(q)}
         />
-        { scope === api.constructor.ASSET_SCOPES.LIBRARY &&<AudioGallery
+        { scope === api.constructor.ASSET_SCOPES.LIBRARY && <AudioGallery
           useWindow={!inWindow}
           className={`media-gallery ${className}`}
           hasMore={hasMore}
@@ -138,7 +138,7 @@ export default class AudioSelectionWorkspace extends Component {
             ))
           }
         </AudioGallery>}
-        { scope === api.constructor.ASSET_SCOPES.UPLOADS &&<AudioGallery
+        { scope === api.constructor.ASSET_SCOPES.UPLOADS && <AudioGallery
           useWindow={!inWindow}
           className={`media-gallery ${className}`}
           hasMore={hasMore}
@@ -148,13 +148,15 @@ export default class AudioSelectionWorkspace extends Component {
           >
           {
             elements.map((item, idx) => (
-              <AudioGridItemUploads
+              <GridItemUploads
+                {...this.props}
+                kind="audio"
                 key={idx}
                 title={item.title}
                 url={item.url}
                 artwork={item.artwork}
-                onUse={audio => onAudioSelected(audio)}
-                onRename={name => this.onRename(item, name)}
+                onUse={onAudioSelected}
+                onRename={this.onRename(item)}
               />
             ))
           }
