@@ -118,7 +118,7 @@ export default class AudioSelectionWorkspace extends Component {
         <Search
           onSearch={q => this.onSearch(q)}
         />
-        { scope === api.constructor.ASSET_SCOPES.LIBRARY && <AudioGallery
+        {scope === api.constructor.ASSET_SCOPES.LIBRARY && <AudioGallery
           useWindow={!inWindow}
           className={`media-gallery ${className}`}
           hasMore={hasMore}
@@ -138,14 +138,14 @@ export default class AudioSelectionWorkspace extends Component {
             ))
           }
         </AudioGallery>}
-        { scope === api.constructor.ASSET_SCOPES.UPLOADS && <AudioGallery
+        {scope === api.constructor.ASSET_SCOPES.UPLOADS && <AudioGallery
           useWindow={!inWindow}
           className={`media-gallery ${className}`}
           hasMore={hasMore}
           loader={<InfiniteLoading key="loader" />}
           loadMore={this.loadMore}
           sizes={sizes}
-          >
+        >
           {
             elements.map((item, idx) => (
               <GridItemUploads
@@ -160,7 +160,7 @@ export default class AudioSelectionWorkspace extends Component {
               />
             ))
           }
-          </AudioGallery>}
+        </AudioGallery>}
       </Fragment>);
   }
 }
