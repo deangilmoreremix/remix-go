@@ -133,7 +133,7 @@ export default class AudioSelectionWorkspace extends Component {
                 title={item.title}
                 url={item.url}
                 artwork={item.artwork}
-                onUse={audio => onAudioSelected(audio)}
+                onUse={onAudioSelected}
               />
             ))
           }
