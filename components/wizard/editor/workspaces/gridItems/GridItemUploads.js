@@ -82,9 +82,10 @@ export default class GridItemUploads extends Component {
   render() {
     const { isNameEdit, isLoading, title } = this.state;
     const { kind } = this.props;
+    const Element = ElementTypes[kind];
     return (
       <div className={`${kind === 'video' ? 'card video-item' : 'card'}`}>
-        {ElementTypes[kind] === 'video' ?
+        {Element ?
           (<VideoGridItem {...this.props} title={title} />)
           :
           (<AudioGridItem {...this.props} title={title} />)

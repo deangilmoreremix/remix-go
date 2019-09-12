@@ -220,7 +220,6 @@ class Api {
     }
   }
 
-  @action
   async renameUploads(item, name) {
     const { _id } = item;
     await this.request(
