@@ -220,7 +220,7 @@ class Api {
     }
   }
 
-  async renameUploads(item, title) {
+  async renameAsset(item, title) {
     const { _id } = item;
     await this.request(
       `/api/users/me/media-assets/${_id}`, {

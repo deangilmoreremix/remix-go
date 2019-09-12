@@ -19,6 +19,7 @@ export default class VideoGridItem extends Component {
       this.previewContainer.parentNode.querySelector('video')[state ? 'play' : 'pause']();
     }
   };
+
   render() {
     const { onPreview, onUse, title, url, preview } = this.props;
     return (

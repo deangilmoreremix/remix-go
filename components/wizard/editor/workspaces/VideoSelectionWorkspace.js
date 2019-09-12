@@ -64,7 +64,7 @@ export default class VideoSelectionWorkspace extends Component {
 
   onRename = item => (titleName) => {
     const { api } = this.props;
-    return api.renameUploads(item, titleName);
+    return api.renameAsset(item, titleName);
   };
 
   onSearch = async (query) => {

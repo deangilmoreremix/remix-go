@@ -78,13 +78,14 @@ export default class AudioSelectionWorkspace extends Component {
 
   onRename = item => (name) => {
     const { api } = this.props;
-    return api.renameUploads(item, name);
+    return api.renameAsset(item, name);
   };
 
   render() {
     const { api, className, inWindow = false, onAudioSelected } = this.props;
     const { scope } = this.state;
     const { hasMore, elements } = this.state[scope];
+    const GridItemElement = (scope === api.constructor.ASSET_SCOPES.UPLOADS ? GridItemUploads : AudioGridItem);
 
     const sizes = inWindow ?
       [
@@ -118,7 +119,7 @@ export default class AudioSelectionWorkspace extends Component {
         <Search
           onSearch={q => this.onSearch(q)}
         />
-        {scope === api.constructor.ASSET_SCOPES.LIBRARY && <AudioGallery
+        <AudioGallery
           useWindow={!inWindow}
           className={`media-gallery ${className}`}
           hasMore={hasMore}
@@ -128,28 +129,7 @@ export default class AudioSelectionWorkspace extends Component {
         >
           {
             elements.map((item, idx) => (
-              <AudioGridItem
-                key={idx}
-                title={item.title}
-                url={item.url}
-                artwork={item.artwork}
-                onUse={onAudioSelected}
-              />
-            ))
-          }
-        </AudioGallery>}
-        {scope === api.constructor.ASSET_SCOPES.UPLOADS && <AudioGallery
-          useWindow={!inWindow}
-          className={`media-gallery ${className}`}
-          hasMore={hasMore}
-          loader={<InfiniteLoading key="loader" />}
-          loadMore={this.loadMore}
-          sizes={sizes}
-        >
-          {
-            elements.map((item, idx) => (
-              <GridItemUploads
-                {...this.props}
+              <GridItemElement
                 kind="audio"
                 key={idx}
                 title={item.title}
@@ -160,7 +140,7 @@ export default class AudioSelectionWorkspace extends Component {
               />
             ))
           }
-        </AudioGallery>}
+        </AudioGallery>
       </Fragment>);
   }
 }
