@@ -220,17 +220,17 @@ class Api {
     }
   }
 
-  async renameUploads(item, name) {
+  async renameUploads(item, titleName) {
     const { _id } = item;
     await this.request(
       `/api/users/me/media-assets/${_id}`, {
         method: 'PATCH',
-        body: { title: name },
+        body: { title: titleName },
         headers: {
           'on-behalf': this.currentUser.id,
         },
       });
-    item.title = name;
+    item.title = titleName;
   }
 
   @action
