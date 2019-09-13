@@ -48,6 +48,12 @@ export default class GridItem extends Component {
     return this.onUploadRename();
   };
 
+  onKeyPress = (event) => {
+    if (event.key === 'Enter') {
+      this.onUploadRename();
+    }
+  };
+
   onUploadRename = async () => {
     const {
       state: { title: newTitle, isLoading },
@@ -95,6 +101,7 @@ export default class GridItem extends Component {
             onChange={this.handleChange}
             onFocus={this.onFocusInputChange}
             onBlur={this.onEditLeave}
+            onKeyPress={this.onKeyPress}
             value={title}
           />
           {(isNameEdit || isLoading)
