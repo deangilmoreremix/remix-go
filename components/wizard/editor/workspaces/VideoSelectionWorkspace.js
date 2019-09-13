@@ -12,8 +12,7 @@ import VideoGallery from 'react-masonry-infinite';
 import PropTypes from '../../../../lib/PropTypes';
 import InfiniteLoading from '../../../common/InfiniteLoading';
 import Search from '../../../common/Search';
-import VideoGridItem from './gridItems/VideoGridItem';
-import GridItemUploads from './gridItems/GridItemUploads';
+import GridItem from './gridItems/GridItem';
 
 
 @inject('api')
@@ -152,7 +151,7 @@ export default class VideoSelectionWorkspace extends Component {
         <Search
           onSearch={q => this.onSearch(q)}
         />
-        {scope === api.constructor.ASSET_SCOPES.UPLOADS && <VideoGallery
+        <VideoGallery
           useWindow={!inWindow}
           className={`media-gallery ${className}`}
           hasMore={hasMore}
@@ -162,7 +161,8 @@ export default class VideoSelectionWorkspace extends Component {
         >
           {
             elements.map((item, idx) => (
-              <GridItemUploads
+              <GridItem
+                scope={scope}
                 kind="video"
                 key={idx}
                 title={item.title}
@@ -174,28 +174,7 @@ export default class VideoSelectionWorkspace extends Component {
               />
             ))
           }
-        </VideoGallery>}
-        {scope === api.constructor.ASSET_SCOPES.LIBRARY && <VideoGallery
-          useWindow={!inWindow}
-          className={`media-gallery ${className}`}
-          hasMore={hasMore}
-          loader={<InfiniteLoading key="loader" />}
-          loadMore={this.loadMore}
-          sizes={sizes}
-        >
-          {
-            elements.map((item, idx) => (
-              <VideoGridItem
-                key={idx}
-                title={item.title}
-                url={item.url}
-                preview={item.preview}
-                onPreview={this.onPreview}
-                onUse={onVideoSelected}
-              />
-            ))
-          }
-        </VideoGallery>}
+        </VideoGallery>
       </Fragment>
     );
   }

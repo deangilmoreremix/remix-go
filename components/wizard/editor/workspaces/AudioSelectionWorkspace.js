@@ -7,8 +7,7 @@ import AudioGallery from 'react-masonry-infinite';
 import PropTypes from '../../../../lib/PropTypes';
 import InfiniteLoading from '../../../common/InfiniteLoading';
 import Search from '../../../common/Search';
-import AudioGridItem from './gridItems/AudioGridItem';
-import GridItemUploads from './gridItems/GridItemUploads';
+import GridItem from './gridItems/GridItem';
 
 
 @inject('api')
@@ -55,10 +54,9 @@ export default class AudioSelectionWorkspace extends Component {
     }
   };
 
-  loadMore = async () => {
-    const { scope } = this.state;
-    const { elements, query } = this.state[scope];
-    await this.loadAudio({ elements, query });
+  onRename = item => (name) => {
+    const { api } = this.props;
+    return api.renameAsset(item, name);
   };
 
   loadAudio = async ({ elements, query }) => {
@@ -76,16 +74,16 @@ export default class AudioSelectionWorkspace extends Component {
     });
   };
 
-  onRename = item => (name) => {
-    const { api } = this.props;
-    return api.renameAsset(item, name);
+  loadMore = async () => {
+    const { scope } = this.state;
+    const { elements, query } = this.state[scope];
+    await this.loadAudio({ elements, query });
   };
 
   render() {
     const { api, className, inWindow = false, onAudioSelected } = this.props;
     const { scope } = this.state;
     const { hasMore, elements } = this.state[scope];
-    const GridItemElement = (scope === api.constructor.ASSET_SCOPES.UPLOADS ? GridItemUploads : AudioGridItem);
 
     const sizes = inWindow ?
       [
@@ -129,7 +127,9 @@ export default class AudioSelectionWorkspace extends Component {
         >
           {
             elements.map((item, idx) => (
-              <GridItemElement
+              <GridItem
+                {...this.props}
+                scope={scope}
                 kind="audio"
                 key={idx}
                 title={item.title}

@@ -16,7 +16,7 @@ const ElementTypes = {
 
 @inject('api')
 @observer
-export default class GridItemUploads extends Component {
+export default class GridItem extends Component {
   static propTypes = {
     title: PropTypes.string.isRequired,
     url: PropTypes.string.isRequired,
@@ -25,6 +25,7 @@ export default class GridItemUploads extends Component {
     onUse: PropTypes.func.isRequired,
     onRename: PropTypes.func.isRequired,
     kind: PropTypes.string.isRequired,
+    scope: PropTypes.string.isRequired,
   };
 
   constructor(props){
@@ -81,11 +82,12 @@ export default class GridItemUploads extends Component {
 
   render() {
     const { isNameEdit, isLoading, title } = this.state;
-    const { kind } = this.props;
+    const { kind, scope, api } = this.props;
     const Element = ElementTypes[kind];
     return (
-      <div className={`${kind === 'video' ? 'card video-item' : 'card'}`}>
+      <div className="card">
         <Element {...this.props} title={title} />
+        {scope === api.constructor.ASSET_SCOPES.UPLOADS &&
         <p className="tile-head">
           <input
             type="text"
@@ -103,7 +105,7 @@ export default class GridItemUploads extends Component {
             />
           )
           }
-        </p>
+        </p>}
       </div>
     );
   }
