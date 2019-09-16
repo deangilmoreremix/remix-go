@@ -7,11 +7,14 @@ import PropTypes from '../../../../../lib/PropTypes';
 @observer
 export default class VideoGridItem extends Component {
   static propTypes = {
-    title: PropTypes.string.isRequired,
-    url: PropTypes.string.isRequired,
-    preview: PropTypes.string.isRequired,
-    onPreview: PropTypes.func.isRequired,
+    item: PropTypes.shape({
+      title: PropTypes.string,
+      url: PropTypes.string.isRequired,
+      preview: PropTypes.string.isRequired,
+    }),
+    onPreview: PropTypes.func,
     onUse: PropTypes.func.isRequired,
+    title: PropTypes.string,
   };
 
   togglePreview = (state) => {
@@ -21,7 +24,7 @@ export default class VideoGridItem extends Component {
   };
 
   render() {
-    const { onPreview, onUse, title, url, preview } = this.props;
+    const { title, onPreview, onUse, item: { url, preview } } = this.props;
     return (
       <div className="card video-item" style={{ backgroundImage: `url(${preview ? '' : '/static/images/editor/default-video-preview.png'})` }}>
         {preview &&

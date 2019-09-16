@@ -84,6 +84,7 @@ export default class AudioSelectionWorkspace extends Component {
     const { api, className, inWindow = false, onAudioSelected } = this.props;
     const { scope } = this.state;
     const { hasMore, elements } = this.state[scope];
+    const allowEdit = (scope === api.constructor.ASSET_SCOPES.UPLOADS);
 
     const sizes = inWindow ?
       [
@@ -128,13 +129,10 @@ export default class AudioSelectionWorkspace extends Component {
           {
             elements.map((item, idx) => (
               <GridItem
-                {...this.props}
-                scope={scope}
+                allowEdit={allowEdit}
                 kind="audio"
                 key={idx}
-                title={item.title}
-                url={item.url}
-                artwork={item.artwork}
+                item={item}
                 onUse={onAudioSelected}
                 onRename={this.onRename(item)}
               />

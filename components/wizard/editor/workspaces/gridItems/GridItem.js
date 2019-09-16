@@ -18,20 +18,23 @@ const ElementTypes = {
 @observer
 export default class GridItem extends Component {
   static propTypes = {
-    title: PropTypes.string.isRequired,
-    url: PropTypes.string.isRequired,
-    preview: PropTypes.string.isRequired,
-    onPreview: PropTypes.func.isRequired,
-    onUse: PropTypes.func.isRequired,
     onRename: PropTypes.func.isRequired,
+    onUse: PropTypes.func.isRequired,
     kind: PropTypes.string.isRequired,
-    scope: PropTypes.string.isRequired,
+    allowEdit: PropTypes.bool.isRequired,
+    onPreview: PropTypes.func,
+    item: PropTypes.shape({
+      title: PropTypes.string,
+      url: PropTypes.string.isRequired,
+      preview: PropTypes.string.isRequired,
+      artwork: PropTypes.string.isRequired,
+    }),
   };
 
-  constructor(props){
+  constructor(props) {
     super(props);
 
-    const { title } = this.props;
+    const { item: { title } } = this.props;
     this.state = {
       isNameEdit: false,
       isLoading: false,
@@ -49,28 +52,28 @@ export default class GridItem extends Component {
   };
 
   onKeyPress = (event) => {
-    if (event.key === 'Enter') {
-      this.onUploadRename();
+    if (event.which === 13) {
+      return this.onUploadRename();
     }
   };
 
   onUploadRename = async () => {
     const {
       state: { title: newTitle, isLoading },
-      props: { onRename, title: oldTitle, kind },
+      props: { onRename, kind, item: { title } },
     } = this;
     if (isLoading) {
       return;
     }
     if (!validateTitle(newTitle)) {
-      if (newTitle !== oldTitle && required(newTitle)) {
+      if (newTitle !== title && required(newTitle)) {
         this.setState({ isLoading: true });
         try {
           const confirmMessage = `Your ${kind} name '${newTitle}' saved successfully.`;
           await onRename(newTitle);
           showInfo(confirmMessage, 'Success');
         } catch (err) {
-          this.setState({ title: oldTitle });
+          this.setState({ title });
           showError(err.message);
         } finally {
           this.setState({ isLoading: false });
@@ -78,7 +81,7 @@ export default class GridItem extends Component {
       }
     } else {
       showError(`${kind} title cannot be empty.`);
-      this.setState({ title: oldTitle });
+      this.setState({ title });
     }
   };
 
@@ -88,12 +91,17 @@ export default class GridItem extends Component {
 
   render() {
     const { isNameEdit, isLoading, title } = this.state;
-    const { kind, scope, api } = this.props;
+    const { kind, item, onUse, onPreview, allowEdit } = this.props;
     const Element = ElementTypes[kind];
     return (
       <div className="card">
-        <Element {...this.props} title={title} />
-        {scope === api.constructor.ASSET_SCOPES.UPLOADS &&
+        <Element
+          item={item}
+          onUse={onUse}
+          onPreview={onPreview}
+          title={title}
+        />
+        {allowEdit &&
         <p className="tile-head">
           <input
             type="text"
