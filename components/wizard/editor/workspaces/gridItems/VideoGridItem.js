@@ -14,7 +14,6 @@ export default class VideoGridItem extends Component {
     }),
     onPreview: PropTypes.func,
     onUse: PropTypes.func.isRequired,
-    title: PropTypes.string,
   };
 
   togglePreview = (state) => {
@@ -24,7 +23,7 @@ export default class VideoGridItem extends Component {
   };
 
   render() {
-    const { title, onPreview, onUse, item: { url, preview } } = this.props;
+    const { onPreview, onUse, item: { url, preview, title } } = this.props;
     return (
       <div className="card video-item" style={{ backgroundImage: `url(${preview ? '' : '/static/images/editor/default-video-preview.png'})` }}>
         {preview &&

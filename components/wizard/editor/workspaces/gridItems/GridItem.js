@@ -4,37 +4,22 @@ import { observer, inject } from 'mobx-react';
 import PropTypes from '../../../../../lib/PropTypes';
 import { showError, showInfo } from '../../../../../services/alertService';
 import { required } from '../../../../../lib/validators';
-import VideoGridItem from './VideoGridItem';
-import AudioGridItem from './AudioGridItem';
 
 
 const validateTitle = value => required()(value);
-const ElementTypes = {
-  audio: AudioGridItem,
-  video: VideoGridItem,
-};
 
 @inject('api')
 @observer
 export default class GridItem extends Component {
   static propTypes = {
     onRename: PropTypes.func.isRequired,
-    onUse: PropTypes.func.isRequired,
-    kind: PropTypes.string.isRequired,
-    allowEdit: PropTypes.bool.isRequired,
-    onPreview: PropTypes.func,
-    item: PropTypes.shape({
-      title: PropTypes.string,
-      url: PropTypes.string.isRequired,
-      preview: PropTypes.string.isRequired,
-      artwork: PropTypes.string.isRequired,
-    }),
+    title: PropTypes.string.isRequired,
   };
 
   constructor(props) {
     super(props);
 
-    const { item: { title } } = this.props;
+    const { title } = this.props;
     this.state = {
       isNameEdit: false,
       isLoading: false,
@@ -48,40 +33,40 @@ export default class GridItem extends Component {
 
   onEditLeave = () => {
     this.setState({ isNameEdit: false });
-    return this.onUploadRename();
+    return this.onRename();
   };
 
   onKeyPress = (event) => {
     if (event.which === 13) {
-      return this.onUploadRename();
+      return this.onRename();
     }
   };
 
-  onUploadRename = async () => {
+  onRename = async () => {
     const {
       state: { title: newTitle, isLoading },
-      props: { onRename, kind, item: { title } },
+      props: { onRename, title: oldTitle },
     } = this;
     if (isLoading) {
       return;
     }
     if (!validateTitle(newTitle)) {
-      if (newTitle !== title && required(newTitle)) {
+      if (newTitle !== oldTitle && required(newTitle)) {
         this.setState({ isLoading: true });
         try {
-          const confirmMessage = `Your ${kind} name '${newTitle}' saved successfully.`;
+          const confirmMessage = `New title name '${newTitle}' saved successfully.`;
           await onRename(newTitle);
           showInfo(confirmMessage, 'Success');
         } catch (err) {
-          this.setState({ title });
+          this.setState({ title: oldTitle });
           showError(err.message);
         } finally {
           this.setState({ isLoading: false });
         }
       }
     } else {
-      showError(`${kind} title cannot be empty.`);
-      this.setState({ title });
+      showError('Title name cannot be empty.');
+      this.setState({ title: oldTitle });
     }
   };
 
@@ -91,17 +76,7 @@ export default class GridItem extends Component {
 
   render() {
     const { isNameEdit, isLoading, title } = this.state;
-    const { kind, item, onUse, onPreview, allowEdit } = this.props;
-    const Element = ElementTypes[kind];
     return (
-      <div className="card">
-        <Element
-          item={item}
-          onUse={onUse}
-          onPreview={onPreview}
-          title={title}
-        />
-        {allowEdit &&
         <p className="tile-head">
           <input
             type="text"
@@ -116,12 +91,11 @@ export default class GridItem extends Component {
           && (
             <button
               className={`rename-button fa ${isLoading ? 'fa-spinner fa-spin' : 'fa-check'}`}
-              onClick={this.onUploadRename}
+              onClick={this.onRename}
             />
           )
           }
-        </p>}
-      </div>
+        </p>
     );
   }
 }

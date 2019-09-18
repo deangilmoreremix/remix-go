@@ -8,6 +8,7 @@ import PropTypes from '../../../../lib/PropTypes';
 import InfiniteLoading from '../../../common/InfiniteLoading';
 import Search from '../../../common/Search';
 import GridItem from './gridItems/GridItem';
+import AudioGridItem from './gridItems/AudioGridItem';
 
 
 @inject('api')
@@ -84,7 +85,7 @@ export default class AudioSelectionWorkspace extends Component {
     const { api, className, inWindow = false, onAudioSelected } = this.props;
     const { scope } = this.state;
     const { hasMore, elements } = this.state[scope];
-    const allowEdit = (scope === api.constructor.ASSET_SCOPES.UPLOADS);
+    const editable = (scope === api.constructor.ASSET_SCOPES.UPLOADS);
 
     const sizes = inWindow ?
       [
@@ -128,16 +129,18 @@ export default class AudioSelectionWorkspace extends Component {
         >
           {
             elements.map((item, idx) => (
-              <GridItem
-                allowEdit={allowEdit}
-                kind="audio"
-                key={idx}
-                item={item}
-                onUse={onAudioSelected}
-                onRename={this.onRename(item)}
-              />
-            ))
-          }
+              <div className="card">
+                <AudioGridItem
+                  key={idx}
+                  item={item}
+                  onUse={onAudioSelected}
+                />
+                {editable &&
+                <GridItem
+                  title={item.title}
+                  onRename={this.onRename(item)}
+                />}
+              </div>))}
         </AudioGallery>
       </Fragment>);
   }

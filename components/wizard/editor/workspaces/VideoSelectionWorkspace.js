@@ -13,6 +13,7 @@ import PropTypes from '../../../../lib/PropTypes';
 import InfiniteLoading from '../../../common/InfiniteLoading';
 import Search from '../../../common/Search';
 import GridItem from './gridItems/GridItem';
+import VideoGridItem from './gridItems/VideoGridItem';
 
 
 @inject('api')
@@ -118,7 +119,7 @@ export default class VideoSelectionWorkspace extends Component {
     const { api, className, inWindow = false, onVideoSelected } = this.props;
     const { scope } = this.state;
     const { hasMore, elements } = this.state[scope];
-    const allowEdit = (scope === api.constructor.ASSET_SCOPES.UPLOADS);
+    const editable = (scope === api.constructor.ASSET_SCOPES.UPLOADS);
 
     const sizes = inWindow ?
       [
@@ -162,17 +163,19 @@ export default class VideoSelectionWorkspace extends Component {
         >
           {
             elements.map((item, idx) => (
-              <GridItem
-                allowEdit={allowEdit}
-                kind="video"
-                key={idx}
-                item={item}
-                onPreview={this.onPreview}
-                onUse={onVideoSelected}
-                onRename={this.onRename(item)}
-              />
-            ))
-          }
+              <div className="card">
+                <VideoGridItem
+                  key={idx}
+                  item={item}
+                  onPreview={this.onPreview}
+                  onUse={onVideoSelected}
+                />
+                {editable &&
+                <GridItem
+                  title={item.title}
+                  onRename={this.onRename(item)}
+                />}
+              </div>))}
         </VideoGallery>
       </Fragment>
     );
