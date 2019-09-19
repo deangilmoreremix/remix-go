@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { observer, inject } from 'mobx-react';
+import { observer } from 'mobx-react';
 
 import PropTypes from '../../../../../lib/PropTypes';
 import { showError, showInfo } from '../../../../../services/alertService';
@@ -8,9 +8,8 @@ import { required } from '../../../../../lib/validators';
 
 const validateTitle = value => required()(value);
 
-@inject('api')
 @observer
-export default class GridItem extends Component {
+export default class InputGridItem extends Component {
   static propTypes = {
     onRename: PropTypes.func.isRequired,
     title: PropTypes.string.isRequired,
@@ -51,10 +50,10 @@ export default class GridItem extends Component {
       return;
     }
     if (!validateTitle(newTitle)) {
-      if (newTitle !== oldTitle && required(newTitle)) {
+      if (newTitle !== oldTitle) {
         this.setState({ isLoading: true });
         try {
-          const confirmMessage = `New title name '${newTitle}' saved successfully.`;
+          const confirmMessage = `The new title '${newTitle}' saved successfully.`;
           await onRename(newTitle);
           showInfo(confirmMessage, 'Success');
         } catch (err) {
@@ -65,7 +64,7 @@ export default class GridItem extends Component {
         }
       }
     } else {
-      showError('Title name cannot be empty.');
+      showError('The title cannot be empty.');
       this.setState({ title: oldTitle });
     }
   };

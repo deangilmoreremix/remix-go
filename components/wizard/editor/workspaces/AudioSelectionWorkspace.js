@@ -7,7 +7,7 @@ import AudioGallery from 'react-masonry-infinite';
 import PropTypes from '../../../../lib/PropTypes';
 import InfiniteLoading from '../../../common/InfiniteLoading';
 import Search from '../../../common/Search';
-import GridItem from './gridItems/GridItem';
+import InputGridItem from './gridItems/InputGridItem';
 import AudioGridItem from './gridItems/AudioGridItem';
 
 
@@ -85,6 +85,7 @@ export default class AudioSelectionWorkspace extends Component {
     const { api, className, inWindow = false, onAudioSelected } = this.props;
     const { scope } = this.state;
     const { hasMore, elements } = this.state[scope];
+    console.log('elements', elements)
     const editable = (scope === api.constructor.ASSET_SCOPES.UPLOADS);
 
     const sizes = inWindow ?
@@ -136,7 +137,7 @@ export default class AudioSelectionWorkspace extends Component {
                   onUse={onAudioSelected}
                 />
                 {editable &&
-                <GridItem
+                <InputGridItem
                   title={item.title}
                   onRename={this.onRename(item)}
                 />}

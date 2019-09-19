@@ -8,7 +8,6 @@ export default class AudioGridItem extends Component {
     item: PropTypes.shape({
       title: PropTypes.string,
       url: PropTypes.string.isRequired,
-      preview: PropTypes.string.isRequired,
       artwork: PropTypes.string,
     }),
     onUse: PropTypes.func.isRequired,
@@ -33,7 +32,7 @@ export default class AudioGridItem extends Component {
   };
 
   render() {
-    const { item: { artwork, url, title }, onUse} = this.props;
+    const { item: { artwork, url, title }, onUse } = this.props;
 
     return (
       <div className="card" style={{ backgroundImage: `url(${artwork || '/static/images/editor/default-artwork.png'})` }}>

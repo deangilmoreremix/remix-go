@@ -12,7 +12,7 @@ import VideoGallery from 'react-masonry-infinite';
 import PropTypes from '../../../../lib/PropTypes';
 import InfiniteLoading from '../../../common/InfiniteLoading';
 import Search from '../../../common/Search';
-import GridItem from './gridItems/GridItem';
+import InputGridItem from './gridItems/InputGridItem';
 import VideoGridItem from './gridItems/VideoGridItem';
 
 
@@ -62,9 +62,9 @@ export default class VideoSelectionWorkspace extends Component {
     });
   };
 
-  onRename = item => (titleName) => {
+  onRename = item => (title) => {
     const { api } = this.props;
-    return api.renameAsset(item, titleName);
+    return api.renameAsset(item, title);
   };
 
   onSearch = async (query) => {
@@ -163,15 +163,17 @@ export default class VideoSelectionWorkspace extends Component {
         >
           {
             elements.map((item, idx) => (
-              <div className="card">
+              <div
+                className="card"
+                key={idx}
+              >
                 <VideoGridItem
-                  key={idx}
                   item={item}
                   onPreview={this.onPreview}
                   onUse={onVideoSelected}
                 />
                 {editable &&
-                <GridItem
+                <InputGridItem
                   title={item.title}
                   onRename={this.onRename(item)}
                 />}
