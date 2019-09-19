@@ -12,7 +12,7 @@ import VideoGallery from 'react-masonry-infinite';
 import PropTypes from '../../../../lib/PropTypes';
 import InfiniteLoading from '../../../common/InfiniteLoading';
 import Search from '../../../common/Search';
-import InputGridItem from './gridItems/InputGridItem';
+import InputField from './gridItems/InputField';
 import VideoGridItem from './gridItems/VideoGridItem';
 
 
@@ -173,7 +173,7 @@ export default class VideoSelectionWorkspace extends Component {
                   onUse={onVideoSelected}
                 />
                 {editable &&
-                <InputGridItem
+                <InputField
                   title={item.title}
                   onRename={this.onRename(item)}
                 />}

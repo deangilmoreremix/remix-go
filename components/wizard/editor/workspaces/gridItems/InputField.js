@@ -9,7 +9,7 @@ import { required } from '../../../../../lib/validators';
 const validateTitle = value => required()(value);
 
 @observer
-export default class InputGridItem extends Component {
+export default class InputField extends Component {
   static propTypes = {
     onRename: PropTypes.func.isRequired,
     title: PropTypes.string.isRequired,

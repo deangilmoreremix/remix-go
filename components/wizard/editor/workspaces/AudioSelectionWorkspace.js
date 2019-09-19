@@ -7,7 +7,7 @@ import AudioGallery from 'react-masonry-infinite';
 import PropTypes from '../../../../lib/PropTypes';
 import InfiniteLoading from '../../../common/InfiniteLoading';
 import Search from '../../../common/Search';
-import InputGridItem from './gridItems/InputGridItem';
+import InputField from './gridItems/InputField';
 import AudioGridItem from './gridItems/AudioGridItem';
 
 
@@ -139,7 +139,7 @@ export default class AudioSelectionWorkspace extends Component {
                   onUse={onAudioSelected}
                 />
                 {editable &&
-                <InputGridItem
+                <InputField
                   title={item.title}
                   onRename={this.onRename(item)}
                 />}
