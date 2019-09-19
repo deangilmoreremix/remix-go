@@ -85,7 +85,6 @@ export default class AudioSelectionWorkspace extends Component {
     const { api, className, inWindow = false, onAudioSelected } = this.props;
     const { scope } = this.state;
     const { hasMore, elements } = this.state[scope];
-    console.log('elements', elements)
     const editable = (scope === api.constructor.ASSET_SCOPES.UPLOADS);
 
     const sizes = inWindow ?
