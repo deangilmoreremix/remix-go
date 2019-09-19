@@ -62,9 +62,9 @@ export default class VideoSelectionWorkspace extends Component {
     });
   };
 
-  onRename = item => (title) => {
+  onRename = item => (name) => {
     const { api } = this.props;
-    return api.renameAsset(item, title);
+    return api.renameAsset(item, name);
   };
 
   onSearch = async (query) => {
