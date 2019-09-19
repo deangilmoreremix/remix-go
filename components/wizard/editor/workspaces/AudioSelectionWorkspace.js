@@ -130,9 +130,11 @@ export default class AudioSelectionWorkspace extends Component {
         >
           {
             elements.map((item, idx) => (
-              <div className="card">
+              <div
+                className="card"
+                key={idx}
+              >
                 <AudioGridItem
-                  key={idx}
                   item={item}
                   onUse={onAudioSelected}
                 />
