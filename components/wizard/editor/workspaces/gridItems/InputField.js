@@ -12,17 +12,17 @@ const validateTitle = value => required()(value);
 export default class InputField extends Component {
   static propTypes = {
     onRename: PropTypes.func.isRequired,
-    title: PropTypes.string.isRequired,
+    value: PropTypes.string.isRequired,
   };
 
   constructor(props) {
     super(props);
 
-    const { title } = this.props;
+    const { value } = this.props;
     this.state = {
       isNameEdit: false,
       isLoading: false,
-      title,
+      value,
     };
   }
 
@@ -32,65 +32,65 @@ export default class InputField extends Component {
 
   onEditLeave = () => {
     this.setState({ isNameEdit: false });
-    return this.onRename();
+    return this.onUpdate();
   };
 
   onKeyPress = (event) => {
     if (event.which === 13) {
-      return this.onRename();
+      return this.onUpdate();
     }
   };
 
-  onRename = async () => {
+  onUpdate = async () => {
     const {
-      state: { title: newTitle, isLoading },
-      props: { onRename, title: oldTitle },
+      state: { value: newValue, isLoading },
+      props: { onRename, value: oldValue },
     } = this;
     if (isLoading) {
       return;
     }
-    if (!validateTitle(newTitle)) {
-      if (newTitle !== oldTitle) {
+    if (!validateTitle(newValue)) {
+      if (newValue !== oldValue) {
         this.setState({ isLoading: true });
         try {
-          const confirmMessage = `The new title '${newTitle}' saved successfully.`;
-          await onRename(newTitle);
+          const confirmMessage = `The new name '${newValue}' saved successfully.`;
+          await onRename(newValue);
           showInfo(confirmMessage, 'Success');
         } catch (err) {
-          this.setState({ title: oldTitle });
+          this.setState({ value: oldValue });
           showError(err.message);
         } finally {
           this.setState({ isLoading: false });
         }
       }
     } else {
-      showError('The title cannot be empty.');
-      this.setState({ title: oldTitle });
+      showError('This field cannot be empty.');
+      this.setState({ value: oldValue });
     }
   };
 
   handleChange = (e) => {
-    this.setState({ title: e.target.value });
+    this.setState({ value: e.target.value });
   };
 
   render() {
-    const { isNameEdit, isLoading, title } = this.state;
+    const { isNameEdit, isLoading, value } = this.state;
     return (
         <p className="tile-head">
           <input
             type="text"
-            className={validateTitle(title) ? 'invalid' : ''}
+            className={validateTitle(value) ? 'invalid' : ''}
             onChange={this.handleChange}
             onFocus={this.onFocusInputChange}
             onBlur={this.onEditLeave}
             onKeyPress={this.onKeyPress}
-            value={title}
+            value={value}
           />
           {(isNameEdit || isLoading)
           && (
             <button
               className={`rename-button fa ${isLoading ? 'fa-spinner fa-spin' : 'fa-check'}`}
-              onClick={this.onRename}
+              onClick={this.onUpdate}
             />
           )
           }
