@@ -175,7 +175,7 @@ export default class VideoSelectionWorkspace extends Component {
                 {editable &&
                 <InputField
                   value={item.title}
-                  onRename={this.onRename(item)}
+                  onChangeInputfield={this.onRename(item)}
                 />}
               </div>))}
         </VideoGallery>
