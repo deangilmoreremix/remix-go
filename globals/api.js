@@ -220,6 +220,19 @@ class Api {
     }
   }
 
+  async renameAsset(item, title) {
+    const { _id } = item;
+    await this.request(
+      `/api/users/me/media-assets/${_id}`, {
+        method: 'PATCH',
+        body: { title },
+        headers: {
+          'on-behalf': this.currentUser.id,
+        },
+      });
+    item.title = title;
+  }
+
   @action
   async publish(project) {
     this.isLoading = true;

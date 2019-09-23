@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import { ButtonGroup, Button } from 'reactstrap';
+import { observer, inject } from 'mobx-react';
 import { observable, runInAction } from 'mobx';
-import { inject, observer } from 'mobx-react';
 
 import {
   PopupboxManager,
@@ -9,10 +9,12 @@ import {
 
 import VideoGallery from 'react-masonry-infinite';
 
-import Search from '../../../common/Search';
-import VideoGridItem from './gridItems/VideoGridItem';
-import InfiniteLoading from '../../../common/InfiniteLoading';
 import PropTypes from '../../../../lib/PropTypes';
+import InfiniteLoading from '../../../common/InfiniteLoading';
+import Search from '../../../common/Search';
+import InputField from './gridItems/InputField';
+import VideoGridItem from './gridItems/VideoGridItem';
+
 
 @inject('api')
 @observer
@@ -60,8 +62,10 @@ export default class VideoSelectionWorkspace extends Component {
     });
   };
 
-  @observable
-  currentPlayback = null;
+  onRename = item => (name) => {
+    const { api } = this.props;
+    return api.renameAsset(item, name);
+  };
 
   onSearch = async (query) => {
     const { api } = this.props;
@@ -91,6 +95,9 @@ export default class VideoSelectionWorkspace extends Component {
     }
   };
 
+  @observable
+  currentPlayback = null;
+
   loadMore = async () => {
     const { api } = this.props;
     const { scope } = this.state;
@@ -112,6 +119,7 @@ export default class VideoSelectionWorkspace extends Component {
     const { api, className, inWindow = false, onVideoSelected } = this.props;
     const { scope } = this.state;
     const { hasMore, elements } = this.state[scope];
+    const editable = (scope === api.constructor.ASSET_SCOPES.UPLOADS);
 
     const sizes = inWindow ?
       [
@@ -145,7 +153,7 @@ export default class VideoSelectionWorkspace extends Component {
         <Search
           onSearch={q => this.onSearch(q)}
         />
-        {scope === api.constructor.ASSET_SCOPES.UPLOADS && <VideoGallery
+        <VideoGallery
           useWindow={!inWindow}
           className={`media-gallery ${className}`}
           hasMore={hasMore}
@@ -154,39 +162,23 @@ export default class VideoSelectionWorkspace extends Component {
           sizes={sizes}
         >
           {
-            elements.map(({ title, url, preview }, idx) => (
-              <VideoGridItem
+            elements.map((item, idx) => (
+              <div
+                className="card"
                 key={idx}
-                title={title}
-                url={url}
-                preview={preview}
-                onPreview={this.onPreview}
-                onUse={video => onVideoSelected(video)}
-              />
-            ))
-          }
-        </VideoGallery>}
-        {scope === api.constructor.ASSET_SCOPES.LIBRARY && <VideoGallery
-          useWindow={!inWindow}
-          className={`media-gallery ${className}`}
-          hasMore={hasMore}
-          loader={<InfiniteLoading key="loader" />}
-          loadMore={this.loadMore}
-          sizes={sizes}
-        >
-          {
-            elements.map(({ title, url, preview }, idx) => (
-              <VideoGridItem
-                key={idx}
-                title={title}
-                url={url}
-                preview={preview}
-                onPreview={this.onPreview}
-                onUse={video => onVideoSelected(video)}
-              />
-            ))
-          }
-        </VideoGallery>}
+              >
+                <VideoGridItem
+                  item={item}
+                  onPreview={this.onPreview}
+                  onUse={onVideoSelected}
+                />
+                {editable &&
+                <InputField
+                  value={item.title}
+                  onSave={this.onRename(item)}
+                />}
+              </div>))}
+        </VideoGallery>
       </Fragment>
     );
   }

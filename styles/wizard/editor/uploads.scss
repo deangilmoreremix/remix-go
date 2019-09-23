@@ -1,0 +1,26 @@
+.tile-head {
+  display: flex;
+  justify-content: space-between;
+  margin: 0.5rem auto;
+  font-size: 1rem;
+
+  input[type="text"] {
+    border: none;
+    font-size: 1rem;
+    text-align: center;
+
+    &.invalid {
+      outline: none;
+      border: 1px solid #EF5054;
+      border-radius: 2px;
+    }
+  }
+
+  .rename-button {
+    border: none;
+    background: unset;
+    cursor: pointer;
+    margin-top: 0.5em;
+  }
+}
+

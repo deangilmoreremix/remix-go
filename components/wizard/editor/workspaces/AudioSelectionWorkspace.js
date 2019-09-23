@@ -4,10 +4,11 @@ import { inject, observer } from 'mobx-react';
 
 import AudioGallery from 'react-masonry-infinite';
 
-import Search from '../../../common/Search';
-import AudioGridItem from './gridItems/AudioGridItem';
-import InfiniteLoading from '../../../common/InfiniteLoading';
 import PropTypes from '../../../../lib/PropTypes';
+import InfiniteLoading from '../../../common/InfiniteLoading';
+import Search from '../../../common/Search';
+import InputField from './gridItems/InputField';
+import AudioGridItem from './gridItems/AudioGridItem';
 
 
 @inject('api')
@@ -54,10 +55,9 @@ export default class AudioSelectionWorkspace extends Component {
     }
   };
 
-  loadMore = async () => {
-    const { scope } = this.state;
-    const { elements, query } = this.state[scope];
-    await this.loadAudio({ elements, query });
+  onRename = item => (name) => {
+    const { api } = this.props;
+    return api.renameAsset(item, name);
   };
 
   loadAudio = async ({ elements, query }) => {
@@ -75,10 +75,17 @@ export default class AudioSelectionWorkspace extends Component {
     });
   };
 
+  loadMore = async () => {
+    const { scope } = this.state;
+    const { elements, query } = this.state[scope];
+    await this.loadAudio({ elements, query });
+  };
+
   render() {
     const { api, className, inWindow = false, onAudioSelected } = this.props;
     const { scope } = this.state;
     const { hasMore, elements } = this.state[scope];
+    const editable = (scope === api.constructor.ASSET_SCOPES.UPLOADS);
 
     const sizes = inWindow ?
       [
@@ -121,16 +128,21 @@ export default class AudioSelectionWorkspace extends Component {
           sizes={sizes}
         >
           {
-            elements.map(({ title, url, artwork }, idx) => (
-              <AudioGridItem
+            elements.map((item, idx) => (
+              <div
+                className="card"
                 key={idx}
-                title={title}
-                url={url}
-                artwork={artwork}
-                onUse={audio => onAudioSelected(audio)}
-              />
-            ))
-          }
+              >
+                <AudioGridItem
+                  item={item}
+                  onUse={onAudioSelected}
+                />
+                {editable &&
+                <InputField
+                  value={item.title}
+                  onSave={this.onRename(item)}
+                />}
+              </div>))}
         </AudioGallery>
       </Fragment>);
   }
