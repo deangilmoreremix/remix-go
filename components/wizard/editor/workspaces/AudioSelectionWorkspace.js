@@ -140,7 +140,7 @@ export default class AudioSelectionWorkspace extends Component {
                 {editable &&
                 <InputField
                   value={item.title}
-                  onChangeInputfield={this.onRename(item)}
+                  onSave={this.onRename(item)}
                 />}
               </div>))}
         </AudioGallery>

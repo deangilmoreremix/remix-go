@@ -11,7 +11,7 @@ const validateTitle = value => required()(value);
 @observer
 export default class InputField extends Component {
   static propTypes = {
-    onChangeInputfield: PropTypes.func.isRequired,
+    onSave: PropTypes.func.isRequired,
     value: PropTypes.string.isRequired,
   };
 
@@ -44,7 +44,7 @@ export default class InputField extends Component {
   onUpdate = async () => {
     const {
       state: { value: newValue, isLoading },
-      props: { onChangeInputfield, value: oldValue },
+      props: { onSave, value: oldValue },
     } = this;
     if (isLoading) {
       return;
@@ -54,7 +54,7 @@ export default class InputField extends Component {
         this.setState({ isLoading: true });
         try {
           const confirmMessage = `The new name '${newValue}' saved successfully.`;
-          await onChangeInputfield(newValue);
+          await onSave(newValue);
           showInfo(confirmMessage, 'Success');
         } catch (err) {
           this.setState({ value: oldValue });
