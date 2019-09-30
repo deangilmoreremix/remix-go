@@ -88,7 +88,7 @@ export default class ProjectDetailsChanger extends Component {
               type="text"
               onChange={({ target: { value } }) => this.setState({ thumbnail: value })}
             />
-            <label>or upload file directly </label>
+            <label>or upload file directly from your computer</label>
             <Input
               type="file"
               onChange={async ({ target: { files: [file] } }) => {
