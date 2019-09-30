@@ -70,7 +70,7 @@ export default class ImageUpload extends Component {
 
   render() {
     const { isUploading, file, url, error } = this.state;
-    const { resolution } = this.props
+    const { resolution } = this.props;
     return (
       <div className="image-upload">
         <FormGroup>
@@ -78,7 +78,7 @@ export default class ImageUpload extends Component {
             Set Image URL
             {resolution &&
             <span className="text-resolution">
-              *Recommended image resolution {this.props.resolution}
+              *Recommended image resolution {resolution}
             </span>}
             <input id="image-url" type="text" onChange={this.changeUrl} />
           </label>
