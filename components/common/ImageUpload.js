@@ -12,6 +12,7 @@ export default class ImageUpload extends Component {
   static propTypes = {
     onFileUploaded: PropTypes.func.isRequired,
     onValidate: PropTypes.func,
+    recommendedResolutionPrompt: PropTypes.string,
   };
 
   state = {
@@ -69,11 +70,16 @@ export default class ImageUpload extends Component {
 
   render() {
     const { isUploading, file, url, error } = this.state;
+    const { recommendedResolutionPrompt } = this.props;
     return (
       <div className="image-upload">
         <FormGroup>
           <label htmlFor="image-url">
             Set Image URL
+            {recommendedResolutionPrompt &&
+            <span className="text-resolution">
+              *Recommended image resolution {recommendedResolutionPrompt}
+            </span>}
             <input id="image-url" type="text" onChange={this.changeUrl} />
           </label>
         </FormGroup>

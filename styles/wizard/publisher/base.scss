@@ -238,6 +238,10 @@
       label {
         margin-right: 10px;
       }
+
+      .text-resolution {
+        margin-left: 1em;
+      }
     }
 
     .embed-grid {
@@ -329,4 +333,11 @@
       float: right;
     }
   }
+}
+
+.text-resolution {
+  font-weight: 600;
+  font-size: 0.7em;
+  margin-top: 0.5em;
+  color: #EF5054
 }
