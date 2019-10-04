@@ -235,7 +235,7 @@ class LinkedinCampaignStager extends CampaignStager {
                       state.onVariablesUpdated(state.variables);
                     }}
                   />
-                  <p className="text-resolution">*Recommended image resolution 1024x630</p>
+                  <p className="text-resolution">*Recommended image resolution 1200x630</p>
                 </div>
               </div>
               <this.constructor.PostPreview

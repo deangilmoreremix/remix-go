@@ -96,7 +96,7 @@ export default class ProjectDetailsChanger extends Component {
                 this.setState({ thumbnail: response.url });
               }}
             />
-            <p className="text-resolution">*Recommended image resolution 1024x630</p>
+            <p className="text-resolution">*Recommended image resolution 1200x630</p>
             <button
               className={`go-button button-primary submit ${this.isDataValid() ? '' : 'inactive'}`}
               onClick={() => {
