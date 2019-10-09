@@ -81,16 +81,16 @@ class FacebookCampaignStager extends CampaignStager {
               />
             </div>
           </div>
-          {/*{*/}
-            {/*state.variables.autoplay*/}
-            {/*&& (*/}
-              {/*<div className="embed-group warning">*/}
-                {/*<strong>Warning! </strong>*/}
-                {/*Please note that due to new autoplay policy changes in browsers, autoplay can*/}
-                {/*start only with muted video and then can be unmuted by explicit user interaction*/}
-              {/*</div>*/}
-            {/*)*/}
-          {/*}*/}
+          {/* { */}
+          {/* state.variables.autoplay */}
+          {/* && ( */}
+          {/* <div className="embed-group warning"> */}
+          {/* <strong>Warning! </strong> */}
+          {/* Please note that due to new autoplay policy changes in browsers, autoplay can */}
+          {/* start only with muted video and then can be unmuted by explicit user interaction */}
+          {/* </div> */}
+          {/* ) */}
+          {/* } */}
           <div className={state.variables.embedLocation.embedGenerator ? 'embed-details' : 'hidden'}>
             <span className="embed-line">{state.variables.embedLocation.prompt}</span>
             <EmbedDataContainer
@@ -323,15 +323,17 @@ class FacebookCampaignStager extends CampaignStager {
                     id="facebook-post-image-input"
                     className="cell facebook-post-input"
                     type="file"
-                    onChange={async ({ target: { files: [file] } }) => {
-                      const response = await this.api.uploadMedia({ data: file });
+                    accept="image/*"
+                    onChange={this.uploadFile((imageData) => {
                       const { postData } = state.variables;
-                      postData.thumbnail = response.url;
+                      postData.thumbnail = imageData.source;
                       state.variables.postData = postData;
                       state.onVariablesUpdated(state.variables);
-                    }}
+                    })}
                   />
-                  <p className="text-resolution">*Recommended image resolution 1200x630</p>
+                  <p className="text-resolution">
+                    {`*Recommended image resolution ${this.constructor.recommendedResolutionPrompt}`}
+                  </p>
                 </div>
               </div>
               <this.constructor.PostPreview
@@ -457,7 +459,8 @@ class FacebookCampaignStager extends CampaignStager {
       userData,
       postData,
     } = this.state;
-    if (isLoading) {
+
+    if (isLoading || this.isUploading) {
       return false;
     }
     switch (stage.key) {

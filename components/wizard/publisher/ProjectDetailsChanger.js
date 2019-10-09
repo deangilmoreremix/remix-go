@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
-import { inject, observer } from 'mobx-react';
+import { observer } from 'mobx-react';
 import { Input, FormGroup } from 'reactstrap';
+import { PopupboxManager } from 'react-popupbox';
 
 import Project from '../../../lib/editor/Project';
 import PropTypes from '../../../lib/PropTypes';
@@ -47,8 +48,8 @@ export default class ProjectDetailsChanger extends Component {
   };
 
   onFileUploaded = (thumbnail) => {
-    debugger
     this.setState({ thumbnail });
+    PopupboxManager.close();
   };
 
   render() {

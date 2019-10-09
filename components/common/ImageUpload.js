@@ -5,7 +5,7 @@ import { FormGroup, Alert } from 'reactstrap';
 import InfiniteLoading from './InfiniteLoading';
 import PropTypes from '../../lib/PropTypes';
 import MediaTypeDetector from '../../lib/popcorn/util/mediaTypeDetector';
-import { openCrop } from '../../lib/utils/open-cropper';
+import { checkImageResolution } from '../../lib/utils/cropHelper';
 
 @inject('api')
 @observer
@@ -69,7 +69,7 @@ export default class ImageUpload extends Component {
     try {
       const media = await api.uploadMedia({ data: file || url });
       const imageMeta = await new MediaTypeDetector().getMetadata(media.url);
-      openCrop({
+      checkImageResolution({
         imageMeta,
         recommendedResolution,
         onFileUploaded: this.onFileUploaded,

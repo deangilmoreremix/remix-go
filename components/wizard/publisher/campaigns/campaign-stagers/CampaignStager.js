@@ -5,8 +5,13 @@
 /* eslint-disable no-underscore-dangle */
 
 import { Component } from 'react';
-import { action, observable } from 'mobx';
+import { action, observable, runInAction } from 'mobx';
+import { PopupboxManager } from 'react-popupbox';
+
 import PropTypes from '../../../../../lib/PropTypes';
+import MediaTypeDetector from '../../../../../lib/popcorn/util/mediaTypeDetector';
+import { modalContent, isWrongResolution } from '../../../../../lib/utils/cropHelper';
+import { showError } from '../../../../../services/alertService';
 
 const iframeStyling = `<!--- embed styling ---->
 <style> 
@@ -16,8 +21,16 @@ const iframeStyling = `<!--- embed styling ---->
 <!--- End of embed styling ---->
 `;
 
+const recommendedResolution = {
+  width: 1200,
+  height: 630,
+};
+
 class CampaignStager {
   static PostPreview = null;
+
+  static recommendedResolutionPrompt = recommendedResolution
+    && `${recommendedResolution.width}x${recommendedResolution.height}`;
 
   static generateStageComponent = (render) => {
     class StageComponent extends Component {
@@ -110,6 +123,10 @@ class CampaignStager {
     embedLocation: this.constructor.EMBED_LOCATIONS[0],
   };
 
+  @observable isUploading = false;
+
+  @observable extraModal = null;
+
   constructor(provider, project, api) {
     this.provider = provider;
     this.project = project;
@@ -121,14 +138,44 @@ class CampaignStager {
     return project;
   }
 
+  @action
+  uploadFile = callback => async ({ target: { files: [file] } }) => {
+    const { api } = this;
+    if (!file) {
+      return;
+    }
+    this.isUploading = true;
+    try {
+      const media = await api.uploadMedia({ data: file });
+      const imageMeta = await new MediaTypeDetector().getMetadata(media.url);
+      if (isWrongResolution({ imageMeta, recommendedResolution })) {
+        runInAction(() => {
+          this.extraModal = modalContent({
+            imageMeta,
+            recommendedResolution,
+            onFileUploaded: (res) => {
+              callback(res);
+              this.extraModal = null;
+            },
+          },
+          );
+        });
+      }
+    } catch (err) {
+      showError(err.message || 'This image format is not supported.');
+    } finally {
+      this.isUploading = false;
+    }
+  };
+
   canBypassStage() {
     return true;
   }
 
   @action
   async nextStage() {
-    if (this.currentStage.key ===
-      this._stages[this._stages.length - 1].key) {
+    if (this.currentStage.key
+      === this._stages[this._stages.length - 1].key) {
       return this.sharePost();
     }
 

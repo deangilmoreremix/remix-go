@@ -39,20 +39,6 @@ export default class ImageCropper extends Component {
     } = props;
     this.state.width = resolution.width;
     this.state.height = resolution.height;
-    // if (resolution) {
-    //   const resolutionParts = resolution.split(new RegExp('x', 'i'));
-    //   if (resolutionParts && resolutionParts.length >= 2) {
-    //     let [correctWidth, correctHeight] = resolutionParts;
-    //     correctWidth = parseInt(correctWidth, 10);
-    //     correctHeight = parseInt(correctHeight, 10);
-    //     if (currentWidth && currentHeight && (currentWidth === correctWidth)
-    //       && (currentHeight === correctHeight)) {
-    //       return onImageCropped(imageData);
-    //     }
-    //   }
-    // } else {
-    //   return onImageCropped(imageData);
-    // }
   }
 
   @action
@@ -88,8 +74,8 @@ export default class ImageCropper extends Component {
       state: { isLoading, width, height },
     } = this;
     return (
-      <Fragment>
-        {isLoading ? <InfiniteLoading />
+      <div className="image-crop-content">
+        {isLoading ? <InfiniteLoading  className="auto-margin"/>
           : (
             <Fragment>
               <h5 className="crop-title">
@@ -117,7 +103,7 @@ export default class ImageCropper extends Component {
             </Fragment>
           )
         }
-      </Fragment>
+      </div>
     );
   }
 }
