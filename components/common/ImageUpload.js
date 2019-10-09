@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { FormGroup, Alert } from 'reactstrap';
+import { PopupboxManager } from 'react-popupbox';
 
 import InfiniteLoading from './InfiniteLoading';
+import ImageCropper from './ImageCropper';
 import PropTypes from '../../lib/PropTypes';
 import MediaTypeDetector from '../../lib/popcorn/util/mediaTypeDetector';
 
@@ -12,8 +14,19 @@ export default class ImageUpload extends Component {
   static propTypes = {
     onFileUploaded: PropTypes.func.isRequired,
     onValidate: PropTypes.func,
-    recommendedResolutionPrompt: PropTypes.string,
+    recommendedResolution: PropTypes.shape({
+      width: PropTypes.number.isRequired,
+      height: PropTypes.number.isRequired,
+    }),
   };
+
+  constructor(props) {
+    super(props);
+    const { recommendedResolution } = props;
+    this.recommendedResolutionPrompt = recommendedResolution
+      && `${recommendedResolution.width}x${recommendedResolution.height}`;
+    this.MediaTypeDetector = new MediaTypeDetector();
+  }
 
   state = {
     error: null,
@@ -35,18 +48,60 @@ export default class ImageUpload extends Component {
 
   changeUrl = event => this.setState({ url: event.target.value, file: null });
 
+  // todo check name
+  onFileUploaded = (imageMeta) => {
+    const { onFileUploaded } = this.props;
+    if (imageMeta.type === 'HTML5' && imageMeta.contentType.indexOf('image/') === 0) {
+      onFileUploaded(imageMeta.source);
+    } else {
+      this.setState({
+        error: 'This image format is not supported.',
+      });
+    }
+  };
+
+  openCrop = (imageMeta) => {
+    const { recommendedResolution } = this.props;
+    PopupboxManager.update({
+      content: <ImageCropper
+        className="canvas"
+        imageData={imageMeta}
+        resolution={recommendedResolution}
+        onImageCropped={(value) => {
+          this.onFileUploaded(value);
+        }}
+      />,
+      config: {
+        titleBar: {
+          enable: true,
+          text: 'Please select image area to use in project',
+        },
+        fadeIn: true,
+        fadeInSpeed: 250,
+        content: {
+          className: 'image-crop-content',
+        },
+      },
+    });
+  };
+
   uploadFile = async () => {
     const { file, url } = this.state;
-    const { onFileUploaded, api } = this.props;
+    const { onFileUploaded, api, recommendedResolution } = this.props;
     if (!file && !url) {
       return;
     }
     this.setState({ isUploading: true });
     try {
-      const videoMeta = await new MediaTypeDetector()
-        .getMetadata(file ? (await api.uploadMedia({ data: file })).url : url);
-      if (videoMeta.type === 'HTML5' && videoMeta.contentType.indexOf('image/') === 0) {
-        onFileUploaded(videoMeta.source);
+      const media = await api.uploadMedia({ data: file || url });
+      const imageMeta = await new MediaTypeDetector().getMetadata(media.url);
+      if (imageMeta.type === 'HTML5' && imageMeta.contentType.indexOf('image/') === 0) {
+        if (recommendedResolution.width !== imageMeta.width
+          || recommendedResolution.height !== imageMeta.height) {
+          this.openCrop(imageMeta);
+        } else {
+          onFileUploaded(imageMeta.source);
+        }
       } else {
         this.setState({
           error: 'This image format is not supported.',
@@ -70,16 +125,18 @@ export default class ImageUpload extends Component {
 
   render() {
     const { isUploading, file, url, error } = this.state;
-    const { recommendedResolutionPrompt } = this.props;
+    const { recommendedResolutionPrompt } = this;
     return (
       <div className="image-upload">
         <FormGroup>
           <label htmlFor="image-url">
             Set Image URL
-            {recommendedResolutionPrompt &&
+            {recommendedResolutionPrompt
+            && (
             <span className="text-resolution">
-              *Recommended image resolution {recommendedResolutionPrompt}
-            </span>}
+              {`*Recommended image resolution ${recommendedResolutionPrompt}`}
+            </span>
+            )}
             <input id="image-url" type="text" onChange={this.changeUrl} />
           </label>
         </FormGroup>
