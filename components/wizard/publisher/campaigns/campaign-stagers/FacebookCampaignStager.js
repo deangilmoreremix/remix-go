@@ -158,7 +158,7 @@ class FacebookCampaignStager extends CampaignStager {
       bootstrap: async (instance) => {
         await instance.provider.init();
         try {
-          const permissions = instance.state.variables.embedLocation === 'facebook-page'
+          const permissions = instance.state.embedLocation === 'facebook-page'
             ? FB_PAGE_PERMISSIONS
             : DEFAULT_PERMISSIONS;
           if (await instance.provider.isAuthorized(permissions)) {
