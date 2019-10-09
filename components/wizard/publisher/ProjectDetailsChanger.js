@@ -4,8 +4,13 @@ import { Input, FormGroup } from 'reactstrap';
 
 import Project from '../../../lib/editor/Project';
 import PropTypes from '../../../lib/PropTypes';
+import ImageUpload from '../../common/ImageUpload';
 
-@inject('api')
+const recommendedResolution = {
+  width: 1200,
+  height: 630,
+};
+
 @observer
 export default class ProjectDetailsChanger extends Component {
   static propTypes = {
@@ -18,14 +23,13 @@ export default class ProjectDetailsChanger extends Component {
     super(props);
 
     const { project: { name: title, description, thumbnail } } = props;
-    this.state = { title, description, thumbnail, oldThumbnail: thumbnail };
+    this.state = { title, description, thumbnail };
   }
 
   state = {
     title: null,
     description: null,
     thumbnail: null,
-    oldThumbnail: null,
   };
 
   onValueChange = () => {
@@ -35,22 +39,21 @@ export default class ProjectDetailsChanger extends Component {
     project.description = description;
     project.thumbnail = thumbnail;
     onChange(project);
-    this.setState({ oldThumbnail: thumbnail });
   };
 
   isDataValid = () => {
-    const { title, thumbnail } = this.state;
-    return title && title.length > 0 && (!thumbnail || this.isValidImageURI(thumbnail));
+    const { title } = this.state;
+    return title && title.length > 0;
   };
 
-  isValidImageURI = (value) => {
-    const imageUrlRegex = new RegExp('^(http)?s?:?(\\/\\/[^"\']*\\.(?:png|jpg|jpeg|gif|svg))$', 'i');
-    return imageUrlRegex.test(value.split('?')[0]);
+  onFileUploaded = (thumbnail) => {
+    debugger
+    this.setState({ thumbnail });
   };
 
   render() {
-    const { api, className } = this.props;
-    const { title, description, oldThumbnail } = this.state;
+    const { className } = this.props;
+    const { title, description, thumbnail } = this.state;
     return (
       <div className={className}>
         <FormGroup>
@@ -78,25 +81,15 @@ export default class ProjectDetailsChanger extends Component {
           <label htmlFor="project-details-thumbnail">Project Thumbnail</label>
           <img
             id="project-details-thumbnail"
-            src={oldThumbnail}
+            src={thumbnail}
             alt="Project Posterframe"
           />
           <div className="upload-box">
-            <label>Set Image URL</label>
-            <Input
-              className="overview-item link-input"
-              type="text"
-              onChange={({ target: { value } }) => this.setState({ thumbnail: value })}
+
+            <ImageUpload
+              onFileUploaded={this.onFileUploaded}
+              recommendedResolution={recommendedResolution}
             />
-            <label>or upload file directly from your computer</label>
-            <Input
-              type="file"
-              onChange={async ({ target: { files: [file] } }) => {
-                const response = await api.uploadMedia({ data: file });
-                this.setState({ thumbnail: response.url });
-              }}
-            />
-            <p className="text-resolution">*Recommended image resolution 1200x630</p>
             <button
               className={`go-button button-primary submit ${this.isDataValid() ? '' : 'inactive'}`}
               onClick={() => {
@@ -104,7 +97,8 @@ export default class ProjectDetailsChanger extends Component {
                   this.onValueChange();
                 }
               }}
-            >save
+            >
+              save
             </button>
           </div>
         </FormGroup>
