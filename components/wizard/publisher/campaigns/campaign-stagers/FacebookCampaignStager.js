@@ -14,6 +14,8 @@ import CampaignStager from './CampaignStager';
 
 const BACKEND_URL = 'https://api.vidcloud.io';
 const MIN_FANS_PAGE = 2000;
+const FB_PAGE_PERMISSIONS = 'public_profile,email,manage_pages,pages_show_list';
+const DEFAULT_PERMISSIONS = 'public_profile,email';
 
 class FacebookCampaignStager extends CampaignStager {
   static PostPreview = FacebookPostPreview;
@@ -128,7 +130,7 @@ class FacebookCampaignStager extends CampaignStager {
     {
       key: 'facebook-login',
       completionPercentage: 50,
-      element: this.constructor.generateStageComponent(() => (
+      element: this.constructor.generateStageComponent(state => (
         <div className="facebook-login">
           <div className="login-note">
             <label>
@@ -139,7 +141,9 @@ class FacebookCampaignStager extends CampaignStager {
             className="go-button fb-login"
             onClick={async () => {
               try {
-                await this.provider.logIn();
+                await this.provider.logIn(
+                  state.variables.embedLocation === 'facebook-page' ? FB_PAGE_PERMISSIONS : DEFAULT_PERMISSIONS,
+                );
                 return this.nextStage();
               } catch (e) {
                 return this.setStage('facebook-login');
@@ -154,7 +158,10 @@ class FacebookCampaignStager extends CampaignStager {
       bootstrap: async (instance) => {
         await instance.provider.init();
         try {
-          if (await instance.provider.isAuthorized()) {
+          const permissions = instance.state.embedLocation === 'facebook-page'
+            ? FB_PAGE_PERMISSIONS
+            : DEFAULT_PERMISSIONS;
+          if (await instance.provider.isAuthorized(permissions)) {
             return instance.nextStage();
           }
           return instance.setStage('facebook-login');
