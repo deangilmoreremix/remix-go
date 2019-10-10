@@ -30,7 +30,7 @@ app.prepare().then(() => {
     }
   });
   require('./lib/express/webmaker-auth')(server);
-  server.use(express.json({ limit: '50mb' }));
+  server.use(express.json({ limit: '10mb' }));
   server.use(express.urlencoded({ extended: true }));
   require('./lib/express/loaderio')(server);
   // server.post('/api/media/join', join);

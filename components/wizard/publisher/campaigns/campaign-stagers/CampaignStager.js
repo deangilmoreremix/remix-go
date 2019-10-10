@@ -6,7 +6,6 @@
 
 import { Component } from 'react';
 import { action, observable, runInAction } from 'mobx';
-import { PopupboxManager } from 'react-popupbox';
 
 import PropTypes from '../../../../../lib/PropTypes';
 import MediaTypeDetector from '../../../../../lib/popcorn/util/mediaTypeDetector';
@@ -21,7 +20,7 @@ const iframeStyling = `<!--- embed styling ---->
 <!--- End of embed styling ---->
 `;
 
-const recommendedResolution = {
+const posterframeRecommendedResolution = {
   width: 1200,
   height: 630,
 };
@@ -29,8 +28,8 @@ const recommendedResolution = {
 class CampaignStager {
   static PostPreview = null;
 
-  static recommendedResolutionPrompt = recommendedResolution
-    && `${recommendedResolution.width}x${recommendedResolution.height}`;
+  static posterframeRecommendedResolutionPrompt =`${posterframeRecommendedResolution.width}`
+    + `x${posterframeRecommendedResolution.height}`;
 
   static generateStageComponent = (render) => {
     class StageComponent extends Component {
@@ -148,11 +147,14 @@ class CampaignStager {
     try {
       const media = await api.uploadMedia({ data: file });
       const imageMeta = await new MediaTypeDetector().getMetadata(media.url);
-      if (isWrongResolution({ imageMeta, recommendedResolution })) {
+      if (isWrongResolution({
+        imageMeta,
+        recommendedResolution: posterframeRecommendedResolution,
+      })) {
         runInAction(() => {
           this.extraModal = modalContent({
             imageMeta,
-            recommendedResolution,
+            recommendedResolution: posterframeRecommendedResolution,
             onFileUploaded: (res) => {
               callback(res);
               this.extraModal = null;

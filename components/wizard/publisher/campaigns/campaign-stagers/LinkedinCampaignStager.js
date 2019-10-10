@@ -236,7 +236,7 @@ class LinkedinCampaignStager extends CampaignStager {
                     })}
                   />
                   <p className="text-resolution">
-                    {`*Recommended image resolution ${this.constructor.recommendedResolutionPrompt}`}
+                    {`*Recommended image resolution ${this.constructor.posterframeRecommendedResolutionPrompt}`}
                   </p>
                 </div>
               </div>
