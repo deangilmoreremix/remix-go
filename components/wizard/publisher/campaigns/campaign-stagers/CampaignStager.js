@@ -9,7 +9,7 @@ import { action, observable, runInAction } from 'mobx';
 
 import PropTypes from '../../../../../lib/PropTypes';
 import MediaTypeDetector from '../../../../../lib/popcorn/util/mediaTypeDetector';
-import { modalContent, isWrongResolution } from '../../../../../lib/utils/cropHelper';
+import { modalContent, isResolutionWrong } from '../../../../../lib/utils/cropHelper';
 import { showError } from '../../../../../services/alertService';
 
 const iframeStyling = `<!--- embed styling ---->
@@ -147,7 +147,7 @@ class CampaignStager {
     try {
       const media = await api.uploadMedia({ data: file });
       const imageMeta = await new MediaTypeDetector().getMetadata(media.url);
-      if (isWrongResolution({
+      if (isResolutionWrong({
         imageMeta,
         recommendedResolution: posterframeRecommendedResolution,
       })) {
