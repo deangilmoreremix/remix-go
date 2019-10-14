@@ -122,13 +122,14 @@ export default class SocialCampaign extends Component {
     const { className, project } = this.props;
     const { stager, isLoading } = this.state;
 
+    const loading = isLoading || (stager && stager.isUploading);
     return (
       <Fragment>
         <div className={`social-campaign ${className}`}>
-          <div className={`loading-screen workspace ${!isLoading ? 'hidden' : ''}`}>
+          <div className={`loading-screen workspace ${!loading ? 'hidden' : ''}`}>
             <InfiniteLoading />
           </div>
-          <div className={`workspace ${isLoading ? 'hidden' : ''}`}>
+          <div className={`workspace ${loading ? 'hidden' : ''}`}>
             {!stager &&
             <div className="social-source-container">
               <span>Please select social network you want to continue with</span>
@@ -144,18 +145,18 @@ export default class SocialCampaign extends Component {
                 ))}
               </ul>
             </div>}
-            {stager &&
+            {stager && !stager.extraModal &&
             <Progress
               className="embed-progress"
               value={stager.currentStage.completionPercentage}
             />}
-            {stager &&
+            {stager && !stager.extraModal &&
             <stager.currentStage.element
               variables={stager.variables}
               project={project}
             />}
           </div>
-          {stager &&
+          {stager && !stager.extraModal &&
           <div className="controls">
             <button
               className={`go-button back ${stager.currentStage.key === stager.stages[0].key ? 'hidden' : ''}`}
@@ -178,6 +179,9 @@ export default class SocialCampaign extends Component {
               {stager.currentStage.actionButtonCaption || 'Next'}
             </button>
           </div>}
+          {
+            stager && stager.extraModal && stager.extraModal.content
+          }
         </div>
       </Fragment>
     );

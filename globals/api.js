@@ -161,9 +161,9 @@ class Api {
   @action
   async get(projectId, isSource) {
     this.isLoading = true;
-    const path = isSource ?
-      `/api/users/me/makes/${projectId}` :
-      `/api/users/me/makes/${projectId}/remix`;
+    const path = isSource
+      ? `/api/users/me/makes/${projectId}`
+      : `/api/users/me/makes/${projectId}/remix`;
     try {
       return this.request(
         path, {
@@ -181,9 +181,9 @@ class Api {
   async save(project) {
     this.isLoading = true;
     try {
-      const path = project.make ?
-        `/api/users/me/makes/${project.make._id}` :
-        '/api/users/me/makes';
+      const path = project.make
+        ? `/api/users/me/makes/${project.make._id}`
+        : '/api/users/me/makes';
       const serializedProject = project.serialize();
       project.make = await this.request(
         path, {
@@ -283,13 +283,12 @@ class Api {
     this.isLoading = true;
     return new Promise((resolve, reject) => {
       if (typeof data === 'string') {
-        data = JSON.stringify({ srcUrl: data });
+        data = { [data.indexOf('data:') === 0 ? 'dataUri' : 'srcUrl']: data };
       } else {
         const fd = new FormData();
         fd.append('media', data);
         data = fd;
       }
-
       const xhr = new XMLHttpRequest();
       if (onProgress) {
         xhr.upload.onprogress = ({ loaded, total }) => {
@@ -297,6 +296,11 @@ class Api {
         };
       }
       xhr.open('PUT', `//${this.common.self}/api/media?${preview ? 'video_preview=true' : ''}`, true);
+      // If the data being sent is a plain object and isn't a FormData object, convert it to JSON
+      if (!(data instanceof FormData) && data === Object(data)) {
+        data = JSON.stringify(data);
+        xhr.setRequestHeader('Content-Type', 'application/json; charset=utf-8');
+      }
       xhr.onload = () => {
         if (onProgress) {
           onProgress(1.0);
