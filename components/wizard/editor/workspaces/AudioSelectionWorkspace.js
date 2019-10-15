@@ -159,7 +159,7 @@ export default class AudioSelectionWorkspace extends Component {
                 item={item}
                 onUse={onAudioSelected}
               />
-              ))
+            ))
           }
         </AudioGallery>}
       </Fragment>);
