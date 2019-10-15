@@ -153,7 +153,7 @@ export default class VideoSelectionWorkspace extends Component {
         <Search
           onSearch={q => this.onSearch(q)}
         />
-        <VideoGallery
+        {scope === api.constructor.ASSET_SCOPES.UPLOADS && <VideoGallery
           useWindow={!inWindow}
           className={`media-gallery ${className}`}
           hasMore={hasMore}
@@ -178,7 +178,28 @@ export default class VideoSelectionWorkspace extends Component {
                   onSave={this.onRename(item)}
                 />}
               </div>))}
-        </VideoGallery>
+        </VideoGallery>}
+        {scope === api.constructor.ASSET_SCOPES.LIBRARY && <VideoGallery
+          useWindow={!inWindow}
+          className={`media-gallery ${className}`}
+          hasMore={hasMore}
+          loader={<InfiniteLoading key="loader" />}
+          loadMore={this.loadMore}
+          sizes={sizes}
+        >
+          {
+            elements.map(({ title, url, preview }, idx) => (
+              <VideoGridItem
+                key={idx}
+                title={title}
+                url={url}
+                preview={preview}
+                onPreview={this.onPreview}
+                onUse={video => onVideoSelected(video)}
+              />
+            ))
+          }
+        </VideoGallery>}
       </Fragment>
     );
   }
