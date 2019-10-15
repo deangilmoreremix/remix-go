@@ -120,6 +120,7 @@ export default class VideoSelectionWorkspace extends Component {
     const { scope } = this.state;
     const { hasMore, elements } = this.state[scope];
     const editable = (scope === api.constructor.ASSET_SCOPES.UPLOADS);
+    console.log(elements)
 
     const sizes = inWindow ?
       [
@@ -188,12 +189,10 @@ export default class VideoSelectionWorkspace extends Component {
           sizes={sizes}
         >
           {
-            elements.map(({ title, url, preview }, idx) => (
+            elements.map((item, idx) => (
               <VideoGridItem
+                item={item}
                 key={idx}
-                title={title}
-                url={url}
-                preview={preview}
                 onPreview={this.onPreview}
                 onUse={onVideoSelected}
               />
