@@ -120,7 +120,6 @@ export default class VideoSelectionWorkspace extends Component {
     const { scope } = this.state;
     const { hasMore, elements } = this.state[scope];
     const editable = (scope === api.constructor.ASSET_SCOPES.UPLOADS);
-    console.log(elements)
 
     const sizes = inWindow ?
       [
