@@ -188,12 +188,9 @@ export default class VideoSelectionWorkspace extends Component {
           sizes={sizes}
         >
           {
-            elements.map(({ title, url, preview }, idx) => (
+            elements.map((item, idx) => (
               <VideoGridItem
                 key={idx}
-                title={title}
-                url={url}
-                preview={preview}
                 onPreview={this.onPreview}
                 onUse={video => onVideoSelected(video)}
               />
