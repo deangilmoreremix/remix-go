@@ -12,7 +12,6 @@
     "build": "next build && next export",
     "eslint": "eslint .",
     "export": "cross-env NODE_ENV=production next export",
-    "postinstall": "npm run build",
     "start": "node runner.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
