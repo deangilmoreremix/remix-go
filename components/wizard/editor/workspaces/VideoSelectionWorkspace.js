@@ -91,9 +91,17 @@ export default class VideoSelectionWorkspace extends Component {
 
   onScopeChange = async (scope) => {
     if (scope !== this.state.scope) {
+      console.log('state', this.state);
       console.log('scope', scope);
       console.log('this.state.scope', this.state.scope);
-      this.setState({ scope });
+      this.setState({
+        scope,
+        [scope]: {
+          hasMore: true,
+          elements: [],
+          query: '',
+        },
+      });
     }
   };
 
@@ -121,6 +129,7 @@ export default class VideoSelectionWorkspace extends Component {
     const { api, className, inWindow = false, onVideoSelected } = this.props;
     const { scope } = this.state;
     const { hasMore, elements } = this.state[scope];
+    console.log('arr of elements', elements);
     const editable = (scope === api.constructor.ASSET_SCOPES.UPLOADS);
 
     const sizes = inWindow ?
@@ -165,28 +174,21 @@ export default class VideoSelectionWorkspace extends Component {
         >
           {
             elements.map((item, idx) => (
-              scope === api.constructor.ASSET_SCOPES.UPLOADS ? (
-                <div
-                  className="card"
-                  key={idx}
-                >
-                  <VideoGridItem
-                    item={item}
-                    onPreview={this.onPreview}
-                    onUse={onVideoSelected}
-                  />
-                  {editable &&
+              <div
+                className="card"
+                key={idx}
+              >
+                <VideoGridItem
+                  item={item}
+                  onPreview={this.onPreview}
+                  onUse={onVideoSelected}
+                />
+                {editable &&
                   <InputField
                     value={item.title}
                     onSave={this.onRename(item)}
                   />}
-                </div>) :
-                (<VideoGridItem
-                  key={idx}
-                  item={item}
-                  onPreview={this.onPreview}
-                  onUse={onVideoSelected}
-                />)
+              </div>
             ))}
         </VideoGallery>
       </Fragment>
