@@ -91,6 +91,8 @@ export default class VideoSelectionWorkspace extends Component {
 
   onScopeChange = async (scope) => {
     if (scope !== this.state.scope) {
+      console.log('scope', scope);
+      console.log('this.state.scope', this.state.scope);
       this.setState({ scope });
     }
   };
@@ -153,7 +155,7 @@ export default class VideoSelectionWorkspace extends Component {
         <Search
           onSearch={q => this.onSearch(q)}
         />
-        {scope === api.constructor.ASSET_SCOPES.UPLOADS && <VideoGallery
+        <VideoGallery
           useWindow={!inWindow}
           className={`media-gallery ${className}`}
           hasMore={hasMore}
@@ -163,41 +165,30 @@ export default class VideoSelectionWorkspace extends Component {
         >
           {
             elements.map((item, idx) => (
-              <div
-                className="card"
-                key={idx}
-              >
-                <VideoGridItem
+              scope === api.constructor.ASSET_SCOPES.UPLOADS ? (
+                <div
+                  className="card"
+                  key={idx}
+                >
+                  <VideoGridItem
+                    item={item}
+                    onPreview={this.onPreview}
+                    onUse={onVideoSelected}
+                  />
+                  {editable &&
+                  <InputField
+                    value={item.title}
+                    onSave={this.onRename(item)}
+                  />}
+                </div>) :
+                (<VideoGridItem
+                  key={idx}
                   item={item}
                   onPreview={this.onPreview}
                   onUse={onVideoSelected}
-                />
-                {editable &&
-                <InputField
-                  value={item.title}
-                  onSave={this.onRename(item)}
-                />}
-              </div>))}
-        </VideoGallery>}
-        {scope === api.constructor.ASSET_SCOPES.LIBRARY && <VideoGallery
-          useWindow={!inWindow}
-          className={`media-gallery ${className}`}
-          hasMore={hasMore}
-          loader={<InfiniteLoading key="loader" />}
-          loadMore={this.loadMore}
-          sizes={sizes}
-        >
-          {
-            elements.map((item, idx) => (
-              <VideoGridItem
-                item={item}
-                key={idx}
-                onPreview={this.onPreview}
-                onUse={onVideoSelected}
-              />
-            ))
-          }
-        </VideoGallery>}
+                />)
+            ))}
+        </VideoGallery>
       </Fragment>
     );
   }
