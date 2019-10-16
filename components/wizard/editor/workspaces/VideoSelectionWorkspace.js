@@ -180,10 +180,10 @@ export default class VideoSelectionWorkspace extends Component {
                   onUse={onVideoSelected}
                 />
                 {editable &&
-                  <InputField
-                    value={item.title}
-                    onSave={this.onRename(item)}
-                  />}
+                <InputField
+                  value={item.title}
+                  onSave={this.onRename(item)}
+                />}
               </div>))}
         </VideoGallery>
       </Fragment>
