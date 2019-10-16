@@ -51,7 +51,14 @@ export default class AudioSelectionWorkspace extends Component {
 
   onScopeChange = async (scope) => {
     if (scope !== this.state.scope) {
-      this.setState({ scope });
+      this.setState({
+        scope,
+        [scope]: {
+          hasMore: true,
+          elements: [],
+          query: '',
+        },
+      });
     }
   };
 
@@ -119,7 +126,7 @@ export default class AudioSelectionWorkspace extends Component {
         <Search
           onSearch={q => this.onSearch(q)}
         />
-        {scope === api.constructor.ASSET_SCOPES.UPLOADS && <AudioGallery
+        <AudioGallery
           useWindow={!inWindow}
           className={`media-gallery ${className}`}
           hasMore={hasMore}
@@ -143,25 +150,7 @@ export default class AudioSelectionWorkspace extends Component {
                   onSave={this.onRename(item)}
                 />}
               </div>))}
-        </AudioGallery>}
-        {scope === api.constructor.ASSET_SCOPES.LIBRARY && <AudioGallery
-          useWindow={!inWindow}
-          className={`media-gallery ${className}`}
-          hasMore={hasMore}
-          loader={<InfiniteLoading key="loader" />}
-          loadMore={this.loadMore}
-          sizes={sizes}
-        >
-          {
-            elements.map((item, idx) => (
-              <AudioGridItem
-                key={idx}
-                item={item}
-                onUse={onAudioSelected}
-              />
-            ))
-          }
-        </AudioGallery>}
+        </AudioGallery>
       </Fragment>);
   }
 }
