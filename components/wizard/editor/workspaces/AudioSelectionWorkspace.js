@@ -51,7 +51,14 @@ export default class AudioSelectionWorkspace extends Component {
 
   onScopeChange = async (scope) => {
     if (scope !== this.state.scope) {
-      this.setState({ scope });
+      this.setState({
+        scope,
+        [scope]: {
+          hasMore: true,
+          elements: [],
+          query: '',
+        },
+      });
     }
   };
 
