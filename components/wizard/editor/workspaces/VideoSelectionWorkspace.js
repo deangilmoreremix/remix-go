@@ -94,9 +94,9 @@ export default class VideoSelectionWorkspace extends Component {
       this.setState({
         scope,
         [scope]: {
-          hasMore: [scope].hasMore,
-          elements: [scope].elements,
-          query: [scope].query,
+          hasMore: true,
+          elements: [],
+          query: '',
         },
       });
     }
