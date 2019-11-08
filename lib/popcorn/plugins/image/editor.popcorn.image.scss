@@ -33,6 +33,16 @@
       z-index: 1;
     }
 
+    .message-error {
+      color: red;
+      font-size: 1em;
+      font-weight: 700;
+      margin: 0 auto;
+      padding: 10px 5px;
+      text-transform: uppercase;
+      background-color: #eececf
+    }
+
     input[type="text"] {
       background: $white;
       color: $primary-color;
