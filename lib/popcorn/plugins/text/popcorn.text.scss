@@ -139,7 +139,6 @@
     border: 0.5px dashed;
     text-align: center;
     bottom: -32px;
-    position: absolute;
     width: 100%;
 
     .link-url-span {
@@ -159,6 +158,7 @@
   &.active {
     .url-container {
       display: flex;
+      position: relative;
     }
   }
 }
