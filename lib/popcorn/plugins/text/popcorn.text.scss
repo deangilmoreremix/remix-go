@@ -159,6 +159,7 @@
     .url-container {
       display: flex;
       position: relative;
+      overflow-y: auto;
     }
   }
 }
