@@ -5,9 +5,11 @@ import AudioPlayer from '../../../../common/AudioPlayer';
 
 export default class AudioGridItem extends Component {
   static propTypes = {
-    title: PropTypes.string.isRequired,
-    url: PropTypes.string.isRequired,
-    artwork: PropTypes.string,
+    item: PropTypes.shape({
+      title: PropTypes.string,
+      url: PropTypes.string.isRequired,
+      artwork: PropTypes.string,
+    }),
     onUse: PropTypes.func.isRequired,
   };
 
@@ -30,7 +32,7 @@ export default class AudioGridItem extends Component {
   };
 
   render() {
-    const { onUse, artwork, title, url } = this.props;
+    const { item: { artwork, url, title }, onUse } = this.props;
 
     return (
       <div className="card" style={{ backgroundImage: `url(${artwork || '/static/images/editor/default-artwork.png'})` }}>
