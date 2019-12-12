@@ -7,6 +7,7 @@ import React from 'react';
 import PropTypes from '../../../lib/PropTypes';
 
 const LinkedinPostPreview = (props) => {
+  console.log('LinkedinPostPreview', props);
   const {
     user,
     post: { title, thumbnail, description },
