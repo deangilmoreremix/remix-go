@@ -3,7 +3,6 @@ import React from 'react';
 import PropTypes from '../../../lib/PropTypes';
 
 const FacebookPostPreview = (props) => {
-  console.log('FAcebookPostPreview', props);
   const {
     user,
     post: { title, thumbnail, description, link },

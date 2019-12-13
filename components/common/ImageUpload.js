@@ -49,8 +49,11 @@ export default class ImageUpload extends Component {
   changeUrl = event => this.setState({ url: event.target.value, file: null });
 
   onFileUploaded = (imageMeta) => {
+    console.log('onFileUploaded');
+    console.log('imageMeta ', imageMeta);
     const { onFileUploaded } = this.props;
     if (imageMeta.type === 'HTML5' && imageMeta.contentType.indexOf('image/') === 0) {
+      console.log('imageMeta.source ', imageMeta.source)
       onFileUploaded(imageMeta.source);
     } else {
       this.setState({
