@@ -147,6 +147,8 @@ class CampaignStager {
     try {
       const media = await api.uploadMedia({ data: file });
       const imageMeta = await new MediaTypeDetector().getMetadata(media.url);
+      console.log('media', media);
+      console.log('imageMeta', imageMeta);
       if (isResolutionWrong({
         imageMeta,
         recommendedResolution: posterframeRecommendedResolution,
@@ -162,6 +164,8 @@ class CampaignStager {
           },
           );
         });
+      } else {
+        callback(media);
       }
     } catch (err) {
       showError(err.message || 'This image format is not supported.');
