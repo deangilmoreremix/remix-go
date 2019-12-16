@@ -5,6 +5,7 @@ import { FormGroup, Alert } from 'reactstrap';
 import InfiniteLoading from './InfiniteLoading';
 import PropTypes from '../../lib/PropTypes';
 import MediaTypeDetector from '../../lib/popcorn/util/mediaTypeDetector';
+import { checkImageResolution } from '../../lib/utils/cropHelper';
 
 @inject('api')
 @observer
@@ -12,7 +13,20 @@ export default class ImageUpload extends Component {
   static propTypes = {
     onFileUploaded: PropTypes.func.isRequired,
     onValidate: PropTypes.func,
+    isModal: PropTypes.bool,
+    recommendedResolution: PropTypes.shape({
+      width: PropTypes.number.isRequired,
+      height: PropTypes.number.isRequired,
+    }),
   };
+
+  constructor(props) {
+    super(props);
+    const { recommendedResolution } = props;
+    this.recommendedResolutionPrompt = recommendedResolution
+      && `${recommendedResolution.width}x${recommendedResolution.height}`;
+    this.MediaTypeDetector = new MediaTypeDetector();
+  }
 
   state = {
     error: null,
@@ -34,23 +48,33 @@ export default class ImageUpload extends Component {
 
   changeUrl = event => this.setState({ url: event.target.value, file: null });
 
+  onFileUploaded = (imageMeta) => {
+    const { onFileUploaded } = this.props;
+    if (imageMeta.type === 'HTML5' && imageMeta.contentType.indexOf('image/') === 0) {
+      onFileUploaded(imageMeta.source);
+    } else {
+      this.setState({
+        error: 'This image format is not supported.',
+      });
+    }
+  };
+
   uploadFile = async () => {
     const { file, url } = this.state;
-    const { onFileUploaded, api } = this.props;
+    const { api, recommendedResolution, isModal } = this.props;
     if (!file && !url) {
       return;
     }
     this.setState({ isUploading: true });
     try {
-      const videoMeta = await new MediaTypeDetector()
-        .getMetadata(file ? (await api.uploadMedia({ data: file })).url : url);
-      if (videoMeta.type === 'HTML5' && videoMeta.contentType.indexOf('image/') === 0) {
-        onFileUploaded(videoMeta.source);
-      } else {
-        this.setState({
-          error: 'This image format is not supported.',
-        });
-      }
+      const media = await api.uploadMedia({ data: file || url });
+      const imageMeta = await new MediaTypeDetector().getMetadata(media.url);
+      checkImageResolution({
+        imageMeta,
+        recommendedResolution,
+        onFileUploaded: this.onFileUploaded,
+        isNewModal: !isModal,
+      });
     } catch (err) {
       this.setState({
         error: err.message || 'This image format is not supported.',
@@ -69,11 +93,18 @@ export default class ImageUpload extends Component {
 
   render() {
     const { isUploading, file, url, error } = this.state;
+    const { recommendedResolutionPrompt } = this;
     return (
       <div className="image-upload">
         <FormGroup>
           <label htmlFor="image-url">
             Set Image URL
+            {recommendedResolutionPrompt
+            && (
+            <span className="text-resolution">
+              {`*Recommended image resolution ${recommendedResolutionPrompt}`}
+            </span>
+            )}
             <input id="image-url" type="text" onChange={this.changeUrl} />
           </label>
         </FormGroup>

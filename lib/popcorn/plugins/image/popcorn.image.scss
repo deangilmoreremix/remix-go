@@ -105,6 +105,9 @@
   &.active {
     .url-container {
       display: flex;
+      position: relative;
+      top: 100%;
+      overflow-y: auto;
     }
   }
 }

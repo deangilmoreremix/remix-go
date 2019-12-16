@@ -227,14 +227,17 @@ class LinkedinCampaignStager extends CampaignStager {
                     id="linkedin-post-image-input"
                     className="cell linkedin-post-input"
                     type="file"
-                    onChange={async ({ target: { files: [file] } }) => {
-                      const response = await this.api.uploadMedia({ data: file });
+                    accept="image/*"
+                    onChange={this.uploadFile((imageData) => {
                       const { postData } = state.variables;
-                      postData.thumbnail = response.url;
+                      postData.thumbnail = imageData.source;
                       state.variables.postData = postData;
                       state.onVariablesUpdated(state.variables);
-                    }}
+                    })}
                   />
+                  <p className="text-resolution">
+                    {`*Recommended image resolution ${this.constructor.posterframeRecommendedResolutionPrompt}`}
+                  </p>
                 </div>
               </div>
               <this.constructor.PostPreview
@@ -301,7 +304,7 @@ class LinkedinCampaignStager extends CampaignStager {
 
   canBypassStage(stage) {
     const { isLoading, embedPage, userData, postData } = this.state;
-    if (isLoading) {
+    if (isLoading || this.isUploading) {
       return false;
     }
     switch (stage.key) {

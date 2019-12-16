@@ -4,10 +4,12 @@ import { inject, observer } from 'mobx-react';
 
 import AudioGallery from 'react-masonry-infinite';
 
-import Search from '../../../common/Search';
-import AudioGridItem from './gridItems/AudioGridItem';
-import InfiniteLoading from '../../../common/InfiniteLoading';
 import PropTypes from '../../../../lib/PropTypes';
+import InfiniteLoading from '../../../common/InfiniteLoading';
+import Search from '../../../common/Search';
+import InputField from './gridItems/InputField';
+import AudioGridItem from './gridItems/AudioGridItem';
+
 
 @inject('api')
 @observer
@@ -24,50 +26,73 @@ export default class AudioSelectionWorkspace extends Component {
     const { api } = props;
     this.state = {
       scope: api.constructor.ASSET_SCOPES.LIBRARY,
-      hasMore: true,
-      elements: [],
-      query: '',
+      [api.constructor.ASSET_SCOPES.LIBRARY]: {
+        hasMore: true,
+        elements: [],
+        query: '',
+      },
+      [api.constructor.ASSET_SCOPES.UPLOADS]: {
+        hasMore: true,
+        elements: [],
+        query: '',
+      },
     };
   }
 
   onSearch = async (query) => {
-    this.setState({ elements: [], hasMore: false });
-    const { api } = this.props;
     const { scope } = this.state;
-    const newElements = await api.assets(scope, api.constructor.ASSET_TYPES.AUDIOS, 0, query);
     this.setState({
-      elements: newElements,
-      hasMore: newElements.length > 0,
-      query,
+      [scope]: {
+        elements: [],
+      },
     });
+    await this.loadAudio({ elements: [], query });
   };
 
   onScopeChange = async (scope) => {
-    this.state = {
-      scope,
-      elements: [],
-      hasMore: true,
-      query: '',
-    };
-    await this.loadMore();
+    if (scope !== this.state.scope) {
+      this.setState({
+        scope,
+        [scope]: {
+          hasMore: true,
+          elements: [],
+          query: '',
+        },
+      });
+    }
   };
 
-  loadMore = async () => {
+  onRename = item => (name) => {
     const { api } = this.props;
-    const { scope, elements, query } = this.state;
+    return api.renameAsset(item, name);
+  };
+
+  loadAudio = async ({ elements, query }) => {
+    const { api } = this.props;
+    const { scope } = this.state;
     const newElements = await api.assets(
       scope, api.constructor.ASSET_TYPES.AUDIOS, elements.length, query,
     );
     this.setState({
-      elements: elements.concat(newElements),
-      // for now we have no pagination for such resources
-      hasMore: newElements.length > 0,
+      [scope]: {
+        query,
+        elements: elements.concat(newElements),
+        hasMore: newElements.length === api.perPage,
+      },
     });
+  };
+
+  loadMore = async () => {
+    const { scope } = this.state;
+    const { elements, query } = this.state[scope];
+    await this.loadAudio({ elements, query });
   };
 
   render() {
     const { api, className, inWindow = false, onAudioSelected } = this.props;
-    const { scope, hasMore, elements } = this.state;
+    const { scope } = this.state;
+    const { hasMore, elements } = this.state[scope];
+    const editable = (scope === api.constructor.ASSET_SCOPES.UPLOADS);
 
     const sizes = inWindow ?
       [
@@ -84,20 +109,20 @@ export default class AudioSelectionWorkspace extends Component {
       ];
     return (
       <Fragment>
-        {/*<ButtonGroup className="go-switch flex-center">*/}
-          {/*<Button*/}
-            {/*onClick={() => this.onScopeChange(api.constructor.ASSET_SCOPES.LIBRARY)}*/}
-            {/*active={scope === api.constructor.ASSET_SCOPES.LIBRARY}*/}
-          {/*>*/}
-            {/*Library*/}
-          {/*</Button>*/}
-          {/*<Button*/}
-            {/*onClick={() => this.onScopeChange(api.constructor.ASSET_SCOPES.UPLOADS)}*/}
-            {/*active={scope === api.constructor.ASSET_SCOPES.UPLOADS}*/}
-          {/*>*/}
-            {/*Uploads*/}
-          {/*</Button>*/}
-        {/*</ButtonGroup>*/}
+        <ButtonGroup className="go-switch flex-center">
+          <Button
+            onClick={() => this.onScopeChange(api.constructor.ASSET_SCOPES.LIBRARY)}
+            active={scope === api.constructor.ASSET_SCOPES.LIBRARY}
+          >
+            Library
+          </Button>
+          <Button
+            onClick={() => this.onScopeChange(api.constructor.ASSET_SCOPES.UPLOADS)}
+            active={scope === api.constructor.ASSET_SCOPES.UPLOADS}
+          >
+            Uploads
+          </Button>
+        </ButtonGroup>
         <Search
           onSearch={q => this.onSearch(q)}
         />
@@ -110,16 +135,21 @@ export default class AudioSelectionWorkspace extends Component {
           sizes={sizes}
         >
           {
-            elements.map(({ title, url, artwork }, idx) => (
-              <AudioGridItem
+            elements.map((item, idx) => (
+              <div
+                className="card"
                 key={idx}
-                title={title}
-                url={url}
-                artwork={artwork}
-                onUse={audio => onAudioSelected(audio)}
-              />
-            ))
-          }
+              >
+                <AudioGridItem
+                  item={item}
+                  onUse={onAudioSelected}
+                />
+                {editable &&
+                <InputField
+                  value={item.title}
+                  onSave={this.onRename(item)}
+                />}
+              </div>))}
         </AudioGallery>
       </Fragment>);
   }

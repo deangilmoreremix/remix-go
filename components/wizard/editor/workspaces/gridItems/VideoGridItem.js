@@ -1,13 +1,18 @@
 import React, { Component } from 'react';
+import { observer, inject } from 'mobx-react';
 
 import PropTypes from '../../../../../lib/PropTypes';
 
+@inject('store')
+@observer
 export default class VideoGridItem extends Component {
   static propTypes = {
-    title: PropTypes.string.isRequired,
-    url: PropTypes.string.isRequired,
-    preview: PropTypes.string.isRequired,
-    onPreview: PropTypes.func.isRequired,
+    item: PropTypes.shape({
+      title: PropTypes.string,
+      url: PropTypes.string.isRequired,
+      preview: PropTypes.string.isRequired,
+    }),
+    onPreview: PropTypes.func,
     onUse: PropTypes.func.isRequired,
   };
 
@@ -18,7 +23,7 @@ export default class VideoGridItem extends Component {
   };
 
   render() {
-    const { onPreview, onUse, title, url, preview } = this.props;
+    const { onPreview, onUse, item: { url, preview, title } } = this.props;
     return (
       <div className="card video-item" style={{ backgroundImage: `url(${preview ? '' : '/static/images/editor/default-video-preview.png'})` }}>
         {preview &&
