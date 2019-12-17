@@ -162,6 +162,8 @@ class CampaignStager {
           },
           );
         });
+      } else {
+        callback(imageMeta);
       }
     } catch (err) {
       showError(err.message || 'This image format is not supported.');
