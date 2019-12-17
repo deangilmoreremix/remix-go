@@ -229,14 +229,10 @@ class LinkedinCampaignStager extends CampaignStager {
                     type="file"
                     accept="image/*"
                     onChange={this.uploadFile((imageData) => {
-                      console.log('uploadFile linkedinCompaignStagre 232 ', state);
-                      console.log('imageData uploadFile', imageData);
                       const { postData } = state.variables;
                       postData.thumbnail = imageData.source;
                       state.variables.postData = postData;
                       state.onVariablesUpdated(state.variables);
-                      console.log('state ', state);
-                      console.log('this state ', this.state);
                     })}
                   />
                   <p className="text-resolution">
