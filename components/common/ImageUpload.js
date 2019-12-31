@@ -53,6 +53,9 @@ export default class ImageUpload extends Component {
     const { onFileUploaded } = this.props;
     if (imageMeta.type === 'HTML5' && imageMeta.contentType.indexOf('image/') === 0) {
       console.log('imageMeta', imageMeta);
+      this.setState({
+        error: null,
+      });
       onFileUploaded(imageMeta.source);
     } else {
       this.setState({
@@ -92,7 +95,6 @@ export default class ImageUpload extends Component {
       this.setState({
         isUploading: false,
         url: null,
-        error: null,
       });
     }
   };
