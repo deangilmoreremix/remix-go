@@ -49,12 +49,13 @@ export default class ImageUpload extends Component {
   changeUrl = event => this.setState({ url: event.target.value, file: null });
 
   onFileUploaded = (imageMeta) => {
+    console.log(this);
     const { onFileUploaded } = this.props;
     if (imageMeta.type === 'HTML5' && imageMeta.contentType.indexOf('image/') === 0) {
-      debugger
+      console.log(imageMeta);
       onFileUploaded(imageMeta.source);
     } else {
-      debugger
+      console.log('error');
       this.setState({
         error: 'This image format is not supported.',
       });
