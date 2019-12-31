@@ -73,6 +73,7 @@ export default class ImageUpload extends Component {
       this.setState({
         error: 'This image format is not supported.',
       });
+      return;
     }
     this.setState({ isUploading: true });
     try {
