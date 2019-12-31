@@ -55,7 +55,6 @@ export default class ImageUpload extends Component {
       console.log('imageMeta', imageMeta);
       onFileUploaded(imageMeta.source);
     } else {
-      console.log('error');
       this.setState({
         error: 'This image format is not supported.',
       });
@@ -93,6 +92,7 @@ export default class ImageUpload extends Component {
       this.setState({
         isUploading: false,
         url: null,
+        error: null,
       });
     }
   };
