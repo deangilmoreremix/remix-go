@@ -49,13 +49,8 @@ export default class ImageUpload extends Component {
   changeUrl = event => this.setState({ url: event.target.value, file: null });
 
   onFileUploaded = (imageMeta) => {
-    console.log(this);
     const { onFileUploaded } = this.props;
     if (imageMeta.type === 'HTML5' && imageMeta.contentType.indexOf('image/') === 0) {
-      console.log('imageMeta', imageMeta);
-      this.setState({
-        error: null,
-      });
       onFileUploaded(imageMeta.source);
     } else {
       this.setState({
@@ -65,7 +60,6 @@ export default class ImageUpload extends Component {
   };
 
   uploadFile = async () => {
-    console.log('uploadFile', this);
     const { file, url } = this.state;
     const { api, recommendedResolution, isModal } = this.props;
     if (!file && !url) {
@@ -86,6 +80,9 @@ export default class ImageUpload extends Component {
         recommendedResolution,
         onFileUploaded: this.onFileUploaded,
         isNewModal: !isModal,
+      });
+      this.setState({
+        error: null,
       });
     } catch (err) {
       this.setState({
