@@ -52,7 +52,7 @@ export default class ImageUpload extends Component {
     console.log(this);
     const { onFileUploaded } = this.props;
     if (imageMeta.type === 'HTML5' && imageMeta.contentType.indexOf('image/') === 0) {
-      console.log(imageMeta);
+      console.log('imageMeta', imageMeta);
       onFileUploaded(imageMeta.source);
     } else {
       console.log('error');
@@ -63,11 +63,16 @@ export default class ImageUpload extends Component {
   };
 
   uploadFile = async () => {
-    console.log(this);
+    console.log('uploadFile', this);
     const { file, url } = this.state;
     const { api, recommendedResolution, isModal } = this.props;
     if (!file && !url) {
       return;
+    }
+    if (!!file.type.indexOf('image/')) {
+      this.setState({
+        error: 'This image format is not supported.',
+      });
     }
     this.setState({ isUploading: true });
     try {
