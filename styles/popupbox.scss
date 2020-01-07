@@ -81,7 +81,7 @@ $popupbox-zindex:    10000;
 }
 
 .popupbox-content {
-  padding: 15px 24px 10px;
+  padding: 20px 24px 30px;
 }
 
 .popupbox-titleBar {
@@ -120,4 +120,16 @@ $popupbox-zindex:    10000;
 .popupbox[data-title='bottom'] .popupbox-titleBar {
   box-shadow: none;
   border-top: 1px #ccc solid
+}
+
+@media (max-width: 1366px) {
+  .popupbox-content {
+    padding: 15px 24px 10px;
+  }
+}
+
+@media (width: 1920px) and (height: 1080px) {
+  .popupbox-wrapper {
+    margin-bottom: 5em;
+  }
 }
