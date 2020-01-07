@@ -39,3 +39,9 @@
   background-color: #ff8c;
   border: thin solid #dbbf6c;
 }
+
+@media (width: 1920px) and (height: 1080px) {
+  .social-campaign {
+    height: 70vh;
+  }
+}
