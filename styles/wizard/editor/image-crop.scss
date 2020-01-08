@@ -1,7 +1,7 @@
 .image-crop-content {
   display: flex;
-  width: 70vw;
-  height: 70vh;
+  width: 75vw;
+  height: 90vh;
   max-width: 100vw;
   max-height: 100vh;
   justify-content: center;
@@ -32,9 +32,11 @@
   }
 }
 
-.social-campaign {
-  .image-crop-content {
-    width: 75vw;
-    height: 90vh;
+@media (width: 1920px) and (height: 1080px) {
+  .social-campaign {
+    .image-crop-content {
+      height: 70vh;
+    }
   }
 }
+
