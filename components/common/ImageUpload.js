@@ -62,6 +62,9 @@ export default class ImageUpload extends Component {
   uploadFile = async () => {
     const { file, url } = this.state;
     const { api, recommendedResolution, isModal } = this.props;
+    this.setState({
+      error: null,
+    });
     if (!file && !url) {
       return;
     }
@@ -80,9 +83,6 @@ export default class ImageUpload extends Component {
         recommendedResolution,
         onFileUploaded: this.onFileUploaded,
         isNewModal: !isModal,
-      });
-      this.setState({
-        error: null,
       });
     } catch (err) {
       this.setState({
