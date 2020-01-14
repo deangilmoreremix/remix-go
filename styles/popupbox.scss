@@ -131,5 +131,9 @@ $popupbox-zindex:    10000;
 @media (width: 1920px) and (height: 1080px) {
   .popupbox-wrapper {
     margin-bottom: 5em;
+    position: absolute;
+    top: 41%;
+    left: 50%;
+    transform: translate(-50%, -50%);
   }
 }
