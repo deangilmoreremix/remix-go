@@ -40,3 +40,14 @@
   border: thin solid #dbbf6c;
 }
 
+@media (max-width: 1366px) {
+  .social-campaign {
+    height: 88vh;
+  }
+}
+
+@media (width: 1920px) and (height: 1080px) {
+  .social-campaign {
+    height: 70vh;
+  }
+}
