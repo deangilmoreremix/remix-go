@@ -143,6 +143,10 @@ class CampaignStager {
     if (!file) {
       return;
     }
+    if (file.type.indexOf('image/') === -1) {
+      showError('This image format is not supported.');
+      return;
+    }
     this.isUploading = true;
     try {
       const media = await api.uploadMedia({ data: file });
