@@ -140,11 +140,10 @@ class CampaignStager {
   @action
   uploadFile = callback => async ({ target: { files: [file] } }) => {
     const { api } = this;
-    console.log(file);
     if (!file) {
       return;
     }
-    if (file && file.type && file.type.indexOf('image/') === -1) {
+    if (file.type.indexOf('image/') === -1) {
       showError('This image format is not supported.');
       return;
     }
