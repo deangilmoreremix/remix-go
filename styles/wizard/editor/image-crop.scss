@@ -1,7 +1,7 @@
 .image-crop-content {
   display: flex;
   width: 100%;
-  height: 100%;
+  height: 80vh;
   max-width: 100vw;
   max-height: 100vh;
   justify-content: center;
@@ -29,6 +29,19 @@
 
   .save-button {
     margin-top: 1rem;
+  }
+}
+
+@media (max-width: 1366px) {
+  .image-crop-content {
+    height: 88vh;
+  }
+}
+
+@media (width: 1920px) and (height: 1080px) {
+  .image-crop-content {
+    height: 70vh;
+    width: 75vw;
   }
 }
 
