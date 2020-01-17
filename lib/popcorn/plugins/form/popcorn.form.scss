@@ -50,9 +50,24 @@
       background: url('/static/images/editor/elements/form/edit.svg') no-repeat;
       height: 100%;
     }
+    .white-edit-button {
+      background: url('/static/images/editor/elements/form/white-edit.svg') no-repeat;
+      height: 100%;
+    }
 
     input {
       padding: 3% 5%;
+    }
+
+    .input-wrapper-container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .input-buttons {
+      position: relative;
+      display: flex;
     }
 
     .input-wrapper {
@@ -66,13 +81,13 @@
       }
 
       .drag-button {
-        margin: 5px 2% 0 0;
+        margin: auto 5px;
         background: url('/static/images/editor/elements/form/element-drag.svg') no-repeat;
         height: 100%;
       }
 
       .input-remove {
-        margin-left: 1%;
+        margin: auto 5px auto auto;
         background: url('/static/images/editor/elements/form/element-remove.svg') no-repeat;
         height: 100%;
       }
@@ -87,6 +102,9 @@
         vertical-align: top;
         padding: 0 8px 0 0;
         width: 80%;
+      },
+      input[type="email"] {
+        width: 100%;
       }
 
       button[type="submit"] {
@@ -134,7 +152,6 @@
 
     .input-add {
       display: block;
-      float: right;
       height: 2em;
       font-family: inherit;
       width: auto;
@@ -233,29 +250,16 @@
       color: #c1c1c1;
     }
 
-    .buttons-inner {
-      display: inline-block;
-      width: 100%;
+    .div-button {
+      display: flex;
+      width: 20%;
       margin: 2% 0;
       height: auto;
+      justify-content: center;
+      cursor: pointer;
 
-      .edit-button {
-        float: right;
-        margin-top: 0.5rem;
-      }
-
-      input[type=submit], .confirm-button {
-        position: relative;
-        height: 2.5em;
-        box-sizing: content-box;
-        overflow: visible;
-        display: block;
-        width: 10%;
-        min-width: 85px;
-        margin: 0 auto;
-        bottom: 0;
-        padding: 0;
-        cursor: pointer;
+      span {
+        margin: 0.4rem;
       }
     }
 
