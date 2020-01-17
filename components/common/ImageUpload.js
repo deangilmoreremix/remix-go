@@ -68,7 +68,7 @@ export default class ImageUpload extends Component {
     if (!file && !url) {
       return;
     }
-    if (file && file.type && file.type.indexOf('image/') === -1) {
+    if (file.type && file.type.indexOf('image/') === -1) {
       this.setState({
         error: 'This image format is not supported.',
       });
