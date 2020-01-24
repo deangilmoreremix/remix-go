@@ -261,6 +261,13 @@
         margin: auto !important;
         height: 50% !important;
       }
+
+      @media screen and (max-width: 1360px) {
+        button {
+          margin: auto !important;
+          height: 35% !important;
+        }
+      }
     }
 
     .div-button {
