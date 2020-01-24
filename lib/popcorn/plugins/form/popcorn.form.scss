@@ -48,7 +48,7 @@
 
     .edit-button {
       background: url('/static/images/editor/elements/form/edit.svg') no-repeat;
-      height: 40%;
+      height: 100%;
     }
     .white-edit-button {
       background: url('/static/images/editor/elements/form/white-edit.svg') no-repeat;
@@ -75,7 +75,6 @@
       display: inline-flex;
       align-items: center;
       width: 100%;
-      justify-content: space-between;
 
       textarea, input {
         width: inherit;
@@ -84,13 +83,13 @@
       .drag-button {
         margin: auto 5px;
         background: url('/static/images/editor/elements/form/element-drag.svg') no-repeat;
-        height: 40%;
+        height: 100%;
       }
 
       .input-remove {
         margin: auto 5px auto auto;
         background: url('/static/images/editor/elements/form/element-remove.svg') no-repeat;
-        height: 40%;
+        height: 100%;
       }
 
       .textarea-field,
@@ -101,7 +100,7 @@
         outline: none;
         -webkit-appearance: none;
         vertical-align: top;
-        padding: 0 8px 0 0;
+        padding: 0;
         width: 80%;
       },
       input[type="email"] {
@@ -123,7 +122,7 @@
       .input-form {
         display: flex;
         flex-direction: row;
-        width: 92%;
+        width: 100%;
         background: white;
         text-align: left;
         box-shadow: 0 0 0 0.5px #c1c1c1;
@@ -251,21 +250,22 @@
       color: #c1c1c1;
     }
 
-    .container-confirm-button {
-      display: flex;
-      align-items: center;
-      width: 20%;
-    }
-
     .container-edit-buttons {
+      width: 20%;
       display: flex;
-      flex-direction: column;
-      align-items: center;
+      align-items: flex-end;
+      justify-content: end;
+      margin-right: 2px;
+
+      button {
+        margin: auto !important;
+        height: 50% !important;
+      }
     }
 
     .div-button {
       display: flex;
-      width: 100%;
+      width: 20%;
       margin: 2% 0;
       height: auto;
       justify-content: center;
