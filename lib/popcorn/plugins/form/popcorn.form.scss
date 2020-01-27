@@ -52,7 +52,7 @@
     }
     .white-edit-button {
       background: url('/static/images/editor/elements/form/white-edit.svg') no-repeat;
-      height: 100%;
+      height: 50%;
     }
 
     input {
@@ -73,7 +73,6 @@
     .input-wrapper {
       padding: 1% 0;
       display: inline-flex;
-      align-items: center;
       width: 100%;
 
       textarea, input {
@@ -272,9 +271,11 @@
 
     .div-button {
       display: flex;
-      width: 20%;
+      width: auto;
+      align-items: center;
+      flex-grow: 1;
       margin: 2% 0;
-      height: auto;
+      height: 100%;
       justify-content: center;
       cursor: pointer;
 
