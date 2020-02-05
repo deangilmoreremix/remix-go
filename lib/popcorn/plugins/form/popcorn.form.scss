@@ -103,6 +103,7 @@
         vertical-align: top;
         padding: 0;
         width: 80%;
+        min-width: 10%;
       }
       input[type="email"] {
         width: 100%;
@@ -134,7 +135,7 @@
 
         .dropdown-button {
           margin: auto 0;
-          width: 10%;
+          min-width: 13%;
           height: inherit;
         }
 
