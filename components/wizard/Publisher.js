@@ -21,6 +21,9 @@ import EmailCampaign from './publisher/campaigns/EmailCampaign';
 import SocialCampaign from './publisher/campaigns/SocialCampaign';
 import RetargetCampaign from './publisher/campaigns/RetargetCampaign';
 
+import { consts } from '../../lib/consts/consts';
+const { LABEL_PUBLISHER } = consts;
+
 @inject('api')
 @inject('store')
 @observer
@@ -168,9 +171,9 @@ export default class Publisher extends Component {
                           width="50%"
                           height="40%"
                         />
-                        <label className="overview-item">URL</label>
+                        <label className="overview-item">{LABEL_PUBLISHER.url}</label>
                         <Input className="overview-item embed-url" type="text" value={activeProject && activeProject.make.url} readOnly />
-                        <label className="overview-item">Embed</label>
+                        <label className="overview-item">{LABEL_PUBLISHER.embed}</label>
                         <EmbedDataContainer className="overview-item embed-item" url={activeProject && activeProject.make.url} />
                       </Col>
                     </Container>
