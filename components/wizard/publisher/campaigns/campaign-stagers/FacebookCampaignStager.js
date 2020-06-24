@@ -21,10 +21,12 @@ class FacebookCampaignStager extends CampaignStager {
   static PostPreview = FacebookPostPreview;
 
   static EMBED_LOCATIONS = [
-    ...CampaignStager.EMBED_LOCATIONS.slice(0, CampaignStager.EMBED_LOCATIONS.length - 1), {
-      key: 'facebook-page',
-      label: 'Facebook Page',
-    }, CampaignStager.EMBED_LOCATIONS[CampaignStager.EMBED_LOCATIONS.length - 1],
+    ...CampaignStager.EMBED_LOCATIONS.slice(0, CampaignStager.EMBED_LOCATIONS.length - 1),
+    // {
+    //   key: 'facebook-page',
+    //   label: 'Facebook Page',
+    // }
+    CampaignStager.EMBED_LOCATIONS[CampaignStager.EMBED_LOCATIONS.length - 1],
   ];
 
   _stages = [
