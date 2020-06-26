@@ -424,7 +424,7 @@ export default class EmailCampaign extends Component {
                   <div className="hint-steps">
                     <span><b>Step 1:</b> Embed the code below on a web-page where you want the video </span>
                     <span><b>Step 2:</b> Save changes on the web-page</span>
-                    <span><b>Step 3:</b> Click the Next button on this dialog box and enter your website/landing page</span>
+                    <span><b>Step 3:</b> Click the Next button on this dialog box and enter your website/landing page URL</span>
                   </div>
                 </div>
                 <EmbedDataContainer
