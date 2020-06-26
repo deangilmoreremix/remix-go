@@ -19,6 +19,7 @@ export default class EmbedDataContainer extends Component {
     url: PropTypes.string.isRequired,
     resizable: PropTypes.bool,
     stringGenerator: PropTypes.func,
+    label: PropTypes.string,
   };
 
   state = {
@@ -32,6 +33,7 @@ export default class EmbedDataContainer extends Component {
       className,
       resizable = false,
       stringGenerator = defaultStringGenerator,
+      label,
     } = this.props;
     const { height, width } = this.state;
 
@@ -56,6 +58,7 @@ export default class EmbedDataContainer extends Component {
             />
           </span>
           </div>
+          {label && (<span className="embed-code-title">{label}</span>)}
           <Input
             type="textarea"
             readOnly

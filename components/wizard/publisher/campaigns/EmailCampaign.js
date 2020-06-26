@@ -18,6 +18,9 @@ const STAGES = [
   { key: 'service-provider', completionPercentage: 100 },
 ];
 
+const LABEL_TEXTAREA = 'Embed Code';
+const TITLE_EMAIL_CAMPAIGN = 'How Do You Want To Send Your Video?';
+
 const iframeStyling = `<!--- embed styling ---->
 <style> 
   .iframe-container { position:relative; padding-bottom:56.25%; padding-top:30px; height:0; overflow:hidden; border:1px solid #ccc; }
@@ -31,31 +34,17 @@ const iframeTag = (url, width, height) => `<div class="iframe-container"><iframe
 const EMBED_LOCATIONS = [
   {
     key: 'default',
-    label: 'Direct (Default Hosting)',
+    label: 'Send Via AutoResponder',
   },
   {
     key: 'leadpages',
-    label: 'LeadPages',
-    prompt: 'Copy and paste this embed code into your LeadPage',
+    label: 'Embed & Send (Advanced)',
     embedGenerator: (url, width, height) => `${embedScript(url)}${iframeStyling}${iframeTag(url, width, height)}`,
   },
   {
     key: 'wordpress',
-    label: 'WordPress',
-    prompt: 'Copy and paste this embed code into your WordPress',
+    label: 'Embed On WordPress & Send',
     embedGenerator: (url, width, height) => `${iframeStyling}${iframeTag(url, width, height)}`,
-  },
-  {
-    key: 'optimizepress',
-    label: 'OptimizePress 2.0',
-    prompt: 'Copy and paste this embed code into your Video Player OP 2.0 element',
-    embedGenerator: (url, width, height) => `${embedScript(url)}${iframeStyling}${iframeTag(url, width, height)}`,
-  },
-  {
-    key: 'other',
-    label: 'Other',
-    prompt: 'Copy & Paste this embed code inside the custom HTML element',
-    embedGenerator: (url, width, height) => `${embedScript(url)}${iframeStyling}${iframeTag(url, width, height)}`,
   },
 ];
 
@@ -364,7 +353,7 @@ export default class EmailCampaign extends Component {
               value={currentStage.completionPercentage}
             />
             <div className={`embed-engine ${currentStage.key !== 'embed-engine' && 'hidden'}`}>
-              <h5 className="embed-title">Where do you want to embed your video?</h5>
+              <h5 className="embed-title">{TITLE_EMAIL_CAMPAIGN}</h5>
               <div className="embed-grid">
                 <div className="row embed-group">
                   <label className="cell" htmlFor="embed-location-select">Embed Location</label>
@@ -430,7 +419,16 @@ export default class EmailCampaign extends Component {
                     : null
                 }
                 <span className="embed-line">{embedLocation.prompt}</span>
+                <div className="hint-container">
+                  <div className="hint-title">Use this option to send your lead to a webpage with your personalized video on it. (Example: Salespage)</div>
+                  <div className="hint-steps">
+                    <span><b>Step 1:</b> Embed code below on webpage where you want the video to show </span>
+                    <span><b>Step 2:</b> Save changes</span>
+                    <span><b>Step 3:</b> Click On Next where you will be asked to enter youy landing page URL</span>
+                  </div>
+                </div>
                 <EmbedDataContainer
+                  label={LABEL_TEXTAREA}
                   className="embed-item"
                   url={project.make.url}
                   stringGenerator={embedLocation.embedGenerator}
@@ -446,6 +444,10 @@ export default class EmailCampaign extends Component {
                 value={embedPage}
                 onChange={({ target: { value } }) => this.setState({ embedPage: value })}
               />
+              <div className="url-hint-container">
+                <span className="url-hint-example">*Must start with https:// or http://</span>
+                <span><b>Example:</b> https://videoremix.io/example</span>
+              </div>
             </div>
             <div className={`service-provider ${currentStage.key !== 'service-provider' && 'hidden'}`}>
               <ul className="service-provider-inner">

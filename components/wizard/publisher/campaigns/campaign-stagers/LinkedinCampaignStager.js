@@ -12,6 +12,9 @@ import CampaignStager from './CampaignStager';
 import EmbedDataContainer from '../../EmbedDataContainer';
 import LinkedinPostPreview from '../../../../common/post-previews/LinkedinPostPreview';
 
+const LABEL_TEXTAREA = 'Copy & Paste this embed code inside the custom HTML element';
+const TITLE_LINKEDIN = 'How Do You Want To Send Your Video?';
+
 class LinkedinCampaignStager extends CampaignStager {
   static PostPreview = LinkedinPostPreview;
 
@@ -21,7 +24,7 @@ class LinkedinCampaignStager extends CampaignStager {
       completionPercentage: 25,
       element: this.constructor.generateStageComponent(state => (
         <div className="embed-engine">
-          <h5 className="embed-title">Where do you want to embed your video?</h5>
+          <h5 className="embed-title">{TITLE_LINKEDIN}</h5>
           <div className="embed-grid">
             <div className="row embed-group">
               <label className="cell" htmlFor="embed-location-select">Embed Location</label>
@@ -84,6 +87,7 @@ class LinkedinCampaignStager extends CampaignStager {
           <div className={state.variables.embedLocation.embedGenerator ? 'embed-details' : 'hidden'}>
             <span className="embed-line">{state.variables.embedLocation.prompt}</span>
             <EmbedDataContainer
+              label={LABEL_TEXTAREA}
               className="embed-item"
               url={[
                 state.project.make.url, [
@@ -112,6 +116,10 @@ class LinkedinCampaignStager extends CampaignStager {
               state.variables.embedPage = value;
             }}
           />
+          <div className="url-hint-container">
+            <span className="url-hint-example">*Must start with https:// or http://</span>
+            <span><b>Example:</b> https://videoremix.io/example</span>
+          </div>
         </div>
       )),
     },
