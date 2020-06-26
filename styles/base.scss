@@ -386,7 +386,17 @@ form,
   .welcome {
     height: 10%;
     width: 50%;
-    margin: 5% auto 0 auto;
+    margin: 3% auto 0 auto;
+
+    h2 {
+      font-size: 3.5rem;
+      margin-bottom: 2rem;
+    }
+
+    a.click-here {
+      font-size: 20px;
+      font-weight: 600;
+    }
 
     * {
       color: $secondary-color;

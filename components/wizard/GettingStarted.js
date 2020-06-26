@@ -18,6 +18,7 @@ import VideoUpload from '../common/VideoUpload';
 import SVGFromTemplate from '../../static/images/getting-started/template.svg';
 import SVGTemplateGenerator from '../../static/images/getting-started/generator.svg';
 import SVGVideoUpload from '../../static/images/getting-started/upload.svg';
+import SVGMyProjects from '../../static/images/getting-started/my_projects.svg';
 
 @inject('api')
 @inject('store')
@@ -41,7 +42,7 @@ export default class GettingStarted extends Component {
   }
 
   getWizard(wizardType) {
-    const { store: { whiteLabelManager, common: { features }, currentUser } } = this.props;
+    const { store: { whiteLabelManager, common: { features, prefixes }, currentUser } } = this.props;
     switch (wizardType) {
       case GettingStarted.WIZARD_TYPES.GENERATOR:
         return (
@@ -101,6 +102,7 @@ export default class GettingStarted extends Component {
                 href={whiteLabelManager.tutorialsLink}
                 target="_blank"
                 rel="noopener noreferer"
+                className="click-here"
               >
                 Click here to view the tutorials.
               </a>
@@ -140,6 +142,15 @@ export default class GettingStarted extends Component {
                 <div className="getting-started-item-inner">
                   <SVGInline className="video-upload-icon" classSuffix="" svg={SVGVideoUpload} cleanup={['title']} />
                   <span>Import Your Own Video</span>
+                </div>
+              </a>
+              <a
+                className="getting-started-item"
+                href={`//${prefixes.projects}.${whiteLabelManager.domain}/me`}
+              >
+                <div className="getting-started-item-inner">
+                  <SVGInline className="my-project-icon" classSuffix="" svg={SVGMyProjects} cleanup={['title']} />
+                  <span>My Projects</span>
                 </div>
               </a>
             </div>
