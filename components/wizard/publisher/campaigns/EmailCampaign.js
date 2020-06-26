@@ -422,9 +422,9 @@ export default class EmailCampaign extends Component {
                 <div className="hint-container">
                   <div className="hint-title">Use this option to send your lead to a webpage with your personalized video on it. (Example: Salespage)</div>
                   <div className="hint-steps">
-                    <span><b>Step 1:</b> Embed code below on webpage where you want the video to show </span>
-                    <span><b>Step 2:</b> Save changes</span>
-                    <span><b>Step 3:</b> Click On Next where you will be asked to enter youy landing page URL</span>
+                    <span><b>Step 1:</b> Embed the code below on a web-page where you want the video </span>
+                    <span><b>Step 2:</b> Save changes on the web-page</span>
+                    <span><b>Step 3:</b> Click the Next button on this dialog box and enter your website/landing page</span>
                   </div>
                 </div>
                 <EmbedDataContainer
