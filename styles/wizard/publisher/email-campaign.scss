@@ -2,6 +2,10 @@
   display: flex;
   flex-direction: column;
 
+  @media (max-width: 1368px) {
+    height: 70vh;
+  }
+
   .workspace {
     .service-provider {
       .service-provider-inner {

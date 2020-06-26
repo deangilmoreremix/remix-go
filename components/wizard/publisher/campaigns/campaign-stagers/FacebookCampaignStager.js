@@ -16,16 +16,14 @@ const BACKEND_URL = 'https://api.vidcloud.io';
 const MIN_FANS_PAGE = 2000;
 const FB_PAGE_PERMISSIONS = 'public_profile,email,manage_pages,pages_show_list';
 const DEFAULT_PERMISSIONS = 'public_profile,email';
+const LABEL_TEXTAREA = 'Copy & Paste this embed code inside the custom HTML element';
+const TITLE_FB = 'How Do You Want To Send Your Video?';
 
 class FacebookCampaignStager extends CampaignStager {
   static PostPreview = FacebookPostPreview;
 
   static EMBED_LOCATIONS = [
     ...CampaignStager.EMBED_LOCATIONS.slice(0, CampaignStager.EMBED_LOCATIONS.length - 1),
-    // {
-    //   key: 'facebook-page',
-    //   label: 'Facebook Page',
-    // }
     CampaignStager.EMBED_LOCATIONS[CampaignStager.EMBED_LOCATIONS.length - 1],
   ];
 
@@ -35,7 +33,7 @@ class FacebookCampaignStager extends CampaignStager {
       completionPercentage: 25,
       element: this.constructor.generateStageComponent(state => (
         <div className="embed-engine">
-          <h5 className="embed-title">Where do you want to embed your video?</h5>
+          <h5 className="embed-title">{TITLE_FB}</h5>
           <div className="embed-grid">
             <div className="row embed-group">
               <label className="cell" htmlFor="embed-location-select">Embed Location</label>
@@ -98,6 +96,7 @@ class FacebookCampaignStager extends CampaignStager {
           <div className={state.variables.embedLocation.embedGenerator ? 'embed-details' : 'hidden'}>
             <span className="embed-line">{state.variables.embedLocation.prompt}</span>
             <EmbedDataContainer
+              label={LABEL_TEXTAREA}
               className="embed-item"
               url={[
                 state.project.make.url, [
@@ -126,6 +125,10 @@ class FacebookCampaignStager extends CampaignStager {
               state.variables.embedPage = value;
             }}
           />
+          <div className="url-hint-container">
+            <span className="url-hint-example">*Must start with https:// or http://</span>
+            <span><b>Example:</b> https://videoremix.io/example</span>
+          </div>
         </div>
       )),
     },

@@ -270,6 +270,34 @@
 
       .embed-details {
         height: 9rem;
+
+        .hint-container {
+          display: flex;
+          flex-direction: column;
+          margin-bottom: 1em;
+
+          .hint-title {
+            text-align: center;
+            font-size: 12px;
+            font-weight: 600;
+            width: 60%;
+            margin: 0 auto;
+            margin-bottom: 0.5em;
+          }
+
+          .hint-steps {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            font-size: 11px;
+            margin: 0 auto;
+            margin-top: 3px;
+
+            > span {
+              padding: 2px;
+            }
+          }
+        }
       }
 
       .embed-item {
@@ -298,6 +326,11 @@
           background: transparent;
           color: $primary-color;
         }
+
+        .embed-code-title {
+          display: flex;
+          padding-top: 1em;
+        }
       }
     }
 
@@ -307,6 +340,17 @@
         margin: 0 10%;
         background: transparent;
         color: $primary-color;
+      }
+
+      .url-hint-container {
+        display: flex;
+        flex-direction: column;
+        font-size: 1rem;
+
+        .url-hint-example {
+          margin-bottom: 0.5em;
+          margin-top: 1.5em;
+        }
       }
     }
   }
