@@ -72,13 +72,14 @@ export default class Menu extends React.Component {
                         {whiteLabelManager.domain === 'videoremix.io' ? 'Projects and Courses' : 'Projects'}
                       </a>
                     </DropdownItem>
-                    {(currentUser.features && (currentUser.features.editor && currentUser.features.editor.state === 'enabled')
-                    || (currentUser.features.staticEditingMode && currentUser.features.staticEditingMode.state === 'enabled')
-                      || currentUser.authorityLevel === 0) && <DropdownItem>
+                    {currentUser && currentUser.features
+                    && (currentUser.features.editor.state === 'enabled'
+                      || currentUser.staticEditingMode.state === 'enabled')
+                      && (<DropdownItem>
                       <a target="_blank" href={`//${prefixes.editor}.${whiteLabelManager.domain}/`}>
                         Advanced Personalized Editor
                       </a>
-                    </DropdownItem>}
+                    </DropdownItem>)}
                     <DropdownItem>
                       <a target="_blank" href="/account">
                         Settings
