@@ -73,6 +73,16 @@ export default class Menu extends React.Component {
                       </a>
                     </DropdownItem>
                     <DropdownItem>
+                      <a target="_blank" href={`//${prefixes.editor}.${whiteLabelManager.domain}/`}>
+                        Personalized Image Editor
+                      </a>
+                    </DropdownItem>
+                    <DropdownItem>
+                      <a target="_blank" href={`//${prefixes.editor}.${whiteLabelManager.domain}/`}>
+                        Personalized Video Editor
+                      </a>
+                    </DropdownItem>
+                    <DropdownItem>
                       <a target="_blank" href="/account">
                         Settings
                       </a>

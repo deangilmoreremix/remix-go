@@ -115,7 +115,7 @@ export default class GettingStarted extends Component {
               >
                 <div className="getting-started-item-inner">
                   <SVGInline className="from-template-icon" classSuffix="" svg={SVGFromTemplate} cleanup={['title']} />
-                  <span>From Template</span>
+                  <span>Start from Template</span>
                 </div>
               </a>
               <a
