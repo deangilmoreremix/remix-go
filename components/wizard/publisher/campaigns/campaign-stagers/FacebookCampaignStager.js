@@ -67,21 +67,21 @@ class FacebookCampaignStager extends CampaignStager {
                 }}
               />
             </div>
-            <div className="row embed-group">
-              <label className="cell" htmlFor="autoplay-check">
-                Autoplay
-              </label>
-              <Input
-                className="cell"
-                type="checkbox"
-                id="autoplay-check"
-                checked={state.variables.autoplay}
-                onChange={({ target: { checked } }) => {
-                  state.variables.autoplay = checked;
-                  state.onVariablesUpdated(state.variables);
-                }}
-              />
-            </div>
+            {/*<div className="row embed-group">*/}
+            {/*  <label className="cell" htmlFor="autoplay-check">*/}
+            {/*    Autoplay*/}
+            {/*  </label>*/}
+            {/*  <Input*/}
+            {/*    className="cell"*/}
+            {/*    type="checkbox"*/}
+            {/*    id="autoplay-check"*/}
+            {/*    checked={state.variables.autoplay}*/}
+            {/*    onChange={({ target: { checked } }) => {*/}
+            {/*      state.variables.autoplay = checked;*/}
+            {/*      state.onVariablesUpdated(state.variables);*/}
+            {/*    }}*/}
+            {/*  />*/}
+            {/*</div>*/}
           </div>
           {/* { */}
           {/* state.variables.autoplay */}

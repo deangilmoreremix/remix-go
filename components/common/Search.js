@@ -17,9 +17,21 @@ export default class Search extends Component {
 
   queryHandler = (value) => {
     const { onSearch } = this.props;
-    this.setState({ query: value });
     onSearch(value);
   };
+
+  handleKeyPress = (e) => {
+    if (e.key === 'Enter') {
+      this.queryHandler(this.state.query);
+    }
+  }
+
+  handleChange = (value) => {
+    if (value === '') {
+      this.queryHandler(value);
+    }
+    this.setState({ query: value });
+  }
 
   render() {
     const { placeholder = 'Search through your content...' } = this.props;
@@ -34,11 +46,14 @@ export default class Search extends Component {
               name="query"
               placeholder={placeholder}
               value={query}
-              onChange={({ target: { value } }) => this.queryHandler(value)}
+              onKeyPress={this.handleKeyPress}
+              onChange={({ target: { value } }) => this.handleChange(value)}
             />
           </div>
           <div className="search-button">
-            <a onClick={() => this.queryHandler(query)}>
+            <a
+              onClick={() => this.queryHandler(query)}
+            >
               <SVGInline className="search-icon" classSuffix="" svg={SVGSearch} cleanup={['title']} />
             </a>
           </div>
