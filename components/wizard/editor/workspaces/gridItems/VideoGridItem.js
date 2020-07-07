@@ -17,7 +17,9 @@ export default class VideoGridItem extends Component {
   };
 
   togglePreview = (state) => {
-    if (this.previewContainer.parentNode.querySelector('video')) {
+    if (this.previewContainer
+      && this.previewContainer.parentNode
+      && this.previewContainer.parentNode.querySelector('video')) {
       this.previewContainer.parentNode.querySelector('video')[state ? 'play' : 'pause']();
     }
   };
