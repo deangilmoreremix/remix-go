@@ -99,7 +99,7 @@ export default class GettingStarted extends Component {
               <h2>Welcome to {whiteLabelManager.appName}!</h2>
               {whiteLabelManager.tutorialsLink &&
               <a
-                href={'http://support.videoremix.io/en/collections/2432930-go-easy-editor'}
+                href='http://support.videoremix.io/en/collections/2432930-go-easy-editor'
                 target="_blank"
                 rel="noopener noreferer"
                 className="click-here"
@@ -160,7 +160,7 @@ export default class GettingStarted extends Component {
 
   async handleWizardSelection(data) {
     const { wizardType } = this.state;
-    const { api, store, store: { common: { features }, currentUser } } = this.props;
+    const { api, store } = this.props;
     this.setState({ waiter: { message: 'Preparing your project...' } });
     switch (wizardType) {
       case GettingStarted.WIZARD_TYPES.FROM_TEMPLATE:
@@ -175,33 +175,6 @@ export default class GettingStarted extends Component {
         store.activeProject = Project.fromTemplate((await api.defaults())[0], true);
         await store.activeProject.updateVideo(data.video, data.trim);
         store.activeProject.thumbnail = store.common.defaultPosterframe;
-        if (currentUser.features[features.generator] && currentUser.features[features.generator].state === 'enabled') {
-          PopupboxManager.open({
-            content: <NicheScriptsWorkspace
-              className="niche-scripts"
-              useWaiter
-              onScriptSelected={async (script) => {
-                const regeneratedProject = Project.fromTemplate(script, true);
-                await regeneratedProject.updateVideo(store.activeProject.video);
-                regeneratedProject.usedWizard = store.activeProject.wizardType;
-                regeneratedProject.thumbnail = store.common.defaultPosterframe;
-                store.activeProject = regeneratedProject;
-                store.activeProject.version = Math.random();
-                PopupboxManager.close();
-              }}
-            />,
-            config: {
-              titleBar: {
-                enable: true,
-                text: 'Select a niche script',
-              },
-              fadeIn: true,
-              fadeInSpeed: 200,
-            },
-          });
-        } else if (currentUser.features[features.generator].link) {
-          window.open(currentUser.features[features.generator].link, '_blank');
-        }
         break;
       default:
         break;
