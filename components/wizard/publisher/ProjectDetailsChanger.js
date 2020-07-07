@@ -71,9 +71,9 @@ export default class ProjectDetailsChanger extends Component {
           <label htmlFor="project-details-description">Project Description</label>
           <Input
             id="project-details-description"
-            className="overview-item description-field"
+            className="overview-item description-field overview-item-post-description"
             type="textarea"
-            rows={4}
+            rows={3}
             value={description}
             onChange={({ target: { value } }) => this.setState({ description: value })}
           />
