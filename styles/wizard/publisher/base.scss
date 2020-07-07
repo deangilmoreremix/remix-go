@@ -92,13 +92,14 @@
           border: 2px solid $secondary-color;
           box-shadow: none;
         }
-          @media (min-width: 1440px) {
-            .form-group {
-              textarea.form-control {
-                height: 10em;
-              }
+
+        @media (min-width: 1440px) {
+          &-post-description {
+            textarea.form-control {
+              height: 10em;
             }
           }
+        }
       }
 
       .overview-item-preview {
@@ -116,8 +117,8 @@
 
       .embed-code {
         textarea.form-control {
-          @media (min-width: 1368px) and (max-width: 1439px) {
-            height: 10em;
+          @media (min-width: 1440px) {
+            height: 20em;
           }
         }
       }
