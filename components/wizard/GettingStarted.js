@@ -99,7 +99,7 @@ export default class GettingStarted extends Component {
               <h2>Welcome to {whiteLabelManager.appName}!</h2>
               {whiteLabelManager.tutorialsLink &&
               <a
-                href='http://support.videoremix.io/en/collections/2432930-go-easy-editor'
+                href={whiteLabelManager.tutorialsLink}
                 target="_blank"
                 rel="noopener noreferer"
                 className="click-here"
