@@ -5,7 +5,7 @@
   padding: 0;
 
   * {
-    margin: 10px 0;
+    margin: 2px 0;
     display: block;
   }
 
@@ -16,15 +16,20 @@
   .text-resolution {
     font-weight: 600;
     font-size: 0.7em;
-    margin-bottom: 1.5em;
+    margin-bottom: 0.2em;
     color: #EF5054
   }
 
   .submit-button {
     height: 30px;
-    width: 100px;
+    width: 15%;
+    font-size: 0.9rem;
     border: none;
     text-transform: uppercase;
+    @media (min-width: 1440px) {
+      width: 18%;
+      height: 35px;
+    }
   }
 
   .alert-error {
