@@ -121,6 +121,12 @@
 
       .embed-code {
         textarea.form-control {
+          @media (max-width: 1367px) {
+            height: 7em;
+          }
+          @media (min-width: 1368px) and (max-width: 1439px){
+            height: 10em;
+          }
           @media (min-width: 1440px) {
             height: 20em;
           }
@@ -228,7 +234,7 @@
         }
         .form-group {
           @media (max-width: 1367px) {
-              margin-bottom: 0.5rem;
+              margin-bottom: 0.3rem;
           }
           @media (min-width: 1368px) and (max-width: 1439px) {
               margin-bottom: 1rem;
@@ -253,7 +259,7 @@
         font-weight: 300;
         font-size: 1.2rem;
         @media (max-width: 1367px)  {
-          font-size: 1rem;
+          font-size: 0.85rem;
           margin-bottom: 0.2rem;
         }
       }
@@ -460,3 +466,11 @@
   color: #EF5054
 }
 
+@media (max-width: 1367px) {
+  h5 {
+    font-size: 1rem;
+  }
+  .overview-item {
+    margin-bottom: 0;
+  }
+}
