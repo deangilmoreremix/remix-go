@@ -34,6 +34,32 @@ $popupbox-zindex:    10000;
 
 .popupbox-content {
   overflow: hidden;
+
+  .container-confirm {
+    display: flex;
+    justify-content: space-evenly;
+
+    &-btn {
+      display: flex;
+      width: 20%;
+      height: 2.5em;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      color: #ffffff;
+      text-align: center;
+      border-radius: 7px;
+      background: #EF5054;
+      font-weight: 700;
+      border: none;
+
+      &:hover {
+        color: #EF5054;
+        background: #ffffff;
+        border: 1px solid #EF5054;
+      }
+    }
+  }
 }
 
 .popupbox-wrapper {
@@ -49,6 +75,10 @@ $popupbox-zindex:    10000;
   flex-direction: column;
   z-index: $popupbox-zindex;
   position: relative;
+}
+
+.custom-popupbox {
+  width: 28rem;
 }
 
 .popupbox-titleBar {
