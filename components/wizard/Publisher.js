@@ -171,10 +171,10 @@ export default class Publisher extends Component {
                           width="50%"
                           height="40%"
                         />
-                        <label className="overview-item">{LABEL_PUBLISHER.url}</label>
-                        <Input className="overview-item embed-url" type="text" value={activeProject && activeProject.make.url} readOnly />
-                        <label className="overview-item">{LABEL_PUBLISHER.embed}</label>
-                        <EmbedDataContainer className="overview-item embed-item" url={activeProject && activeProject.make.url} />
+                        <label className="overview-item overview-item-preview overview-item-preview-first">{LABEL_PUBLISHER.url}</label>
+                        <Input className="overview-item embed-url embed-url-preview" type="text" value={activeProject && activeProject.make.url} readOnly />
+                        <label className="overview-item overview-item-preview">{LABEL_PUBLISHER.embed}</label>
+                        <EmbedDataContainer className="overview-item embed-item embed-url-preview embed-code" url={activeProject && activeProject.make.url} />
                       </Col>
                     </Container>
                   </div>

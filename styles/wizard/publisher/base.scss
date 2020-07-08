@@ -41,12 +41,12 @@
       height: 100%;
 
       .action-button {
-        font-size: 1.2rem;
-        width: 100%;
+        font-size: 0.9rem;
+        width: 60%;
         border: none;
         margin-top: 7%;
-        height: 10%;
-        min-height: 45px;
+        height: 3em;
+        min-height: 37px;
         text-transform: uppercase;
       }
 
@@ -86,17 +86,51 @@
       .overview-item {
         display: block;
         width: 100%;
-        margin: 10px 20px;
+        margin: 2px 20px;
 
         &:focus {
           border: 2px solid $secondary-color;
           box-shadow: none;
         }
+
+        @media (min-width: 1440px) {
+          &-post-description {
+            textarea.form-control {
+              height: 10em;
+            }
+          }
+        }
+      }
+
+      .overview-item-preview {
+        margin-bottom: 0.5rem;
+      }
+
+      .overview-item-preview-first {
+        margin-top: 1.5em;
       }
 
       .embed-url {
         background: transparent;
         color: $primary-color;
+      }
+
+      .embed-url-preview {
+        margin-bottom: 1rem;
+      }
+
+      .embed-code {
+        textarea.form-control {
+          @media (max-width: 1367px) {
+            height: 7em;
+          }
+          @media (min-width: 1368px) and (max-width: 1439px){
+            height: 10em;
+          }
+          @media (min-width: 1440px) {
+            height: 20em;
+          }
+        }
       }
 
       .embed-item {
@@ -133,19 +167,36 @@
         }
 
         .thumbnail-field {
+
           img {
-            width: 80%;
+            width: 15%;
             height: auto;
-            margin: 0 10%;
+            margin: 0 5%;
           }
 
           .upload-box {
-            margin: 5% 0;
+            margin: 1% 0;
 
             .link-input {
               width: 100%;
             }
           }
+          @media (max-width: 1367px) {
+            img {
+              width: 10%;
+            }
+          }
+          @media (min-width: 1368px) and (max-width: 1439px) {
+            img {
+              width: 15%;
+            }
+          }
+          @media (min-width: 1440px) {
+            img {
+              width: 30%;
+            }
+          }
+
         }
 
         .icon {
@@ -173,16 +224,44 @@
         }
 
         .submit {
-          width: 20%;
-          font-size: 1.3rem;
+          width: 15%;
+          font-size: 1.4rem;
           height: 30px;
-          margin-top: 2rem;
+          @media (min-width: 1440px) {
+            width: 18%;
+            height: 35px;
+          }
+        }
+        .form-group {
+          @media (max-width: 1367px) {
+              margin-bottom: 0.3rem;
+          }
+          @media (min-width: 1368px) and (max-width: 1439px) {
+              margin-bottom: 1rem;
+          }
+          @media (min-width: 1440px) {
+            margin-bottom: 1.5rem;
+          }
+
+          label[for="image-uploader"] {
+            display: flex;
+            align-items: center;
+
+            input[type=file] {
+              margin-left: 1em;
+              width: 40%;
+            }
+          }
         }
       }
 
       label {
         font-weight: 300;
         font-size: 1.2rem;
+        @media (max-width: 1367px)  {
+          font-size: 0.85rem;
+          margin-bottom: 0.2rem;
+        }
       }
     }
   }
@@ -385,4 +464,13 @@
   font-size: 0.7em;
   margin-top: 0.5em;
   color: #EF5054
+}
+
+@media (max-width: 1367px) {
+  h5 {
+    font-size: 1rem;
+  }
+  .overview-item {
+    margin-bottom: 0;
+  }
 }

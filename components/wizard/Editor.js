@@ -369,7 +369,7 @@ Publish & Share
                       }
                     }}
                   >
-                    <SVGInline className="icon personalizer-icon" classSuffix="" svg={SVGPersonalizer} cleanup={['title']} />
+                    <SVGInline className="icon personalizer-icon addon-icon-svg" classSuffix="" svg={SVGPersonalizer} cleanup={['title']} />
                     <span>Personalizer</span>
                   </button>
                   <button
@@ -399,7 +399,7 @@ Publish & Share
                       }
                     }}
                   >
-                    <SVGInline className="icon cta-icon" classSuffix="" svg={SVGCallToAction} cleanup={['title']} />
+                    <SVGInline className="icon cta-icon addon-icon-svg" classSuffix="" svg={SVGCallToAction} cleanup={['title']} />
                     <span>Call to Action</span>
                   </button>
                   <button
@@ -435,7 +435,7 @@ Publish & Share
                       }
                     }}
                   >
-                    <SVGInline className="icon niche-scripts-icon" classSuffix="" svg={SVGNicheScripts} cleanup={['title']} />
+                    <SVGInline className="icon niche-scripts-icon addon-icon-svg" classSuffix="" svg={SVGNicheScripts} cleanup={['title']} />
                     <span>Niche Scripts</span>
                   </button>
                 </ActionsPane>

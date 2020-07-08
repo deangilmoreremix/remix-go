@@ -383,18 +383,18 @@ export default class EmailCampaign extends Component {
                     onChange={({ target: { checked } }) => this.setState({ preload: checked })}
                   />
                 </div>
-                <div className="row embed-group">
-                  <label className="cell" htmlFor="autoplay-check">
-                    Autoplay
-                  </label>
-                  <Input
-                    className="cell"
-                    type="checkbox"
-                    id="autoplay-check"
-                    checked={autoplay}
-                    onChange={({ target: { checked } }) => this.setState({ autoplay: checked })}
-                  />
-                </div>
+                {/*<div className="row embed-group">*/}
+                {/*  <label className="cell" htmlFor="autoplay-check">*/}
+                {/*    Autoplay*/}
+                {/*  </label>*/}
+                {/*  <Input*/}
+                {/*    className="cell"*/}
+                {/*    type="checkbox"*/}
+                {/*    id="autoplay-check"*/}
+                {/*    checked={autoplay}*/}
+                {/*    onChange={({ target: { checked } }) => this.setState({ autoplay: checked })}*/}
+                {/*  />*/}
+                {/*</div>*/}
               </div>
               {/*{*/}
                 {/*autoplay*/}

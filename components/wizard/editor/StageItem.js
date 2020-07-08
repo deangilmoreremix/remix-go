@@ -1,6 +1,13 @@
 import React from 'react';
+import ReactTooltip from 'react-tooltip';
 
 import PropTypes from '../../../lib/PropTypes';
+
+const TEXT_TOOLTIP = {
+  Video: 'Click to change Video',
+  Audio: 'Click to change Audio',
+  Captions: 'Click to edit Captions',
+};
 
 const StageItem = (props) => {
   const { className, image, title, onClick, validationMessage } = props;
@@ -14,7 +21,18 @@ const StageItem = (props) => {
         }
       }}
     >
-      <div>
+      <ReactTooltip
+        id={title + 1}
+        place="top"
+        effect="solid"
+        delayShow={500}
+        delayHide={600}
+        type="info"
+        className="custom-tooltip"
+      />
+      <div
+        data-tip={TEXT_TOOLTIP[title]}
+      >
         {image}
         <br />
         <span>{title}</span>
