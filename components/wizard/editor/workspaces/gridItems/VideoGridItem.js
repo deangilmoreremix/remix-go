@@ -28,7 +28,8 @@ export default class VideoGridItem extends Component {
     const { onPreview, onUse, item: { url, preview, title } } = this.props;
     return (
       <div className="card video-item" style={{ backgroundImage: `url(${preview ? '' : '/static/images/editor/default-video-preview.png'})` }}>
-        {preview &&
+        {preview
+          && (
           <video
             className="video"
             preload="true"
@@ -36,8 +37,11 @@ export default class VideoGridItem extends Component {
             loop
             muted
           >
-            <source src={preview || url} type="video/webm" />
+            { preview
+              ? <source src={preview} type="video/webm" />
+              : <source src={url} type="video/mp4" /> }
           </video>
+          )
         }
         <div
           className="overlay"
