@@ -160,18 +160,6 @@
           font-size: 0.8rem;
         }
 
-        .custom-tooltip {
-          background-color: #dddddd;
-          color: #eb5054;
-          border: 2px solid #eb5054;
-          font-weight: 600;
-
-          &:after {
-            border-right-color: #dddddd;
-            border-right-style: solid;
-            border-right-width: 6px;
-          }
-        }
       }
     }
 
