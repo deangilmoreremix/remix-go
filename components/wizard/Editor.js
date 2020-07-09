@@ -69,7 +69,7 @@ export default class Editor extends Component {
     additionalData: [],
   };
   @observable
-  confirmBool = false;
+  customModalConfirm = false;
 
   constructor(props) {
     super(props);
@@ -84,11 +84,11 @@ export default class Editor extends Component {
       }
     }
     reaction(
-      () => this.confirmBool,
+      () => this.customModalConfirm,
       () => {
-          if (this.confirmBool) {
+          if (this.customModalConfirm) {
             this.openSavedProject();
-            this.confirmBool = false;
+            this.customModalConfirm = false;
           }
       },
     );
@@ -157,8 +157,7 @@ export default class Editor extends Component {
   };
 
   checkConfirm = (btn) => {
-    this.confirmBool = btn;
-    console.log(this.confirmBool);
+    this.customModalConfirm = btn;
     PopupboxManager.close();
   };
 
@@ -352,7 +351,7 @@ export default class Editor extends Component {
                             },
                           });
                         } else {
-                          this.confirmBool = true;
+                          this.customModalConfirm = true;
                         }
                       // no need to have it working now, but who knows for future...
                       // if (activeProject.audio) {
