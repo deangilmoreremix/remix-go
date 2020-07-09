@@ -36,7 +36,7 @@ export default class VideoGridItem extends Component {
             loop
             muted
           >
-            <source src={preview} type="video/webm" />
+            <source src={preview || url} type="video/webm" />
           </video>
         }
         <div
