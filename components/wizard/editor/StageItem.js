@@ -27,11 +27,10 @@ const StageItem = (props) => {
         effect="solid"
         delayShow={500}
         delayHide={600}
-        type="info"
-        className="custom-tooltip"
       />
       <div
         data-tip={TEXT_TOOLTIP[title]}
+        data-for={title + 1}
       >
         {image}
         <br />
