@@ -10,7 +10,6 @@
 
   .publisher-pane {
     min-width: 90px;
-    height: 100%;
   }
 
   .canvas {
@@ -90,7 +89,7 @@
       }
 
       .overview-item-iframe {
-        height: 50%;
+        height: 65%;
       }
 
       .overview-item {
@@ -101,10 +100,6 @@
         &:focus {
           border: 2px solid $secondary-color;
           box-shadow: none;
-        }
-
-        &-iframe {
-          border: 1px solid darkred;
         }
 
         @media (min-width: 1440px) {
@@ -124,13 +119,13 @@
       .embed-code {
         textarea.form-control {
           @media (max-width: 1367px) {
-            height: 7em;
+            height: 4em;
           }
           @media (min-width: 1368px) and (max-width: 1439px){
-            height: 10em;
+            height: 6em;
           }
           @media (min-width: 1440px) {
-            height: 15em;
+            height: 10em;
           }
         }
       }
