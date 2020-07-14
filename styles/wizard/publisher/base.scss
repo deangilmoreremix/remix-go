@@ -10,7 +10,6 @@
 
   .publisher-pane {
     min-width: 90px;
-    height: 100%;
   }
 
   .canvas {
@@ -83,10 +82,20 @@
     .overview-column {
       width: 50%;
 
+      @media (max-width: 1367px) {
+        input, textarea {
+          font-size: 0.9rem;
+        }
+      }
+
+      .overview-item-iframe {
+        height: 65%;
+      }
+
       .overview-item {
         display: block;
         width: 100%;
-        margin: 2px 20px;
+        margin: 10px 20px;
 
         &:focus {
           border: 2px solid $secondary-color;
@@ -102,33 +111,21 @@
         }
       }
 
-      .overview-item-preview {
-        margin-bottom: 0.5rem;
-      }
-
-      .overview-item-preview-first {
-        margin-top: 1.5em;
-      }
-
       .embed-url {
         background: transparent;
         color: $primary-color;
       }
 
-      .embed-url-preview {
-        margin-bottom: 1rem;
-      }
-
       .embed-code {
         textarea.form-control {
           @media (max-width: 1367px) {
-            height: 7em;
+            height: 4em;
           }
           @media (min-width: 1368px) and (max-width: 1439px){
-            height: 10em;
+            height: 6em;
           }
           @media (min-width: 1440px) {
-            height: 20em;
+            height: 10em;
           }
         }
       }
@@ -169,13 +166,13 @@
         .thumbnail-field {
 
           img {
-            width: 15%;
+            width: 80%;
             height: auto;
-            margin: 0 5%;
+            margin: 0 10%;
           }
 
           .upload-box {
-            margin: 1% 0;
+            margin: 5% 0;
 
             .link-input {
               width: 100%;
@@ -183,12 +180,13 @@
           }
           @media (max-width: 1367px) {
             img {
-              width: 10%;
+              width: 20%;
+              margin: 0 3%;
             }
           }
           @media (min-width: 1368px) and (max-width: 1439px) {
             img {
-              width: 15%;
+              width: 25%;
             }
           }
           @media (min-width: 1440px) {
@@ -225,7 +223,7 @@
 
         .submit {
           width: 15%;
-          font-size: 1.4rem;
+          font-size: 1.3rem;
           height: 30px;
           @media (min-width: 1440px) {
             width: 18%;
@@ -238,9 +236,6 @@
           }
           @media (min-width: 1368px) and (max-width: 1439px) {
               margin-bottom: 1rem;
-          }
-          @media (min-width: 1440px) {
-            margin-bottom: 1.5rem;
           }
 
           label[for="image-uploader"] {
@@ -461,7 +456,7 @@
 
 .text-resolution {
   font-weight: 600;
-  font-size: 0.7em;
+  font-size: 0.8em;
   margin-top: 0.5em;
   color: #EF5054
 }
