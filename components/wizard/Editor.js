@@ -2,7 +2,7 @@ import React, { Component, Fragment } from 'react';
 import Head from 'next/head';
 import { Container, Col, Row } from 'reactstrap';
 import { inject, observer } from 'mobx-react';
-import { observable, action, reaction } from 'mobx';
+import { observable, action } from 'mobx';
 import SVGInline from 'react-svg-inline';
 import Router from 'next/router';
 import {
@@ -10,7 +10,6 @@ import {
   PopupboxContainer,
 } from 'react-popupbox';
 
-import CustomConfirm from '../../lib/CustomConfirm';
 import Waiter from '../common/Waiter';
 import GettingStarted from './GettingStarted';
 import Project from '../../lib/editor/Project';
@@ -68,8 +67,6 @@ export default class Editor extends Component {
     text: null,
     additionalData: [],
   };
-  @observable
-  customModalConfirm = false;
 
   constructor(props) {
     super(props);
@@ -83,15 +80,6 @@ export default class Editor extends Component {
         Router.push('/');
       }
     }
-    reaction(
-      () => this.customModalConfirm,
-      () => {
-          if (this.customModalConfirm) {
-            this.openSavedProject();
-            this.customModalConfirm = false;
-          }
-      },
-    );
   }
 
   state = {
@@ -156,24 +144,9 @@ export default class Editor extends Component {
     this.setWarning(formWarning(activeProject.projectData))();
   };
 
-  checkConfirm = (btn) => {
-    this.customModalConfirm = btn;
-    PopupboxManager.close();
-  };
-
-  openSavedProject = async () => {
-    const { api, store: { activeProject }} = this.props;
-    this.setState({ waiter: { message: 'Saving your project...' } });
-    const savedProject = await api.publish(await api.save(activeProject));
-    Router.push({
-      pathname: '/publish',
-      query: { project: savedProject.make._id },
-    });
-    this.setState({ waiter: null });
-  }
-
   render() {
     const {
+      api,
       store,
       store: {
         activeProject,
@@ -333,26 +306,7 @@ export default class Editor extends Component {
                   </button>
                   <button
                     className="go-button action-button"
-                      onClick={() => {
-                        if (activeProject.allowedSocials.indexOf('linkedin') === -1
-                          && activeProject.allowedSocials.indexOf('facebook') === -1) {
-                          PopupboxManager.open({
-                            content: <CustomConfirm
-                              onButtonClicked={this.checkConfirm}
-                            />,
-                            config: {
-                              titleBar: {
-                                enable: true,
-                                text: `Facebook and/or LinkedIn integration has been disabled for Autoresponder. Click OK to continue`,
-                              },
-                              fadeIn: true,
-                              fadeInSpeed: 200,
-                              className: 'custom-popupbox',
-                            },
-                          });
-                        } else {
-                          this.customModalConfirm = true;
-                        }
+                    onClick={async () => {
                       // no need to have it working now, but who knows for future...
                       // if (activeProject.audio) {
                       //   this.setState({
@@ -367,6 +321,13 @@ export default class Editor extends Component {
                       //   await activeProject.updateAudio(null);
                       //   await activeProject.updateVideo(url);
                       // }
+                      this.setState({ waiter: { message: 'Saving your project...' } });
+                      const savedProject = await api.publish(await api.save(activeProject));
+                      Router.push({
+                        pathname: '/publish',
+                        query: { project: savedProject.make._id },
+                      });
+                      this.setState({ waiter: null });
                     }}
                   >
 Publish & Share
