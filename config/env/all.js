@@ -18,8 +18,8 @@ module.exports = {
     secret: process.env.CLIENT_SECRET || 'q39Jy70X6ao9dTca',
   },
   helpCrunch: {
-    applicationId: process.env.HELP_CRUNCH_APP_ID,
-    applicationSecret: process.env.HELP_CRUNCH_SECRET,
+    applicationId: process.env.HELP_CRUNCH_APP_ID || '1',
+    applicationSecret: process.env.HELP_CRUNCH_SECRET || '1',
   },
   access: {
     minAuthLevel: process.env.MIN_AUTH_LEVEL || 5,
