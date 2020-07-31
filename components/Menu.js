@@ -47,7 +47,11 @@ export default class Menu extends React.Component {
   logoutHandler(e) {
     e.preventDefault();
     if (!e.shiftKey) {
-      return Router.push('/logout');
+      if (window.HelpCrunch) {
+        window.HelpCrunch('logout', () => Router.push('/logout'));
+      } else {
+        return Router.push('/logout');
+      }
     }
   }
 
@@ -64,9 +68,11 @@ export default class Menu extends React.Component {
                 <div className="group-bordered">
                   <DropdownToggle nav caret>
                     <img className="userpic" src={currentUser.avatar} />
-                    Hi {currentUser.fullName}
+                    Hi
+                    {' '}
+                    {currentUser.fullName}
                   </DropdownToggle>
-                  <DropdownMenu >
+                  <DropdownMenu>
                     <DropdownItem>
                       <a target="_blank" href={`//${prefixes.projects}.${whiteLabelManager.domain}/me`}>
                         {whiteLabelManager.domain === 'videoremix.io' ? 'Projects and Courses' : 'Projects'}
@@ -75,11 +81,13 @@ export default class Menu extends React.Component {
                     {currentUser && currentUser.features
                     && (currentUser.features.editor.state === 'enabled'
                       || currentUser.features.staticEditingMode.state === 'enabled')
-                      && (<DropdownItem>
-                      <a target="_blank" href={`//${prefixes.editor}.${whiteLabelManager.domain}/`}>
+                      && (
+                      <DropdownItem>
+                        <a target="_blank" href={`//${prefixes.editor}.${whiteLabelManager.domain}/`}>
                         Advanced Personalized Editor
-                      </a>
-                    </DropdownItem>)}
+                        </a>
+                      </DropdownItem>
+                      )}
                     <DropdownItem>
                       <a target="_blank" href="/account">
                         Settings

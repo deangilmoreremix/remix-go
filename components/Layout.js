@@ -9,7 +9,7 @@ import { initApiAndPreload, initApi } from '../globals/api';
 import PopcornProxy from '../lib/PopcornProxy';
 import Header from './Header';
 import Footer from './Footer';
-import Intercom from './common/Intercom';
+import HelpCrunch from './common/HelpCrunch';
 
 class Layout extends Component {
   static async getInitialProps({ query, req }, preloader) {
@@ -40,30 +40,29 @@ class Layout extends Component {
             <link
               rel="shortcut icon"
               href={
-                whiteLabelManager.shouldOverride ?
-                  `//cdn.vidcloud.io/wl/${whiteLabelManager.domain}/resources/vc_favicon` :
-                  '//cdn.vidcloud.io/resources/go/favicon.png'
+                whiteLabelManager.shouldOverride
+                  ? `//cdn.vidcloud.io/wl/${whiteLabelManager.domain}/resources/vc_favicon`
+                  : '//cdn.vidcloud.io/resources/go/favicon.png'
               }
             />
-            {whiteLabelManager.shouldOverride &&
-            <style dangerouslySetInnerHTML={{ __html: whiteLabelManager.css }} />}
+            {whiteLabelManager.shouldOverride
+            && <style dangerouslySetInnerHTML={{ __html: whiteLabelManager.css }} />}
           </Head>
           <Header className={`theme-${whiteLabelManager.key}`} />
           <Container {...this.props} className={`main theme-${whiteLabelManager.key}`}>
             {this.props.children}
-            {this.store.currentUser && whiteLabelManager.domain === 'videoremix.io' ?
-              <Intercom
-                appID={this.store.common.intercom.appId}
-                user={{
-                  email: this.store.currentUser.email,
-                  fullName: this.store.currentUser.fullName,
-                  hash: this.store.currentUser.hash,
-                  createdAt: Math.floor(
-                    Date.parse(this.store.currentUser.createdAt) / 1000,
-                  ).toString(),
-                }}
-                domain="videoremix.io"
-              /> : null}
+            {this.store.currentUser && whiteLabelManager.domain === 'videoremix.io'
+              ? (
+                <HelpCrunch
+                  applicationId={this.store.common.helpCrunch.applicationId}
+                  applicationSecret={this.store.common.helpCrunch.applicationSecret}
+                  user={{
+                    email: this.store.currentUser.email,
+                    fullName: this.store.currentUser.fullName,
+                    hash: this.store.currentUser.hash,
+                  }}
+                />
+              ) : null}
           </Container>
           <Footer
             className={`theme-${whiteLabelManager.key}`}

@@ -177,6 +177,16 @@ class Api {
     }
   }
 
+  setRoles = async () => {
+    const user = await this.request('/api/users/me?serialized=true', {
+      method: 'GET',
+      headers: {
+        'on-behalf': this.currentUser.id,
+      },
+    });
+    this.currentUser.roles = user.roles;
+  };
+
   @action
   async save(project) {
     this.isLoading = true;
