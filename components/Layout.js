@@ -33,18 +33,18 @@ class Layout extends Component {
     }
     return (
       <Provider store={this.store} api={this.api}>
-        <noscript dangerouslySetInnerHTML={{
-          __html: `<iframe src="https://www.googletagmanager.com/ns.html?id=GTM-WMCHG8T"
+        <div>
+          <noscript dangerouslySetInnerHTML={{
+            __html: `<iframe src="https://www.googletagmanager.com/ns.html?id=GTM-WMCHG8T"
                       height="0" width="0" style="display:none;visibility:hidden"></iframe>`,
-        }}
-        />
-        <noscript dangerouslySetInnerHTML={{
-          __html: `<img height="1" width="1" style="display:none"
+          }}
+          />
+          <noscript dangerouslySetInnerHTML={{
+            __html: `<img height="1" width="1" style="display:none"
               src="https://www.facebook.com/tr?id=205065714219509&ev=PageView&noscript=1"
           />`,
-        }}
-        />
-        <div>
+          }}
+          />
           <Head>
             <title>
               {whiteLabelManager.brandName}
