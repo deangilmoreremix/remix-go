@@ -47,10 +47,11 @@ class Store {
       // eslint-disable-next-line global-require
       global.fetch = require('isomorphic-fetch');
       global.btoa = string => Buffer.from(string).toString('base64');
-      const getUserHash = (email) => {
+      const getUserHash = (email, isIntercom) => {
         // eslint-disable-next-line global-require
         const crypto = require('crypto');
-        const hmac = crypto.createHmac('sha256', source.common.helpCrunch.applicationSecret);
+        const hmac = crypto.createHmac('sha256', isIntercom ? source.common.intercom.secret
+          : source.common.helpCrunch.applicationSecret);
         hmac.update(email);
         return hmac.digest('hex');
       };
@@ -63,6 +64,7 @@ class Store {
       );
       if (this.currentUser) {
         this.currentUser.hash = getUserHash(this.currentUser.email);
+        this.currentUser.intercomHash = getUserHash(this.currentUser.email, true);
       }
     }
     Object.assign(this, source);
