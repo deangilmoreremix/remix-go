@@ -10,6 +10,7 @@ import PopcornProxy from '../lib/PopcornProxy';
 import Header from './Header';
 import Footer from './Footer';
 import HelpCrunch from './common/HelpCrunch';
+import Intercom from './common/Intercom';
 
 class Layout extends Component {
   static async getInitialProps({ query, req }, preloader) {
@@ -61,6 +62,21 @@ class Layout extends Component {
                     fullName: this.store.currentUser.fullName,
                     hash: this.store.currentUser.hash,
                   }}
+                />
+              ) : null}
+            {this.store.currentUser && whiteLabelManager.domain === 'videoremix.io'
+              ? (
+                <Intercom
+                  appID={this.store.common.intercom.appId}
+                  user={{
+                    email: this.store.currentUser.email,
+                    fullName: this.store.currentUser.fullName,
+                    hash: this.store.currentUser.hash,
+                    createdAt: Math.floor(
+                      Date.parse(this.store.currentUser.createdAt) / 1000,
+                    ).toString(),
+                  }}
+                  domain="videoremix.io"
                 />
               ) : null}
           </Container>
