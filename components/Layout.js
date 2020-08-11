@@ -34,17 +34,22 @@ class Layout extends Component {
     return (
       <Provider store={this.store} api={this.api}>
         <div>
-          <noscript dangerouslySetInnerHTML={{
-            __html: `<iframe src="https://www.googletagmanager.com/ns.html?id=GTM-WMCHG8T"
+          {whiteLabelManager.domain === 'videoremix.io'
+          && this.store.common.scriptStatistic
+            && (<>
+              <noscript dangerouslySetInnerHTML={{
+                __html: `<iframe src="https://www.googletagmanager.com/ns.html?id=GTM-WMCHG8T"
                       height="0" width="0" style="display:none;visibility:hidden"></iframe>`,
-          }}
-          />
-          <noscript dangerouslySetInnerHTML={{
-            __html: `<img height="1" width="1" style="display:none"
+              }}
+              />
+              <noscript dangerouslySetInnerHTML={{
+                __html: `<img height="1" width="1" style="display:none"
               src="https://www.facebook.com/tr?id=205065714219509&ev=PageView&noscript=1"
           />`,
-          }}
-          />
+              }}
+              />
+            </>)
+          }
           <Head>
             <title>
               {whiteLabelManager.brandName}
@@ -60,19 +65,22 @@ class Layout extends Component {
             {whiteLabelManager.shouldOverride
             && <style dangerouslySetInnerHTML={{ __html: whiteLabelManager.css }} />}
             {/* Google Tag Manager */}
-            <script dangerouslySetInnerHTML={{
-              __html: `(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+            {whiteLabelManager.domain === 'videoremix.io'
+            && this.store.common.scriptStatistic
+            && (<>
+              <script dangerouslySetInnerHTML={{
+                __html: `(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
                 new Date().getTime(),event:'gtm.js'});
             var f=d.getElementsByTagName(s)[0],
               j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
               'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
             })(window,document,'script','dataLayer','GTM-WMCHG8T')`,
-            }}
-            />
-            {/* End Google Tag Manager */}
-            {/* Facebook Pixel Code */}
-            <script dangerouslySetInnerHTML={{
-              __html: `!function (f, b, e, v, n, t, s) { 
+              }}
+              />
+              {/* End Google Tag Manager */}
+              {/* Facebook Pixel Code */}
+              <script dangerouslySetInnerHTML={{
+                __html: `!function (f, b, e, v, n, t, s) { 
                 if (f.fbq) return; 
                 n = f.fbq = function () { 
                   n.callMethod ? 
@@ -91,8 +99,9 @@ class Layout extends Component {
                }(window, document, 'script', 'https://connect.facebook.net/en_US/fbevents.js'); 
                 fbq('init', '205065714219509'); 
                 fbq('track', 'PageView');`,
-            }}
-            />
+              }}
+              />
+            </>)}
             {/* End Facebook Pixel Code */}
           </Head>
           <Header className={`theme-${whiteLabelManager.key}`} />

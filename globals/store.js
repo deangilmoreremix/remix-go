@@ -163,6 +163,7 @@ export async function initStoreAndPreload(isServer, source, req, preloader) {
       intercom: config.intercom,
       helpCrunch: config.helpCrunch,
       defaultPosterframe: config.posterframe,
+      scriptStatistic: config.scriptStatistic,
     };
   }
 
