@@ -36,7 +36,8 @@ class Layout extends Component {
         <div>
           {whiteLabelManager.domain === 'videoremix.io'
           && this.store.common.scriptStatistic
-            && (<>
+            && (
+            <div>
               <noscript dangerouslySetInnerHTML={{
                 __html: `<iframe src="https://www.googletagmanager.com/ns.html?id=GTM-WMCHG8T"
                       height="0" width="0" style="display:none;visibility:hidden"></iframe>`,
@@ -48,7 +49,8 @@ class Layout extends Component {
           />`,
               }}
               />
-            </>)
+            </div>
+            )
           }
           <Head>
             <title>
@@ -67,7 +69,8 @@ class Layout extends Component {
             {/* Google Tag Manager */}
             {whiteLabelManager.domain === 'videoremix.io'
             && this.store.common.scriptStatistic
-            && (<>
+            && (
+            <div>
               <script dangerouslySetInnerHTML={{
                 __html: `(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
                 new Date().getTime(),event:'gtm.js'});
@@ -101,7 +104,8 @@ class Layout extends Component {
                 fbq('track', 'PageView');`,
               }}
               />
-            </>)}
+            </div>
+            )}
             {/* End Facebook Pixel Code */}
           </Head>
           <Header className={`theme-${whiteLabelManager.key}`} />
