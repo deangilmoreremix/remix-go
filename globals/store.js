@@ -154,7 +154,6 @@ export async function initStoreAndPreload(isServer, source, req, preloader) {
       hostname: req.hostname,
       prefixes: config.prefixes,
       cdnHostname: config.s3.cdn,
-      cdnSocialWeb: config.s3.cdnSocialWeb,
       backend: config.backend,
       socketProtocol: config.socketProtocol,
       clientId: config.client.id,

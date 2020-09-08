@@ -64,7 +64,7 @@ export default class Publisher extends Component {
         whiteLabelManager,
         common: {
           features,
-          cdnSocialWeb,
+          cdnHostname,
         },
         currentUser,
         project,
@@ -130,7 +130,7 @@ export default class Publisher extends Component {
         ) : null }
         <iframe
           title="Iframe social conductor"
-          src={`${cdnSocialWeb}/social-campaign/social-campaign.html`}
+          src={'https://dev-cdn.videoremix.io/social-campaign/social-campaign.html'}
           frameBorder="0"
           className="conductor-iframe"
           id="conductor-iframe"
