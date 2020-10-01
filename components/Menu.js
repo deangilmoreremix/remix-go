@@ -48,10 +48,9 @@ export default class Menu extends React.Component {
     e.preventDefault();
     if (!e.shiftKey) {
       if (window.HelpCrunch) {
-        window.HelpCrunch('logout', () => Router.push('/logout'));
-      } else {
-        return Router.push('/logout');
+        window.HelpCrunch('logout');
       }
+      return Router.push('/logout');
     }
   }
 
