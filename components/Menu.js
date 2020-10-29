@@ -78,8 +78,9 @@ export default class Menu extends React.Component {
                       </a>
                     </DropdownItem>
                     {currentUser && currentUser.features
-                    && (currentUser.features.editor.state === 'enabled'
-                      || currentUser.features.staticEditingMode.state === 'enabled')
+                    && ((currentUser.features.editor && currentUser.features.editor.state === 'enabled')
+                      || (currentUser.features.staticEditingMode
+                        && currentUser.features.staticEditingMode.state === 'enabled'))
                       && (
                       <DropdownItem>
                         <a target="_blank" href={`//${prefixes.editor}.${whiteLabelManager.domain}/`}>
