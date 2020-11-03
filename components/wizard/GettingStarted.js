@@ -119,13 +119,13 @@ export default class GettingStarted extends Component {
                 </div>
               </a>
               <a
-                title={(currentUser && currentUser.features[features.generator] && currentUser.features[features.generator].state === 'enabled') ? '' : 'This feature is not available on your type of subscription. Click here to details.'}
-                className={`getting-started-item ${(currentUser && currentUser.features[features.generator] && currentUser.features[features.generator].state === 'enabled') ? '' : 'inactive'}`}
-                href={(currentUser && currentUser.features[features.generator] && currentUser.features[features.generator].state === 'enabled') ?
+                title={(currentUser && currentUser.features && currentUser.features[features.generator] && currentUser.features[features.generator].state === 'enabled') ? '' : 'This feature is not available on your type of subscription. Click here to details.'}
+                className={`getting-started-item ${(currentUser && currentUser.features && currentUser.features[features.generator] && currentUser.features[features.generator].state === 'enabled') ? '' : 'inactive'}`}
+                href={(currentUser && currentUser.features && currentUser.features[features.generator] && currentUser.features[features.generator].state === 'enabled') ?
                   `/?wizard=${this.constructor.WIZARD_TYPES.GENERATOR.key}` :
-                  currentUser && currentUser.features[features.generator] && currentUser.features[features.generator].link
+                  currentUser && currentUser.features && currentUser.features[features.generator] && currentUser.features[features.generator].link
                 }
-                target={(currentUser && currentUser.features[features.generator] && currentUser.features[features.generator].state === 'enabled') ?
+                target={(currentUser && currentUser.features && currentUser.features[features.generator] && currentUser.features[features.generator].state === 'enabled') ?
                   '_self' :
                   '_blank'
                 }
