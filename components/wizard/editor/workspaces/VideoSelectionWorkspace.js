@@ -90,6 +90,7 @@ export default class VideoSelectionWorkspace extends Component {
   };
 
   onScopeChange = async (scope) => {
+    debugger;
     if (scope !== this.state.scope) {
       this.setState({
         scope,
@@ -118,6 +119,7 @@ export default class VideoSelectionWorkspace extends Component {
   };
 
   render() {
+    console.log('FFF', this);
     const { api, className, inWindow = false, onVideoSelected } = this.props;
     const { scope } = this.state;
     const { hasMore, elements } = this.state[scope];
