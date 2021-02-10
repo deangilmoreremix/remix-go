@@ -93,10 +93,13 @@ export default class VideoSelectionWorkspace extends Component {
     if (scope !== this.state.scope) {
       this.setState({
         scope,
+        [scope]: {
+          hasMore: true,
+          elements: [],
+          query: '',
+        },
       }, () => {
-        if (this.state[scope].elements.length === 0) {
-          this.loadMore();
-        }
+        this.loadMore();
       });
     }
   };
