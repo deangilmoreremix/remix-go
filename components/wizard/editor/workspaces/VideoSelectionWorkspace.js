@@ -98,6 +98,8 @@ export default class VideoSelectionWorkspace extends Component {
           elements: [],
           query: '',
         },
+      }, () => {
+        this.loadMore();
       });
     }
   };
