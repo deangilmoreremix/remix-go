@@ -290,6 +290,7 @@
     color: $primary-color;
     width: 100%;
     text-align: center;
+    overflow: auto;
 
     .embed-progress {
       margin-bottom: 2%;
@@ -437,6 +438,8 @@
       display: inline-block;
       height: 100%;
       width: 15%;
+      margin-top: 0.5rem;
+
       &.inactive {
         opacity: 0.3;
         pointer-events: none;
