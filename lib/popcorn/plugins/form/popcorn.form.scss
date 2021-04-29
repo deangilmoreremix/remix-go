@@ -56,6 +56,11 @@
       margin-right: 4px;
     }
 
+    .edit-button-input {
+      background: url('/static/images/editor/elements/form/edit-input.svg') no-repeat;
+      height: 100%;
+    }
+
     input {
       padding: 3% 5%;
     }
@@ -157,8 +162,8 @@
       height: 2em;
       font-family: inherit;
       width: auto;
-      color: $secondary-color;
-      border: $secondary-color solid 1px;
+      color: #ffffff;
+      border: #ffffff solid 1px;
       text-transform: uppercase;
       margin: 0.5em;
     }
