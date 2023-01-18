@@ -257,7 +257,11 @@ class Api {
       project.make.url = response.url;
       project.make.contentUrl = response.contenturl;
       return project;
-    } finally {
+    }
+    catch(err) {
+      console.log(err);
+    }
+     finally {
       this.isLoading = false;
     }
   }
