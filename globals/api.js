@@ -259,7 +259,7 @@ class Api {
       return project;
     }
     catch(err) {
-      console.log(err);
+      console.log(err,"er===>>>>");
     }
      finally {
       this.isLoading = false;
