@@ -319,7 +319,6 @@ class Api {
         }
         this.isLoading = false;
         if (xhr.status !== 200) {
-          console.log(xhr.responseText);
           return reject(JSON.parse(xhr.responseText));
           // return reject(new Error(`HTTP error ${xhr.status}.`));
         }

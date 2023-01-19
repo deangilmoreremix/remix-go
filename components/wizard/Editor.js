@@ -323,7 +323,10 @@ export default class Editor extends Component {
                       // }
                       this.setState({ waiter: { message: 'Saving your project...' } });
                       const savedProject = await api.publish(await api.save(activeProject));
-                      window.location.href = `/publish?project=${savedProject.make._id}`;
+                      Router.push({
+                        pathname: '/publish',
+                        query: { project: savedProject.make._id },
+                      });
                       this.setState({ waiter: null });
                     }}
                   >
