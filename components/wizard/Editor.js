@@ -309,8 +309,10 @@ export default class Editor extends Component {
                     onClick={async () => {
                       try{
                         this.setState({ waiter: { message: 'Saving your project...' } });
-                      const savedProject = await api.publish(await api.save(activeProject));
-                      console.log(savedProject,"savedProject");
+                        const activeprojectData = await api.save(activeProject);
+                        console.log(activeprojectData,"activeprojectData")
+                        const savedProject = await api.publish(activeprojectData);
+                        console.log(savedProject,"savedProject");
                       await Router.push({
                         pathname: '/publish',
                         query: { project: savedProject.make._id },
