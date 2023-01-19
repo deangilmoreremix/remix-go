@@ -314,11 +314,12 @@ export default class Editor extends Component {
                         const savedProject = await api.publish(activeprojectData);
                         console.log(savedProject,"savedProject");
                         console.log(savedProject.make._id,'savedProject.make._id');
-                      await Router.push({
-                        pathname: '/publish',
-                        query: { project: savedProject.make._id },
-                      });
-                      this.setState({ waiter: null });
+                        window.location.href = `/publish?project=${savedProject.make._id}`;
+                      // await Router.push({
+                      //   pathname: '/publish',
+                      //   query: { project: savedProject.make._id },
+                      // });
+                      this.setState({ waiter:null });
                       }
                       catch(error) {
                         console.log(error,"error");
