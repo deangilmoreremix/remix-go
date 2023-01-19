@@ -90,7 +90,7 @@ class CampaignStager {
     {
       key: 'leadpages',
       label: 'Embed On Webpage',
-      embedGenerator: (url, width, height) => `${iframeStyling} <div class="iframe-container"><iframe id='vr-${url.split('/').reverse()[0]}' src='${url}' width='${width}' height='${height}' frameborder='0' allow="autoplay; fullscreen" mozallowfullscreen webkitallowfullscreen allowfullscreen></iframe></div>`,
+      embedGenerator: (url, width, height) => `${iframeStyling} <div class="iframe-container"><iframe id='vr-${url.split('/').reverse()[0]}' src='${url}' width='${width}' height='${height}' frameborder='0' allow="autoplay; fullscreen" mozallowfullscreen webkitallowfullscreen></iframe></div>`,
     },
   ];
 
