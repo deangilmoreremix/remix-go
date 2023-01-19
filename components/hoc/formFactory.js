@@ -103,7 +103,6 @@ export default ({
           onAfterSubmit();
         }
       } catch (err) {
-        console.log('server error', err);
         this.handleServerError(err);
       }
     };

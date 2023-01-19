@@ -254,8 +254,10 @@ class Api {
             'on-behalf': this.currentUser.id,
           },
         });
-      project.make.url = response.url;
-      project.make.contentUrl = response.contenturl;
+      if(response && response.url && response.contenturl) {
+        project.make.url = response.url;
+        project.make.contentUrl = response.contenturl;
+      }
       return project;
     } finally {
       this.isLoading = false;
@@ -317,7 +319,6 @@ class Api {
         }
         this.isLoading = false;
         if (xhr.status !== 200) {
-          console.log(xhr.responseText);
           return reject(JSON.parse(xhr.responseText));
           // return reject(new Error(`HTTP error ${xhr.status}.`));
         }
