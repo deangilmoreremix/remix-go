@@ -313,6 +313,7 @@ export default class Editor extends Component {
                         console.log(activeprojectData,"activeprojectData")
                         const savedProject = await api.publish(activeprojectData);
                         console.log(savedProject,"savedProject");
+                        console.log(savedProject.make._id,'savedProject.make._id');
                       await Router.push({
                         pathname: '/publish',
                         query: { project: savedProject.make._id },
