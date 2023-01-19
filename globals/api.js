@@ -256,6 +256,8 @@ class Api {
         });
       project.make.url = response.url;
       project.make.contentUrl = response.contenturl;
+      console.log(response,"response");
+      console.log(project,"project");
       return project;
     } finally {
       this.isLoading = false;
