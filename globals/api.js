@@ -254,10 +254,10 @@ class Api {
             'on-behalf': this.currentUser.id,
           },
         });
-      project.make.url = response.url;
-      project.make.contentUrl = response.contenturl;
-      console.log(response,"response");
-      console.log(project,"project");
+      if(response && response.url && response.contenturl) {
+        project.make.url = response.url;
+        project.make.contentUrl = response.contenturl;
+      }
       return project;
     } finally {
       this.isLoading = false;
