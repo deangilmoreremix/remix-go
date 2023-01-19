@@ -307,7 +307,19 @@ export default class Editor extends Component {
                   <button
                     className="go-button action-button"
                     onClick={async () => {
-                      console.log(activeProject,"activeProject");
+                      try{
+                        this.setState({ waiter: { message: 'Saving your project...' } });
+                      const savedProject = await api.publish(await api.save(activeProject));
+                      console.log(savedProject,"savedProject");
+                      Router.push({
+                        pathname: '/publish',
+                        query: { project: savedProject.make._id },
+                      });
+                      this.setState({ waiter: null });
+                      }
+                      catch(error) {
+                        console.log(error,"error");
+                      }
                       // no need to have it working now, but who knows for future...
                       // if (activeProject.audio) {
                       //   this.setState({
@@ -322,14 +334,7 @@ export default class Editor extends Component {
                       //   await activeProject.updateAudio(null);
                       //   await activeProject.updateVideo(url);
                       // }
-                      this.setState({ waiter: { message: 'Saving your project...' } });
-                      const savedProject = await api.publish(await api.save(activeProject));
-                      console.log(savedProject,"savedProject");
-                      Router.push({
-                        pathname: '/publish',
-                        query: { project: savedProject.make._id },
-                      });
-                      this.setState({ waiter: null });
+                      
                     }}
                   >
 Publish & Share
