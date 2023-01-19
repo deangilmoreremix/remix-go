@@ -104,6 +104,7 @@ export default class Publisher extends Component {
               },
             ]}
             onPhaseChanged={(element) => {
+              console.log("call phase change");
               switch (element.key) {
                 case 'getting-started':
                   Router.push({
