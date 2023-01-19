@@ -73,7 +73,7 @@ module.exports = {
     key: process.env.S3_KEY || 'AKIAZIC4SYEXKB3F5L2V',
     bucket: process.env.S3_BUCKET || 'videoremix',
     mediaBucket: process.env.S3_MEDIA_BUCKET || '',
-    secret: process.env.S3_SECRET || 'mhFJES4BgaRQNOjA+F6NvE4nV1KSWbOxgviOPap3',
+    secret: process.env.S3_SECRET || 'rVsDp2sM1AyaebUqY3WY9vDefDIE/s6WbqePUVYz',
     domain: process.env.S3_DOMAIN || 'http://videoremix.s3-website-us-west-1.amazonaws.com',
     emulation: process.env.S3_EMULATION || false,
     publishLifetime: process.env.S3_PUBLISH_LIFETIME || 3600,
