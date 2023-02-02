@@ -60,8 +60,8 @@ export default class Menu extends React.Component {
       <Container>
         <Navbar color="faded" light expand="md">
           <NavbarBrand href="/" />
-          <NavbarToggler onClick={this.toggle} />
-          <Collapse isOpen={this.state.isOpen} navbar>
+          
+          <div  navbar>
             <Nav className="ml-auto" navbar>
               <UncontrolledDropdown nav>
                 <div className="group-bordered">
@@ -101,7 +101,7 @@ export default class Menu extends React.Component {
 
               </UncontrolledDropdown>
             </Nav>
-          </Collapse>
+          </div>
         </Navbar>
       </Container>
     );

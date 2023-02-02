@@ -124,6 +124,7 @@ class Layout extends Component {
             )}
             {/* End Facebook Pixel Code */}
           </Head>
+          <div className='site-wrapper'>
           <Header className={`theme-${whiteLabelManager.key} ${(this.state.searchQuery == "" && this.state.path == "/") ? "welcome-page" : ""}`} />
           <div {...this.props} className={`${(this.state.searchQuery == "" && this.state.path == "/") ? "welcome-page" : ""} main theme-${whiteLabelManager.key}`}>
             <Container>
@@ -163,6 +164,7 @@ class Layout extends Component {
             changelogLink={`//${this.store.common.prefixes.projects}.${whiteLabelManager.domain}/changelog?scope=go`}
             termsOfServiceLink={whiteLabelManager.termsOfServiceLink}
           />
+          </div>
         </div>
       </Provider>
     );

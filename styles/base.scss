@@ -25,10 +25,15 @@ html {
 input, textarea, select, button {
   font-family: $SourceSans;
 }
-
+.container{
+  max-width: 1190px;
+}
 .main {
   padding-top: $main-indent-top;
   // height: 100vh;
+  @media (max-width : 1366px){
+    padding-top: 70px;
+  }
 }
 .main .container{
   height: 100%;
@@ -373,13 +378,18 @@ form,
     }
   }
 }
+.site-wrapper{
+  position: relative;
+}
 .main.welcome-page{
   background-image : url('/static/images/getting-started/Group10106.png');
+  padding-bottom: 50px;
 }
+
 .getting-started {
   // background-image : url('/static/images/getting-started/Group10106.png');
-  padding-bottom: $footer-height;
-  padding-bottom: 50px;
+  // padding-bottom: $footer-height;
+  // padding-bottom: 50px;
   // bottom: 0;
   // left: 0;
   // padding-top: $header-height;
@@ -391,14 +401,16 @@ form,
   // flex-direction: column;
   color: $primary-color;
   text-align: center;
-  min-height: calc(100vh - 97px);
+  min-height: calc(100vh - 147px);
   // align-items: center;
   align-content: center;
-
+  @media (max-width : 1366px){
+    min-height: calc(100vh - 120px);
+  }
   .welcome {
     // height: 10%;
-    // width: 50%;
-    margin: 3% auto 0 auto;
+    width: 100%;
+    // margin: 3% auto 0 auto;
 
     h2 {
       // font-size: 3.5rem;
@@ -407,6 +419,9 @@ form,
       font-weight: 800;
       color: $white-80;
       
+      @media (max-width : 1366px){
+        font-size: 42px;
+      }
       span{
         background: $gradient-bg;
         -webkit-background-clip: text;
@@ -422,6 +437,9 @@ form,
       font-weight: 500;
       color: $white;
       text-decoration: underline;
+      @media (max-width : 1366px){
+        font-size: 16px;
+      }
     }
 
     * {
@@ -436,6 +454,11 @@ form,
   padding: 60px;
   border-radius: 20px;
   background-color: $black-bg-light;
+  @media (max-width : 1366px){
+    margin-top: 35px;
+    padding: 40px;
+    max-width: 600px;
+  }
 }
   .getting-started-list {
     // width: 60%;
@@ -474,14 +497,21 @@ form,
         height: 100%;
         flex-direction: column;
         padding: 28px 10px;
+        align-items: center;
       }
       span.SVGInline{
         margin-bottom: 27px;
+        @media (max-width : 1366px){
+          margin-bottom: 20px;
+        }
       }
       .getting-started-title{
         font-size: 18px;
         font-weight: 500;
         color: $white;
+        @media (max-width : 1366px) {
+          font-size: 16px;
+        }
       }
       img, .SVGInline {
         // height: 35%;

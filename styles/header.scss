@@ -7,10 +7,14 @@
   top: 0;
   left: 0;
   width: 100%;
-  padding: 23px;
+  padding: 23px 0;
   background-color: #3A3A51;
   border-bottom-left-radius: 50px;
   border-bottom-right-radius: 50px;
+  
+  @media (max-width : 1366px){
+    padding: 10px 0;
+  }
   &.welcome-page{
     background-color: transparent !important;
   }
@@ -18,6 +22,7 @@
     padding-left: 0;
     padding-right: 0;
     padding: 0;
+    justify-content: space-between;
   }
 
   .language-picker {
@@ -82,7 +87,7 @@
 .header .dropdown-menu {
   font-family: "Poppins", sans-serif;
   right: 0 !important;
-  left: auto !important;
+  // left: auto !important;
   background-color: $black-bg;
   width: 260px;
   border: 2px solid rgba(239, 80, 84, 0.5);
