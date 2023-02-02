@@ -55,7 +55,7 @@ export default class Menu extends React.Component {
   }
 
   render() {
-    const { store: { whiteLabelManager, common: { prefixes }, currentUser = { } } } = this.props;
+    const { store: { whiteLabelManager, common: { prefixes }, currentUser = {} } } = this.props;
     return (
       <Container>
         <Navbar color="faded" light expand="md">
@@ -66,27 +66,22 @@ export default class Menu extends React.Component {
               <UncontrolledDropdown nav>
                 <div className="group-bordered">
                   <DropdownToggle nav caret>
-                    <img className="userpic" src={currentUser.avatar} />
-                    Hi
+                    Hi,
                     {' '}
-                    {currentUser.fullName}
+                    <b>{currentUser.fullName}</b>
+                    <img className="userpic" src={currentUser.avatar} />
                   </DropdownToggle>
                   <DropdownMenu>
-                    <DropdownItem>
-                      <a target="_blank" href={`//${prefixes.projects}.${whiteLabelManager.domain}/me`}>
-                        {whiteLabelManager.domain === 'videoremix.io' ? 'Projects and Courses' : 'Projects'}
-                      </a>
-                    </DropdownItem>
                     {currentUser && currentUser.features
-                    && ((currentUser.features.editor && currentUser.features.editor.state === 'enabled')
-                      || (currentUser.features.staticEditingMode
-                        && currentUser.features.staticEditingMode.state === 'enabled'))
+                      && ((currentUser.features.editor && currentUser.features.editor.state === 'enabled')
+                        || (currentUser.features.staticEditingMode
+                          && currentUser.features.staticEditingMode.state === 'enabled'))
                       && (
-                      <DropdownItem>
-                        <a target="_blank" href={`//${prefixes.editor}.${whiteLabelManager.domain}/`}>
-                        Advanced Personalized Editor
-                        </a>
-                      </DropdownItem>
+                        <DropdownItem>
+                          <a target="_blank" href={`//${prefixes.projects}.${whiteLabelManager.domain}/en-US/strategy-course`}>
+                            Strategy Courses
+                          </a>
+                        </DropdownItem>
                       )}
                     <DropdownItem>
                       <a target="_blank" href="/account">

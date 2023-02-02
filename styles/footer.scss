@@ -1,7 +1,6 @@
 .footer {
   @extend %full-width;
   height: $footer-height;
-  background: $primary-color;
   color: $white;
   position: fixed;
   z-index: 10;
@@ -19,6 +18,8 @@
   }
   .direct-link:hover {
     text-decoration: underline;
+    color: #EF5054;
+
   }
 
   @media (max-width: 1367px) {

@@ -15,11 +15,9 @@ export default class Header extends Component {
   render() {
     const { className } = this.props;
     return (
-      <Container>
         <header className={`header ${className}`}>
           <Menu />
         </header>
-      </Container>
     );
   }
 }

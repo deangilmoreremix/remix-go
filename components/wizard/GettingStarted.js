@@ -15,10 +15,10 @@ import NicheScriptsWorkspace from './niche-scripts/NicheScriptsWorkspace';
 import Project from '../../lib/editor/Project';
 import VideoUpload from '../common/VideoUpload';
 
-import SVGFromTemplate from '../../static/images/getting-started/template.svg';
-import SVGTemplateGenerator from '../../static/images/getting-started/generator.svg';
-import SVGVideoUpload from '../../static/images/getting-started/upload.svg';
-import SVGMyProjects from '../../static/images/getting-started/my_projects.svg';
+import SVGFromTemplate from '../../static/images/start-from-template.svg';
+import SVGTemplateGenerator from '../../static/images/template-generator.svg';
+import SVGVideoUpload from '../../static/images/import-video.svg';
+import SVGMyProjects from '../../static/images/my-project.svg';
 
 @inject('api')
 @inject('store')
@@ -94,9 +94,10 @@ export default class GettingStarted extends Component {
         return <Templates onTemplateSelected={data => this.handleWizardSelection(data)} />;
       default:
         return (
-          <div className="scrollable full-height getting-started">
+          <div className="full-height getting-started">
+            
             <div className="welcome">
-              <h2>Welcome to {whiteLabelManager.appName}!</h2>
+              <h2>Welcome to <span>{whiteLabelManager.appName}!</span></h2>
               {whiteLabelManager.tutorialsLink &&
               <a
                 href={whiteLabelManager.tutorialsLink}
@@ -108,6 +109,7 @@ export default class GettingStarted extends Component {
               </a>
               }
             </div>
+            <div className='getting-start-list-wrap'>
             <div className="getting-started-list">
               <a
                 className="getting-started-item"
@@ -115,7 +117,7 @@ export default class GettingStarted extends Component {
               >
                 <div className="getting-started-item-inner">
                   <SVGInline className="from-template-icon" classSuffix="" svg={SVGFromTemplate} cleanup={['title']} />
-                  <span>Start From Template</span>
+                  <span className='getting-started-title'>Start From Template</span>
                 </div>
               </a>
               <a
@@ -132,7 +134,7 @@ export default class GettingStarted extends Component {
               >
                 <div className="getting-started-item-inner">
                   <SVGInline className="template-generator-icon" classSuffix="" svg={SVGTemplateGenerator} cleanup={['title']} />
-                  <span>Template Generator</span>
+                  <span className='getting-started-title'>Template Generator</span>
                 </div>
               </a>
               <a
@@ -141,7 +143,7 @@ export default class GettingStarted extends Component {
               >
                 <div className="getting-started-item-inner">
                   <SVGInline className="video-upload-icon" classSuffix="" svg={SVGVideoUpload} cleanup={['title']} />
-                  <span>Import Your Own Video</span>
+                  <span className='getting-started-title'>Import Your Own Video</span>
                 </div>
               </a>
               <a
@@ -150,9 +152,10 @@ export default class GettingStarted extends Component {
               >
                 <div className="getting-started-item-inner">
                   <SVGInline className="my-project-icon" classSuffix="" svg={SVGMyProjects} cleanup={['title']} />
-                  <span>My Projects</span>
+                  <span className='getting-started-title'>My Projects</span>
                 </div>
               </a>
+            </div>
             </div>
           </div>);
     }

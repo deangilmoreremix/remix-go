@@ -11,21 +11,37 @@ import Header from './Header';
 import Footer from './Footer';
 import HelpCrunch from './common/HelpCrunch';
 import Intercom from './common/Intercom';
+import router from 'next/router';
 
 class Layout extends Component {
   static async getInitialProps({ query, req }, preloader) {
     const isServer = !!req;
     const store = await initStoreAndPreload(isServer, query, req, preloader);
     const api = await initApiAndPreload(isServer, query, req, preloader);
+    const pathname = "";
+    const querypath = "";
     return { store, api };
   }
 
   constructor(props) {
     super(props);
+    this.state = {path: "", searchQuery: ""};
     this.store = initStore(props.store);
     this.api = initApi(props.api);
   }
 
+  componentDidMount() {
+    const {currentUser} = this.props;
+    this.pathname = window.location.pathname;
+    this.querypath = window.location.search;
+    this.setState({path: window.location.pathname, searchQuery: window.location.search})
+  }
+
+  componentDidUpdate() {
+    const {currentUser} = this.props;
+    this.pathname = window.location.pathname;
+    this.querypath = window.location.search;
+  }
   render() {
     const { store: { whiteLabelManager } } = this.props;
     if (process.browser) {
@@ -108,8 +124,9 @@ class Layout extends Component {
             )}
             {/* End Facebook Pixel Code */}
           </Head>
-          <Header className={`theme-${whiteLabelManager.key}`} />
-          <Container {...this.props} className={`main theme-${whiteLabelManager.key}`}>
+          <Header className={`theme-${whiteLabelManager.key} ${(this.state.searchQuery == "" && this.state.path == "/") ? "welcome-page" : ""}`} />
+          <div {...this.props} className={`${(this.state.searchQuery == "" && this.state.path == "/") ? "welcome-page" : ""} main theme-${whiteLabelManager.key}`}>
+            <Container>
             {this.props.children}
             {this.store.currentUser && whiteLabelManager.domain === 'videoremix.io'
               ? (
@@ -138,7 +155,8 @@ class Layout extends Component {
                   domain="videoremix.io"
                 />
               ) : null}
-          </Container>
+              </Container>
+          </div>
           <Footer
             className={`theme-${whiteLabelManager.key}`}
             serviceName={whiteLabelManager.serviceName}

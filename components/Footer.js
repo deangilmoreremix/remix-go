@@ -5,7 +5,6 @@ import PropTypes from '../lib/PropTypes';
 const Footer = (props) => {
   const { changelogLink, serviceName, termsOfServiceLink, className } = props;
   return (
-    <Container>
       <footer className={`footer ${className}`}>
         <div className="copyright">© {serviceName} | <a
           className="direct-link"
@@ -17,7 +16,7 @@ const Footer = (props) => {
         </a>
         </div>
       </footer>
-    </Container>);
+    );
 };
 
 Footer.propTypes = {

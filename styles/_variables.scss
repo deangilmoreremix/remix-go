@@ -1,21 +1,26 @@
 $fa-font-path:            "//netdna.bootstrapcdn.com/font-awesome/4.7.0/fonts" !default;
 $black:                    #000000 !default;
 $white:                    #ffffff !default;
+$white-80:                 rgba(255, 255, 255, 0.8) !default;
 $gray-200:                 #e9ecef !default;
 $gray-300:                 #dee2e6 !default;
 $default-gray:             #626262 !default;
 $green:                    #18a212 !default;
 $secondary-color:          #EF5054 !default;
 $primary-color:            #343a40 !default;
+$black-bg:                 #1C1C26 !default;
+$black-bg-light:           #3A3A51 !default;
+$gradient-bg:               linear-gradient(0deg, #F48E6E 0%, #EE6EA7 100%);
+$red:                      #EF5054 !default;
 
 $accent-color:             $gray-200;
-$background-color:         $accent-color;
+$background-color:         $black-bg;
 $header-bg:                $white;
-$header-height:            67px;
+$header-height:            96px;
 $footer-height:            50px;
 $main-indent-top:          $header-height;
 
-$SourceSans:               'Muli', sans-serif;
+$SourceSans:               'Poppins', sans-serif;
 
 $border-width:              2px;
 $form-feedback-valid-color: $white;
