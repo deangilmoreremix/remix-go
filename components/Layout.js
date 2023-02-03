@@ -127,7 +127,6 @@ class Layout extends Component {
           <div className='site-wrapper'>
           <Header className={`theme-${whiteLabelManager.key} ${(this.state.searchQuery == "" && this.state.path == "/") ? "welcome-page" : ""}`} />
           <div {...this.props} className={`${(this.state.searchQuery == "" && this.state.path == "/") ? "welcome-page" : ""} main theme-${whiteLabelManager.key}`}>
-            <Container>
             {this.props.children}
             {this.store.currentUser && whiteLabelManager.domain === 'videoremix.io'
               ? (
@@ -156,14 +155,7 @@ class Layout extends Component {
                   domain="videoremix.io"
                 />
               ) : null}
-              </Container>
           </div>
-          <Footer
-            className={`theme-${whiteLabelManager.key}`}
-            serviceName={whiteLabelManager.serviceName}
-            changelogLink={`//${this.store.common.prefixes.projects}.${whiteLabelManager.domain}/changelog?scope=go`}
-            termsOfServiceLink={whiteLabelManager.termsOfServiceLink}
-          />
           </div>
         </div>
       </Provider>

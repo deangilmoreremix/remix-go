@@ -3,19 +3,35 @@
 
 .search-template {
   color: $default-gray;
-  padding: 30px 20px 20px 20px;
+  // padding: 30px 20px 20px 20px;
+  max-width: 480px;
+  width: 100%;
   display: flex;
   justify-content: center;
+  margin-right: 40px;
 
   .search-field {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 50%;
+    width: 100%;
 
     .search-input {
-      width: 70%;
+      width: 94%;
       input {
+        &.form-control{
+          background-color: #3A3A51;
+          width: 100%;
+          border: none !important;
+          margin-top: 0;
+          padding: 13px 20px 13px 20px;
+          font-size: 16px;
+          border-radius: 10px;
+          color: #fff;
+          font-weight: 500;
+          line-height: 22px;
+          box-shadow: none;
+        }
         &.vr-dashed {
           width: 100%;
           font-size: 1em;
@@ -33,13 +49,20 @@
     }
 
     .search-button {
-      text-align: center;
+      width: 50px;
+      height: 50px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: $red;
+      border-radius: 10px;
+      margin-left: -20px;
       a {
         cursor: pointer;
         img, svg {
           &.search-icon {
-            width: 15px;
-            height: 15px;
+            width: 20px;
+            height: 20px;
           }
         }
       }

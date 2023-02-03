@@ -29,7 +29,7 @@ export default class Search extends Component {
         <div className="search-field">
           <div className="search-input">
             <input
-              className="vr-dashed"
+              className="form-control"
               type="text"
               name="query"
               placeholder={placeholder}

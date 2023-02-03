@@ -5,6 +5,9 @@ import { inject, observer } from 'mobx-react';
 import { observable, action } from 'mobx';
 import SVGInline from 'react-svg-inline';
 import Router from 'next/router';
+import customizeVideoIcon from '../../static/images/Frame140.svg';
+import publishShareIcon from '../../static/images/Frame138.svg';
+import chooseTemplateIcon from '../../static/images/Frame139.svg';
 import {
   PopupboxManager,
   PopupboxContainer,
@@ -197,18 +200,24 @@ export default class Editor extends Component {
                 || GettingStarted.WIZARD_TYPES.FROM_TEMPLATE).label,
                 active: false,
                 available: true,
+                image: chooseTemplateIcon,
+                val:0
               },
               {
                 key: 'edit',
                 title: 'Customize Video',
                 active: true,
                 available: true,
+                image: customizeVideoIcon,
+                val:50
               },
               {
                 key: 'publish',
                 title: 'Publish & Share',
                 active: false,
                 available: false,
+                image:publishShareIcon,
+                val:100
               },
             ]}
             onPhaseChanged={(element) => {

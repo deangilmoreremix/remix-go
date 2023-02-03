@@ -76,7 +76,7 @@
   font-style: bold;
   // text-transform: uppercase
 }
-.header .dropdown .dropdown-toggle::after{
+.dropdown .dropdown-toggle::after{
   border: 0;
   width: 11px;
   height: 6px;
@@ -84,7 +84,7 @@
   background-repeat: no-repeat;
   background-size: 11px;
 }
-.header .dropdown-menu {
+.dropdown-menu {
   font-family: "Poppins", sans-serif;
   right: 0 !important;
   // left: auto !important;
@@ -94,9 +94,15 @@
   border-radius: 4px;
   .dropdown-item{
     padding: 5px 16px;
+    color: $white;
+    font-size: 14px;
+    text-transform: none;
+    font-weight: 400;
+    font-family: "Poppins", sans-serif;
 
     &:hover{
       background-color: transparent;
+      color: $red;
     }
   }
   a{

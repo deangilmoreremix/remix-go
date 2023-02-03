@@ -20,6 +20,9 @@ import ProjectDetailsChanger from './publisher/ProjectDetailsChanger';
 import EmailCampaign from './publisher/campaigns/EmailCampaign';
 import SocialCampaign from './publisher/campaigns/SocialCampaign';
 import RetargetCampaign from './publisher/campaigns/RetargetCampaign';
+import customizeVideoIcon from '../../static/images/Frame140.svg';
+import publishShareIcon from '../../static/images/Frame138.svg';
+import chooseTemplateIcon from '../../static/images/Frame139.svg';
 
 import { consts } from '../../lib/consts/consts';
 const { LABEL_PUBLISHER } = consts;
@@ -89,18 +92,24 @@ export default class Publisher extends Component {
                 || GettingStarted.WIZARD_TYPES.FROM_TEMPLATE).label,
                 active: false,
                 available: true,
+                image:chooseTemplateIcon,
+                val:0
               },
               {
                 key: 'edit',
                 title: 'Customize Video',
                 active: false,
                 available: true,
+                image:customizeVideoIcon,
+                val:50
               },
               {
                 key: 'publish',
                 title: 'Publish & Share',
                 active: true,
                 available: true,
+                image:publishShareIcon,
+                val:100
               },
             ]}
             onPhaseChanged={(element) => {

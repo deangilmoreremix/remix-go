@@ -1,16 +1,129 @@
 .templates {
   min-height: 600px;
 }
+.choose-template-container {
+  display: flex;
+  padding: 0 55px;
+}
+
+.template_content {
+  padding: 0 55px;
+  margin: 20px 0;
+
+  .template_items {
+    display: flex;
+    flex-wrap: wrap;
+    margin: 0 -15px;
+
+    .template-wrapper{
+      padding: 15px;
+      flex: 1 0 25%;
+      max-width: 25%; 
+
+      @media (max-width : 1023px) {
+        flex: 1 0 33.33%;
+        max-width: 33.33%;
+      }
+      &:hover{
+        .template_data{
+          opacity: 1;
+        }
+      }
+    }
+    .template_item {
+      width: 100%;
+      height: 100%;
+      border-radius: 10px;
+      overflow: hidden;
+      position: relative;
+    
+      .img-wrapper {
+        position: relative;
+        border-radius: 10px;
+        overflow: hidden;
+        padding-top: 100%;
+        img{
+          position: absolute;
+          top: 0;
+          bottom: 0;
+          left: 0;
+          right: 0;
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+        }
+      }
+      .template_data{
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        opacity: 0;
+        width: 100%;
+        height: 100%;
+        padding: 20px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        background-color: rgba(0,0,0,0.7);
+        transition: opacity 0.5s;
+
+        .btn-preview img{
+          width: 78px;
+          height: 78px;
+          @media (max-width : 1366px){
+            width: 40px;
+            height: 40px;
+          }
+        }
+        p{
+          font-size: 18px;
+          font-weight: 500;
+          line-height: 1.2;
+          margin-top: 40px;
+          @media (max-width : 1366px){
+            margin-top: 20px;
+            font-size: 16px;
+          }
+        }
+        @media (max-width : 1366px){
+          .btn.btn-primary.btn-small{
+            padding: 6px 24px;
+            font-size: 14px;
+            
+          }
+        }
+      }
+    }
+
+  }
+
+
+}
 
 .wizard-gallery {
   margin: $header-height auto ($footer-height + 10px)  auto;
   text-align: center;
 }
+.select-niche-dropdown {
+  // position: fixed;
+  // left: 80%;
+  .dropdown-toggle.btn.btn-secondary{
+    background: $red;
+    color: $white;
+    border-color: $red;
+    font-size: 16px;
+    line-height: 1.2;
+    font-weight: 500;
+    box-shadow: none !important;
+  }
+}
 
 .card {
-  width: 200px;
+  width: 310px;
   overflow: hidden;
-  height: 200px;
+  height: 310px;
   box-shadow: rgba(0, 0, 0, 0.14902) 0 2px 4px;
   display: flex;
   justify-content: center;

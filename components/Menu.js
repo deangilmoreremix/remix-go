@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import Link from 'next/link';
 import Router from 'next/router';
-
+import Footer from './Footer';
 import {
   Collapse,
   Container,

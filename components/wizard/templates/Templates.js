@@ -8,6 +8,8 @@ import {
   PopupboxContainer,
 } from 'react-popupbox';
 
+import { DropdownMenu, DropdownItem, Dropdown, DropdownToggle } from 'reactstrap';
+
 import PropTypes from '../../../lib/PropTypes';
 import InfiniteLoading from '../../common/InfiniteLoading';
 import Search from '../../common/Search';
@@ -24,13 +26,25 @@ export default class Templates extends Component {
   constructor(props) {
     super(props);
 
+    this.toggle = this.toggle.bind(this);
     this.state = {
+      isOpen: false,
+    };
+
+    this.state = {
+      dropdownOpen: false,
       hasMore: true,
       elements: [],
       query: '',
     };
   }
 
+
+  toggle() {
+    this.setState({
+      isOpen: !this.state.isOpen,
+    });
+  }
   onPreview = (template) => {
     this.currentPlayback = (<EmbeddedPlayback
       source={template.url}
@@ -56,10 +70,8 @@ export default class Templates extends Component {
     const { api } = this.props;
     const newElements = await api.templates(0, query);
     this.setState({
-      elements: newElements,
-      hasMore: newElements.length > 0,
-      query,
-    });
+      elements: newElements
+    })
   };
 
   @observable
@@ -86,11 +98,42 @@ export default class Templates extends Component {
             this.popupboxContainer.state.children = null;
           }}
         />
-        <Search
-          onSearch={q => this.onSearch(q)}
-          placeholder="Search through your templates..."
-        />
-
+        <div className='choose-template-container'>
+          <Search
+            onSearch={q => this.onSearch(q)}
+            placeholder="Search through your templates..."
+          />
+          <Dropdown isOpen={this.state.isOpen} toggle={this.toggle} direction={'down'} className={'select-niche-dropdown'}>
+            <DropdownToggle caret>
+              Select Niches
+            </DropdownToggle>
+            <DropdownMenu container="body">
+              <DropdownItem>Foo Action</DropdownItem>
+              <DropdownItem>Bar Action</DropdownItem>
+              <DropdownItem>Quo Action</DropdownItem>
+            </DropdownMenu>
+          </Dropdown>
+        </div>
+        <div className='template_content'>
+          <div className='template_items'>
+            {this.state.elements.map((item, idx) => (
+              <div className='template-wrapper'>
+                <div className='template_item' key={idx}>
+                  <div className='img-wrapper'>
+                    <img src={item.thumbnail}></img>
+                  </div>
+                  <div className='template_data'>
+                    <div class="buttons-container">
+                      <a class="button btn-preview" onClick={() => { this.onPreview(item) }}><img src={'/static/images/play-icon.png'}></img></a>
+                      <p>{item.title}</p>
+                      <a class="btn btn-primary btn-small" onClick={() => this.props.onTemplateSelected(item)}>use</a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
         <TemplateGallery
           className="wizard-gallery"
           hasMore={this.state.hasMore}
@@ -101,22 +144,10 @@ export default class Templates extends Component {
             { mq: '512px', columns: 2, gutter: 30 },
             { mq: '768px', columns: 3, gutter: 30 },
             { mq: '1024px', columns: 4, gutter: 30 },
-            { mq: '1536px', columns: 5, gutter: 30 },
+            { mq: '1536px', columns: 4, gutter: 30 },
           ]}
         >
-          {
-            this.state.elements.map((item, idx) => (
-              <TemplateItem
-                key={idx}
-                template={item}
-                onPreview={this.onPreview}
-                onUse={(template) => {
-                  const { onTemplateSelected } = this.props;
-                  onTemplateSelected(template);
-                }}
-              />
-            ))
-          }
+          <div></div>
         </TemplateGallery>
       </Fragment>);
   }
