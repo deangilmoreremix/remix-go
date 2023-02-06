@@ -76,12 +76,16 @@ $popupbox-zindex:    10000;
   overflow: hidden;
   max-width: 80%;
   min-width: 300px;
-  box-shadow: 0 0 20px rgba(0, 0, 0, .9);
-  background-color: white;
+  box-shadow: none;
+  // background-color: white;
+  background-color: #3A3A51;
+  padding: 40px;
+  border-radius: 20px;
 }
 
 .popupbox-content {
-  padding: 20px 24px 30px;
+  // padding: 20px 24px 30px;
+  padding: 40px 0 0 0;
 }
 
 .popupbox-titleBar {
@@ -89,24 +93,29 @@ $popupbox-zindex:    10000;
   font-size: 18px;
   color: $primary-color;
   padding: 11px 37px 11px 24px;
-  border-bottom: 1px #ccc solid;
+  border-bottom: 1px $red solid;
+  padding: 0 0 27px 0;
+  color: $white;
+  font-size: 20px;
 }
 
 .popupbox-btn--close {
   transition: all .5s;
   position: absolute;
   right: 11px;
-  top: 11px;
+  top: 0px;
   color: #c1c1c1;
   background: none;
   border: none;
   outline: none;
   cursor: pointer;
+  font-weight: 700;
+  font-size: 26px;
 }
 
-.popupbox-btn--close:hover {
-  color: #000;
-}
+// .popupbox-btn--close:hover {
+//   color: #000;
+// }
 
 .popupbox.is-active {
   opacity: 1;
@@ -124,7 +133,14 @@ $popupbox-zindex:    10000;
 
 @media (max-width: 1366px) {
   .popupbox-content {
-    padding: 15px 24px 10px;
+    // padding: 15px 24px 10px;
+    padding: 30px;
+  }
+  .popupbox-wrapper{
+    padding: 30px;
+  }
+  .popupbox-titleBar{
+    font-size: 18px;
   }
 }
 
