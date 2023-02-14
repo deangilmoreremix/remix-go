@@ -108,7 +108,57 @@ export default class EditorStageChanger extends Component {
                 <ConstructionWorkspace
                   className="full-height full-width"
                   checkForm={checkForm}
+                  stage={stage}
                 />);
+            case  EditorStateManager.STAGE_TYPES.PERSONALIZER: 
+              return (
+                <ConstructionWorkspace
+                  className="full-height full-width"
+                  checkForm={checkForm}
+                  stage={stage}
+                  editorStateManager={editorStateManager}
+                />
+              );
+              case  EditorStateManager.STAGE_TYPES.CALL_TO_ACTION: 
+              return (
+                <ConstructionWorkspace
+                  className="full-height full-width"
+                  checkForm={checkForm}
+                  stage={stage}
+                  editorStateManager={editorStateManager}
+
+                />
+              );
+              case  EditorStateManager.STAGE_TYPES.END_SCREENS_CUSTOMISE: 
+              return (
+                <ConstructionWorkspace
+                  className="full-height full-width"
+                  checkForm={checkForm}
+                  stage={stage}
+                  editorStateManager={editorStateManager}
+
+                />
+              );
+              case  EditorStateManager.STAGE_TYPES.NICHE_SCRIPT_CUSTOMISE: 
+              return (
+                <ConstructionWorkspace
+                  className="full-height full-width"
+                  checkForm={checkForm}
+                  stage={stage}
+                  editorStateManager={editorStateManager}
+
+                />
+              );
+              case  EditorStateManager.STAGE_TYPES.IMAGE_LT_CUSTOMISE: 
+              return (
+                <ConstructionWorkspace
+                  className="full-height full-width"
+                  checkForm={checkForm}
+                  stage={stage}
+                  editorStateManager={editorStateManager}
+
+                />
+              );
             default:
               return null;
           }

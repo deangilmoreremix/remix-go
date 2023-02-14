@@ -11,7 +11,10 @@
   background-color: #3A3A51;
   border-bottom-left-radius: 50px;
   border-bottom-right-radius: 50px;
-  
+  .container{
+    max-width: 100%;
+    padding: 0 55px;
+  }
   @media (max-width : 1366px){
     padding: 10px 0;
   }
@@ -71,7 +74,7 @@
   color: #fff;
   font-family: 'Poppins', sans-serif;
   // font-style: popp;
-  font-size: 9pt;
+  font-size: 14px;
   padding-right: 0;
   font-style: bold;
   // text-transform: uppercase
@@ -80,7 +83,7 @@
   border: 0;
   width: 11px;
   height: 6px;
-  background-image: url('/static/images/dropdown-toggle-icon.png');
+  background-image: url('https://cdn.vidcloud.io/resources/go/static/images/dropdown-toggle.png');
   background-repeat: no-repeat;
   background-size: 11px;
 }

@@ -62,6 +62,7 @@ export default class NicheScriptsWorkspace extends Component {
     const { waiter } = this.state;
     return (
       <Fragment>
+        <div className='niche-component'>
         { waiter && useWaiter ? <Waiter message={waiter.message} /> : null }
         <Search
           onSearch={q => this.onSearch(q)}
@@ -86,6 +87,8 @@ export default class NicheScriptsWorkspace extends Component {
             }
           </NicheScriptsList>
         </div>
-      </Fragment>);
+        </div>
+      </Fragment>
+      );
   }
 }

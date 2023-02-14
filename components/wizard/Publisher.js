@@ -25,6 +25,7 @@ import publishShareIcon from '../../static/images/Frame138.svg';
 import chooseTemplateIcon from '../../static/images/Frame139.svg';
 
 import { consts } from '../../lib/consts/consts';
+import VideoPlayer from '../common/VideoPlayer';
 const { LABEL_PUBLISHER } = consts;
 
 @inject('api')
@@ -38,11 +39,24 @@ export default class Publisher extends Component {
     if (!activeProject && project) {
       this.retrieveProject(project);
     }
+    this.toggle = this.toggle.bind(this);
+
+    this.state = {
+      isOpen: false,
+      contentType: ''
+    }
   }
 
   state = {
     waiter: null,
   };
+
+  toggle(contentType) {
+    this.setState({
+      isOpen: !this.state.isOpen,
+      contentType: contentType
+    })
+  }
 
   onProjectUpdate = async (project) => {
     this.setState({ waiter: { message: 'Updating your project details...' } });
@@ -83,33 +97,33 @@ export default class Publisher extends Component {
               : whiteLabelManager.brandName}
           </title>
         </Head>
-        { activeProject ? (
+        {activeProject ? (
           <PhaseView
             elements={[
               {
                 key: 'getting-started',
                 title: ((activeProject && activeProject.usedWizard)
-                || GettingStarted.WIZARD_TYPES.FROM_TEMPLATE).label,
+                  || GettingStarted.WIZARD_TYPES.FROM_TEMPLATE).label,
                 active: false,
                 available: true,
-                image:chooseTemplateIcon,
-                val:0
+                image: chooseTemplateIcon,
+                val: 0
               },
               {
                 key: 'edit',
                 title: 'Customize Video',
                 active: false,
                 available: true,
-                image:customizeVideoIcon,
-                val:50
+                image: customizeVideoIcon,
+                val: 50
               },
               {
                 key: 'publish',
                 title: 'Publish & Share',
                 active: true,
                 available: true,
-                image:publishShareIcon,
-                val:100
+                image: publishShareIcon,
+                val: 100
               },
             ]}
             onPhaseChanged={(element) => {
@@ -119,7 +133,7 @@ export default class Publisher extends Component {
                     pathname: '/',
                     query: {
                       wizard: ((activeProject && activeProject.usedWizard)
-                      || GettingStarted.WIZARD_TYPES.FROM_TEMPLATE).key,
+                        || GettingStarted.WIZARD_TYPES.FROM_TEMPLATE).key,
                     },
                   });
                   break;
@@ -136,7 +150,7 @@ export default class Publisher extends Component {
               }
             }}
           />
-        ) : null }
+        ) : null}
         <iframe
           title="Iframe social conductor"
           src={`${cdnSocialWeb}/social-campaign/social-campaign.html`}
@@ -151,7 +165,7 @@ export default class Publisher extends Component {
             this.popupboxContainer.state.children = null;
           }}
         />
-        { waiter ? <Waiter message={waiter.message} /> : null }
+        {waiter ? <Waiter message={waiter.message} /> : null}
         <Container fluid className={`publisher-wrapper project-expector ${activeProject && 'hidden'}`}>
           {project ? <InfiniteLoading /> : <div>There is no active project.</div>}
         </Container>
@@ -188,89 +202,94 @@ export default class Publisher extends Component {
                     </Container>
                   </div>
                 </Col>
+                {this.state.isOpen && <VideoPlayer contentType={this.state.contentType} title="Preview" item={activeProject} playbackUrl={playbackUrl} setShow={this.toggle} />}
                 <Col className="col-2 paddingless publisher-pane">
                   <ActionsPane className="actions-pane">
                     <button
                       className="go-button action-button"
                       onClick={() => {
-                        PopupboxManager.open({
-                          content: <EmailCampaign
-                            className="campaign"
-                            project={activeProject}
-                            onCampaignFinished={() => PopupboxManager.close()}
-                          />,
-                          config: {
-                            titleBar: {
-                              enable: true,
-                              text: 'Email Campaign',
-                            },
-                            fadeIn: true,
-                            fadeInSpeed: 200,
-                          },
-                        });
+                        this.toggle('emailCampaign')
+                        //   PopupboxManager.open({
+                        //     content: <EmailCampaign
+                        //       className="campaign"
+                        //       project={activeProject}
+                        //       onCampaignFinished={() => PopupboxManager.close()}
+                        //     />,
+                        //     config: {
+                        //       titleBar: {
+                        //         enable: true,
+                        //         text: 'Email Campaign',
+                        //       },
+                        //       fadeIn: true,
+                        //       fadeInSpeed: 200,
+                        //     },
+                        //   });
                       }}
                     >
-                    Email Campaign
+                      Email Campaign
                     </button>
                     <button
                       className="go-button action-button"
                       onClick={() => {
-                        PopupboxManager.open({
-                          content: <SocialCampaign
-                            className="campaign"
-                            project={activeProject}
-                            iframeConductor={this.iframeConductor}
-                            onCampaignFinished={() => {
-                              PopupboxManager.close();
-                              alert('This video has been posted with Social Campaign successfully.');
-                            }}
-                            onTitleUpdated={title => PopupboxManager.update({
-                              config: {
-                                titleBar: {
-                                  text: title,
-                                },
-                              },
-                            })}
-                          />,
-                          config: {
-                            titleBar: {
-                              enable: true,
-                              text: 'Social Campaign',
-                            },
-                            fadeIn: true,
-                            fadeInSpeed: 200,
-                          },
-                        });
+                        this.toggle('socialCampaign')
+                        // PopupboxManager.open({
+                        //   content: <SocialCampaign
+                        //     className="campaign"
+                        //     project={activeProject}
+                        //     iframeConductor={this.iframeConductor}
+                        //     onCampaignFinished={() => {
+                        //       PopupboxManager.close();
+                        //       alert('This video has been posted with Social Campaign successfully.');
+                        //     }}
+                        //     onTitleUpdated={title => PopupboxManager.update({
+                        //       config: {
+                        //         titleBar: {
+                        //           text: title,
+                        //         },
+                        //       },
+                        //     }
+                        //     )}
+                        //   />,
+                        //   config: {
+                        //     titleBar: {
+                        //       enable: true,
+                        //       text: 'Social Campaign',
+                        //     },
+                        //     fadeIn: true,
+                        //     fadeInSpeed: 200,
+                        //   },
+                        // });
                       }}
                     >
-                    Social Campaign
+                      Social Campaign
                     </button>
                     <button
                       className={`go-button action-button ${(currentUser.features[features.retarget] && currentUser.features[features.retarget].state === 'enabled') ? '' : 'inactive'}`}
                       title={(currentUser.features[features.retarget] && currentUser.features[features.retarget].state === 'enabled') ? '' : 'This feature is not available on your type of subscription. Click here to details.'}
                       onClick={() => {
                         if (currentUser.features[features.retarget] && currentUser.features[features.retarget].state === 'enabled') {
-                          PopupboxManager.open({
-                            content: <RetargetCampaign
-                              className="campaign"
-                              project={activeProject}
-                              onCampaignFinished={() => PopupboxManager.close()}
-                            />,
-                            config: {
-                              titleBar: {
-                                enable: true,
-                                text: 'Opt-In/Retarget',
-                              },
-                              fadeIn: true,
-                              fadeInSpeed: 200,
-                            },
-                          });
+                          this.toggle('retargetCampaign')
+                          // PopupboxManager.open({
+                          //   content: <RetargetCampaign
+                          //     className="campaign"
+                          //     project={activeProject}
+                          //     onCampaignFinished={() => PopupboxManager.close()}
+                          //   />,
+                          //   config: {
+                          //     titleBar: {
+                          //       enable: true,
+                          //       text: 'Opt-In/Retarget',
+                          //     },
+                          //     fadeIn: true,
+                          //     fadeInSpeed: 200,
+                          //   },
+                          // });
                         } else if (currentUser.features[features.retarget].link) {
                           window.open(currentUser.features[features.retarget].link, '_blank');
                         }
                       }}
                     >
-                    Opt-In/Retarget
+                      Opt-In/Retarget
                     </button>
                   </ActionsPane>
                 </Col>

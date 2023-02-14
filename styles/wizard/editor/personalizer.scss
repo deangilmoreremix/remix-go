@@ -1,14 +1,14 @@
 .personalizer {
-  color: $primary-color;
   font-size: 1.1rem;
-  display: flex;
+  display: inline-block;
   flex-direction: row;
+  overflow-y: auto;
+  width: 100%;
 
   .token-list {
-    display: block;
+    display: flex;
     padding: 0;
-    height: 100%;
-    width: 35%;
+
     list-style-type: none;
 
     .token-list-item {
@@ -16,6 +16,10 @@
       cursor: pointer;
       margin: 10px 0;
       font-weight: inherit;
+      margin: 10px 5px;
+      padding: 0 15px;
+      background-color: #22222F;
+      border-radius: 5px;
 
       .item-dot-icon {
         .cls-1 {
@@ -24,14 +28,19 @@
         }
       }
 
+      .token-list-name {
+
+        color: white;
+        padding: 5px 17px;
+      }
+
       .icon {
         margin-right: 5px;
       }
 
       &.selected {
-        color: $secondary-color;
+        background-color: $secondary-color;
         font-weight: 500;
-
         .item-dot-icon {
           .cls-1 {
             fill: $secondary-color;
@@ -65,10 +74,14 @@
 
     .configuration-list {
       display: block;
-      padding: 0;
+      padding-bottom: 70px;
       height: 50%;
       width: 100%;
       list-style-type: none;
+      padding-left: 0;
+      // .list-li {
+      //   padding: 2px 0px;
+      // }
 
       .configuration-list-item {
         display: block;
@@ -89,7 +102,11 @@
 
         .fallback-input {
           margin-left: 5px;
-          display: inline;
+          display: flex;
+          background: #1C1C26;
+          border-radius: 5px;
+          width: 50%;
+          max-width: 450px;
         }
 
         &.selected {
@@ -108,13 +125,13 @@
 
     .confirm-button {
       position: absolute;
-      bottom: 8%;
-      right: 4%;
+      bottom: 10%;
       text-weight: 400;
       width: 80px;
       height: 30px;
       text-transform: uppercase;
       border: none;
+
       &:before {
         content: '\002B';
         margin-right: 3px;

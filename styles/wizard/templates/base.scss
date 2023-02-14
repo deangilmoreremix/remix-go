@@ -11,18 +11,20 @@
   margin: 20px 0;
 
   .template_items {
-    display: flex;
-    flex-wrap: wrap;
-    margin: 0 -15px;
-
+    // display: flex;
+    // flex-wrap: wrap;
+    // margin: 0 -15px; 
+    display: grid;
+    grid-template-columns: repeat(auto-fit,minmax(340px, 340px));
+    
     .template-wrapper{
       padding: 15px;
-      flex: 1 0 25%;
-      max-width: 25%; 
+      // flex: 1 0 25%;
+      // max-width: 25%; 
 
       @media (max-width : 1023px) {
-        flex: 1 0 33.33%;
-        max-width: 33.33%;
+        // flex: 1 0 33.33%;
+        // max-width: 33.33%;
       }
       &:hover{
         .template_data{

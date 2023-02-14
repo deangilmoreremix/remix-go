@@ -23,6 +23,7 @@ import SVGFromTemplate from '../../static/images/start-from-template.svg';
 import SVGTemplateGenerator from '../../static/images/template-generator.svg';
 import SVGVideoUpload from '../../static/images/import-video.svg';
 import SVGMyProjects from '../../static/images/my-project.svg';
+import VideoPlayer from '../common/VideoPlayer';
 
 @inject('api')
 @inject('store')
@@ -46,10 +47,15 @@ export default class GettingStarted extends Component {
       .find(([key, item]) => item.key === wizard);
     this.state = {
       wizardType: foundWizardType && foundWizardType[1],
+      isOpen:false,
+      contentType:""
     };
+    this.toggle = this.toggle.bind(this);
     this.store = initStore(props.store);
   }
-
+  toggle() {
+    this.setState({isOpen:this.state.isOpen, contentType:this.state.contentType})
+  }
   getWizard(wizardType) {
     const { store: { whiteLabelManager, common: { features, prefixes }, currentUser } } = this.props;
     switch (wizardType) {
@@ -62,26 +68,28 @@ export default class GettingStarted extends Component {
                 this.popupboxContainer.state.children = null;
               }}
             />
+            {this.state.isOpen && <VideoPlayer contentType={this.state.contentType} title="Preview" item={activeProject} playbackUrl={playbackUrl} setShow={this.toggle} />}
             <VideoSelectionWorkspace
               className="wizard-gallery"
               onVideoSelected={(video) => {
+                this.toggle('nicheScript')
                 const nicheSelection = (<NicheScriptsWorkspace
                   className="niche-scripts"
                   onScriptSelected={(script) => {
                     this.handleWizardSelection({ script, video });
                   }}
                 />);
-                PopupboxManager.open({
-                  content: nicheSelection,
-                  config: {
-                    titleBar: {
-                      enable: true,
-                      text: 'Select a niche script',
-                    },
-                    fadeIn: true,
-                    fadeInSpeed: 200,
-                  },
-                });
+                // PopupboxManager.open({
+                //   content: nicheSelection,
+                //   config: {
+                //     titleBar: {
+                //       enable: true,
+                //       text: 'Select a niche script',
+                //     },
+                //     fadeIn: true,
+                //     fadeInSpeed: 200,
+                //   },
+                // });
               }}
             />
           </div>);

@@ -7,7 +7,7 @@ import {
   PopupboxManager,
   PopupboxContainer,
 } from 'react-popupbox';
-
+import VideoPlayer from '../../common/VideoPlayer';
 import { DropdownMenu, DropdownItem, Dropdown, DropdownToggle } from 'reactstrap';
 
 import PropTypes from '../../../lib/PropTypes';
@@ -30,7 +30,11 @@ export default class Templates extends Component {
     this.state = {
       isOpen: false,
     };
-
+    this.previewToggle = this.previewToggle.bind(this);
+    this.state = {
+      isPreviewOpen: false,
+      previewItem:""
+    }
     this.state = {
       dropdownOpen: false,
       hasMore: true,
@@ -39,6 +43,14 @@ export default class Templates extends Component {
     };
   }
 
+  previewToggle(item) {
+    this.setState({
+      isPreviewOpen:!this.state.isPreviewOpen,
+      previewItem:item
+    })
+  }
+
+  
 
   toggle() {
     this.setState({
@@ -101,7 +113,7 @@ export default class Templates extends Component {
         <div className='choose-template-container'>
           <Search
             onSearch={q => this.onSearch(q)}
-            placeholder="Search through your templates..."
+            placeholder="Search Your Template"
           />
           <Dropdown isOpen={this.state.isOpen} toggle={this.toggle} direction={'down'} className={'select-niche-dropdown'}>
             <DropdownToggle caret>
@@ -124,7 +136,7 @@ export default class Templates extends Component {
                   </div>
                   <div className='template_data'>
                     <div class="buttons-container">
-                      <a class="button btn-preview" onClick={() => { this.onPreview(item) }}><img src={'/static/images/play-icon.png'}></img></a>
+                      <a class="button btn-preview" onClick={() => { this.previewToggle(item) }}><img src={'https://cdn.vidcloud.io/resources/go/static/images/play-icon.png'}></img></a>
                       <p>{item.title}</p>
                       <a class="btn btn-primary btn-small" onClick={() => this.props.onTemplateSelected(item)}>use</a>
                     </div>
@@ -134,6 +146,7 @@ export default class Templates extends Component {
             ))}
           </div>
         </div>
+        {this.state.isPreviewOpen && <VideoPlayer contentType='video'  isFooter={false} title={this.state.previewItem.title} item={this.state.previewItem} isOpen={this.state.isPreviewOpen} setShow={this.previewToggle} statechanger={this.setState}/>}
         <TemplateGallery
           className="wizard-gallery"
           hasMore={this.state.hasMore}

@@ -1,0 +1,44 @@
+// .modal-container {
+//     background-color: #3A3A51;
+// }
+.modal-header {
+    border-bottom: 2px solid #eb5054;
+}
+
+.modal-content {
+    width: auto;
+    background-color: #3A3A51;
+    padding: 3%;
+}
+
+.modal-dialog {
+    position: absolute;
+    width: 100%;
+    margin: 0.5rem;
+    pointer-events: none;
+    left: 30%;
+    top: 20%;
+    max-width: 800px;
+}
+.modal-body .search-template .search-field .search-input input.form-control {
+    background-color: #1C1C26;
+}
+.modal-body .button.btn-preview {
+    position: absolute;
+    left: 50%;
+    bottom: 50%;
+}
+.close-modal {
+    background-color: #3A3A51;
+    border: 0px;
+    left: 95%;
+    position: absolute;
+}
+
+.img-preview {
+    opacity: 0.5;
+    width: 100%;
+}
+.preview-video {
+    width: 100%;
+}

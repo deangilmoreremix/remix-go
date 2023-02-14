@@ -1,32 +1,62 @@
 .niche-scripts {
-  width: 50vw;
+  width: 35vw;;
   height: 50vh;
   overflow: auto;
-
+ 
   .wizard-list {
     width: 100% !important;
-
-    .list-item {
+    .niche-item {
+      display: flex;
+      background: bottom;
       width: 100%;
-      padding-bottom: 7px;
-      height: auto;
-      color: $primary-color;
-      font-size: 1.1rem;
-      border-bottom: solid 0.3px $primary-color;
+      .niche-details {
+        background: black;
+       
+        padding: 2%;
+          padding-right: 2%;
+        padding-right: 68%;
 
-      .script-title {
-        display: inline-block;
-        padding-top: 3px;
+       
       }
-
       .go-button {
-        color: $white;
-        cursor: pointer;
-        float: right;
-        height: 24px;
-        padding: 2px 0;
-        width: 50px;
-      }
+        position: absolute;
+        left: 80%;
+        margin: 0;
+        height: 100%;
+      } 
+  
     }
+    // .list-item {
+    //   width: 100%;
+    //   padding-bottom: 7px;
+    //   height: auto;
+    //   color: #fff;
+    //   font-size: 1.1rem;
+    //   border-bottom: solid 0.3px $primary-color;
+
+    //   .script-title {
+    //     display: inline-block;
+    //     padding-top: 3px;
+    //   }
+
+    //   .go-button {
+    //     color: $white;
+    //     cursor: pointer;
+    //     float: right;
+    //     height: 24px;
+    //     padding: 2px 0;
+    //     width: 50px;
+    //   }
+    // }
   }
 }
+.niche-component .search-template {
+  margin-left: 34%;
+  margin-bottom: 2%;
+}
+.niche-component .search-template .search-field .search-input input.form-control{
+ 
+  background-color: #1C1C26;
+
+}
+

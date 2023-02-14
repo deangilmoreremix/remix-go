@@ -142,6 +142,40 @@ class Api {
   }
 
   @action
+  async endScreens(count = 0, query = '') {
+    this.isLoading = true;
+    const page = Math.ceil(count / this.perPage);
+    try {
+      return this.request(
+        `/api/makes/go?segment=endScreens&perPage=${this.perPage}&page=${page + 1}&q=${query}`, {
+          method: 'GET',
+          headers: {
+            'on-behalf': this.currentUser.id,
+          },
+        });
+    } finally {
+      this.isLoading = false;
+    }
+  }
+
+  @action
+  async imageLT(count = 0, query = '') {
+    this.isLoading = true;
+    const page = Math.ceil(count / this.perPage);
+    try {
+      return this.request(
+        `/api/makes/go?segment=imageLT&perPage=${this.perPage}&page=${page + 1}&q=${query}`, {
+          method: 'GET',
+          headers: {
+            'on-behalf': this.currentUser.id,
+          },
+        });
+    } finally {
+      this.isLoading = false;
+    }
+  }
+
+  @action
   async defaults(count = 0, query = '') {
     this.isLoading = true;
     const page = Math.ceil(count / this.perPage);

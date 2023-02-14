@@ -107,14 +107,14 @@ export default class ImageUpload extends Component {
       <div className="image-upload">
         <FormGroup>
           <label htmlFor="image-url">
-            Set Image URL
+            {/* Set Image URL */}
             {recommendedResolutionPrompt
             && (
             <span className="text-resolution">
               {`*Recommended image resolution ${recommendedResolutionPrompt}`}
             </span>
             )}
-            <input id="image-url" type="text" onChange={this.changeUrl} />
+            <input id="image-url" type="text" onChange={this.changeUrl} placeholder={'Set Image URL'} />
           </label>
         </FormGroup>
         <FormGroup>

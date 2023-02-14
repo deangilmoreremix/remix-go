@@ -73,13 +73,13 @@ export default class Personalizer extends Component {
     const { className, onTokenChosen } = this.props;
     const { currentToken, tokenMode, fallbackValue, customTokenValue } = this.state;
     return (
-      <div className={className} style={{ width: '600px', height: '300px' }}>
+      <div className={className} >
         <ul className="token-list">
           {Personalizer.TOKENS.map((token, idx) => (
             <li key={idx} onClick={() => this.onTokenChange(token)}>
               <span className={`token-list-item ${token === currentToken ? 'selected' : ''}`}>
-                <SVGInline className="icon item-dot-icon" classSuffix="" svg={SVGItemDot} cleanup={['title']} />
-                {token}
+                {/* <SVGInline className="icon item-dot-icon" classSuffix="" svg={SVGItemDot} cleanup={['title']} /> */}
+                <p className='token-list-name'>{token}</p>
               </span>
             </li>
           ))}
@@ -98,7 +98,7 @@ export default class Personalizer extends Component {
           </span>
           <div className="separator horizontal" />
           <ul className="configuration-list">
-            <li>
+            <li className='list-li'>
               <span
                 className={`configuration-list-item ${tokenMode === Personalizer.TOKEN_MODE.PLAIN ? 'selected' : ''}`}
                 onClick={() => this.setState({ tokenMode: Personalizer.TOKEN_MODE.PLAIN })}
@@ -107,7 +107,7 @@ export default class Personalizer extends Component {
                 plain
               </span>
             </li>
-            <li>
+            <li className='list-li'>
               <span
                 className={`configuration-list-item ${tokenMode === Personalizer.TOKEN_MODE.FALLBACK ? 'selected' : ''}`}
                 onClick={() => this.setState({ tokenMode: Personalizer.TOKEN_MODE.FALLBACK })}
@@ -123,7 +123,7 @@ export default class Personalizer extends Component {
                 />
               </span>
             </li>
-            <li>
+            <li className='list-li'>
               <span
                 className={`configuration-list-item ${tokenMode === Personalizer.TOKEN_MODE.UPPERCASE ? 'selected' : ''}`}
                 onClick={() => this.setState({ tokenMode: Personalizer.TOKEN_MODE.UPPERCASE })}

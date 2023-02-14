@@ -30,7 +30,7 @@ input, textarea, select, button {
 }
 .main {
   padding-top: $main-indent-top;
-  // height: 100vh;
+  min-height: 100vh;
   @media (max-width : 1366px){
     padding-top: 70px;
   }

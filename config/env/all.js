@@ -29,6 +29,8 @@ module.exports = {
       cta: process.env.GO_CTA_LIBRARY || 'go:cta',
       leadgen: process.env.GO_LEAD_GENERATOR || 'go:leadgen',
       retarget: process.env.GO_RETARGET || 'optinCode',
+      endScreens: process.env.GO_END_SCREENS || 'go:endScreens',
+      imageLT: process.env.GO_END_SCREENS || 'go:imageLT'
     },
   },
   loginServer: {
