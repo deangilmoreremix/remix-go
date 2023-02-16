@@ -50,6 +50,7 @@ export default class EditorStageChanger extends Component {
       warning,
       checkForm,
       setWarning,
+      api,
       store: {
         activeProject,
         editorStateManager,
@@ -78,7 +79,9 @@ export default class EditorStageChanger extends Component {
                 <div className="scrollable full-height">
                   { waiter ? <Waiter message={waiter.message} /> : null }
                   <VideoSelectionWorkspace
+                    api={api}
                     inWindow
+                    activeProject={activeProject}
                     onVideoSelected={async (video) => {
                       this.setState({ waiter: { message: 'Loading video...' } });
                       await activeProject.updateVideo(video);
@@ -90,10 +93,12 @@ export default class EditorStageChanger extends Component {
               );
             case EditorStateManager.STAGE_TYPES.AUDIO_CUSTOMISE:
               return (
-                <div className="scrollable full-height">
+                <div className="scrollable ">
                   { waiter ? <Waiter message={waiter.message} /> : null }
                   <AudioSelectionWorkspace
                     inWindow
+                    api={api}
+                    activeProject={activeProject}
                     onAudioSelected={async (audio) => {
                       this.setState({ waiter: { message: 'Loading audio...' } });
                       await activeProject.updateAudio(audio);
@@ -106,14 +111,18 @@ export default class EditorStageChanger extends Component {
             case EditorStateManager.STAGE_TYPES.CAPTION_CUSTOMISE:
               return (
                 <ConstructionWorkspace
-                  className="full-height full-width"
+                api={api}
+                activeProject={activeProject}
+                  className=" full-width"
                   checkForm={checkForm}
                   stage={stage}
                 />);
             case  EditorStateManager.STAGE_TYPES.PERSONALIZER: 
               return (
                 <ConstructionWorkspace
-                  className="full-height full-width"
+                api={api}
+                activeProject={activeProject}
+                  className=" full-width"
                   checkForm={checkForm}
                   stage={stage}
                   editorStateManager={editorStateManager}
@@ -122,7 +131,9 @@ export default class EditorStageChanger extends Component {
               case  EditorStateManager.STAGE_TYPES.CALL_TO_ACTION: 
               return (
                 <ConstructionWorkspace
-                  className="full-height full-width"
+                api={api}
+                activeProject={activeProject}
+                  className=" full-width"
                   checkForm={checkForm}
                   stage={stage}
                   editorStateManager={editorStateManager}
@@ -132,7 +143,9 @@ export default class EditorStageChanger extends Component {
               case  EditorStateManager.STAGE_TYPES.END_SCREENS_CUSTOMISE: 
               return (
                 <ConstructionWorkspace
-                  className="full-height full-width"
+                api={api}
+                activeProject={activeProject}
+                  className=" full-width"
                   checkForm={checkForm}
                   stage={stage}
                   editorStateManager={editorStateManager}
@@ -142,7 +155,9 @@ export default class EditorStageChanger extends Component {
               case  EditorStateManager.STAGE_TYPES.NICHE_SCRIPT_CUSTOMISE: 
               return (
                 <ConstructionWorkspace
-                  className="full-height full-width"
+                api={api}
+                activeProject={activeProject}
+                  className=" full-width"
                   checkForm={checkForm}
                   stage={stage}
                   editorStateManager={editorStateManager}
@@ -152,7 +167,9 @@ export default class EditorStageChanger extends Component {
               case  EditorStateManager.STAGE_TYPES.IMAGE_LT_CUSTOMISE: 
               return (
                 <ConstructionWorkspace
-                  className="full-height full-width"
+                api={api}
+                activeProject={activeProject}
+                  className=" full-width"
                   checkForm={checkForm}
                   stage={stage}
                   editorStateManager={editorStateManager}

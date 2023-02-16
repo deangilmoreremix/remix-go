@@ -3,7 +3,7 @@
 }
 
 //sidebar
-.sidebar{
+.sidebar {
   position: fixed;
   top: 0;
   left: 0;
@@ -47,15 +47,34 @@
     }
 
     .workspace {
-     
+
       display: block;
       padding: 0;
       overflow: auto;
-    height: calc(100vh - 306px);
+      height: calc(100vh - 306px);
 
+      .center-container {
+        height: 100%;
+        padding-left: 145px;
+      }
+
+      .button-container {
+        text-align: right;
+        .mr_15 {
+          margin-right: 15px;
+        }
+      }
 
       .scrollable {
         padding: 30px 0;
+        position: relative;
+
+        .search-template {
+          color: #626262;
+          max-width: 480px;
+          width: 100%;
+        
+        }
 
         .card {
           border: 1px solid $gray-300;
@@ -63,14 +82,29 @@
       }
 
       .construction-workspace {
-        display: flex;
+        display: grid;
         flex-direction: column;
         overflow-y: hidden;
+        overflow-y: hidden;
+        grid-template-columns: 20% 100%;
+        max-width: 95%;
+        column-gap: 25px;
+        padding-left: 237px;
 
         // todo This style adjusts the height in chrome and does not change anything in other
         // browsers. we need to deal with the height of the flexible container in chrome
         .construction-scene {
-          height: 70%;
+          // height: 70%;
+          order: 2;
+          padding: 0 20% 0 0px;
+          width: calc(100% - 40px);
+          margin-left: auto;
+
+          .wrapper {
+            padding: 0 !important;
+            width: 100%;
+            // padding-right: 24%;
+          }
         }
 
         .construction-container {
@@ -85,7 +119,7 @@
         }
 
         .construction-thumbnails {
-          height: 30%;
+          // height: auto;
           position: relative;
           overflow-y: hidden;
 
@@ -96,14 +130,14 @@
             left: 0;
             right: 0;
             margin: 5px 0;
-            display: flex;
+            display: grid;
             flex-wrap: nowrap;
             overflow: auto;
             -webkit-overflow-scrolling: touch;
             -ms-overflow-style: -ms-autohiding-scrollbar;
 
             .thumbnail-canvas-scroll {
-              display: flex;
+              display: grid;
               flex-wrap: nowrap;
               min-width: 100%;
 
@@ -111,7 +145,7 @@
                 flex: 0 0 auto;
                 float: unset;
                 display: inline-block;
-                width: 20%;
+                width: 100%;
                 margin: 0 auto;
                 height: 100%;
                 cursor: pointer;
@@ -129,6 +163,7 @@
                   .action-button {
                     display: none;
                   }
+
                   .input-form {
                     height: 0.5rem;
                   }
@@ -150,19 +185,31 @@
 
       .stage-item {
         // font-family: "Montserrat Light", sans-serif;
-        height: auto;
-        min-height: 90px;
-        padding: 12px;
+        padding: 14px 25px 14px 20px;
         text-align: center;
         // text-transform: uppercase;
-        display:flex;
-        justify-content:center;
-        align-items:center;
+        display: flex;
+        // justify-content: center;
+        align-items: center;
         cursor: pointer;
-        margin: 10px 0;
-        &:first-child{
+        .sidebar-menu-items {
+          display: flex;
+          align-items: center;
+
+          span {
+            margin-top: 0;
+            font-size: 16px;
+            font-weight: 400;
+            line-height: 24px;
+            padding-left: 20px;
+          }
+        }
+       
+
+        &:first-child {
           margin-top: 0;
         }
+
         &.active {
           background: rgb(212, 72, 77);
           background: $gradient-bg;
@@ -174,9 +221,8 @@
         }
 
         img {
-          width: 52px;
-          height: 52px;
-          margin-bottom: 10px;
+          width: 30px;
+          height: 30px;
         }
 
         span {
@@ -230,6 +276,12 @@
     }
   }
 }
+
+// .editor-wrapper .canvas .workspace .button-container {
+//   text-align: right;
+//   margin-bottom: 30px;
+//   padding-right: 50px;
+// }
 
 .project-expector {
   display: flex;

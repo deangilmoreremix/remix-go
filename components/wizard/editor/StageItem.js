@@ -31,6 +31,7 @@ const StageItem = (props) => {
       <div
         data-tip={TEXT_TOOLTIP[title]}
         data-for={title + 1}
+        className={'sidebar-menu-items'}
       >
         {image}
         <br />

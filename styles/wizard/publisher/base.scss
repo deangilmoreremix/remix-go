@@ -16,7 +16,7 @@
     height: 100%;
 
     .workspace {
-    
+
       display: block;
       padding: 0;
       overflow: auto;
@@ -68,6 +68,14 @@
       }
     }
   }
+}
+
+.editor-wrapper .canvas .workspace .scrollable .search-template {
+  color: #626262;
+  max-width: 480px;
+  width: 100%;
+  margin-left: auto;
+  margin-right: 15px;
 }
 
 .publish-overview {
@@ -232,10 +240,10 @@
         }
         .form-group {
           @media (max-width: 1367px) {
-              margin-bottom: 0.3rem;
+            margin-bottom: 0.3rem;
           }
           @media (min-width: 1368px) and (max-width: 1439px) {
-              margin-bottom: 1rem;
+            margin-bottom: 1rem;
           }
 
           label[for="image-uploader"] {

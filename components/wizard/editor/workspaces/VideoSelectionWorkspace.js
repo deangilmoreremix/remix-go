@@ -14,6 +14,7 @@ import InfiniteLoading from '../../../common/InfiniteLoading';
 import Search from '../../../common/Search';
 import InputField from './gridItems/InputField';
 import VideoGridItem from './gridItems/VideoGridItem';
+import PublishButton from '../../../common/PublishButton';
 
 
 @inject('api')
@@ -29,6 +30,7 @@ export default class VideoSelectionWorkspace extends Component {
     super(props);
 
     const { api } = props;
+    this.onSelected = this.onSelected.bind(this);
     this.state = {
       scope: api.constructor.ASSET_SCOPES.LIBRARY,
       [api.constructor.ASSET_SCOPES.LIBRARY]: {
@@ -88,6 +90,9 @@ export default class VideoSelectionWorkspace extends Component {
       });
     });
   };
+  onSelected = () => {
+      console.log("click here");
+  }
 
   onScopeChange = async (scope) => {
     if (scope !== this.state.scope) {
@@ -125,7 +130,7 @@ export default class VideoSelectionWorkspace extends Component {
   };
 
   render() {
-    const { api, className, inWindow = false, onVideoSelected } = this.props;
+    const { api, className, inWindow = false, onVideoSelected, activeProject } = this.props;
     const { scope } = this.state;
     const { hasMore, elements } = this.state[scope];
     const editable = (scope === api.constructor.ASSET_SCOPES.UPLOADS);
@@ -135,16 +140,17 @@ export default class VideoSelectionWorkspace extends Component {
         { columns: 1, gutter: 20 },
         { mq: '694px', columns: 2, gutter: 20 },
         { mq: '1000px', columns: 3, gutter: 20 },
-        { mq: '1536px', columns: 4, gutter: 20 },
+        { mq: '1536px', columns: 5, gutter: 20 },
       ] : [
         { columns: 1, gutter: 30 },
         { mq: '512px', columns: 2, gutter: 30 },
         { mq: '768px', columns: 3, gutter: 30 },
-        { mq: '1024px', columns: 4, gutter: 30 },
+        { mq: '1024px', columns: 5, gutter: 30 },
         { mq: '1536px', columns: 5, gutter: 30 },
       ];
     return (
       <Fragment>
+        <div className='go-button-container'>
         <ButtonGroup className="go-switch flex-center">
           <Button
             onClick={() => this.onScopeChange(api.constructor.ASSET_SCOPES.LIBRARY)}
@@ -162,6 +168,47 @@ export default class VideoSelectionWorkspace extends Component {
         <Search
           onSearch={q => this.onSearch(q)}
         />
+        <PublishButton  activeProject={activeProject} api={api}/>
+        </div>
+         {/* <div className='button-container'>
+                <button
+                  className="go-button action-button mr_15"
+                  onClick={() => {
+                    this.toggle()
+                  }}
+                >
+                  Preview
+                </button>
+                <button
+                  className="go-button action-button"
+                  onClick={async () => {
+                    // no need to have it working now, but who knows for future...
+                    // if (activeProject.audio) {
+                    //   this.setState({
+                    //     waiter: {
+                    //       message: 'Making your media mobile-friendly...',
+                    //     },
+                    //   });
+                    //   const { url } = await api.mergeMedia(
+                    //     activeProject.video,
+                    //     activeProject.audio,
+                    //   );
+                    //   await activeProject.updateAudio(null);
+                    //   await activeProject.updateVideo(url);
+                    // }
+                    this.setState({ waiter: { message: 'Saving your project...' } });
+                    const savedProject = await api.publish(await api.save(activeProject));
+                    Router.push({
+                      pathname: '/publish',
+                      query: { project: savedProject.make._id },
+                    });
+                    this.setState({ waiter: null });
+                  }}
+                >
+                  Publish & Share
+                </button>
+          </div>
+        // </div> */}
         <VideoGallery
           useWindow={!inWindow}
           className={`media-gallery ${className}`}
@@ -175,6 +222,7 @@ export default class VideoSelectionWorkspace extends Component {
               <div
                 className="card"
                 key={idx}
+                onClick={this.onSelected}
               >
                 <VideoGridItem
                   item={item}

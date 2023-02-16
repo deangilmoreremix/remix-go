@@ -18,20 +18,26 @@ html {
 }
 
 .flex-center {
-  display: flex;
-  justify-content: center;
+  // display: flex;
+  // justify-content: center;
 }
 
-input, textarea, select, button {
+input,
+textarea,
+select,
+button {
   font-family: $SourceSans;
 }
-.container{
+
+.container {
   max-width: 1190px;
 }
+
 .main {
   padding-top: $main-indent-top;
   min-height: 100vh;
-  @media (max-width : 1366px){
+
+  @media (max-width : 1366px) {
     padding-top: 70px;
   }
 }
@@ -336,20 +342,54 @@ form,
 
 .full-height {
   height: 100%;
+  width: 100%;
+
 }
 
 .go-button {
-  font-family: "Montserrat Light", sans-serif;
+  // font-family: "Montserrat Light", sans-serif;
   cursor: pointer;
-  color: $white;
+  color: #ffffff;
   text-align: center;
-  border-radius: 7px;
-  background: $secondary-color;
+  border-radius: 6px;
+  background: #EF5054;
+  font-family: 'Poppins';
+  font-style: normal;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 20px;
+  border: 0;
+  padding: 10px 20px;
 
   &.inactive {
     opacity: 0.3;
     cursor: default;
   }
+}
+
+.go-button-container {
+  display: flex;
+  justify-content: space-between;
+  padding-left: 292px;
+  align-items: center;
+  margin-bottom: 30px;
+  .button-container {
+    text-align: right;
+    padding-right: 50px;
+    
+  }
+
+  // .go-switch {
+  //   padding-top: 20px;
+  // }
+}
+
+.mr_15 {
+  margin-right: 15px;
+}
+
+.ml_15 {
+  margin-left: 15px;
 }
 
 .video-popup {
@@ -431,7 +471,7 @@ form,
       font-size: 72px;
       font-weight: 800;
       color: $white-80;
-      
+
       @media (max-width : 1366px){
         font-size: 42px;
       }
@@ -442,7 +482,7 @@ form,
         background-clip: text;
         text-fill-color: transparent;
       }
-    
+
     }
 
     a.click-here {
@@ -460,19 +500,19 @@ form,
     }
   }
 .getting-start-list-wrap{
-  width: 100%;
-  max-width: 650px;
-  margin: 0 auto;
-  margin-top: 58px;
-  padding: 60px;
-  border-radius: 20px;
-  background-color: $black-bg-light;
+    width: 100%;
+    max-width: 650px;
+    margin: 0 auto;
+    margin-top: 58px;
+    padding: 60px;
+    border-radius: 20px;
+    background-color: $black-bg-light;
   @media (max-width : 1366px){
-    margin-top: 35px;
-    padding: 40px;
-    max-width: 600px;
+      margin-top: 35px;
+      padding: 40px;
+      max-width: 600px;
+    }
   }
-}
   .getting-started-list {
     // width: 60%;
     // height: 50%;
@@ -499,7 +539,7 @@ form,
         color: inherit;
       }
 
-        &.inactive {
+      &.inactive {
         opacity: 0.5;
         cursor: default;
       }

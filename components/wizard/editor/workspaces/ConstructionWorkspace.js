@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import { Container } from 'reactstrap';
 import { inject, observer } from 'mobx-react';
 
@@ -7,6 +7,7 @@ import ConstructionScene from './construction/ConstructionScene';
 import CheckpointsList from './construction/CheckpointsList';
 import VideoPlayer from '../../../common/VideoPlayer';
 import Project from '../../../../lib/editor/Project';
+import PublishButton from '../../../common/PublishButton';
 
 @inject('store')
 @observer
@@ -32,7 +33,7 @@ export default class ConstructionWorkspace extends Component {
   }
 
   componentWillUnmount() {
-    const { store: { activeProject, editorStateManager } } = this.props;
+    const { api, store: { activeProject, editorStateManager } } = this.props;
     this.resignActiveElement();
     activeProject.engines.forEach(engine => activeProject.detach(engine));
   }
@@ -126,27 +127,30 @@ export default class ConstructionWorkspace extends Component {
   }
 
   render() {
-    const { className, store: { activeProject, editorStateManager }, store } = this.props;
+    const { api, className, store: { activeProject, editorStateManager }, store } = this.props;
     if (!activeProject) {
       return null;
     }
     return (
-      <Container
-        className={`construction-workspace ${className || ''}`}
-        onClick={() => this.resignActiveElement()}
-      >
-        {this.state.isOpen && <VideoPlayer isOpen={this.state.isOpen} title={this.state.title} item={activeProject} contentType={this.state.contentType} setShow={this.toggle} store={store} activeProject={activeProject} onActiveProject={(cta) => {
-          activeProject.cta = new Project(cta)
-        }} />}
-        <ConstructionScene
-          onPopcornInitialize={popcornWrapper => this.onPopcornInitialize(popcornWrapper)}
-        />
-        <CheckpointsList
-          className="construction-thumbnails"
-          checkpoints={activeProject.checkpoints}
-          onCheckpointSelect={at => this.onProjectSeek(at)}
-        />
-      </Container>
+      <Fragment>
+        <PublishButton activeProject={activeProject} api={api} />
+        <Container
+          className={`construction-workspace ${className || ''}`}
+          onClick={() => this.resignActiveElement()}
+        >
+          {this.state.isOpen && <VideoPlayer isOpen={this.state.isOpen} title={this.state.title} item={activeProject} contentType={this.state.contentType} setShow={this.toggle} store={store} activeProject={activeProject} onActiveProject={(cta) => {
+            activeProject.cta = new Project(cta)
+          }} />}
+          <ConstructionScene
+            onPopcornInitialize={popcornWrapper => this.onPopcornInitialize(popcornWrapper)}
+          />
+          <CheckpointsList
+            className="construction-thumbnails"
+            checkpoints={activeProject.checkpoints}
+            onCheckpointSelect={at => this.onProjectSeek(at)}
+          />
+        </Container>
+      </Fragment>
     );
   }
 }

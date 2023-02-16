@@ -286,50 +286,14 @@ export default class Editor extends Component {
                 />
               </div>
               <div className="workspace" key={activeProject && activeProject.version}>
-                <div className='button-container'>
-                <button
-                  className="go-button action-button"
-                  onClick={() => {
-                    this.toggle()
-                  }}
-                >
-                  Preview
-                </button>
-                <button
-                  className="go-button action-button"
-                  onClick={async () => {
-                    // no need to have it working now, but who knows for future...
-                    // if (activeProject.audio) {
-                    //   this.setState({
-                    //     waiter: {
-                    //       message: 'Making your media mobile-friendly...',
-                    //     },
-                    //   });
-                    //   const { url } = await api.mergeMedia(
-                    //     activeProject.video,
-                    //     activeProject.audio,
-                    //   );
-                    //   await activeProject.updateAudio(null);
-                    //   await activeProject.updateVideo(url);
-                    // }
-                    this.setState({ waiter: { message: 'Saving your project...' } });
-                    const savedProject = await api.publish(await api.save(activeProject));
-                    Router.push({
-                      pathname: '/publish',
-                      query: { project: savedProject.make._id },
-                    });
-                    this.setState({ waiter: null });
-                  }}
-                >
-                  Publish & Share
-                </button>
-                </div>
+               
                 <WorkspaceContainer
                   stateManager={editorStateManager}
                   className="full-height"
                   checkForm={this.checkForm}
                   setWarning={this.setWarning}
                   warning={this.warning}
+                  api={api}
                 />
                 <Row className={`toolbar ${editorStateManager.stage === StateManager.STAGE_TYPES.CAPTION_CUSTOMISE || editorStateManager.stage === StateManager.STAGE_TYPES.CALL_TO_ACTION  || editorStateManager.stage === StateManager.STAGE_TYPES.PERSONALIZER || editorStateManager.stage === StateManager.STAGE_TYPES.NICHE_SCRIPT_CUSTOMISE || editorStateManager.stage === StateManager.STAGE_TYPES.END_SCREENS_CUSTOMISE || editorStateManager.stage === StateManager.STAGE_TYPES.IMAGE_LT_CUSTOMISE ? '' : 'hidden'}`}>
                   {activeProject && activeProject.activeElement ? (
