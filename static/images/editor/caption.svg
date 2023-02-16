@@ -1,13 +1,19 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- Generator: Adobe Illustrator 22.1.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
-<svg version="1.1" id="Layer_247_copy" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px"
-	 y="0px" viewBox="0 0 68.7 60.8" style="enable-background:new 0 0 68.7 60.8;" xml:space="preserve">
-<style type="text/css">
-	.st0{fill:none;stroke:#FFFFFF;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;}
-</style>
-<title>Captions</title>
-<path class="st0" d="M5.3,1h58.2c2.4,0,4.3,1.9,4.3,4.3v50.2c0,2.4-1.9,4.3-4.3,4.3H5.3c-2.4,0-4.3-1.9-4.3-4.3V5.3
-	C1,2.9,2.9,1,5.3,1z"/>
-<line class="st0" x1="34.4" y1="12.4" x2="34.4" y2="48.3"/>
-<path class="st0" d="M50.5,18.3v-1.7c0-2.4-1.9-4.3-4.3-4.3c0,0,0,0,0,0H22.5c-2.4,0-4.3,1.9-4.3,4.3l0,0v1.7"/>
+<svg width="52" height="55" viewBox="0 0 52 55" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g filter="url(#filter0_d_993_2145)">
+<path d="M45.1469 6H5.85398C5.34147 6 5 6.34147 5 6.85398V46.1454C5 46.658 5.34147 46.9994 5.85398 46.9994H45.1454C45.658 46.9994 45.9994 46.658 45.9994 46.1454L46 6.85398C46 6.34147 45.6585 6 45.146 6H45.1469ZM44.2924 45.2915H6.70973V7.70883H44.2938L44.2924 45.2915Z" fill="#F5F5F5"/>
+<path d="M21.9985 32.4787C22.2548 32.4787 22.5111 32.4787 22.7673 32.3935C23.2798 32.3082 23.5361 31.8809 23.4508 31.4537C23.3656 30.9412 22.9383 30.6849 22.5111 30.6849H21.9985C19.6071 30.6849 17.7275 28.8059 17.7275 26.4138C17.7275 24.0224 19.6065 22.1428 21.9985 22.1428H22.5111C22.9383 22.228 23.2798 21.9718 23.4508 21.5451C23.6219 21.1178 23.3656 20.6053 22.9383 20.4348H22.7673C22.5111 20.4348 22.2548 20.3496 21.9985 20.3496C18.6673 20.3496 16.0195 22.9973 16.0195 26.3286C16.0195 29.6599 18.6673 32.3935 21.9985 32.4787Z" fill="#F5F5F5"/>
+<path d="M33.104 32.4787C33.3603 32.4787 33.6165 32.4787 33.8728 32.3935C34.3853 32.3082 34.6415 31.8809 34.5563 31.4537C34.4711 30.9412 34.0438 30.6849 33.6165 30.6849H33.104C30.7125 30.6849 28.833 28.8059 28.833 26.4138C28.833 24.0224 30.7119 22.1428 33.104 22.1428H33.6165C34.0438 22.228 34.3853 21.9718 34.5563 21.5451C34.7273 21.1178 34.4711 20.6053 34.0438 20.4348H33.8728C33.6165 20.4348 33.3603 20.3496 33.104 20.3496C29.7727 20.3496 27.125 22.9973 27.125 26.3286C27.1244 29.6599 29.7727 32.3935 33.104 32.4787Z" fill="#F5F5F5"/>
+</g>
+<defs>
+<filter id="filter0_d_993_2145" x="-4" y="0" width="60" height="60" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+<feFlood flood-opacity="0" result="BackgroundImageFix"/>
+<feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
+<feOffset dy="4"/>
+<feGaussianBlur stdDeviation="2"/>
+<feComposite in2="hardAlpha" operator="out"/>
+<feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.25 0"/>
+<feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_993_2145"/>
+<feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_993_2145" result="shape"/>
+</filter>
+</defs>
 </svg>
