@@ -108,9 +108,18 @@ export default class Editor extends Component {
     }
   }
 
-  // onActiveProject = (project) => {
-  //   console.log(project,"project=============");
-  // }  
+  async componentDidUpdate() {
+    const { api,store:{ activeProject } } = this.props;
+    try {
+      if(activeProject.make._id && activeProject.modified) {
+        await api.save(activeProject);
+      }
+    }
+    catch(e) {
+      console.log(e);
+    }
+  }
+  
   retrieveProject = async (projectId, isRemix) => {
     const { api, store } = this.props;
     const source = await api.get(projectId, !isRemix);
@@ -312,7 +321,6 @@ export default class Editor extends Component {
                   )}
                 </Row>
               </div>
-              {console.log(editorStateManager.stage, StateManager.STAGE_TYPES.PERSONALIZER, "==========>>>")}
               {/* <Col className="col-2 paddingless editor-pane"> */}
               {/* <ActionsPane className="actions-pane scrollable">
                   <button
