@@ -128,7 +128,7 @@ export default class AudioSelectionWorkspace extends Component {
         <Search
           onSearch={q => this.onSearch(q)}
         />
-        <PublishButton  activeProject={activeProject} api={api}/>
+        {/* <PublishButton  activeProject={activeProject} api={api}/> */}
         </div>
         <AudioGallery
           useWindow={!inWindow}

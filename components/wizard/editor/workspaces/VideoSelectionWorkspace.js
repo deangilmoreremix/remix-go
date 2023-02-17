@@ -168,47 +168,8 @@ export default class VideoSelectionWorkspace extends Component {
         <Search
           onSearch={q => this.onSearch(q)}
         />
-        <PublishButton  activeProject={activeProject} api={api}/>
+        {/* <PublishButton  activeProject={activeProject} api={api}/> */}
         </div>
-         {/* <div className='button-container'>
-                <button
-                  className="go-button action-button mr_15"
-                  onClick={() => {
-                    this.toggle()
-                  }}
-                >
-                  Preview
-                </button>
-                <button
-                  className="go-button action-button"
-                  onClick={async () => {
-                    // no need to have it working now, but who knows for future...
-                    // if (activeProject.audio) {
-                    //   this.setState({
-                    //     waiter: {
-                    //       message: 'Making your media mobile-friendly...',
-                    //     },
-                    //   });
-                    //   const { url } = await api.mergeMedia(
-                    //     activeProject.video,
-                    //     activeProject.audio,
-                    //   );
-                    //   await activeProject.updateAudio(null);
-                    //   await activeProject.updateVideo(url);
-                    // }
-                    this.setState({ waiter: { message: 'Saving your project...' } });
-                    const savedProject = await api.publish(await api.save(activeProject));
-                    Router.push({
-                      pathname: '/publish',
-                      query: { project: savedProject.make._id },
-                    });
-                    this.setState({ waiter: null });
-                  }}
-                >
-                  Publish & Share
-                </button>
-          </div>
-        // </div> */}
         <VideoGallery
           useWindow={!inWindow}
           className={`media-gallery ${className}`}
