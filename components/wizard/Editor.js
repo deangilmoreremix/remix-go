@@ -231,7 +231,7 @@ export default class Editor extends Component {
                 active: false,
                 available: true,
                 image: chooseTemplateIcon,
-                val: 0
+                val: 25
               },
               {
                 key: 'edit',
@@ -239,7 +239,7 @@ export default class Editor extends Component {
                 active: true,
                 available: true,
                 image: customizeVideoIcon,
-                val: 50
+                val: 75
               },
               {
                 key: 'publish',
@@ -281,21 +281,23 @@ export default class Editor extends Component {
           <InfiniteLoading />
         </Container>
         {activeProject ? (
+          <Fragment>
+           <div className="col-2 paddingless editor-pane sidebar">
+           <EditorStageChanger
+             className="stage-wrapper"
+             stage={editorStateManager.stage}
+             onChange={(stage) => {
+               editorStateManager.stage = stage;
+               editorStateManager.toolbar = null;
+             }}
+           />
+             </div>
           <div fluid className={`editor-wrapper ${!activeProject && 'hidden'}`}>
 
             <div className={`canvas full-height ${editorStateManager.stage === StateManager.STAGE_TYPES.CAPTION_CUSTOMISE || editorStateManager.stage === StateManager.STAGE_TYPES.CALL_TO_ACTION  || editorStateManager.stage === StateManager.STAGE_TYPES.PERSONALIZER || editorStateManager.stage === StateManager.STAGE_TYPES.NICHE_SCRIPT_CUSTOMISE || editorStateManager.stage === StateManager.STAGE_TYPES.END_SCREENS_CUSTOMISE || editorStateManager.stage === StateManager.STAGE_TYPES.IMAGE_LT_CUSTOMISE ? 'with-toolbar' : ''}`}>
-              <div className="col-2 paddingless editor-pane sidebar">
-                <EditorStageChanger
-                  className="stage-wrapper"
-                  stage={editorStateManager.stage}
-                  onChange={(stage) => {
-                    editorStateManager.stage = stage;
-                    editorStateManager.toolbar = null;
-                  }}
-                />
-              </div>
+             
+            
               <div className="workspace" key={activeProject && activeProject.version}>
-               
                 <WorkspaceContainer
                   stateManager={editorStateManager}
                   className="full-height"
@@ -543,6 +545,7 @@ export default class Editor extends Component {
               {/* </Col> */}
             </div>
           </div>
+          </Fragment>
         ) : null}
       </Fragment>
     );

@@ -107,7 +107,7 @@ export default class Publisher extends Component {
                 active: false,
                 available: true,
                 image: chooseTemplateIcon,
-                val: 0
+                val: 25
               },
               {
                 key: 'edit',
@@ -115,7 +115,7 @@ export default class Publisher extends Component {
                 active: false,
                 available: true,
                 image: customizeVideoIcon,
-                val: 50
+                val: 75
               },
               {
                 key: 'publish',

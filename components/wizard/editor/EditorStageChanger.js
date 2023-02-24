@@ -28,7 +28,7 @@ const EDITOR_STAGE_VIEWS = [{
   image: <img src="https://cdn.vidcloud.io/resources/go/static/images/editor/caption.svg" alt="" />,
   validator: () => null,
   title: 'Captions',
-  
+
 }, {
   stage: StateManager.STAGE_TYPES.PERSONALIZER,
   image: <img src="https://cdn.vidcloud.io/resources/go/static/images/editor/personalizer.svg" alt="" />,
@@ -72,17 +72,17 @@ export default class EditorStageChanger extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      editprStage: '',
+      editorStage: '',
     };
   }
 
   componentWillReceiveProps(nextProps) {
     this.setState({
-      editprStage: nextProps.stage
+      editorStage: nextProps.stage
     })
     if (nextProps.stage == 'PERSONALIZER_CUSTOMISE' || nextProps.stage == 'NICHE_SCRIPT_CUSTOMISE' || nextProps.stage == 'END_SCREENS_CUSTOMISE' || nextProps.stage == 'IMAGE_LT_CUSTOMISE' || nextProps.stage == 'CALL_TO_ACTION') {
       this.setState({
-        editprStage: 'CAPTION_CUSTOMISE'
+        editorStage: 'CAPTION_CUSTOMISE'
       })
     }
   }
@@ -94,7 +94,7 @@ export default class EditorStageChanger extends Component {
         {EDITOR_STAGE_VIEWS.map(({ stage, image, title, validator }, idx) => (
           <StageItem
             key={idx}
-            className={`stage-item ${stage === this.state.editprStage && 'active'}`}
+            className={`stage-item ${stage === this.state.editorStage && 'active'}`}
             title={title}
             image={image}
             validationMessage={validator(activeProject)}

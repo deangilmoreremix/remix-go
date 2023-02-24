@@ -224,7 +224,7 @@ export default class GettingStarted extends Component {
               active: true,
               available: true,
               image:chooseTemplateIcon,
-              val:0
+              val:25
             },
             {
               key: 'edit',
@@ -232,7 +232,7 @@ export default class GettingStarted extends Component {
               active: false,
               available: false,
               image:customizeVideoIcon,
-              val:50
+              val:75
             },
             {
               key: 'publish',

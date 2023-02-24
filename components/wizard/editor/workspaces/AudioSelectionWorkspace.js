@@ -100,13 +100,13 @@ export default class AudioSelectionWorkspace extends Component {
         { columns: 1, gutter: 20 },
         { mq: '694px', columns: 2, gutter: 20 },
         { mq: '1000px', columns: 3, gutter: 20 },
-        { mq: '1536px', columns: 5, gutter: 20 },
+        { mq: '1536px', columns: 4, gutter: 20 },
       ] : [
         { columns: 1, gutter: 30 },
         { mq: '512px', columns: 2, gutter: 30 },
         { mq: '768px', columns: 3, gutter: 30 },
-        { mq: '1024px', columns: 5, gutter: 30 },
-        { mq: '1536px', columns: 5, gutter: 30 },
+        { mq: '1024px', columns: 4, gutter: 30 },
+        { mq: '1536px', columns: 4, gutter: 30 },
       ];
     return (
       <Fragment>
@@ -148,11 +148,11 @@ export default class AudioSelectionWorkspace extends Component {
                   item={item}
                   onUse={onAudioSelected}
                 />
-                {editable &&
+                {/* {editable &&
                 <InputField
                   value={item.title}
                   onSave={this.onRename(item)}
-                />}
+                />} */}
               </div>))}
         </AudioGallery>
       </Fragment>);

@@ -91,7 +91,7 @@ export default class VideoSelectionWorkspace extends Component {
     });
   };
   onSelected = () => {
-      console.log("click here");
+    console.log("click here");
   }
 
   onScopeChange = async (scope) => {
@@ -140,35 +140,35 @@ export default class VideoSelectionWorkspace extends Component {
         { columns: 1, gutter: 20 },
         { mq: '694px', columns: 2, gutter: 20 },
         { mq: '1000px', columns: 3, gutter: 20 },
-        { mq: '1536px', columns: 5, gutter: 20 },
+        { mq: '1536px', columns: 4, gutter: 20 },
       ] : [
         { columns: 1, gutter: 30 },
         { mq: '512px', columns: 2, gutter: 30 },
         { mq: '768px', columns: 3, gutter: 30 },
-        { mq: '1024px', columns: 5, gutter: 30 },
-        { mq: '1536px', columns: 5, gutter: 30 },
+        { mq: '1024px', columns: 4, gutter: 30 },
+        { mq: '1536px', columns: 4, gutter: 30 },
       ];
     return (
       <Fragment>
         <div className='go-button-container'>
-        <ButtonGroup className="go-switch flex-center">
-          <Button
-            onClick={() => this.onScopeChange(api.constructor.ASSET_SCOPES.LIBRARY)}
-            active={scope === api.constructor.ASSET_SCOPES.LIBRARY}
-          >
-            Library
-          </Button>
-          <Button
-            onClick={() => this.onScopeChange(api.constructor.ASSET_SCOPES.UPLOADS)}
-            active={scope === api.constructor.ASSET_SCOPES.UPLOADS}
-          >
-            Uploads
-          </Button>
-        </ButtonGroup>
-        <Search
-          onSearch={q => this.onSearch(q)}
-        />
-        {/* <PublishButton  activeProject={activeProject} api={api}/> */}
+          <ButtonGroup className="go-switch flex-center">
+            <Button
+              onClick={() => this.onScopeChange(api.constructor.ASSET_SCOPES.LIBRARY)}
+              active={scope === api.constructor.ASSET_SCOPES.LIBRARY}
+            >
+              Library
+            </Button>
+            <Button
+              onClick={() => this.onScopeChange(api.constructor.ASSET_SCOPES.UPLOADS)}
+              active={scope === api.constructor.ASSET_SCOPES.UPLOADS}
+            >
+              Uploads
+            </Button>
+          </ButtonGroup>
+          <Search
+            onSearch={q => this.onSearch(q)}
+          />
+          {/* <PublishButton  activeProject={activeProject} api={api}/> */}
         </div>
         <VideoGallery
           useWindow={!inWindow}
@@ -190,11 +190,11 @@ export default class VideoSelectionWorkspace extends Component {
                   onPreview={this.onPreview}
                   onUse={onVideoSelected}
                 />
-                {editable &&
-                <InputField
-                  value={item.title}
-                  onSave={this.onRename(item)}
-                />}
+                {/* {editable &&
+                  <InputField
+                    value={item.title}
+                    onSave={this.onRename(item)}
+                  />} */}
               </div>))}
         </VideoGallery>
       </Fragment>

@@ -1,5 +1,5 @@
 .publisher-wrapper {
-  background: $gray-200;
+  background: $background-color;
   bottom: $footer-height + $editor-wrapper-padding;
   left: 0;
   top: $header-height + $editor-wrapper-padding + $phase-component;
@@ -81,7 +81,7 @@
 .publish-overview {
   height: 100%;
   width: 100%;
-  color: $primary-color;
+  color: #fff;
 
   .publish-overview-inner {
     display: flex;

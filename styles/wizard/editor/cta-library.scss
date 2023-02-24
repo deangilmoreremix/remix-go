@@ -1,10 +1,13 @@
 .cta-library {
-  width: 50vw;
   height: 50vh;
   overflow: auto;
 
+  .search-template {
+    margin-bottom: 20px;
+    width: 400px;
+  }
+
   .cta-library-inner {
-    margin: 0 auto;
     padding: 30px 0;
     text-align: center;
 
@@ -45,7 +48,7 @@
           .button {
             cursor: pointer;
             height: 25px;
-            display: inline-block;;
+            display: inline-block;
             width: 70px;
             padding: 3px 8px;
             border: white solid 0.5px;
@@ -61,7 +64,7 @@
       }
     }
 
-    .card > h2 {
+    .card>h2 {
       font-size: 6em;
       color: #fff;
       margin: 1.6em 0;

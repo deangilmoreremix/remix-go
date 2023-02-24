@@ -52,11 +52,11 @@ export default class EndScreens extends Component {
     const { elements } = this.state;
     const { query } = this.state;
     const newElements = await api.endScreens(elements.length, query);
-    if (newElements.length && this.state.activeItem == "") {
-      this.setState({
-        activeItem: newElements[0]
-      })
-    }
+    // if (newElements.length && this.state.activeItem == "") {
+    //   this.setState({
+    //     activeItem: newElements[0]
+    //   })
+    // }
     this.setState({
       elements: elements.concat(newElements),
       hasMore: newElements.length > 0,
