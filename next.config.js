@@ -2,12 +2,8 @@ const path = require('path');
 const glob = require('glob');
 
 module.exports = {
-  exportPathMap() {
-    return {
-      '/': { page: '/' },
-      '/index': { page: '/index' },
-    };
-  },
+  output: 'export',
+  trailingSlash: true,
   webpack: (config) => {
     config.module.rules.push(
       {

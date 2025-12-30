@@ -14,7 +14,7 @@ This is the part of the VidCloud project: lite editor of personalized videos.
  
 ## Prerequisites
 Before first launch the following software must be installed:
- * Node.js (8.9.x generation).
+  * Node.js (18.x or higher).
  
 ## Installation
  1. `git clone git@github.com:strategic-limited/remix-go.git` - to get project sources;
