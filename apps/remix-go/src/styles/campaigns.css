@@ -1,0 +1,98 @@
+.email-campaign select option {
+  background: #1a1a2e;
+  color: #e5e5e5;
+}
+
+.embed-code-generator pre {
+  white-space: pre-wrap;
+  word-break: break-all;
+}
+
+.personalized-link-generator .token-tag {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 4px;
+  background: rgba(139, 92, 246, 0.2);
+  color: #a78bfa;
+  font-size: 0.75rem;
+  font-family: monospace;
+}
+
+.batch-generator .progress-bar {
+  height: 8px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.batch-generator .progress-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #7c3aed, #a78bfa);
+  border-radius: 4px;
+  transition: width 0.3s ease;
+}
+
+.batch-generator .contact-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 6px 8px;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.03);
+  font-size: 0.75rem;
+}
+
+.batch-generator .contact-row.success {
+  border-left: 2px solid #22c55e;
+}
+
+.batch-generator .contact-row.failed {
+  border-left: 2px solid #ef4444;
+}
+
+.batch-generator .contact-row.processing {
+  border-left: 2px solid #7c3aed;
+}
+
+/* Teleprompter */
+.teleprompter {
+  cursor: default;
+  user-select: none;
+}
+
+.teleprompter #tp-text {
+  transition: none;
+}
+
+/* Dynamic background */
+.dynamic-background .preview-container {
+  position: relative;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.dynamic-background .preview-container img {
+  display: block;
+  width: 100%;
+}
+
+/* Personalizer */
+.personalizer .token-btn {
+  transition: all 0.15s ease;
+}
+
+.personalizer .token-btn:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+/* Voice clone / Avatar generator */
+.voice-clone .upload-zone,
+.avatar-generator .upload-zone {
+  transition: border-color 0.15s ease;
+}
+
+.voice-clone .upload-zone:hover,
+.avatar-generator .upload-zone:hover {
+  border-color: rgba(139, 92, 246, 0.5);
+}

@@ -1,0 +1,224 @@
+/* CSS Custom Properties for dynamic theming */
+:root {
+  /* Default theme colors */
+  --theme-primary: #007bff;
+  --theme-secondary: #6c757d;
+  --theme-accent: #007bff;
+  --theme-success: #28a745;
+  --theme-danger: #dc3545;
+  --theme-warning: #ffc107;
+  --theme-info: #17a2b8;
+  --theme-light: #f8f9fa;
+  --theme-dark: #343a40;
+
+  /* Typography */
+  --theme-font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  --theme-font-size-base: 16px;
+  --theme-font-size-lg: 18px;
+  --theme-font-size-xl: 20px;
+
+  /* Layout */
+  --theme-border-radius: 8px;
+  --theme-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+
+  /* Background colors */
+  --theme-bg-primary: #ffffff;
+  --theme-bg-secondary: #f8f9fa;
+  --theme-bg-tertiary: #e9ecef;
+
+  /* Text colors */
+  --theme-text-primary: #212529;
+  --theme-text-secondary: #6c757d;
+  --theme-text-light: #ffffff;
+}
+
+/* Dark theme overrides */
+[data-theme="dark"] {
+  --theme-bg-primary: #1a1a1a;
+  --theme-bg-secondary: #2d2d2d;
+  --theme-bg-tertiary: #404040;
+  --theme-text-primary: #ffffff;
+  --theme-text-secondary: #adb5bd;
+  --theme-text-light: #ffffff;
+  --theme-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+/* High contrast theme */
+[data-theme="high-contrast"] {
+  --theme-primary: #000000;
+  --theme-secondary: #ffffff;
+  --theme-accent: #ff0000;
+  --theme-text-primary: #000000;
+  --theme-text-secondary: #000000;
+  --theme-bg-primary: #ffffff;
+  --theme-bg-secondary: #ffffff;
+  --theme-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+}
+
+/* Apply theme variables throughout the app */
+.btn-primary {
+  background-color: var(--theme-primary);
+  border-color: var(--theme-primary);
+  color: var(--theme-text-light);
+}
+
+.btn-primary:hover {
+  background-color: var(--theme-primary);
+  opacity: 0.9;
+  border-color: var(--theme-primary);
+}
+
+.btn-secondary {
+  background-color: var(--theme-secondary);
+  border-color: var(--theme-secondary);
+  color: var(--theme-text-light);
+}
+
+.card {
+  background-color: var(--theme-bg-primary);
+  color: var(--theme-text-primary);
+  border: 1px solid var(--theme-bg-tertiary);
+  border-radius: var(--theme-border-radius);
+  box-shadow: var(--theme-shadow);
+}
+
+.text-primary {
+  color: var(--theme-primary);
+}
+
+.text-secondary {
+  color: var(--theme-text-secondary);
+}
+
+.bg-primary {
+  background-color: var(--theme-primary);
+  color: var(--theme-text-light);
+}
+
+.bg-secondary {
+  background-color: var(--theme-secondary);
+  color: var(--theme-text-light);
+}
+
+.bg-light {
+  background-color: var(--theme-bg-secondary);
+}
+
+body {
+  font-family: var(--theme-font-family);
+  font-size: var(--theme-font-size-base);
+  color: var(--theme-text-primary);
+  background-color: var(--theme-bg-primary);
+  transition: background-color 0.3s, color 0.3s;
+}
+
+/* Form elements */
+.form-control {
+  background-color: var(--theme-bg-primary);
+  color: var(--theme-text-primary);
+  border: 1px solid var(--theme-bg-tertiary);
+  border-radius: var(--theme-border-radius);
+}
+
+.form-control:focus {
+  border-color: var(--theme-primary);
+  box-shadow: 0 0 0 0.2rem rgba(var(--theme-primary-rgb), 0.25);
+}
+
+/* Navigation elements */
+.navbar {
+  background-color: var(--theme-bg-primary);
+  border-bottom: 1px solid var(--theme-bg-tertiary);
+}
+
+.nav-link {
+  color: var(--theme-text-primary);
+}
+
+.nav-link:hover {
+  color: var(--theme-primary);
+}
+
+/* Sidebar styling */
+.sidebar {
+  background-color: var(--theme-bg-secondary);
+  border-right: 1px solid var(--theme-bg-tertiary);
+}
+
+/* Modal styling */
+.modal-content {
+  background-color: var(--theme-bg-primary);
+  color: var(--theme-text-primary);
+  border: 1px solid var(--theme-bg-tertiary);
+}
+
+/* Alert styling */
+.alert-primary {
+  background-color: rgba(var(--theme-primary-rgb), 0.1);
+  border-color: var(--theme-primary);
+  color: var(--theme-primary);
+}
+
+.alert-secondary {
+  background-color: rgba(var(--theme-secondary-rgb), 0.1);
+  border-color: var(--theme-secondary);
+  color: var(--theme-secondary);
+}
+
+/* Progress bars */
+.progress-bar {
+  background-color: var(--theme-primary);
+}
+
+/* Table styling */
+.table {
+  color: var(--theme-text-primary);
+}
+
+.table thead th {
+  background-color: var(--theme-bg-secondary);
+  border-color: var(--theme-bg-tertiary);
+  color: var(--theme-text-primary);
+}
+
+.table tbody tr {
+  border-color: var(--theme-bg-tertiary);
+}
+
+.table tbody tr:hover {
+  background-color: var(--theme-bg-secondary);
+}
+
+/* Utility classes for theming */
+.theme-primary-bg { background-color: var(--theme-primary); }
+.theme-secondary-bg { background-color: var(--theme-secondary); }
+.theme-primary-text { color: var(--theme-primary); }
+.theme-secondary-text { color: var(--theme-text-secondary); }
+.theme-border { border-color: var(--theme-bg-tertiary); }
+
+/* Animation and transitions */
+* {
+  transition: background-color 0.3s, color 0.3s, border-color 0.3s;
+}
+
+/* Focus indicators for accessibility */
+*:focus {
+  outline: 2px solid var(--theme-primary);
+  outline-offset: 2px;
+}
+
+/* High contrast focus for better accessibility */
+@media (prefers-contrast: high) {
+  *:focus {
+    outline: 3px solid var(--theme-primary);
+    outline-offset: 3px;
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    transition: none !important;
+    animation: none !important;
+  }
+}

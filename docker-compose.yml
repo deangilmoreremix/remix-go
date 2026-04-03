@@ -1,0 +1,75 @@
+version: '3.8'
+services:
+  main-app:
+    build:
+      context: .
+      dockerfile: Dockerfile.main
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=development
+      - SUPABASE_URL=${SUPABASE_URL}
+      - SUPABASE_ANON_KEY=${SUPABASE_ANON_KEY}
+    volumes:
+      - .:/app
+      - /app/node_modules
+    depends_on:
+      - postgres
+      - redis
+    networks:
+      - higgsfield
+
+  remix-go:
+    build:
+      context: ./apps/remix-go
+      dockerfile: Dockerfile
+    ports:
+      - "5173:5173"
+    environment:
+      - NODE_ENV=development
+      - VITE_SUPABASE_URL=${SUPABASE_URL}
+      - VITE_SUPABASE_ANON_KEY=${SUPABASE_ANON_KEY}
+    volumes:
+      - ./apps/remix-go:/app
+      - /app/node_modules
+    networks:
+      - higgsfield
+
+  postgres:
+    image: postgres:15
+    environment:
+      - POSTGRES_DB=higgsfield_dev
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=password
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - higgsfield
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    networks:
+      - higgsfield
+
+  nginx:
+    image: nginx:alpine
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      - main-app
+      - remix-go
+    networks:
+      - higgsfield
+
+volumes:
+  postgres_data:
+
+networks:
+  higgsfield:
+    driver: bridge

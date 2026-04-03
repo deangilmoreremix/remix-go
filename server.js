@@ -6,6 +6,7 @@ const express = require('express');
 const compression = require('compression');
 const next = require('next');
 const mobxReact = require('mobx-react');
+const { createProxyMiddleware } = require('http-proxy-middleware');
 
 const app = next({ dev });
 const handle = app.getRequestHandler();
@@ -36,6 +37,19 @@ app.prepare().then(() => {
   // server.post('/api/media/join', join);
   server.put('/api/media', processForm, isValidMedia, mediaUpload);
   server.get('/api/get-content-type', getContentType);
+
+  // Proxy Remix Go app routes
+  if (dev) {
+    // Development: Proxy to Vite dev server on port 5173
+    server.use('/apps/remix-go', createProxyMiddleware({
+      target: 'http://localhost:5173',
+      changeOrigin: true,
+      pathRewrite: { '^/apps/remix-go': '' }
+    }));
+  } else {
+    // Production: Serve built static files
+    server.use('/apps/remix-go', express.static(require('path').join(__dirname, 'apps/remix-go/dist')));
+  }
 
   if (!nakedRun) {
     server.get('/_next/*', (req, res) => {

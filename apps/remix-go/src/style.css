@@ -1,0 +1,6 @@
+@import "tailwindcss";
+@import "grapesjs/dist/css/grapes.min.css";
+@import "./styles/global.css";
+@import "./styles/editor.css";
+@import "./styles/popcorn.css";
+@import "./styles/campaigns.css";
