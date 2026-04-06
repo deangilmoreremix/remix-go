@@ -1,169 +1,91 @@
-import React from 'react';
-import { useTheme } from '../contexts/ThemeContext';
+export default function BrandHeader({ showBackButton = true, onBackClick, theme = {} }) {
+  const container = document.createElement('header');
+  container.className = 'brand-header flex items-center justify-between p-4 border-b border-gray-800';
 
-export function BrandHeader({ showBackButton = true, onBackClick }) {
-  const { theme } = useTheme();
-
-  const handleBackClick = () => {
-    if (onBackClick) {
-      onBackClick();
-    } else {
-      // Default behavior: navigate back to main app
-      window.location.href = '/';
+  const defaultTheme = {
+    name: 'RemixGo',
+    logo: '/logo.png',
+    colors: {
+      primary: '#8b5cf6',
+      light: '#ffffff',
+      accent: '#ec4899'
     }
   };
 
-  return (
-    <header
-      className="brand-header"
-      style={{
-        backgroundColor: theme.colors.primary,
-        color: theme.colors.light,
-        borderBottom: `2px solid ${theme.colors.accent}`
-      }}
-    >
-      <div className="header-content">
-        {showBackButton && (
-          <button
-            className="back-button"
-            onClick={handleBackClick}
-            aria-label="Back to main app"
-            style={{
-              backgroundColor: 'transparent',
-              border: 'none',
-              color: theme.colors.light,
-              cursor: 'pointer',
-              padding: '8px',
-              borderRadius: '4px'
-            }}
-          >
-            <svg
-              width="20"
-              height="20"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            >
+  const currentTheme = { ...defaultTheme, ...theme };
+
+  function render() {
+    container.innerHTML = `
+      <div class="flex items-center gap-4">
+        ${showBackButton ? `
+          <button class="back-button flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-white/10 transition-colors text-white"
+                  aria-label="Back to main app">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <path d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
             </svg>
-            <span className="back-text">Back to {theme.name}</span>
+            <span class="back-text">Back to ${currentTheme.name}</span>
           </button>
-        )}
+        ` : ''}
 
-        <div className="brand-info">
-          <img
-            src={theme.logo}
-            alt={`${theme.name} logo`}
-            className="brand-logo"
-            style={{ height: '32px', width: 'auto' }}
-          />
-          <div className="brand-details">
-            <h1
-              className="brand-name"
-              style={{
-                fontFamily: theme.typography?.fontFamily,
-                margin: 0,
-                fontSize: '20px',
-                fontWeight: '600'
-              }}
-            >
-              {theme.name} Video Editor
-            </h1>
-            <p
-              className="brand-tagline"
-              style={{
-                margin: '4px 0 0 0',
-                fontSize: '14px',
-                opacity: 0.9
-              }}
-            >
-              Powered by Remix Go
-            </p>
+        <div class="brand-info flex items-center gap-3">
+          <img src="${currentTheme.logo}" alt="${currentTheme.name} logo" class="brand-logo w-8 h-8 rounded-lg" onerror="this.style.display='none'">
+          <div>
+            <h1 class="brand-name text-xl font-bold text-white">${currentTheme.name}</h1>
+            <p class="brand-tagline text-sm text-gray-400">Video Editor</p>
           </div>
-        </div>
-
-        <div className="header-actions">
-          {/* Additional header actions can go here */}
         </div>
       </div>
 
-      <style jsx>{`
-        .brand-header {
-          padding: 16px 24px;
-          box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-          position: sticky;
-          top: 0;
-          z-index: 100;
+      <div class="header-actions flex items-center gap-3">
+        <button class="notification-btn w-10 h-10 rounded-lg bg-gray-800 hover:bg-gray-700 flex items-center justify-center text-gray-400 hover:text-white transition-colors"
+                title="Notifications">
+          <i class="fa fa-bell"></i>
+        </button>
+        <button class="profile-btn w-10 h-10 rounded-lg bg-gray-800 hover:bg-gray-700 flex items-center justify-center text-gray-400 hover:text-white transition-colors"
+                title="Profile">
+          <i class="fa fa-user"></i>
+        </button>
+      </div>
+    `;
+
+    attachEventListeners();
+  }
+
+  function attachEventListeners() {
+    const backButton = container.querySelector('.back-button');
+    if (backButton) {
+      backButton.addEventListener('click', () => {
+        if (onBackClick) {
+          onBackClick();
+        } else {
+          window.location.href = '/';
         }
+      });
+    }
 
-        .header-content {
-          display: flex;
-          align-items: center;
-          justify-content: space-between;
-          max-width: 1200px;
-          margin: 0 auto;
-        }
+    const notificationBtn = container.querySelector('.notification-btn');
+    if (notificationBtn) {
+      notificationBtn.addEventListener('click', () => {
+        console.log('Notifications clicked');
+      });
+    }
 
-        .back-button {
-          display: flex;
-          align-items: center;
-          gap: 8px;
-          transition: background-color 0.2s;
-        }
+    const profileBtn = container.querySelector('.profile-btn');
+    if (profileBtn) {
+      profileBtn.addEventListener('click', () => {
+        console.log('Profile clicked');
+      });
+    }
+  }
 
-        .back-button:hover {
-          background-color: rgba(255, 255, 255, 0.1);
-        }
+  render();
 
-        .back-text {
-          font-size: 14px;
-        }
+  container.api = {
+    updateTheme: (newTheme) => {
+      Object.assign(currentTheme, newTheme);
+      render();
+    }
+  };
 
-        .brand-info {
-          display: flex;
-          align-items: center;
-          gap: 16px;
-          flex: 1;
-          justify-content: center;
-        }
-
-        .brand-logo {
-          border-radius: 4px;
-        }
-
-        .brand-details {
-          text-align: left;
-        }
-
-        .header-actions {
-          display: flex;
-          align-items: center;
-          gap: 12px;
-        }
-
-        @media (max-width: 768px) {
-          .header-content {
-            flex-direction: column;
-            gap: 12px;
-          }
-
-          .brand-info {
-            flex-direction: column;
-            gap: 8px;
-          }
-
-          .back-text {
-            display: none;
-          }
-
-          .brand-details {
-            text-align: center;
-          }
-        }
-      `}</style>
-    </header>
-  );
+  return container;
 }
