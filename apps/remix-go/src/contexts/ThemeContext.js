@@ -1,32 +1,28 @@
-import { createContext, useContext, useEffect, useState } from 'react';
+// Vanilla JS theme management
+class ThemeManager {
+  constructor() {
+    this.theme = this.getDefaultTheme();
+    this.isLoading = true;
+    this.listeners = new Set();
+    this.init();
+  }
 
-const ThemeContext = createContext();
-
-export function ThemeProvider({ children }) {
-  const [theme, setTheme] = useState(getDefaultTheme());
-  const [isLoading, setIsLoading] = useState(true);
-
-  useEffect(() => {
+  init() {
     // Listen for theme updates from main app
     const handleThemeUpdate = (event) => {
       if (event.data.type === 'HIGGSFIELD_THEME_UPDATE') {
         const newTheme = event.data.theme;
-        setTheme(newTheme);
-        localStorage.setItem('higgsfield-theme', JSON.stringify(newTheme));
-
-        // Apply theme to CSS variables
-        applyThemeVariables(newTheme);
+        this.setTheme(newTheme);
       }
     };
 
     // Request theme from main app
-    requestThemeFromMainApp();
+    this.requestThemeFromMainApp();
 
     window.addEventListener('message', handleThemeUpdate);
-    return () => window.removeEventListener('message', handleThemeUpdate);
-  }, []);
+  }
 
-  const requestThemeFromMainApp = () => {
+  requestThemeFromMainApp() {
     // Request theme data from main app
     window.parent.postMessage({
       type: 'REMIX_GO_THEME_REQUEST',
@@ -35,41 +31,38 @@ export function ThemeProvider({ children }) {
 
     // Set timeout to stop loading if no response
     setTimeout(() => {
-      setIsLoading(false);
+      this.isLoading = false;
+      this.notifyListeners();
     }, 2000);
-  };
+  }
 
-  const updateTheme = (newTheme) => {
-    setTheme(newTheme);
+  setTheme(newTheme) {
+    this.theme = newTheme;
     localStorage.setItem('higgsfield-theme', JSON.stringify(newTheme));
-    applyThemeVariables(newTheme);
-  };
-
-  const resetTheme = () => {
-    const defaultTheme = getDefaultTheme();
-    updateTheme(defaultTheme);
-  };
-
-  if (isLoading) {
-    return <div className="theme-loading">Loading theme...</div>;
+    this.applyThemeVariables(newTheme);
+    this.notifyListeners();
   }
 
-  return (
-    <ThemeContext.Provider value={{ theme, updateTheme, resetTheme, isLoading }}>
-      {children}
-    </ThemeContext.Provider>
-  );
-}
-
-export function useTheme() {
-  const context = useContext(ThemeContext);
-  if (!context) {
-    throw new Error('useTheme must be used within a ThemeProvider');
+  resetTheme() {
+    const defaultTheme = this.getDefaultTheme();
+    this.setTheme(defaultTheme);
   }
-  return context;
-}
 
-function getDefaultTheme() {
+  subscribe(callback) {
+    this.listeners.add(callback);
+    return () => this.listeners.delete(callback);
+  }
+
+  notifyListeners() {
+    this.listeners.forEach(callback => callback({
+      theme: this.theme,
+      updateTheme: this.setTheme.bind(this),
+      resetTheme: this.resetTheme.bind(this),
+      isLoading: this.isLoading
+    }));
+  }
+
+  getDefaultTheme() {
   const saved = localStorage.getItem('higgsfield-theme');
   if (saved) {
     try {
@@ -108,7 +101,7 @@ function getDefaultTheme() {
   };
 }
 
-function applyThemeVariables(theme) {
+  applyThemeVariables(theme) {
   if (!theme || !theme.colors) return;
 
   const root = document.documentElement;
@@ -140,3 +133,5 @@ function applyThemeVariables(theme) {
     });
   }
 }
+
+export const themeManager = new ThemeManager();

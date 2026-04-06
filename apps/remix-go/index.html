@@ -3,11 +3,55 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Remix Go - AI Video Editor</title>
-  <link rel="stylesheet" href="/src/style.css">
+  <title>RemixGo Vanilla - Video Editor</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
   <div id="app"></div>
-  <script type="module" src="/src/main.js"></script>
+
+  <script type="module">
+    import { createRemixGoApp, VideoEditor, AIContentGenerator, CommandPalette } from './src/index.js';
+
+    // Initialize the app
+    const app = createRemixGoApp(document.getElementById('app'), {
+      theme: 'dark'
+    });
+
+    // Mount the main video editor
+    const videoEditor = VideoEditor();
+    app.mount('video-editor', videoEditor);
+
+    // Add command palette
+    const commandPalette = CommandPalette({
+      commands: [
+        { id: 'new-project', name: 'New Project', shortcut: 'Ctrl+N', icon: 'fa-plus' },
+        { id: 'ai-generate', name: 'AI Generate', shortcut: 'Ctrl+G', icon: 'fa-magic' },
+        { id: 'export', name: 'Export Video', shortcut: 'Ctrl+E', icon: 'fa-download' }
+      ],
+      onSelect: (command) => {
+        console.log('Selected command:', command.name);
+      }
+    });
+
+    // Mount command palette (it manages its own positioning)
+    document.body.appendChild(commandPalette);
+
+    // Demo: Show AI Content Generator in a modal
+    setTimeout(() => {
+      const aiGenerator = AIContentGenerator({
+        onGenerate: (content, metadata) => {
+          console.log('Generated content:', content, metadata);
+        },
+        onSave: (content) => {
+          console.log('Saved content:', content);
+        }
+      });
+
+      app.showModal(aiGenerator);
+    }, 2000);
+
+    console.log('RemixGo Vanilla app initialized!');
+  </script>
 </body>
 </html>

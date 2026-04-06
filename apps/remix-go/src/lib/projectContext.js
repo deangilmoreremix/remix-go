@@ -189,27 +189,4 @@ class ProjectContextManager {
 // Create singleton instance
 export const projectContextManager = new ProjectContextManager();
 
-// React hook for using project context
-export function useProjectContext() {
-  const [currentProject, setCurrentProject] = React.useState(projectContextManager.getCurrentProject());
-  const [recentProjects, setRecentProjects] = React.useState(projectContextManager.getRecentProjects());
-
-  React.useEffect(() => {
-    const unsubscribe = projectContextManager.subscribe((project) => {
-      setCurrentProject(project);
-      setRecentProjects(projectContextManager.getRecentProjects());
-    });
-
-    return unsubscribe;
-  }, []);
-
-  return {
-    currentProject,
-    recentProjects,
-    createProject: projectContextManager.createProject.bind(projectContextManager),
-    saveProject: projectContextManager.saveProject.bind(projectContextManager),
-    deleteProject: projectContextManager.deleteProject.bind(projectContextManager),
-    switchToProject: projectContextManager.switchToProject.bind(projectContextManager),
-    clearContext: projectContextManager.clearContext.bind(projectContextManager),
-  };
-}
+// Export the manager directly for vanilla JS usage
