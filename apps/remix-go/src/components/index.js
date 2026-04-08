@@ -21,6 +21,9 @@ export { default as FormBuilder } from './FormBuilder.js';
 // UI Components
 export { default as AlertModal } from './AlertModal.js';
 export { default as ConfirmationModal } from './ConfirmationModal.js';
+export { default as ContentModal } from './ContentModal.js';
+export { default as CropModal } from './CropModal.js';
+export { default as CTAActionModal } from './CTAActionModal.js';
 export { default as FilePickerModal } from './FilePickerModal.js';
 export { default as HelpModal } from './HelpModal.js';
 export { default as KeyboardShortcutsModal } from './KeyboardShortcutsModal.js';
@@ -28,6 +31,7 @@ export { default as OnboardingModal } from './OnboardingModal.js';
 export { default as PreviewModal } from './PreviewModal.js';
 export { default as ProgressModal } from './ProgressModal.js';
 export { default as SettingsModal } from './SettingsModal.js';
+export { default as TemplatePreviewModal } from './TemplatePreviewModal.js';
 
 // AI Components
 export { default as AIGeneratePanel } from './AIGeneratePanel.js';
