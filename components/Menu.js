@@ -50,7 +50,9 @@ export default class Menu extends React.Component {
       if (window.HelpCrunch) {
         window.HelpCrunch('logout');
       }
-      return Router.push('/logout');
+      fetch('/logout', { method: 'POST' }).then(() => {
+        window.location.href = '/';
+      });
     }
   }
 

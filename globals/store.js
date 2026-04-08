@@ -162,6 +162,7 @@ export async function initStoreAndPreload(isServer, source, req, preloader) {
       features: config.access.features,
       video: config.video,
       intercom: config.intercom,
+      facebook: config.facebook,
       helpCrunch: config.helpCrunch,
       defaultPosterframe: config.posterframe,
       scriptStatistic: config.scriptStatistic,

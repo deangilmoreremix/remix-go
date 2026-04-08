@@ -135,9 +135,15 @@ class Layout extends Component {
                       Date.parse(this.store.currentUser.createdAt) / 1000,
                     ).toString(),
                   }}
-                  domain="videoremix.io"
-                />
-              ) : null}
+                   domain="videoremix.io"
+                 />
+               ) : null}
+             {(() => {
+               if (typeof window !== 'undefined') {
+                 window.facebookAppId = this.store.common.facebook.appId;
+               }
+               return null;
+             })()}
           </Container>
           <Footer
             className={`theme-${whiteLabelManager.key}`}

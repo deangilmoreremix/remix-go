@@ -52,6 +52,9 @@ module.exports = {
     appId: process.env.INTERCOM_APP_ID,
     secret: process.env.INTERCOM_SECRET,
   },
+  facebook: {
+    appId: process.env.FACEBOOK_APP_ID || '1728968890675795',
+  },
   newRelic: {
     key: process.env.NEW_RELIC_LICENSE_KEY || '',
   },

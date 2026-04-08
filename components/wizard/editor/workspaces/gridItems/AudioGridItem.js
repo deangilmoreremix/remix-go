@@ -4,6 +4,8 @@ import PropTypes from '../../../../../lib/PropTypes';
 import AudioPlayer from '../../../../common/AudioPlayer';
 
 export default class AudioGridItem extends Component {
+  static currentPlaying = null;
+
   static propTypes = {
     item: PropTypes.shape({
       title: PropTypes.string,
@@ -18,12 +20,15 @@ export default class AudioGridItem extends Component {
   };
 
   onAudioPreview = (playingState) => {
-    // TODO: refactor this shit
-    const playing = document.getElementsByClassName('playing');
-    if (playing && playing.length > 0) {
-      for (let i = 0; i < playing.length; i += 1) {
-        playing[i].click();
+    if (!playingState) {
+      // Starting to play, stop any current
+      if (AudioGridItem.currentPlaying && AudioGridItem.currentPlaying !== this) {
+        AudioGridItem.currentPlaying.setState({ isPlaying: false });
       }
+      AudioGridItem.currentPlaying = this;
+    } else {
+      // Stopping
+      AudioGridItem.currentPlaying = null;
     }
 
     this.setState({
